@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wasatch Wind</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+        <link href="ww2.css" rel="stylesheet">
+        <meta charset="utf-8">
+    </head>
+
+<body>
+
+<div class="flex-header">
+    <img src="images/wffglogo.png" height="130">
+    <span class="center txtsz250 bold underline"><a href="http://www.wasatchfreeflight.org" target="_blank">Wasatch Free Flight</a></span>
+    <img src="images/pg.gif" height="130">
+</div>
+
+<h1 class="center txtsz250">Wind History</h1>
+
+<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
+<div class="flex-container white" id="mountaintop">
+    <div class="flex-col">
+        <div class="left txtsz200 bold">11,066'</div><br>
+        <div class="left bold">3373 m</div>
+    </div>
+    <div style="flex-basis: 700px"><canvas id="Alta Mt Baldy" height="100"></canvas></div>
+    <div class="flex-col">
+        <div class="center txtsz350 bold" id="amb-wind"></div>
+        <div class="center txtsz250 bold ltcoral" id="amb-gust"></div>   </div>
+</div></a><hr>
+
+<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=rey&table=1&banner=off" target="_blank">
+<div class="flex-container white" id="mountainmid">
+    <div class="flex-col">
+        <div class="left txtsz200 bold">9,400'</div><br>
+        <div class="left bold">2865 m</div>
+    </div>
+    <div style="flex-basis: 700px"><canvas id="Reynolds Peak" height="100"></canvas></div>
+    <div class="flex-col">
+        <div class="center txtsz350 bold" id="rey-wind"></div>
+        <div class="center txtsz250 bold ltcoral" id="rey-gust"></div>   </div>
+</div></a><hr>
+
+<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=kslc&table=1&banner=off" target="_blank">
+<div class="flex-container white" id="mountainlow">
+    <div class="flex-col">
+        <div class="left txtsz200 bold">4,226'</div><br>
+        <div class="left bold">1288 m</div>
+    </div>
+    <div style="flex-basis: 700px"><canvas id="KSLC" height="100"></canvas></div>
+    <div class="flex-col">
+        <div class="center txtsz350 bold" id="kslc-wind"></div>
+        <div class="center txtsz250 bold ltcoral" id="kslc-gust"></div>
+    </div>
+</div></a>
+
+<!-- LOCAL SCRIPTS --> 
+<script type="text/javascript" src="ww2.js"></script>
+<script type="text/javascript" src="chartjs2.js"></script>
+
+</body>
+</html>
