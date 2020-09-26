@@ -1,0 +1,162 @@
+@media only screen and (min-width: 1081px) {
+    body {
+        margin-left: 35%;
+        margin-right: 35%;
+        zoom: 0.5;
+    }
+}
+@media only screen and (max-width: 1080px) {
+    body {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+body {
+    font-family: 'Tahoma';
+    background-color: #000034;
+    font-size: 20px;
+    color: white;
+}
+a:link {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:active {
+    color: white;
+    background-color: transparent;
+    text-decoration: underline;
+}
+table {
+    width: 100%;
+    border: 5px solid white;
+    border-radius: 25px;
+    padding: 10px;
+}
+.noborder {
+    border: none;
+}
+td.bottom {
+    vertical-align: bottom;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.center {
+    text-align: center;
+}
+.indent {
+    padding-left: 20px;
+}
+.bold {
+    font-weight: bold;
+}
+.underline {
+    text-decoration: underline;
+}
+.white {
+    color: white;
+}
+.ltblue {
+    color: lightblue;
+}
+.ltcoral {
+    color: coral;
+}
+.txtsz50 {
+    font-size: 50%;
+}
+.txtsz150 {
+    font-size: 150%;
+}
+.txtsz200 {
+    font-size: 200%;
+}
+.txtsz250 {
+    font-size: 250%;
+}
+.txtsz300 {
+    font-size: 300%;
+}
+.txtsz350 {
+    font-size: 350%;
+}
+.flex-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 180px;
+}
+.starthidden {
+    display: none;
+}
+.collapsible {
+    background-color: rgb(100, 100, 100);
+    color: white;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 100%;
+    border: 5px solid white;
+    border-radius: 25px;
+    margin-top: 10px;
+}
+.collapsible:after {
+    content: url(images/plus.png);
+    float: right;
+}
+.active:after {
+    content: url(images/minus.png);
+}
+.collapse-contents {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+.inline {
+    display: inline-block;
+}
+button {
+    background-color: rgb(100, 100, 100);
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 100%;
+    border: 5px solid white;
+    border-radius: 25px;
+    margin-top: 10px;
+}
+.floatleft {
+    float: left;
+}
+.floatright {
+    float: right;
+}
+#mountaintop {
+    background-image: url('images/topgrn.png');
+}
+#mountainmid {
+    background-image: url('images/midgrn.png');
+}
+#mountainlow {
+    background-image: url('images/botgrn.png');
+}
