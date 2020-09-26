@@ -9,7 +9,7 @@ function drawWindChart(chartID, time, wind, gust, dir) {
     // console.log(dir);
     let points = wind.map(data => data === 0 ? '' : arrow);
     let max = Math.ceil(Math.max(...wind));
-    max = (gust === '') ? max : Math.ceil(Math.max(...gust));
+    max = (Math.max(...gust) > 0) ? Math.ceil(Math.max(...gust)) : max;
     const windChart = document.getElementById(chartID);
     Chart.defaults.global.defaultFontColor = 'white';
     Chart.defaults.global.defaultFontFamily = 'Tahoma';
