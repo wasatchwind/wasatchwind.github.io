@@ -68,7 +68,7 @@ td.bottom {
 .ltblue {
     color: lightblue;
 }
-.ltcoral {
+.coral {
     color: coral;
 }
 .txtsz50 {
@@ -89,6 +89,9 @@ td.bottom {
 .txtsz350 {
     font-size: 350%;
 }
+.txtsz400 {
+    font-size: 400%;
+}
 .flex-header {
     display: flex;
     align-items: center;
@@ -102,7 +105,7 @@ td.bottom {
 .flex-col {
     display: flex;
     flex-direction: column;
-    flex-basis: 180px;
+    flex-basis: 140px;
 }
 .starthidden {
     display: none;
@@ -150,13 +153,4 @@ button {
 }
 .floatright {
     float: right;
-}
-#mountaintop {
-    background-image: url('images/topgrn.png');
-}
-#mountainmid {
-    background-image: url('images/midgrn.png');
-}
-#mountainlow {
-    background-image: url('images/botgrn.png');
 }
