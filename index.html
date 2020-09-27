@@ -10,50 +10,56 @@
 
 <body>
 
+<!-- HEADER -->
 <div class="flex-header">
     <img src="images/wffglogo.png" height="130">
     <span class="center txtsz250 bold underline"><a href="http://www.wasatchfreeflight.org" target="_blank">Wasatch Free Flight</a></span>
     <img src="images/pg.gif" height="130">
+</div><hr>
+
+<!-- DATE, TIME, SUNSET BANNER -->
+<table class="noborder">
+    <th><img src="images/calendar.png" height="50px"></th>
+    <th class="left txtsz200 ltblue" id="current-date"></th>
+    <th><img src="images/clock4.png" height="50px"></th>
+    <th class="left txtsz200 ltblue" id="current-time"></th>
+    <th><img src="images/sunset2.png" height="50px"></th>
+    <th class="left txtsz200 ltblue" id="sunset-time"></th>
+</table><hr>
+
+<!-- WIND HISTORY BUTTON -->
+<button class="bold txtsz250" onclick="toggleDiv('toggle-wind-history')">
+    <img class="floatleft" src="images/plus60.png">Wind History
+    <img class="floatright" src="images/plus60.png">
+</button>
+
+<!-- DRAW WIND HISTORY CHARTS -->
+<div class="starthidden" id="toggle-wind-history"><br>
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
+    <div class="flex-container white" id="amb-color">
+        <div style="flex-basis: 800px"><canvas id="Alta Mt Baldy - 11,066' (3373 m)" height="110"></canvas></div>
+        <div class="flex-col">
+            <div class="center txtsz400 bold" id="amb-wind"></div>
+            <div class="center txtsz300 bold coral" id="amb-gust"></div>   </div>
+    </div></a><hr>
+
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=rey&table=1&banner=off" target="_blank">
+    <div class="flex-container white" id="rey-color">
+        <div style="flex-basis: 800px"><canvas id="Reynolds Peak - 9400' (2865 m)" height="110"></canvas></div>
+        <div class="flex-col">
+            <div class="center txtsz400 bold" id="rey-wind"></div>
+            <div class="center txtsz300 bold coral" id="rey-gust"></div>   </div>
+    </div></a><hr>
+
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=kslc&table=1&banner=off" target="_blank">
+    <div class="flex-container white" id="kslc-color">
+        <div style="flex-basis: 800px"><canvas id="KSLC - 4,226' (1288 m)" height="110"></canvas></div>
+        <div class="flex-col">
+            <div class="center txtsz400 bold" id="kslc-wind"></div>
+            <div class="center txtsz300 bold coral" id="kslc-gust"></div>
+        </div>
+    </div></a>
 </div>
-
-<h1 class="center txtsz250">Wind History</h1>
-
-<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
-<div class="flex-container white" id="mountaintop">
-    <div class="flex-col">
-        <div class="left txtsz200 bold">11,066'</div><br>
-        <div class="left bold">3373 m</div>
-    </div>
-    <div style="flex-basis: 700px"><canvas id="Alta Mt Baldy" height="100"></canvas></div>
-    <div class="flex-col">
-        <div class="center txtsz350 bold" id="amb-wind"></div>
-        <div class="center txtsz250 bold ltcoral" id="amb-gust"></div>   </div>
-</div></a><hr>
-
-<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=rey&table=1&banner=off" target="_blank">
-<div class="flex-container white" id="mountainmid">
-    <div class="flex-col">
-        <div class="left txtsz200 bold">9,400'</div><br>
-        <div class="left bold">2865 m</div>
-    </div>
-    <div style="flex-basis: 700px"><canvas id="Reynolds Peak" height="100"></canvas></div>
-    <div class="flex-col">
-        <div class="center txtsz350 bold" id="rey-wind"></div>
-        <div class="center txtsz250 bold ltcoral" id="rey-gust"></div>   </div>
-</div></a><hr>
-
-<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=kslc&table=1&banner=off" target="_blank">
-<div class="flex-container white" id="mountainlow">
-    <div class="flex-col">
-        <div class="left txtsz200 bold">4,226'</div><br>
-        <div class="left bold">1288 m</div>
-    </div>
-    <div style="flex-basis: 700px"><canvas id="KSLC" height="100"></canvas></div>
-    <div class="flex-col">
-        <div class="center txtsz350 bold" id="kslc-wind"></div>
-        <div class="center txtsz250 bold ltcoral" id="kslc-gust"></div>
-    </div>
-</div></a>
 
 <!-- LOCAL SCRIPTS --> 
 <script type="text/javascript" src="ww2.js"></script>
