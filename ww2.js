@@ -1,11 +1,30 @@
-function toggleDiv(element) {
-    document.getElementById(element).style.display = (document.getElementById(element).style.display === 'block') ? 'none' : 'block';
-}
+let today = new Date();
 
 function headerDateTime() {
-    let today = new Date();
     document.getElementById('current-date').innerHTML = today.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
     document.getElementById('current-time').innerHTML = today.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+}
+
+function toggleMain(element, btn, match) {
+    match = (btn !== 'wind-btn') ? resetButtonsAndDivs('wind') : match;
+    match = (btn !== 'talt-btn') ? resetButtonsAndDivs('talt') : match;
+    match = (btn !== 'soar-btn') ? resetButtonsAndDivs('soar') : match;
+    document.getElementById(element).style.display = (document.getElementById(element).style.display === 'block') ? 'none' : 'block';
+    document.getElementById(btn).style.backgroundColor = (document.getElementById(btn).style.backgroundColor === 'darkblue') ? 'rgb(100, 100, 100)' : 'darkblue';
+}
+
+function resetButtonsAndDivs(btn) {
+    document.getElementById(btn + '-btn').style.backgroundColor = 'rgb(100, 100, 100)';
+    document.getElementById('toggle-' + btn + '-submenu').style.display = 'none';
+    document.getElementById(btn + '-history-btn').style.backgroundColor = 'rgb(100, 100, 100)';
+    document.getElementById(btn + '-forecast-btn').style.backgroundColor = 'rgb(100, 100, 100)';
+    document.getElementById('toggle-' + btn + '-history').style.display = 'none';
+    document.getElementById('toggle-' + btn + '-forecast').style.display = 'none';
+}
+
+function toggleSub(element, btn) {
+    document.getElementById(element).style.display = (document.getElementById(element).style.display === 'block') ? 'none' : 'block';
+    document.getElementById(btn).style.backgroundColor = (document.getElementById(btn).style.backgroundColor === 'darkblue') ? 'rgb(100, 100, 100)' : 'darkblue';
 }
 
 function timeSeries() { // https://developers.synopticdata.com/mesonet
@@ -21,7 +40,7 @@ function ambWindChart(ambData) {
     let ambTime = ambData.date_time.map(data => data.replace(':00', '').toLowerCase().slice(0,-1));
     let ambDir = ambData.wind_direction_set_1.map(data => Math.round(data));
     let ambColor = 'grn';
-    ambColor = (Math.max(...ambData.wind_speed_set_1) > 30) ? 'red' : (Math.max(...ambData.wind_speed_set_1) > 20) ? 'ylw' : ambColor;
+    ambColor = ((ambData.wind_speed_set_1[ambData.wind_speed_set_1.length - 1]) > 30) ? 'red' : ((ambData.wind_speed_set_1[ambData.wind_speed_set_1.length - 1]) > 20) ? 'ylw' : ambColor;
     document.getElementById('amb-color').style.backgroundImage = 'url(images/top' + ambColor + '.png)';
     drawWindChart("Alta Mt Baldy - 11,066' (3373 m)", ambTime, ambData.wind_speed_set_1, ambData.wind_gust_set_1, ambDir);
     latestReading('amb', ambData.wind_speed_set_1, ambData.wind_gust_set_1);
@@ -60,12 +79,41 @@ function latestReading(stid, wind, gust) {
 }
 
 function openWeather() { // https://openweathermap.org/api/one-call-api
-    let url = 'https://api.openweathermap.org/data/2.5/onecall?lat=40.77&lon=-111.97&exclude=minutely,hourly,daily&units=imperial&appid=b6a86a0bc25e260e4db9c7f98654ad08';
+    let url = 'https://api.openweathermap.org/data/2.5/onecall?lat=40.77&lon=-111.97&exclude=minutely,daily&units=imperial&appid=b6a86a0bc25e260e4db9c7f98654ad08';
     $.get(url, function(data) {
         document.getElementById('sunset-time').innerHTML = new Date(data.current.sunset * 1000).toLocaleTimeString([], {timeStyle: 'short'}).toLowerCase();
     });
 }
 
+function pmGraphicals() {
+    let timeString = (today.getHours() > 19 || today.getHours() < 7) ? 7 : 3;
+    let windURL = 'https://graphical.weather.gov/images/slc/WindSpd' + timeString + '_slc.png';
+    let wxURL = 'https://graphical.weather.gov/images/slc/Wx' + timeString + '_slc.png';
+    document.getElementById('graphical-wind').src = windURL;
+    document.getElementById('graphical-weather').src = wxURL;
+}
+
+function skewT() {
+    let dateString = today.toLocaleDateString('en-ZA').replaceAll('/', '');
+    let fullURL = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
+    fullURL = (today.getHours() < 7) ? 'images/comebacktomorrow.jpg' : fullURL;
+    document.getElementById('skewT').src = fullURL;
+}
+
+function noaaScrape() {
+    let url = 'https://www.google.com/url?q=https%3A%2F%2Fus-central1-wasatchwind.cloudfunctions.net%2Fnoaa-forecast-scrape-1';
+    $.get(url, function(data) {
+        for (i=0; i<3; i++) {
+            document.getElementById('forecast-day' + i +'-img').src = noaaFcData.IMAGE[i];
+            document.getElementById('forecast-day' + i +'-day').innerHTML = noaaFcData.DAY[i];
+            document.getElementById('forecast-day' + i +'-txt').innerHTML = noaaFcData.TEXT[i];
+        }
+    });
+}
+
 headerDateTime();
+pmGraphicals();
+skewT();
 timeSeries();
 openWeather();
+noaaScrape();

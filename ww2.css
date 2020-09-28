@@ -12,10 +12,12 @@
     }
 }
 body {
-    font-family: 'Tahoma';
     background-color: #000034;
+    font-family: 'Tahoma';
     font-size: 20px;
+    font-weight: bold;
     color: white;
+    text-align: center;
 }
 a:link {
     color: yellow;
@@ -50,14 +52,8 @@ td.bottom {
 .right {
     text-align: right;
 }
-.center {
-    text-align: center;
-}
 .indent {
     padding-left: 20px;
-}
-.bold {
-    font-weight: bold;
 }
 .underline {
     text-decoration: underline;
@@ -92,11 +88,6 @@ td.bottom {
 .txtsz400 {
     font-size: 400%;
 }
-.flex-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
 .flex-container {
     display: flex;
     justify-content: space-between;
@@ -110,36 +101,11 @@ td.bottom {
 .starthidden {
     display: none;
 }
-.collapsible {
-    background-color: rgb(100, 100, 100);
-    color: white;
-    cursor: pointer;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    width: 100%;
-    border: 5px solid white;
-    border-radius: 25px;
-    margin-top: 10px;
-}
-.collapsible:after {
-    content: url(images/plus.png);
-    float: right;
-}
-.active:after {
-    content: url(images/minus.png);
-}
-.collapse-contents {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-}
-.inline {
-    display: inline-block;
-}
 button {
     background-color: rgb(100, 100, 100);
     color: white;
+    font-size: 150%;
+    font-weight: bold;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
@@ -147,10 +113,19 @@ button {
     border: 5px solid white;
     border-radius: 25px;
     margin-top: 10px;
+}
+button:active {
+    background-color: darkblue;
+}
+button:focus {
+    background-color: darkblue;
 }
 .floatleft {
     float: left;
 }
 .floatright {
     float: right;
+}
+hr {
+    border: 2px solid white;
 }
