@@ -74,7 +74,7 @@
         <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
         <div class="flex-container white" id="amb-color">
             <div style="flex-basis: 800px"><canvas id="Alta Mt Baldy - 11,066' (3373 m)" height="110"></canvas></div>
-            <div class="flex-col">
+            <div class="flex-col-chart">
                 <div class="txtsz400" id="amb-wind"></div>
                 <div class="txtsz300 coral" id="amb-gust"></div>   </div>
         </div></a><hr>
@@ -82,7 +82,7 @@
         <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=rey&table=1&banner=off" target="_blank">
         <div class="flex-container white" id="rey-color">
             <div style="flex-basis: 800px"><canvas id="Reynolds Peak - 9400' (2865 m)" height="110"></canvas></div>
-            <div class="flex-col">
+            <div class="flex-col-chart">
                 <div class="txtsz400" id="rey-wind"></div>
                 <div class="txtsz300 coral" id="rey-gust"></div>   </div>
         </div></a><hr>
@@ -90,7 +90,7 @@
         <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=kslc&table=1&banner=off" target="_blank">
         <div class="flex-container white" id="kslc-color">
             <div style="flex-basis: 800px"><canvas id="KSLC - 4,226' (1288 m)" height="110"></canvas></div>
-            <div class="flex-col">
+            <div class="flex-col-chart">
                 <div class="txtsz400" id="kslc-wind"></div>
                 <div class="txtsz300 coral" id="kslc-gust"></div>
             </div>
@@ -164,43 +164,57 @@
 
 <!-- GENERAL FORECAST -->
 <div>
-    <br><hr><span class="txtsz200">3 Day Forecast</span><hr>
+    <br><hr><span class="txtsz200">General Forecast</span><hr>
+
+    <!-- 3 DAY OUTLOOK -->
+    <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.XN8LtchKhPY" target="_blank">
+    <h1 class="txtsz150">3 Day Outlook</h1>
     <table>
         <tr>
-            <td rowspan="2"><a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.XN8LtchKhPY" target="_blank">
-                <img id="forecast-day0-img" height=250px></a></td>
-            <td id="forecast-day0-day" class="txtsz200"></td>
+            <td rowspan="2"><img id="forecast-day0-img" height=200px></td>
+            <td id="forecast-day0-day" class="txtsz200 noaa-day"></td>
         </tr>
         <tr>
-            <td id="forecast-day0-txt" class="indent txtsz150"></td>
+            <td id="forecast-day0-txt" class="txtsz150 noaa-text"></td>
+        </tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
+            <td id="forecast-day1-day" class="txtsz200 noaa-day"></td>
         </tr>
         <tr>
-            <td colspan="2"><hr></td>
+            <td id="forecast-day1-txt" class="txtsz150 noaa-text"></td>
+        </tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day2-img" height=200px></td>
+            <td id="forecast-day2-day" class="txtsz200 noaa-day"></td>
         </tr>
         <tr>
-            <td rowspan="2"><a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.XN8LtchKhPY" target="_blank">
-                <img id="forecast-day1-img" height=250px></a></td>
-            <td id="forecast-day1-day" class="txtsz200"></td>
+            <td id="forecast-day2-txt" class="txtsz150 noaa-text"></td>
         </tr>
-        <tr>
-            <td id="forecast-day1-txt" class="indent txtsz150"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><hr></td>
-        </tr>
-        <tr>
-            <td rowspan="2"><a href="https://us-central1-wasatchwind.cloudfunctions.net/noaa-forecast-scrape" target="_blank">
-                <img id="forecast-day2-img" height=250px></a></td>
-            <td id="forecast-day2-day" class="txtsz200"></td>
-        </tr>
-        <tr>
-            <td id="forecast-day2-txt" class="indent txtsz150"></td>
-        </tr>
-    </table>
+    </table></a>
+
+    <!-- AREA FORECAST DISCUSSION -->
+    <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+    <h1 class="txtsz150">Area Forecast Discussion</h1></a>
 </div>
 
+<!-- OTHER RESOURCES -->
+<div>
+    <br><hr><span class="txtsz200">Misc.</span><hr>
 
+    <!-- LINKS -->
+    <a href="https://livetrack24.com/tracks/country/us" target="_blank">
+    <h1 class="txtsz150">LiveTrack24</h1></a>
 
+    <a href="https://www.xctrack.me/" target="_blank">
+    <h1 class="txtsz150">XC Track</h1></a>
+
+    <a href="http://xcfind.paraglide.us/map.html?id=15" target="_blank">
+    <h1 class="txtsz150">XC Find</h1></a>
+
+</div>
 
 <!-- LOCAL SCRIPTS --> 
 <script type="text/javascript" src="ww2.js"></script>
