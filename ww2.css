@@ -36,15 +36,23 @@ a:active {
 }
 table {
     width: 100%;
-    border: 5px solid white;
+    border: 2px solid white;
     border-radius: 25px;
     padding: 10px;
 }
 .noborder {
     border: none;
 }
-td.bottom {
-    vertical-align: bottom;
+td.noaa-text {
+    vertical-align: text-top;
+    padding-left: 20px;
+    text-align: left;
+    font-weight: normal;
+    color: white;
+}
+td.noaa-day {
+    vertical-align: top;
+    color: lightblue;
 }
 .left {
     text-align: left;
@@ -57,6 +65,9 @@ td.bottom {
 }
 .underline {
     text-decoration: underline;
+}
+.notbold {
+    font-weight: normal;
 }
 .white {
     color: white;
@@ -93,7 +104,7 @@ td.bottom {
     justify-content: space-between;
     align-items: center;
 }
-.flex-col {
+.flex-col-chart {
     display: flex;
     flex-direction: column;
     flex-basis: 140px;

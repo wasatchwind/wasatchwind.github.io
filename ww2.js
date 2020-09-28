@@ -101,12 +101,12 @@ function skewT() {
 }
 
 function noaaScrape() {
-    let url = 'https://www.google.com/url?q=https%3A%2F%2Fus-central1-wasatchwind.cloudfunctions.net%2Fnoaa-forecast-scrape-1';
+    let url = 'https://us-central1-wasatchwind.cloudfunctions.net/noaa-forecast-scrape';
     $.get(url, function(data) {
         for (i=0; i<3; i++) {
-            document.getElementById('forecast-day' + i +'-img').src = noaaFcData.IMAGE[i];
-            document.getElementById('forecast-day' + i +'-day').innerHTML = noaaFcData.DAY[i];
-            document.getElementById('forecast-day' + i +'-txt').innerHTML = noaaFcData.TEXT[i];
+            document.getElementById('forecast-day' + i +'-img').src = data.IMAGE[i];
+            document.getElementById('forecast-day' + i +'-day').innerHTML = data.DAY[i];
+            document.getElementById('forecast-day' + i +'-txt').innerHTML = data.TEXT[i];
         }
     });
 }
