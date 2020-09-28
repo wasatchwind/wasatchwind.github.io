@@ -1,6 +1,5 @@
-let arrow = new Image(30, 30);
+let arrow = new Image(40, 40);
 arrow.src = './images/arrow.png';
-
 
 function drawWindChart(chartID, time, wind, gust, dir) {
     // console.log(time);
@@ -13,7 +12,7 @@ function drawWindChart(chartID, time, wind, gust, dir) {
     const windChart = document.getElementById(chartID);
     Chart.defaults.global.defaultFontColor = 'white';
     Chart.defaults.global.defaultFontFamily = 'Tahoma';
-    Chart.defaults.global.defaultFontSize = 20;
+    Chart.defaults.global.defaultFontSize = 32;
     new Chart(windChart, {
         type: 'line',
         data: {
@@ -37,10 +36,10 @@ function drawWindChart(chartID, time, wind, gust, dir) {
                     yAxisID: 'Gust',
                     data: gust,
                     borderColor: 'coral',
-                    borderWidth: 8,
+                    borderWidth: 10,
                     fill: false,
                     showLine: false,
-                    pointRadius: 15,
+                    pointRadius: 16,
                     pointStyle: 'line'
                 },
             ]
