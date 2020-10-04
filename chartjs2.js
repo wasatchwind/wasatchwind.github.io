@@ -25,7 +25,7 @@ function drawWindChart(chartID, time, wind, gust, dir) {
                     data: wind,
                     borderColor: 'gray',
                     borderWidth: 2,
-                    backgroundColor: 'darkblue',
+                    backgroundColor: 'royalblue',
                     fill: true,
                     pointRadius: 2,
                     pointStyle: points,
