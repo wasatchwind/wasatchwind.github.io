@@ -1,30 +1,39 @@
-let today = new Date();
+const today = new Date();
+let toggleStatus = 'current';
+let currentOption = '&nbsp;'
 
 function headerDateTime() {
     document.getElementById('current-date').innerHTML = today.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
     document.getElementById('current-time').innerHTML = today.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'}).toLowerCase();
 }
 
-function toggleMain(element, btn, match) {
-    match = (btn !== 'wind-btn') ? resetButtonsAndDivs('wind') : match;
-    match = (btn !== 'talt-btn') ? resetButtonsAndDivs('talt') : match;
-    match = (btn !== 'soar-btn') ? resetButtonsAndDivs('soar') : match;
-    document.getElementById(element).style.display = (document.getElementById(element).style.display === 'block') ? 'none' : 'block';
-    document.getElementById(btn).style.backgroundColor = (document.getElementById(btn).style.backgroundColor === 'darkblue') ? 'rgb(100, 100, 100)' : 'darkblue';
+document.getElementById('toggle-image').src = 'images/toggle-' + toggleStatus + '.png';
+document.getElementById('currently-showing').innerHTML = currentOption;
+
+function toggleMenu() {
+    document.getElementById('menu-button').classList.toggle('show');
 }
 
-function resetButtonsAndDivs(btn) {
-    document.getElementById(btn + '-btn').style.backgroundColor = 'rgb(100, 100, 100)';
-    document.getElementById('toggle-' + btn + '-submenu').style.display = 'none';
-    document.getElementById(btn + '-history-btn').style.backgroundColor = 'rgb(100, 100, 100)';
-    document.getElementById(btn + '-forecast-btn').style.backgroundColor = 'rgb(100, 100, 100)';
-    document.getElementById('toggle-' + btn + '-history').style.display = 'none';
-    document.getElementById('toggle-' + btn + '-forecast').style.display = 'none';
+function toggleOption(category) {
+    currentOption = category;
+    document.getElementById('currently-showing').innerHTML = currentOption;
+    if (currentOption === 'Wind') {
+        document.getElementById('wind-current').style.display = 'block';
+    } 
 }
 
-function toggleSub(element, btn) {
-    document.getElementById(element).style.display = (document.getElementById(element).style.display === 'block') ? 'none' : 'block';
-    document.getElementById(btn).style.backgroundColor = (document.getElementById(btn).style.backgroundColor === 'darkblue') ? 'rgb(100, 100, 100)' : 'darkblue';
+function toggleImage() {
+    toggleStatus = (toggleStatus === 'current') ? 'forecast' : 'current';
+    document.getElementById('toggle-image').src = 'images/toggle-' + toggleStatus + '.png';
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('.menu-button')) {
+        let dropdowns = document.getElementsByClassName('start-hidden');
+        for (i=0; i<dropdowns.length; i++) {
+            dropdowns[i] = (dropdowns[i].classList.contains('show')) ? dropdowns[i].classList.remove('show') : dropdowns[i];
+        }
+    }
 }
 
 function timeSeries() { // https://developers.synopticdata.com/mesonet
@@ -64,8 +73,8 @@ function kslcWindChart(kslcData) {
     let kslcGust = '';
     kslcGust = (kslcData.wind_gust_set_1) ? kslcData.wind_gust_set_1.slice(-11) : kslcGust;
     let kslcDir = kslcData.wind_direction_set_1.slice(-11);
-    let kslcColor = 'grn';
-    kslcColor = (Math.max(...kslcWind) > 20) ? 'red' : (Math.max(...kslcWind) > 9) ? 'ylw' : kslcColor;
+    let kslcColor = 'base';
+    kslcColor = (Math.max(...kslcWind) > 30) ? 'red' : (Math.max(...kslcWind) > 20) ? 'ylw' : kslcColor;
     document.getElementById('kslc-color').style.backgroundImage = 'url(images/bot' + kslcColor + '.png)';
     drawWindChart("KSLC - 4,226' (1288 m)", kslcTime, kslcWind, kslcGust, kslcDir);
     latestReading('kslc', kslcWind, kslcGust);
@@ -101,7 +110,7 @@ function skewT() {
 }
 
 function noaaScrape() {
-    let url = 'https://us-central1-wasatchwind.cloudfunctions.net/noaa-forecast-scrape';
+    let url = 'https://us-central1-wasatchwind.cloudfunctions.net/noaa-forecast-scrape-1';
     $.get(url, function(data) {
         for (i=0; i<3; i++) {
             document.getElementById('forecast-day' + i +'-img').src = data.IMAGE[i];
@@ -112,8 +121,8 @@ function noaaScrape() {
 }
 
 headerDateTime();
-pmGraphicals();
-skewT();
+//pmGraphicals();
+//skewT();
 timeSeries();
-openWeather();
-noaaScrape();
+//openWeather();
+//noaaScrape();
