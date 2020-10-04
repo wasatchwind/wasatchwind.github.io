@@ -40,6 +40,9 @@ table {
     border-radius: 25px;
     padding: 10px;
 }
+hr {
+    border: 2px solid white;
+}
 .noborder {
     border: none;
 }
@@ -62,6 +65,9 @@ td.noaa-day {
 }
 .indent {
     padding-left: 20px;
+}
+.bottom {
+    vertical-align: sub;
 }
 .underline {
     text-decoration: underline;
@@ -99,7 +105,7 @@ td.noaa-day {
 .txtsz400 {
     font-size: 400%;
 }
-.flex-container {
+.flex-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -109,34 +115,42 @@ td.noaa-day {
     flex-direction: column;
     flex-basis: 140px;
 }
-.starthidden {
+.flex-menu {
+    display: flex;
+    flex-basis: flex-start;
+}
+.start-hidden {
     display: none;
 }
-button {
+.show {
+    display: block;
+}
+.menu-button {
+    background-image: url('images/menu.png');
+    background-color: transparent;
+    padding: 43px;
+    border: none;
+}
+.menu-option-button {
     background-color: rgb(100, 100, 100);
     color: white;
-    font-size: 150%;
     font-weight: bold;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    width: 100%;
-    border: 5px solid white;
-    border-radius: 25px;
-    margin-top: 10px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    width: 75%;
+    text-align: left;
 }
-button:active {
-    background-color: darkblue;
+.menu-selection {
+    flex: 1;
+    margin-right: 10%;
 }
-button:focus {
-    background-color: darkblue;
+.toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
-.floatleft {
-    float: left;
-}
-.floatright {
-    float: right;
-}
-hr {
-    border: 2px solid white;
+.toggle-button {
+    background-color: transparent;
+    border: none;
 }
