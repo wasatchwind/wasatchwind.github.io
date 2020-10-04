@@ -126,7 +126,7 @@ td.noaa-day {
     display: block;
 }
 .menu-button {
-    background-image: url('.images/menu.png');
+    background-image: url('https://wasatchwind.github.io/images/menu.png');
     background-color: transparent;
     padding: 43px;
     border: none;
