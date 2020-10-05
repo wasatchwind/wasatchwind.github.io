@@ -24,7 +24,7 @@
 </div><hr>
 
 <!-- CURRENT / FORECAST TOGGLE -->
-<div class="toggle txtsz250">
+<div class="flex-toggle txtsz250">
     <div>Current&nbsp;</div>
     <button class="toggle-button" onclick="toggleImage()"><img id="toggle-image"></button>
     <div>&nbsp;Forecast</div>
@@ -32,22 +32,20 @@
 
 <!-- MENU BUTTON & CURRENT OPTION -->
 <div class="flex-menu">
-    <button onclick="toggleMenu()" class="menu-button"></button>
-    <div class="menu-selection txtsz350 ltblue" id="currently-showing"></div>
+    <button class="menu-button" onclick="toggleMenu()"></button>
+    <div class="menu-selection txtsz350 ltblue" id="current-option"></div>
 </div>
 
 <!-- MENU DROPDOWN OPTIONS -->
-<div class="start-hidden left" id="menu-button">
+<div class="start-hidden left" id="menu-button-list">
     <button class="menu-option-button txtsz250" id="wind-button" onclick="toggleOption('Wind')">Wind</button><br>
     <button class="menu-option-button txtsz250" id="soar-button" onclick="toggleOption('Soaring')">Soaring</button><br>
     <button class="menu-option-button txtsz250" id="talt-button" onclick="toggleOption('Temp & Pressure')">Temp & Pressure</button><br>
-    <button class="menu-option-button txtsz250" id="gnrl-button" onclick="toggleOption('Synoptic')">Synoptic</button><br>
-    <button class="menu-option-button txtsz250" id="cams-button" onclick="toggleOption('Webcams')">Webcams</button><br>
-    <button class="menu-option-button txtsz250" id="xctr-button" onclick="toggleOption('XC Trackers')">XC Trackers</button>
+    <button class="menu-option-button txtsz250" id="gnrl-button" onclick="toggleOption('Synoptic')">Synoptic</button>
 </div>
 
-<!-- WIND HISTORY -->
-<div class="start-hidden" id="wind-current">
+<!-- WIND CURRENT -->
+<div class="start-hidden" id="Wind-current">
 
     <!-- SURFACE WIND MAP-->
     <h1 class="txtsz150">Surface Map</h1>
@@ -85,6 +83,128 @@
         </div></a>
     </div>
 </div>
+
+<!-- WIND FORECAST -->
+<div class="start-hidden" id="Wind-forecast">
+
+    <!-- WIND CHART -->
+    <h1 class="txtsz150">48 Hours (KSLC)</h1>
+    <a href="https://forecast.weather.gov/MapClick.php?w3=sfcwind&w3u=1&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+    <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=00001000000000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a>
+
+    <!-- GRAPHICAL SURFACE -->
+    <h1 class="txtsz150">Afternoon Graphical Surface</h1>
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+    <img id="graphical-wind" width="100%" ></a>
+</div>
+
+<!-- SOARING CURRENT -->
+<div class="start-hidden" id="Soaring-current">
+
+    <!-- MORNING SKEW T -->
+    <h1 class="txtsz150">Today's Morning Skew T</h1>
+    <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
+    <img id="skewT" width="100%" ></a>
+</div>
+
+<!-- SOARING FORECAST -->
+<div class="start-hidden" id="Soaring-forecast">
+    <br><hr><span class="txtsz200">Temperature and Pressure History</span><hr>
+</div>
+
+<!-- TEMP & PRESSURE CURRENT -->
+<div class="start-hidden" id="Temp & Pressure-current">
+    <br><hr><span class="txtsz200">Temperature and Pressure History</span><hr>
+</div>
+
+<!-- TEMP & PRESSURE FORECAST -->
+<div class="start-hidden" id="Temp & Pressure-forecast">
+
+    <!-- TEMP CHART -->
+    <h1 class="txtsz150">48 Hours (KSLC)</h1>
+    <a href="https://forecast.weather.gov/MapClick.php?w3=sfcwind&w3u=1&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+    <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10000000000000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a>
+</div>
+
+<!-- SYNOPTIC CURRENT -->
+<div class="start-hidden" id="Synoptic-current">
+
+    <!-- CLOUDS & PRECIP / RADAR -->
+    <h1 class="txtsz150">Clouds and Precip - Last Hour</h1>
+    <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+    <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a>
+
+    <!-- JETSTREAM -->
+    <h1 class="txtsz150">Jetstream - Last 18 Hours</h1>
+    <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
+    <img src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%" ></a>
+</div>
+
+<!-- SYNOPTIC FORECAST -->
+<div class="start-hidden" id="Synoptic-forecast">
+
+    <!-- GRAPHICAL WX -->
+    <h1 class="txtsz150">Afternoon Graphical Weather</h1>
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+    <img id="graphical-weather" width="100%" ></a>
+
+    <!-- SKY COVER & PRECIP CHART -->
+    <h1 class="txtsz150">48 Hours (KSLC)</h1>
+    <a href="https://forecast.weather.gov/MapClick.php?w3=sfcwind&w3u=1&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+    <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=00000110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a>
+
+    <!-- 3 DAY OUTLOOK -->
+    <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.XN8LtchKhPY" target="_blank">
+    <h1 class="txtsz150">3 Day Outlook</h1>
+    <table>
+        <tr>
+            <td rowspan="2"><img id="forecast-day0-img" height=200px></td>
+            <td id="forecast-day0-day" class="txtsz200 noaa-day"></td>
+        </tr>
+        <tr>
+            <td id="forecast-day0-txt" class="txtsz150 noaa-text"></td>
+        </tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
+            <td id="forecast-day1-day" class="txtsz200 noaa-day"></td>
+        </tr>
+        <tr>
+            <td id="forecast-day1-txt" class="txtsz150 noaa-text"></td>
+        </tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day2-img" height=200px></td>
+            <td id="forecast-day2-day" class="txtsz200 noaa-day"></td>
+        </tr>
+        <tr>
+            <td id="forecast-day2-txt" class="txtsz150 noaa-text"></td>
+        </tr>
+    </table></a>
+
+    <!-- AREA FORECAST DISCUSSION -->
+    <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+    <h1 class="txtsz150">Area Forecast Discussion</h1></a>
+</div>
+
+
+<!-- OTHER RESOURCES -->
+<!-- <div>
+    <br><hr><span class="txtsz200">Misc.</span><hr> -->
+
+    <!-- LINKS -->
+    <!-- <a href="https://livetrack24.com/tracks/country/us" target="_blank">
+    <h1 class="txtsz150">LiveTrack24</h1></a>
+    <a href="https://www.xctrack.me/" target="_blank">
+    <h1 class="txtsz150">XC Track</h1></a>
+    <a href="http://xcfind.paraglide.us/map.html?id=15" target="_blank">
+    <h1 class="txtsz150">XC Find</h1></a>
+</div> -->
+
+
+
+
+
 
 <!-- LOCAL SCRIPTS --> 
 <script type="text/javascript" src="ww2.js"></script>
