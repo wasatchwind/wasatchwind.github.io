@@ -119,17 +119,26 @@ td.noaa-day {
     display: flex;
     flex-basis: flex-start;
 }
+.flex-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
 .start-hidden {
     display: none;
 }
 .show {
     display: block;
 }
-.menu-button {
-    background-image: url('https://wasatchwind.github.io/images/menu.png');
+.toggle-button {
     background-color: transparent;
-    padding: 43px;
     border: none;
+}
+.menu-button {
+    background-image: url('images/menu.png');
+    background-color: transparent;
+    border: none;
+    padding: 43px;
 }
 .menu-option-button {
     background-color: rgb(100, 100, 100);
@@ -144,13 +153,4 @@ td.noaa-day {
 .menu-selection {
     flex: 1;
     margin-right: 10%;
-}
-.toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-}
-.toggle-button {
-    background-color: transparent;
-    border: none;
 }

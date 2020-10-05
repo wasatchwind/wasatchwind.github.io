@@ -1,6 +1,6 @@
 const today = new Date();
 let toggleStatus = 'current';
-let currentOption = '&nbsp;'
+let currentShow = '&nbsp;'
 
 function headerDateTime() {
     document.getElementById('current-date').innerHTML = today.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
@@ -8,23 +8,30 @@ function headerDateTime() {
 }
 
 document.getElementById('toggle-image').src = 'images/toggle-' + toggleStatus + '.png';
-document.getElementById('currently-showing').innerHTML = currentOption;
+document.getElementById('current-option').innerHTML = currentShow;
 
 function toggleMenu() {
-    document.getElementById('menu-button').classList.toggle('show');
+    document.getElementById('menu-button-list').classList.toggle('show');
 }
 
-function toggleOption(category) {
-    currentOption = category;
-    document.getElementById('currently-showing').innerHTML = currentOption;
-    if (currentOption === 'Wind') {
-        document.getElementById('wind-current').style.display = 'block';
-    } 
+function toggleOption(selected) {
+    if (currentShow !== '&nbsp;') {
+        document.getElementById(currentShow + '-' + toggleStatus).style.display = 'none';
+    }
+    currentShow = selected;
+    document.getElementById('current-option').innerHTML = currentShow;
+    document.getElementById(currentShow + '-' + toggleStatus).style.display = 'block';
 }
 
 function toggleImage() {
+    if (currentShow !== '&nbsp;') {
+        document.getElementById(currentShow + '-' + toggleStatus).style.display = 'none';
+    }
     toggleStatus = (toggleStatus === 'current') ? 'forecast' : 'current';
     document.getElementById('toggle-image').src = 'images/toggle-' + toggleStatus + '.png';
+    if (currentShow !== '&nbsp;') {
+        document.getElementById(currentShow + '-' + toggleStatus).style.display = 'block';
+    }
 }
 
 window.onclick = function(event) {
@@ -121,8 +128,8 @@ function noaaScrape() {
 }
 
 headerDateTime();
-//pmGraphicals();
-//skewT();
+pmGraphicals();
+skewT();
 timeSeries();
-//openWeather();
-//noaaScrape();
+openWeather();
+noaaScrape();
