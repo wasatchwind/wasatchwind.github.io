@@ -172,7 +172,7 @@ function skewT() {
 }
 
 function soarcast() {
-    let url = 'https://wasatchwind.github.io/soaring.json';
+    let url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json';
     $.get(url, function(soarFcData) {
         let rolms = Math.round((parseInt(soarFcData.MAX_RATE_OF_LIFT) / 196.85) * 10) / 10 + ' m/s';
         let neg3m = Math.round(parseInt(soarFcData.NEG_3_INDEX.replace(',', '')) / 3.281) + ' m';
