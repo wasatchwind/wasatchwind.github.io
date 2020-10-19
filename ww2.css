@@ -84,8 +84,8 @@ td.noaa-day {
 .coral {
     color: coral;
 }
-.txtsz50 {
-    font-size: 50%;
+.txtsz40 {
+    font-size: 40%;
 }
 .txtsz150 {
     font-size: 150%;
@@ -102,8 +102,8 @@ td.noaa-day {
 .txtsz350 {
     font-size: 350%;
 }
-.txtsz400 {
-    font-size: 400%;
+.txtsz500 {
+    font-size: 500%;
 }
 .flex-heading {
     display: flex;
@@ -115,14 +115,21 @@ td.noaa-day {
     flex-direction: column;
     flex-basis: 140px;
 }
-.flex-menu {
+.flex-start {
     display: flex;
     flex-basis: flex-start;
 }
 .flex-toggle {
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-evenly;
+}
+.flex-center {
+    flex: 0 50%;
+}
+.flex-push {
+    margin-left: auto;
+    margin-right: 5%;
 }
 .start-hidden {
     display: none;
@@ -133,6 +140,8 @@ td.noaa-day {
 .toggle-button {
     background-color: transparent;
     border: none;
+    padding-left: 60px;
+    padding-right: 60px;
 }
 .menu-button {
     background-image: url('images/menu.png');
@@ -153,4 +162,11 @@ td.noaa-day {
 .menu-selection {
     flex: 1;
     margin-right: 10%;
+}
+div.fullwidth {
+    width: 100%;
+}
+.aloftbg {
+    background-image: url('images/aloft.png');
+    background-size: 100% 100%;
 }
