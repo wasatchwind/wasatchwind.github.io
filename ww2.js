@@ -211,8 +211,10 @@ function noaaScrape() {
     });
 }
 
-$('p').on('swipe',function() {
-    $(this).hide();
+$(document).on('pagecreate', '#pageone', function() {
+    $('p').on('swipe',function() {
+        $(this).hide();
+    });
 });
 
 timeSeries();
