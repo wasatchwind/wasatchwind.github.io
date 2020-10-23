@@ -198,15 +198,22 @@ function soarcast() {
 }
 
 function noaaScrape() {
-    let url = 'https://us-central1-wasatchwind.cloudfunctions.net/noaa-forecast-scrape-1';
+    let url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
     $.get(url, function(data) {
+        let position = 0;
+        position = (data.properties.periods[0].name === 'This Afternoon') ? 2 : 1;
         for (i=0; i<3; i++) {
-            document.getElementById('forecast-day' + i +'-img').src = data.IMAGE[i];
-            document.getElementById('forecast-day' + i +'-day').innerHTML = data.DAY[i];
-            document.getElementById('forecast-day' + i +'-txt').innerHTML = data.TEXT[i];
+            document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
+            document.getElementById('forecast-day' + i +'-txt').innerHTML = data.properties.periods[position].detailedForecast;
+            document.getElementById('forecast-day' + i +'-img').src = data.properties.periods[position].icon;
+            position += 2;
         }
     });
 }
+
+$('p').on('swipe',function() {
+    $(this).hide();
+});
 
 timeSeries();
 openWeatherHistoryAPI();
