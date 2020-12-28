@@ -30,7 +30,7 @@ function calculate_APZ(alti, temp) {
     return apz;
 }
 
-// mesonet_latest_api();
+mesonet_latest_api();
 
 
 // Surface current wind map         SURFACE
