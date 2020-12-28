@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wasatch Wind</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link href="ww.css" rel="stylesheet">
+    </head>
+<body>
+
+<!-- HEADING -->
+<a href="http://www.wasatchfreeflight.org" target="_blank">
+<table>
+    <tr>
+        <td rowspan="3"><img src="images/wfflogo.png" height="150"></td>
+        <td class="txtsz300 underline">Wasatch Free Flight</td>
+        <td rowspan="3"><img src="images/pg.gif" height="150"></td>
+    </tr>
+    <tr><td class="txtsz200 ltblue" id="date"></td></tr>
+    <tr><td class="txtsz125 unbold ltblue" id="time"></td></tr>
+</table></a><hr>
+
+<table>
+    <tr>
+        <td rowspan="2"><a href="http://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg" target="_blank"><img src="http://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg" height="150"></a></td>
+        <td><img src="images/pressure.png" height="90"></td>
+        <td><img src="images/temp.png" height="90"></td>
+        <td><img src="images/apz.png" height="90"></td>
+        <td><img src="images/wind.png" height="90"></td>
+    </tr>
+    <tr class="txtsz200 ltblue">
+        <td class="current" id="current-pressure">30.11</td>
+        <td class="current" id="current-temp">35</td>
+        <td class="current" id="apz">3</td>
+        <td id="current-wind">NW 10</td>
+    </tr>
+</table><hr>
+
+
+<!-- LOCAL SCRIPTS --> 
+<script type="text/javascript" src="ww.js"></script>
+
+</body>
+</html>
