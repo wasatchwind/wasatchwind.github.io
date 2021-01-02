@@ -39,6 +39,8 @@ a:active {
 .txtsz200 { font-size: 200%; }
 .txtsz250 { font-size: 250%; }
 .txtsz300 { font-size: 300%; }
+.left { text-align: left; }
+.right { text-align: right; }
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline;}
 .ltblue { color: lightblue; }
