@@ -2,6 +2,23 @@ const now = new Date();
 document.getElementById('date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
 document.getElementById('time').innerHTML = now.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'}).toLowerCase();
 
+function hide_all_divs() {
+    document.getElementById('wind').style.display = 'none';
+    document.getElementById('lift').style.display = 'none';
+    document.getElementById('sky').style.display = 'none';
+    document.getElementById('temp-alti').style.display = 'none';
+    document.getElementById('synoptic').style.display = 'none';
+    document.getElementById('misc').style.display = 'none';
+}
+
+function toggle_div(element) {
+    let div = document.getElementById(element);
+    hide_all_divs();
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
+    } else { div.style.display = 'block'; }
+}
+
 function mesonet_latest_api() { // https://developers.synopticdata.com/mesonet
     let url = 'https://api.synopticdata.com/v2/stations/latest?&stid=KSLC&obtimezone=local&timeformat=%-I:%M%20%p&vars=wind_speed,wind_gust,wind_cardinal_direction,altimeter,air_temp&units=english,speed|mph,temp|F&token=6243aadc536049fc9329c17ff2f88db3';
     $.get(url, function(data) {
@@ -36,4 +53,35 @@ function calculate_APZ(alti, temp) {
     return apz;
 }
 
+// function noaa_three_day() {
+//     let url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
+//     $.get(url, function(data) {
+//         console.log(data);
+//         let position = 0;
+//         position = (data.properties.periods[0].name === 'Tonight') ? 1 : position;
+//         for (i=0; i<3; i++) {
+//             document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
+//             document.getElementById('forecast-day' + i +'-txt').innerHTML = data.properties.periods[position].detailedForecast;
+//             document.getElementById('forecast-day' + i +'-img').src = data.properties.periods[position].icon;
+//             position += 2;
+//         }
+//     });
+// }
+
+function noaa_three_day() {
+    let url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
+    $.get(url, function(data) {
+        console.log(data);
+        let position = 0;
+        position = (data.properties.periods[0].isDaytime) ? position : 1;
+        for (i=0; i<3; i++) {
+            document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
+            document.getElementById('forecast-day' + i +'-txt').innerHTML = data.properties.periods[position].detailedForecast;
+            document.getElementById('forecast-day' + i +'-img').src = data.properties.periods[position].icon;
+            position += 2;
+        }
+    });
+}
+
 mesonet_latest_api();
+noaa_three_day();
