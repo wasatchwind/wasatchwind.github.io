@@ -39,13 +39,52 @@ a:active {
 .txtsz200 { font-size: 200%; }
 .txtsz250 { font-size: 250%; }
 .txtsz300 { font-size: 300%; }
+
 .left { text-align: left; }
 .right { text-align: right; }
+
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline;}
+
 .ltblue { color: lightblue; }
-table {
-    width: 100%;
+.white { color: white; }
+
+table { width: 100%; }
+table.bordered {
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 10px;
 }
+
 td.current { width: 25%; }
 td.bottom { vertical-align: bottom; }
+td.top { vertical-align: top; }
+td.noaa-text {
+    vertical-align: text-top;
+    padding-left: 20px;
+    text-align: left;
+    font-weight: normal;
+    color: white;
+}
+td.noaa-day {
+    vertical-align: top;
+    color: lightblue;
+}
+
+.starthidden { display: none; }
+
+button {
+    background-color: rgb(100, 100, 100);
+    color: yellow;
+    font-weight: bold;
+    font-size: 250%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 47%;
+    border: 5px solid white;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
