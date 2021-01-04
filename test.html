@@ -15,7 +15,7 @@
         <td class="txtsz300 underline" colspan="2">Wasatch Free Flight</td>
         <td rowspan="2"><img src="images/pg.gif" height="140"></td>
     </tr>
-    <tr class="txtsz200 ltblue">
+    <tr class="txtsz250 ltblue">
         <td id="date"></td>
         <td id="time"></td>
     </tr>
@@ -24,18 +24,19 @@
 <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
 <table>
     <tr>
-        <td><img src="images/pressure.png" height="70"></td>
-        <td><img src="images/temp.png" height="70"></td>
-        <td class="txtsz200 bottom">KSLC</td>
-        <td><img src="images/apz.png" height="70"></td>
-        <td><img src="images/wind.png" height="70"></td>
+        <td><img src="images/pressure.png" height="90"></td>
+        <td><img src="images/temp.png" height="90"></td>
+        <td><img src="images/apz.png" height="90"></td>
+        <td><img src="images/wind.png" height="90"></td>
+    </tr>
+    <tr class="txtsz200 ltblue">
+        <td class="current" id="current-pressure"></td>
+        <td class="current" id="current-temp"></td>
+        <td class="current" id="apz"></td>
+        <td class="current" id="current-wind"></td>
     </tr>
     <tr>
-        <td class="current txtsz200 ltblue" id="current-pressure"></td>
-        <td class="current txtsz200 ltblue" id="current-temp"></td>
-        <td class="txtsz125 top" id="kslc-latest-time"></td>
-        <td class="current txtsz200 ltblue" id="apz"></td>
-        <td class="current txtsz200 ltblue" id="current-wind"></td>
+        <td class="unbold" colspan="4" id="kslc-latest-time"></td>
     </tr>
 </table></a><hr>
 
@@ -48,58 +49,76 @@
 
 <!-- WIND SECTION -->
 <div class="starthidden" id="wind">
-    <span class="txtsz300">Wind</span>
+    <div class="txtsz300">Wind</div>
 </div>
 
 <!-- LIFT SECTION  -->
 <div class="starthidden" id="lift">
-    <span class="txtsz300">Lift</span>
+    <div class="txtsz300">Lift</div>
 </div>
 
 <!-- SKY COVER SECTION -->
 <div class="starthidden" id="sky">
-    <span class="txtsz300">Sky Cover</span>
+    <div class="txtsz300">Sky Cover</div>
+
+    <!-- CLOUDS & PRECIP GIF -->
+    <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+    <p class="txtsz200">Clouds & Precip (Last 60 Mins)</p>
+    <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a><br><br>
+    
+    <!-- SURFACE GRAPHICAL SKY COVER -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+    <div class="surface-graphical"></div>
+    <div>Morning</div>
+    <div>Mid Day</div>
+    <img id="graphical-wind-0" width="49%">
+    <img id="graphical-wind-1" width="49%">
+    <img id="graphical-wind-2" width="49%">
+    <img id="graphical-wind-3" width="49%">
+    </a>
 </div>
 
 <!-- TEMP & PRESSURE SECTION -->
 <div class="starthidden" id="temp-alti">
-    <span class="txtsz300">Temp & Pressure</span>
+    <div class="txtsz300">Temp & Pressure</div>
 </div>
 
 <!-- SYNOPTIC SECTION -->
 <div class="starthidden" id="synoptic">
-    <span class="txtsz300">Synoptic</span>
+    <div class="txtsz300">Synoptic</div>
 
+    <!-- HOURLY FORECAST CHART -->
     <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-    <p class="txtsz200">SLC 2 Day Hourly Forecast</p>
+    <p class="txtsz250">2 Day Hourly Forecast</p>
     <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a><br><br>
 
+    <!-- NOAA 3 DAY FORECAST -->
     <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.X_EMLNhKiw4" target="_blank">
-    <p class="txtsz200">SLC 3 Day Forecast</p>
+    <p class="txtsz200">3 Day Forecast</p>
     <table class="bordered">
         <tr>
             <td rowspan="2"><img id="forecast-day0-img" height=200px></td>
             <td class="txtsz250 noaa-day" id="forecast-day0-day"></td>
         </tr>
-        <tr><td class="noaa-text" id="forecast-day0-txt"></td></tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day0-txt"></td></tr>
         <tr><td colspan="2"><hr></td></tr>
         <tr>
             <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
             <td class="txtsz250 noaa-day" id="forecast-day1-day"></td>
         </tr>
-        <tr><td class="noaa-text" id="forecast-day1-txt"></td></tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day1-txt"></td></tr>
         <tr><td colspan="2"><hr></td></tr>
         <tr>
             <td rowspan="2"><img id="forecast-day2-img" height=200px></td>
             <td class="txtsz250 noaa-day" id="forecast-day2-day"></td>
         </tr>
-        <tr><td class="noaa-text" id="forecast-day2-txt"></td></tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day2-txt"></td></tr>
     </table></a>
 </div><br>
 
 <!-- MISC. SECTION -->
 <div class="starthidden" id="misc">
-    <span class="txtsz300">Misc.</span>
+    <div class="txtsz300">Misc.</div>
 </div>
 
 <!-- LOCAL SCRIPTS -->
