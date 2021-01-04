@@ -20,19 +20,19 @@ body {
     text-align: center;
 }
 a:link {
-    color: yellow;
+    color: white;
     background-color: transparent;
     text-decoration: none;
 }
 a:visited {
-    color: yellow;
+    color: white;
     background-color: transparent;
     text-decoration: none;
 }
 a:active {
     color: white;
     background-color: transparent;
-    text-decoration: underline;
+    text-decoration: none;
 }
 .txtsz125 { font-size: 125%; }
 .txtsz150 { font-size: 150%; }
@@ -44,7 +44,7 @@ a:active {
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline;}
 .ltblue { color: lightblue; }
-.white { color: white; }
+.yellow { color: yellow; }
 table { width: 100%; }
 table.bordered {
     border: 2px solid white;
@@ -60,7 +60,7 @@ td.noaa-text {
     text-align: left;
     font-weight: normal;
     color: white;
-    font-size: 125%;
+    font-size: 120%;
 }
 td.noaa-day {
     vertical-align: top;
@@ -69,7 +69,7 @@ td.noaa-day {
 .starthidden { display: none; }
 button {
     background-color: rgb(100, 100, 100);
-    color: yellow;
+    color: white;
     font-weight: bold;
     font-size: 250%;
     padding-top: 10px;
