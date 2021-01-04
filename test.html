@@ -12,12 +12,12 @@
 <table>
     <tr>
         <td rowspan="2"><img src="images/wfflogo.png" height="140"></td>
-        <td class="txtsz300 underline" colspan="2">Wasatch Free Flight</td>
+        <td class="txtsz300 yellow" colspan="2">Wasatch Free Flight</td>
         <td rowspan="2"><img src="images/pg.gif" height="140"></td>
     </tr>
     <tr class="txtsz250 ltblue">
-        <td id="date"></td>
-        <td id="time"></td>
+        <td class="left" id="date"></td>
+        <td class="right" id="time"></td>
     </tr>
 </table></a><hr>
 
@@ -29,27 +29,41 @@
         <td><img src="images/apz.png" height="90"></td>
         <td><img src="images/wind.png" height="90"></td>
     </tr>
-    <tr class="ltblue">
-        <td class="current txtsz250" id="current-pressure"></td>
-        <td class="current txtsz250" id="current-temp"></td>
-        <td class="current txtsz250" id="apz"></td>
-        <td class="current txtsz200" id="current-wind"></td>
+    <tr class="txtsz250 ltblue">
+        <td class="current" id="current-pressure"></td>
+        <td class="current" id="current-temp"></td>
+        <td class="current" id="apz"></td>
+        <td class="current" id="current-wind"></td>
     </tr>
-    <tr>
-        <td class="unbold" colspan="4" id="kslc-latest-time"></td>
-    </tr>
+    <tr><td class="unbold" colspan="4" id="kslc-latest-time"></td></tr>
 </table></a><hr>
 
 <button onclick="toggle_div('wind')">Wind</button>
 <button onclick="toggle_div('lift')">Lift</button>
 <button onclick="toggle_div('sky')">Sky Cover</button>
 <button onclick="toggle_div('temp-alti')">Temp & Pressure</button>
-<button onclick="toggle_div('synoptic')">Synoptic</button>
+<button onclick="toggle_div('synoptic')">General Forecast</button>
 <button onclick="toggle_div('misc')">Misc.</button>
 
 <!-- WIND SECTION -->
 <div class="starthidden" id="wind">
     <div class="txtsz300">Wind</div>
+
+    <!-- GRAPHICAL SURFACE WIND -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="txtsz250">Surface Forecast</div>
+        <div class="flex-graphical txtsz200">
+            <div>Morning</div>
+            <div>Mid Day</div>
+        </div>
+        <img id="graphical-wind-0" width="49%">
+        <img id="graphical-wind-1" width="49%">
+        <div class="flex-graphical txtsz200">
+            <div>Afternoon</div>
+            <div>Evening</div>
+        </div>
+        <img id="graphical-wind-2" width="49%">
+        <img id="graphical-wind-3" width="49%"></a>
 </div>
 
 <!-- LIFT SECTION  -->
@@ -66,9 +80,9 @@
     <p class="txtsz250">Clouds & Precip (Last Hour)</p>
     <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a><br><br>
     
-    <!-- SURFACE GRAPHICAL SKY COVER -->
+    <!-- GRAPHICAL SKY COVER -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-    <div class="surface-graphical txtsz250"></div>
+    <div class="txtsz250">Forecast</div>
     <div class="flex-graphical txtsz200">
         <div>Morning</div>
         <div>Mid Day</div>
@@ -80,8 +94,7 @@
         <div>Evening</div>
     </div>
     <img id="graphical-sky-2" width="49%">
-    <img id="graphical-sky-3" width="49%">
-    </a>
+    <img id="graphical-sky-3" width="49%"></a>
 </div>
 
 <!-- TEMP & PRESSURE SECTION -->
@@ -91,16 +104,32 @@
 
 <!-- SYNOPTIC SECTION -->
 <div class="starthidden" id="synoptic">
-    <div class="txtsz300">Synoptic</div>
+    <div class="txtsz300">General Forecast</div>
+
+    <!-- GRAPHICAL WX -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="txtsz250">WX</div>
+        <div class="flex-graphical txtsz200">
+            <div>Morning</div>
+            <div>Mid Day</div>
+        </div>
+        <img id="graphical-wx-0" width="49%">
+        <img id="graphical-wx-1" width="49%">
+        <div class="flex-graphical txtsz200">
+            <div>Afternoon</div>
+            <div>Evening</div>
+        </div>
+        <img id="graphical-wx-2" width="49%">
+        <img id="graphical-wx-3" width="49%"></a>
 
     <!-- HOURLY FORECAST CHART -->
     <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-    <p class="txtsz250">2 Day Hourly Forecast</p>
+    <p class="txtsz250">2 Day Hourly</p>
     <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a><br><br>
 
     <!-- NOAA 3 DAY FORECAST -->
     <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.X_EMLNhKiw4" target="_blank">
-    <p class="txtsz250">3 Day Forecast</p>
+    <p class="txtsz250">3 Day</p>
     <table class="bordered">
         <tr>
             <td rowspan="2"><img id="forecast-day0-img" height=200px></td>
