@@ -66,17 +66,16 @@ function noaa_three_day() {
     });
 }
 
-function graphical_forecast(day) {
+function graphical_forecasts() {
     let timeString = (now.getHours() > 19 || now.getHours() < 7) ? 5 : 1;
-    day = (now.getHours() > 19) ? ' (tomorrow)' : '';
-    document.getElementsByClassName('surface-graphical')[0].innerHTML = 'Forecast' + day;
-    // document.getElementsByClassName('surface-graphical')[1].innerHTML = 'Surface Graphical' + day;
+    
     for (i=0; i<4; i++) {
+        document.getElementById('graphical-wind-' + i).src = 'https://graphical.weather.gov/images/slc/WindSpd' + (timeString + i) + '_slc.png';
         document.getElementById('graphical-sky-' + i).src = 'https://graphical.weather.gov/images/slc/Sky' + (timeString + i) + '_slc.png';
-        // document.getElementById('graphical-weather-' + i).src = 'https://graphical.weather.gov/images/slc/Wx' + (timeString + i) + '_slc.png';
+        document.getElementById('graphical-wx-' + i).src = 'https://graphical.weather.gov/images/slc/Wx' + (timeString + i) + '_slc.png';
     }
 }
 
 mesonet_latest_api();
 noaa_three_day();
-graphical_forecast();
+graphical_forecasts();
