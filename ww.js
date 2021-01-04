@@ -22,7 +22,6 @@ function toggle_div(element) {
 function mesonet_latest_api() { // https://developers.synopticdata.com/mesonet
     let url = 'https://api.synopticdata.com/v2/stations/latest?&stid=KSLC&obtimezone=local&timeformat=%-I:%M%20%p&vars=wind_speed,wind_gust,wind_cardinal_direction,altimeter,air_temp&units=english,speed|mph,temp|F&token=6243aadc536049fc9329c17ff2f88db3';
     $.get(url, function(data) {
-        console.log(data);
         alti = data.STATION[0].OBSERVATIONS.altimeter_value_1.value.toFixed(2);
         temp = Math.round(data.STATION[0].OBSERVATIONS.air_temp_value_1.value);
         wind = Math.round(data.STATION[0].OBSERVATIONS.wind_speed_value_1.value);
@@ -32,7 +31,7 @@ function mesonet_latest_api() { // https://developers.synopticdata.com/mesonet
         wind = (windTime === gustTime) ? wind + 'g' + Math.round(data.STATION[0].OBSERVATIONS.wind_gust_value_1.value) : wind;
         wind = (wind === 'Calm') ? wind : data.STATION[0].OBSERVATIONS.wind_cardinal_direction_value_1d.value + ' ' + wind;
         
-        document.getElementById('kslc-latest-time').innerHTML = windTime.toLowerCase();
+        document.getElementById('kslc-latest-time').innerHTML = 'KSLC ' + windTime.toLowerCase();
         document.getElementById('current-pressure').innerHTML = alti;
         document.getElementById('current-temp').innerHTML = temp;
         document.getElementById('apz').innerHTML = calculate_APZ(alti, temp);
@@ -53,25 +52,9 @@ function calculate_APZ(alti, temp) {
     return apz;
 }
 
-// function noaa_three_day() {
-//     let url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
-//     $.get(url, function(data) {
-//         console.log(data);
-//         let position = 0;
-//         position = (data.properties.periods[0].name === 'Tonight') ? 1 : position;
-//         for (i=0; i<3; i++) {
-//             document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
-//             document.getElementById('forecast-day' + i +'-txt').innerHTML = data.properties.periods[position].detailedForecast;
-//             document.getElementById('forecast-day' + i +'-img').src = data.properties.periods[position].icon;
-//             position += 2;
-//         }
-//     });
-// }
-
 function noaa_three_day() {
     let url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
     $.get(url, function(data) {
-        console.log(data);
         let position = 0;
         position = (data.properties.periods[0].isDaytime) ? position : 1;
         for (i=0; i<3; i++) {
@@ -83,5 +66,17 @@ function noaa_three_day() {
     });
 }
 
+function graphical_forecast(day) {
+    let timeString = (now.getHours() > 19 || now.getHours() < 7) ? 5 : 1;
+    day = (now.getHours() > 19) ? ' (tomorrow)' : '';
+    document.getElementsByClassName('surface-graphical')[0].innerHTML = 'Surface Graphical' + day;
+    // document.getElementsByClassName('surface-graphical')[1].innerHTML = 'Surface Graphical' + day;
+    for (i=0; i<4; i++) {
+        document.getElementById('graphical-wind-' + i).src = 'https://graphical.weather.gov/images/slc/WindSpd' + (timeString + i) + '_slc.png';
+        // document.getElementById('graphical-weather-' + i).src = 'https://graphical.weather.gov/images/slc/Wx' + (timeString + i) + '_slc.png';
+    }
+}
+
 mesonet_latest_api();
 noaa_three_day();
+graphical_forecast();
