@@ -68,7 +68,7 @@ function noaa_three_day() {
 
 function graphical_forecasts() {
     let timeString = (now.getHours() > 19 || now.getHours() < 7) ? 5 : 1;
-    
+
     for (i=0; i<4; i++) {
         document.getElementById('graphical-wind-' + i).src = 'https://graphical.weather.gov/images/slc/WindSpd' + (timeString + i) + '_slc.png';
         document.getElementById('graphical-sky-' + i).src = 'https://graphical.weather.gov/images/slc/Sky' + (timeString + i) + '_slc.png';
@@ -76,6 +76,14 @@ function graphical_forecasts() {
     }
 }
 
+function skew_t() {
+    let dateString = now.toLocaleDateString('en-ZA').replaceAll('/', '');
+    let skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
+    skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
+    document.getElementById('skew-t').src = skewTurl;
+}
+
 mesonet_latest_api();
 noaa_three_day();
 graphical_forecasts();
+skew_t();
