@@ -39,12 +39,14 @@ a:active {
 .txtsz200 { font-size: 200%; }
 .txtsz250 { font-size: 250%; }
 .txtsz300 { font-size: 300%; }
+.txtsz350 { font-size: 350%; }
 .left { text-align: left; }
 .right { text-align: right; }
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline;}
 .ltblue { color: lightblue; }
 .yellow { color: yellow; }
+hr.dash { border: 1px dashed white; }
 table { width: 100%; }
 table.bordered {
     border: 2px solid white;
@@ -54,13 +56,15 @@ table.bordered {
 td.current { width: 25%; }
 td.bottom { vertical-align: bottom; }
 td.top { vertical-align: top; }
+span.test { vertical-align: top; }
+/* td { border: 1px solid white; } */
 td.noaa-text {
     vertical-align: text-top;
     padding-left: 20px;
     text-align: left;
     font-weight: normal;
     color: white;
-    font-size: 100%;
+    font-size: 105%;
 }
 td.noaa-day {
     vertical-align: top;
