@@ -56,19 +56,59 @@
 
     <!-- GRAPHICAL SURFACE WIND -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-        <div class="txtsz250">Surface Forecast</div>
-        <div class="flex-graphical txtsz200">
-            <div>Morning</div>
-            <div>Mid Day</div>
-        </div>
-        <img id="graphical-wind-0" width="49%">
-        <img id="graphical-wind-1" width="49%">
-        <div class="flex-graphical txtsz200">
-            <div>Afternoon</div>
-            <div>Evening</div>
-        </div>
-        <img id="graphical-wind-2" width="49%">
-        <img id="graphical-wind-3" width="49%"></a><br>
+    <div class="txtsz250">Surface Forecast</div>
+    <div class="flex-graphical txtsz200">
+        <div>Morning</div>
+        <div>Mid Day</div>
+    </div>
+    <img id="graphical-wind-0" width="49%">
+    <img id="graphical-wind-1" width="49%">
+    <div class="flex-graphical txtsz200">
+        <div>Afternoon</div>
+        <div>Evening</div>
+    </div>
+    <img id="graphical-wind-2" width="49%">
+    <img id="graphical-wind-3" width="49%"></a><br>
+
+    <!-- WIND ALOFT -->
+    <a href="https://www.aviationweather.gov/windtemp/data?region=slc" target="_blank">
+    <div class="txtsz250">Wind Aloft</div>
+    <span class="txtsz200 ltblue" id="aloft-start"></span> &nbsp;&nbsp;to&nbsp;&nbsp; <span class="txtsz200 ltblue" id="aloft-end"></span>
+
+    <table class="bordered">
+        <tr>
+            <td class="left" width="10%"><span class="txtsz300">18</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-3" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-3"><span><img src="images/leftbar.png"><img src="images/midbar.png" id="barwidth-3" height="80px"><img src="images/rightbar.png"></span><span class="test" id="spd-3"></span></td>
+        </tr>
+        <tr><td class="right unbold">5486 m</td></tr>
+        <tr>
+            <td colspan="4"><hr class="dash"></td>
+        </tr><tr>
+            <td class="left" width="10%"><span class="txtsz300">12</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-2" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-2"><span><img src="images/leftbar.png"><img src="images/midbar.png" id="barwidth-2" height="80px"><img src="images/rightbar.png"></span><span class="test" id="spd-2"></span></td>
+        </tr><tr>
+            <td class="right unbold">3658 m</td>
+        </tr><tr>
+            <td colspan="4"><hr class="dash"></td>
+        </tr><tr>
+            <td class="left" width="10%"><span class="txtsz300">9</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-1" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-1"><span><img src="images/leftbar.png"><img src="images/midbar.png" id="barwidth-1" height="80px"><img src="images/rightbar.png"></span><span class="test" id="spd-1"></span></td>
+        </tr><tr>
+            <td class="right unbold">2743 m</td>
+        </tr><tr>
+            <td colspan="4"><hr class="dash"></td>
+        </tr><tr>
+            <td class="left" width="10%"><span class="txtsz300">6</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-0" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-0"><span><img src="images/leftbar.png"><img src="images/midbar.png" id="barwidth-0" height="80px"><img src="images/rightbar.png"></span><span class="test" id="spd-0"></span></td>
+        </tr><tr>
+            <td class="right unbold">1288 m</td>
+        </tr>
+    </table>
+
 </div>
 
 <!-- LIFT SECTION  -->
@@ -142,12 +182,6 @@
     <div class="txtsz250">3 Day</div>
     <table class="bordered">
         <tr>
-            <td rowspan="2"><img id="forecast-day0-img" height=200px></td>
-            <td class="txtsz250 noaa-day" id="forecast-day0-day"></td>
-        </tr>
-        <tr><td class="noaa-text" id="forecast-day0-txt"></td></tr>
-        <tr><td colspan="2"><hr></td></tr>
-        <tr>
             <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
             <td class="txtsz250 noaa-day" id="forecast-day1-day"></td>
         </tr>
@@ -158,6 +192,12 @@
             <td class="txtsz250 noaa-day" id="forecast-day2-day"></td>
         </tr>
         <tr><td class="noaa-text" id="forecast-day2-txt"></td></tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day3-img" height=200px></td>
+            <td class="txtsz250 noaa-day" id="forecast-day3-day"></td>
+        </tr>
+        <tr><td class="noaa-text" id="forecast-day3-txt"></td></tr>
     </table></a><br>
 </div><br>
 
