@@ -56,7 +56,7 @@ table.bordered {
 td.current { width: 25%; }
 td.bottom { vertical-align: bottom; }
 td.top { vertical-align: top; }
-span.test { vertical-align: top; }
+span.aloft { vertical-align: top; }
 /* td { border: 1px solid white; } */
 td.noaa-text {
     vertical-align: text-top;
