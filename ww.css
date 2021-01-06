@@ -91,3 +91,7 @@ button {
     justify-content: space-around;
     align-items: center;
 }
+.aloftbg {
+    background-image: url('images/aloft.png');
+    background-size: 100% 100%;
+}
