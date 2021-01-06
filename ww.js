@@ -86,8 +86,7 @@ function latest_morning_skew_t() {
 function wind_aloft_gcp_function() {
     let url = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-122620';
     $.get(url, function(data) {
-        // let data = [{"Start":"1 pm"},{"End":"8 pm"},{"Direction":"calm"},{"Direction":320},{"Direction":340},{"Direction":330},{"Speed(mph)":0},{"Speed(mph)":12},{"Speed(mph)":33},{"Speed(mph)":71},{"Temp(F)":18},{"Temp(F)":14},{"Temp(F)":-2}];
-        console.log(data);
+        // let data = [{"Start":"2 pm"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":220},{"Direction":240},{"Direction":240},{"Speed(mph)":0},{"Speed(mph)":10},{"Speed(mph)":18},{"Speed(mph)":30},{"Temp(F)":34},{"Temp(F)":27},{"Temp(F)":0}];
         document.getElementById('aloft-start').innerHTML = data[0].Start;
         document.getElementById('aloft-end').innerHTML = data[1].End;
         for (i=0; i<4; i++) {
