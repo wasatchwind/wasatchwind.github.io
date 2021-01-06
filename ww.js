@@ -87,12 +87,17 @@ function wind_aloft_gcp_function() {
     let url = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-122620';
     $.get(url, function(data) {
         // let data = [{"Start":"2 pm"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":220},{"Direction":240},{"Direction":240},{"Speed(mph)":0},{"Speed(mph)":10},{"Speed(mph)":18},{"Speed(mph)":30},{"Temp(F)":34},{"Temp(F)":27},{"Temp(F)":0}];
+        const ylwSpeeds = [7, 10, 13, 19];
+        const redSpeeds = [11, 16, 21, 32];
+        let color = 'grn';
         document.getElementById('aloft-start').innerHTML = data[0].Start;
         document.getElementById('aloft-end').innerHTML = data[1].End;
         for (i=0; i<4; i++) {
             document.getElementById('dir-' + i).src = 'images/dirs/' + data[i+2].Direction + '.gif';
-            document.getElementById('spd-' + i).innerHTML = '<span class="txtsz350 ltblue">' + data[i+6]['Speed(mph)'] + '</span><span class="unbold white"> mph</span>';
             if (data[i+2].Direction === 'calm') { document.getElementById('aloft-' + i).style.display = 'none' }
+            document.getElementById('spd-' + i).innerHTML = '<span class="txtsz350 ltblue">' + data[i+6]['Speed(mph)'] + '</span><span class="unbold white"> mph</span>';
+            color = (data[i+6]['Speed(mph)'] > ylwSpeeds[i]) ? 'ylw' : (data[i+6]['Speed(mph)'] > redSpeeds[i]) ? 'red' : color;
+            document.getElementById('barwidth-' + i).src = 'images/midbar' + color + '.png';
             document.getElementById('barwidth-' + i).style.width = data[i+6]['Speed(mph)']*0.6 + '%';
         }
     });
