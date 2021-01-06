@@ -14,29 +14,7 @@ function hide_all_divs() {
 function toggle_div(element) {
     let div = document.getElementById(element);
     hide_all_divs();
-    if (div.style.display === 'block') {
-        div.style.display = 'none';
-    } else { div.style.display = 'block'; }
-}
-
-function mesonet_latest_data_api() { // https://developers.synopticdata.com/mesonet
-    let url = 'https://api.synopticdata.com/v2/stations/latest?&stid=KSLC&obtimezone=local&timeformat=%-I:%M%20%p&vars=wind_speed,wind_gust,wind_cardinal_direction,altimeter,air_temp&units=english,speed|mph,temp|F&token=6243aadc536049fc9329c17ff2f88db3';
-    $.get(url, function(data) {
-        alti = data.STATION[0].OBSERVATIONS.altimeter_value_1.value.toFixed(2);
-        temp = Math.round(data.STATION[0].OBSERVATIONS.air_temp_value_1.value);
-        wind = Math.round(data.STATION[0].OBSERVATIONS.wind_speed_value_1.value);
-        windTime = data.STATION[0].OBSERVATIONS.wind_speed_value_1.date_time;
-        gustTime = data.STATION[0].OBSERVATIONS.wind_gust_value_1.date_time;
-        wind = (wind === 0) ? 'Calm' : wind;
-        wind = (windTime === gustTime) ? wind + 'g' + Math.round(data.STATION[0].OBSERVATIONS.wind_gust_value_1.value) : wind;
-        wind = (wind === 'Calm') ? wind : data.STATION[0].OBSERVATIONS.wind_cardinal_direction_value_1d.value + ' ' + wind;
-        
-        document.getElementById('kslc-latest-time').innerHTML = 'KSLC ' + windTime.toLowerCase();
-        document.getElementById('current-pressure').innerHTML = alti;
-        document.getElementById('current-temp').innerHTML = temp;
-        document.getElementById('apz').innerHTML = calculate_apz(alti, temp);
-        document.getElementById('current-wind').innerHTML = wind;
-    });
+    if (div.style.display === 'block') { div.style.display = 'none'; } else { div.style.display = 'block'; }
 }
 
 function calculate_apz(alti, temp) {
@@ -50,6 +28,25 @@ function calculate_apz(alti, temp) {
     apz = currentZones.findIndex(n => n >= alti);
     apz = (alti == currentZones[3]) ? 'LoP' : apz;
     return apz;
+}
+
+function mesonet_latest_data_api() { // https://developers.synopticdata.com/mesonet
+    let url = 'https://api.synopticdata.com/v2/stations/latest?&stid=KSLC&obtimezone=local&timeformat=%-I:%M%20%p&vars=wind_speed,wind_gust,wind_cardinal_direction,altimeter,air_temp&units=english,speed|mph,temp|F&token=6243aadc536049fc9329c17ff2f88db3';
+    $.get(url, function(data) {
+        alti = data.STATION[0].OBSERVATIONS.altimeter_value_1.value.toFixed(2);
+        temp = Math.round(data.STATION[0].OBSERVATIONS.air_temp_value_1.value);
+        wind = Math.round(data.STATION[0].OBSERVATIONS.wind_speed_value_1.value);
+        windTime = data.STATION[0].OBSERVATIONS.wind_speed_value_1.date_time;
+        gustTime = data.STATION[0].OBSERVATIONS.wind_gust_value_1.date_time;
+        wind = (wind === 0) ? 'Calm' : wind;
+        wind = (windTime === gustTime) ? wind + 'g' + Math.round(data.STATION[0].OBSERVATIONS.wind_gust_value_1.value) : wind;
+        wind = (wind === 'Calm') ? wind : data.STATION[0].OBSERVATIONS.wind_cardinal_direction_value_1d.value + ' ' + wind;
+        document.getElementById('kslc-latest-time').innerHTML = 'KSLC ' + windTime.toLowerCase();
+        document.getElementById('current-pressure').innerHTML = alti;
+        document.getElementById('current-temp').innerHTML = temp;
+        document.getElementById('apz').innerHTML = calculate_apz(alti, temp);
+        document.getElementById('current-wind').innerHTML = wind;
+    });
 }
 
 function noaa_three_day_forecast() {
@@ -76,17 +73,25 @@ function graphical_forecast_images() {
     }
 }
 
-function latest_morning_skew_t() {
+function morning_skew_t_today() {
     let dateString = now.toLocaleDateString('en-ZA').replaceAll('/', '');
     let skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
     skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
     document.getElementById('skew-t').src = skewTurl;
 }
 
+function set_wind_aloft_link() {
+    let range = '06';
+    range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : range;
+    let linkURL = 'https://www.aviationweather.gov/windtemp/data?level=low&fcst=' + range + '&region=slc&layout=on&date=';
+    document.getElementById('wind-aloft-link').setAttribute('href', linkURL);
+}
+
 function wind_aloft_gcp_function() {
     let url = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-122620';
     $.get(url, function(data) {
         // let data = [{"Start":"2 pm"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":220},{"Direction":240},{"Direction":240},{"Speed(mph)":0},{"Speed(mph)":10},{"Speed(mph)":18},{"Speed(mph)":30},{"Temp(F)":34},{"Temp(F)":27},{"Temp(F)":0}];
+        set_wind_aloft_link();
         const ylwSpeeds = [7, 10, 13, 19];
         const redSpeeds = [11, 16, 21, 32];
         let color = 'grn';
@@ -107,5 +112,5 @@ function wind_aloft_gcp_function() {
 mesonet_latest_data_api();
 noaa_three_day_forecast();
 graphical_forecast_images();
-latest_morning_skew_t();
+morning_skew_t_today();
 wind_aloft_gcp_function();
