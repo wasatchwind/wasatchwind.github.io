@@ -92,8 +92,8 @@ function wind_aloft_gcp_function() {
     $.get(url, function(data) {
         // let data = [{"Start":"2 pm"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":220},{"Direction":240},{"Direction":240},{"Speed(mph)":0},{"Speed(mph)":10},{"Speed(mph)":18},{"Speed(mph)":30},{"Temp(F)":34},{"Temp(F)":27},{"Temp(F)":0}];
         set_wind_aloft_link();
-        const ylwSpeeds = [7, 10, 13, 19];
-        const redSpeeds = [11, 16, 21, 32];
+        const ylwSpeeds = [9, 12, 15, 21];
+        const redSpeeds = [12, 18, 24, 36];
         let color = 'grn';
         document.getElementById('aloft-start').innerHTML = data[0].Start;
         document.getElementById('aloft-end').innerHTML = data[1].End;
@@ -101,7 +101,7 @@ function wind_aloft_gcp_function() {
             document.getElementById('dir-' + i).src = 'images/dirs/' + data[i+2].Direction + '.gif';
             if (data[i+2].Direction === 'calm') { document.getElementById('aloft-' + i).style.display = 'none' }
             document.getElementById('spd-' + i).innerHTML = '<span class="txtsz350 ltblue">' + data[i+6]['Speed(mph)'] + '</span><span class="unbold white"> mph</span>';
-            color = (data[i+6]['Speed(mph)'] > ylwSpeeds[i]) ? 'ylw' : (data[i+6]['Speed(mph)'] > redSpeeds[i]) ? 'red' : color;
+            color = (data[i+6]['Speed(mph)'] > redSpeeds[i]) ? 'red' : (data[i+6]['Speed(mph)'] > ylwSpeeds[i]) ? 'ylw' : color;
             document.getElementById('barwidth-' + i).src = 'images/midbar' + color + '.png';
             document.getElementById('barwidth-' + i).style.width = data[i+6]['Speed(mph)']*0.6 + '%';
         }
