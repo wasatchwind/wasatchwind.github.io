@@ -64,7 +64,7 @@ function noaa_three_day_forecast() {
 }
 
 function graphical_forecast_images() {
-    let timeString = (now.getHours() > 19 || now.getHours() < 7) ? 5 : 1;
+    let timeString = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1;
     let url = 'https://graphical.weather.gov/images/slc/';
     for (i=0; i<4; i++) {
         document.getElementById('graphical-wind-' + i).src = url + 'WindSpd' + (timeString + i) + '_slc.png';
