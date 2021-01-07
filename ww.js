@@ -90,7 +90,7 @@ function set_wind_aloft_link() {
 function wind_aloft_gcp_function() {
     let url = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-122620';
     $.get(url, function(data) {
-        // let data = [{"Start":"2 pm"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":220},{"Direction":240},{"Direction":240},{"Speed(mph)":0},{"Speed(mph)":10},{"Speed(mph)":18},{"Speed(mph)":30},{"Temp(F)":34},{"Temp(F)":27},{"Temp(F)":0}];
+        // let data = [{"Start":"11 am"},{"End":"11 pm"},{"Direction":"calm"},{"Direction":"calm"},{"Direction":320},{"Direction":290},{"Speed(mph)":0},{"Speed(mph)":0},{"Speed(mph)":22},{"Speed(mph)":62},{"Temp(F)":19},{"Temp(F)":16},{"Temp(F)":-6}];
         set_wind_aloft_link();
         const ylwSpeeds = [9, 12, 15, 21];
         const redSpeeds = [12, 18, 24, 36];
@@ -108,9 +108,21 @@ function wind_aloft_gcp_function() {
     });
 }
 
+function determine_wind_map_time() {
+    hour = now.getHours();
+    min = now.getMinutes();
+    if (hour > 12 && hour < 20) {
+        min = (min < 15) ? '00' : (min < 30) ? 15 : (min < 45) ? 30 : 45;
+    } else min = '00';
+    ampm = (hour < 12 && hour >= 7) ? ' am' : ' pm';
+    hour = (hour >= 7 && hour <= 20) ? (hour % 12 === 0) ? 12 : hour % 12 : 8;
+    document.getElementById('wind-map-timestamp').innerHTML = hour + ':' + min + ampm;
+}
+
 
 mesonet_latest_data_api();
 noaa_three_day_forecast();
 graphical_forecast_images();
 morning_skew_t_today();
 wind_aloft_gcp_function();
+determine_wind_map_time();
