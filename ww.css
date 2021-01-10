@@ -95,3 +95,24 @@ button {
     background-image: url('images/aloft.png');
     background-size: 100% 100%;
 }
+.dalrLabel {
+    fill: white;
+    font-size: 150%;
+}
+.yAxis { font-size: 150%; }
+.xAxis { font-size: 150%; }
+.yLabel {
+    fill: lightblue;
+    text-anchor: middle;
+    font-size: 150%;
+}
+.xLabel {
+    fill: lightblue;
+    text-anchor: middle;
+    font-size: 150%;
+}
+.yTicks { opacity: 0.5; }
+.xTicks {
+    opacity: 0.5;
+    stroke: white;
+}
