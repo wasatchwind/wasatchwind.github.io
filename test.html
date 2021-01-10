@@ -3,6 +3,7 @@
     <head>
         <title>Wasatch Wind</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js"></script>
         <link href="ww.css" rel="stylesheet">
     </head>
 <body>
@@ -12,13 +13,10 @@
 <table>
     <tr>
         <td rowspan="2"><img src="images/wfflogo.png" height="140"></td>
-        <td class="txtsz300 yellow" colspan="2">Wasatch Free Flight</td>
+        <td class="txtsz300 yellow">Wasatch Free Flight</td>
         <td rowspan="2"><img src="images/pg.gif" height="140"></td>
     </tr>
-    <tr class="txtsz250 ltblue">
-        <td class="left" id="date"></td>
-        <td class="right" id="time"></td>
-    </tr>
+    <tr><td class="txtsz250 ltblue" id="date"></td></tr>
 </table></a><hr>
 
 <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
@@ -35,7 +33,7 @@
         <td class="current" id="apz">&nbsp;</td>
         <td class="current" id="current-wind">&nbsp;</td>
     </tr>
-    <tr><td class="txtsz125" colspan="4" id="kslc-latest-time">&nbsp;</td></tr>
+    <tr><td class="txtsz150" colspan="4" id="kslc-latest-time">&nbsp;</td></tr>
 </table></a><hr>
 
 <button onclick="toggle_div('wind')">Wind</button>
@@ -53,8 +51,8 @@
     <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
     <div class="txtsz250">Surface Wind Map</div>
     <span class="txtsz200" id="wind-map-timestamp"></span>
-    <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br>
-    <!-- <img src="" width="100%"></a><br> -->
+    <!-- <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br> -->
+    <img src="" width="100%"></a><br>
 
     <!-- JETSTREAM -->
     <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
@@ -121,6 +119,12 @@
     <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
     <div class="txtsz250">Morning Skew-T</div>
     <img id="skew-t" width="100%"></a><br>
+
+    <!-- RAOB SOUNDING TEMP PLOT D3 -->
+    <div class="txtsz250">Simple Sounding Plot</div>
+    <div id="skewt"></div><br>
+    <span class="txtsz150">Max height of thermals at max forecast temp </span><span class="txtsz150" id="max-forecast-temp"></span>
+    <div class="txtsz200" id="thermal-max-height-forecast"></div>
 </div>
 
 <!-- SKY COVER SECTION -->
@@ -209,6 +213,7 @@
 </div>
 
 <!-- LOCAL SCRIPTS -->
+<script src="d3soundingchart.js"></script>
 <script type="text/javascript" src="ww.js"></script>
 
 </body>
