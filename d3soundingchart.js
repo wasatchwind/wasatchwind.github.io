@@ -1,8 +1,8 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
     let margin = {top: 50, right: 30, bottom: 80, left: 90};
-    let width = 864 - margin.left - margin.right;
-    let height = 630 - margin.top - margin.bottom;
-    let polygon = 'M 211 -1, L 842 571, L 960 571, L 960 -1, L 446 -1';
+    let width = 880 - margin.left - margin.right;
+    let height = 640 - margin.top - margin.bottom;
+    let polygon = 'M 190 0, L 760 510, L 880 510, L 880 0, L 446 0';
     let svg = d3.select('#skewt').append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
@@ -78,32 +78,32 @@ function draw_lapse_chart (data, maxTemp, dalr) {
         .attr('d', polygon)
         .attr('fill', 'rgb(100,100,100)');
     svg.append('text') // DALR label
-        .attr('x', 400)
-        .attr('y', -180)
+        .attr('x', 460)
+        .attr('y', -160)
         .attr('transform', 'rotate(43)')
         .attr('class', 'dalrLabel')
         .text('\u2190 DALR (-5.38 \u00B0F / 1000 ft) \u2192');
     svg.append('line') // Legend red line
         .attr('stroke', 'red')
         .attr('stroke-width', 5)
-        .attr('x1', 500)
+        .attr('x1', 400)
         .attr('y1', 40)
-        .attr('x2', 550)
+        .attr('x2', 450)
         .attr('y2', 40);
     svg.append('text') // Legend red line text label
-        .attr('x', 580)
+        .attr('x', 480)
         .attr('y', 45)
         .attr('class', 'dalrLabel')
         .text('Sounding Temp');
     svg.append('line') // Legend green line
         .attr('stroke', 'lightgreen')
         .attr('stroke-width', 4)
-        .attr('x1', 500)
+        .attr('x1', 400)
         .attr('y1', 90)
-        .attr('x2', 550)
+        .attr('x2', 450)
         .attr('y2', 90);
     svg.append('text') // Legend green line text label
-        .attr('x', 580)
+        .attr('x', 480)
         .attr('y', 95)
         .attr('class', 'dalrLabel')
         .text('Forecast Max Temp');
