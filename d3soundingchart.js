@@ -1,8 +1,8 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
-    let margin = {top: 50, right: 30, bottom: 80, left: 90};
+    let margin = {top: 15, right: 25, bottom: 80, left: 90};
     let width = 880 - margin.left - margin.right;
     let height = 640 - margin.top - margin.bottom;
-    let polygon = 'M 190 0, L 760 510, L 880 510, L 880 0, L 446 0';
+    let polygon = 'M 192 0, L 765 545, L 880 545, L 880 0, L 446 0';
     let svg = d3.select('#skewt').append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
@@ -57,11 +57,11 @@ function draw_lapse_chart (data, maxTemp, dalr) {
     svg.append('g') // Draw y axis
         .attr('class', 'yAxis')
         .call(d3.axisLeft(y));
-    svg.append('text') // x axis label
-        .attr('transform', 'translate(' + (width/2) + ',' + (height + margin.top + 20) + ')')
+    svg.append('text') // x axis label (Temp)
+        .attr('transform', 'translate(' +  (width - margin.left - margin.right)/2 + ',' + (height + margin.top + 60) + ')')
         .attr('class', 'xLabel')
         .text('Temp \u00B0F');
-    svg.append('text') // y axis label
+    svg.append('text') // y axis label (Altitude)
         .attr('transform', 'rotate(-90)')
         .attr('y', -65)
         .attr('x', 0 - (height / 2))
