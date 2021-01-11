@@ -1,7 +1,7 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
     let margin = {top: 50, right: 30, bottom: 80, left: 90};
-    let width = 960 - margin.left - margin.right;
-    let height = 700 - margin.top - margin.bottom;
+    let width = 864 - margin.left - margin.right;
+    let height = 630 - margin.top - margin.bottom;
     let polygon = 'M 211 -1, L 842 571, L 960 571, L 960 -1, L 446 -1';
     let svg = d3.select('#skewt').append('svg')
         .attr('width', width + margin.left + margin.right)
