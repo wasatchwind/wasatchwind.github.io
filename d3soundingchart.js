@@ -31,21 +31,21 @@ function draw_lapse_chart (data, maxTemp, dalr) {
         .attr('class', 'xTicks')
         .attr('x1', function(d) { return x(d-75) })
         .attr('x2', function(d) { return x(d) })
-        .attr('y1', 0)
-        .attr('y2', height);
+        .attr('y1', y(18))
+        .attr('y2', y(4.229));
     svg.append('path').datum(data) // Plot sounding temp line
         .attr('fill', 'none')
         .attr('stroke', 'red')
         .attr('stroke-width', 5)
         .attr('d', tempLine);
     svg.append('g').append('rect') // Draw blank rectangle to clip temp line above chart
-        .attr('fill', '#000034')
+        .attr('fill', '#000050')
         .attr('x', 0 - margin.left)
         .attr('y', 0 - margin.top)
         .attr('width', width)
         .attr('height', margin.top);
     svg.append('g').append('rect') // Draw blank rectangle to clip temp line left of chart
-        .attr('fill', '#000034')
+        .attr('fill', '#000050')
         .attr('x', 0 - margin.left)
         .attr('y', 0)
         .attr('width', margin.left)
