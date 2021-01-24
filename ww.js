@@ -167,7 +167,7 @@ function build_tempalti_history_chart(data) {
         document.getElementById('kslc-alti-bar-' + i).style.height = (((alti[i]-min)*75)/(max-min))+5 + 'px';
         document.getElementById('kslc-temp-' + i).innerHTML = temp[i];
         document.getElementById('kslc-apz-' + i).src = 'images/apz' + calculate_apz(alti[i], temp[i]) + '.png';
-        document.getElementById('kslc-apz-' + i).style.width = '75px';
+        document.getElementById('kslc-apz-' + i).style.width = '60px';
     }
 }
 
