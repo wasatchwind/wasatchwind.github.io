@@ -49,12 +49,12 @@
     <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
     <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
     <div class="txtsz250"><span>Surface Wind Map </span><span id="wind-map-timestamp"></span></div>
-    <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br>
-    <!-- <img src="" width="100%"></a><br> -->
+    <!-- <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br> -->
+    <img src="https://wasatchwind.github.io/images/wind-map-save.png" width="100%"></a><br>
 
     <!-- KSLC 1 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-    <div class="txtsz250">KSLC 1 Hour History</div>
+    <div class="txtsz250">History: KSLC 1 Hour</div>
     <table class="bordered gray">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="green" id="kslc-wind-bar-0">&nbsp;</div></td>
@@ -112,7 +112,7 @@
 
     <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
-    <div class="txtsz250">Alta Baldy 6 Hour History</div>
+    <div class="txtsz250">History: Alta Baldy 6 Hours</div>
     <table class="bordered gray">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="green" id="amb-wind-bar-0">&nbsp;</div></td>
@@ -150,12 +150,12 @@
 
     <!-- JETSTREAM -->
     <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
-    <div class="txtsz250">Jetstream (Last 18 Hours)</div>
+    <div class="txtsz250">History: Jetstream 18 Hours</div>
     <img src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%"></a><br>
 
     <!-- GRAPHICAL SURFACE WIND -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-    <div class="txtsz250">Surface Forecast</div>
+    <div class="txtsz250">Forecast: Surface</div>
     <div class="flex-graphical txtsz200">
         <div>1 (Morning)</div>
         <div>2 (Mid Day)</div>
@@ -171,7 +171,7 @@
 
     <!-- WIND ALOFT -->
     <a id="wind-aloft-link" target="_blank">
-    <div class="txtsz250">Wind Aloft</div>
+    <div class="txtsz250">Forecast: Wind Aloft</div>
     <span class="txtsz200 ltblue" id="aloft-start"></span> &nbsp;&nbsp;to&nbsp;&nbsp; <span class="txtsz200 ltblue" id="aloft-end"></span>
     <table class="bordered aloftbg darkblue">
         <tr>
@@ -214,7 +214,7 @@
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
     <div class="txtsz250">Simple Sounding Plot</div>
-    <div class="txtsz300 ltcoral" id="skewt"></div><br>
+    <div id="skewt"></div><br>
     <span class="txtsz150">Max height of thermals at max forecast temp </span><span class="txtsz150" id="max-forecast-temp"></span>
     <div class="txtsz200" id="thermal-max-height-forecast"></div>
 </div>
@@ -224,12 +224,12 @@
 
     <!-- CLOUDS & PRECIP GIF -->
     <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
-    <div class="txtsz250">Clouds & Precip (Last Hour)</div>
+    <div class="txtsz250">History: Clouds & Precip 1 Hour</div>
     <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a><br>
     
     <!-- GRAPHICAL SKY COVER -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-    <div class="txtsz250">Forecast</div>
+    <div class="txtsz250">Forecast: Cloud Cover</div>
     <div class="flex-graphical txtsz200">
         <div>1 (Morning)</div>
         <div>2 (Mid Day)</div>
@@ -249,7 +249,7 @@
 
     <!-- KSLC 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-    <div class="txtsz250">KSLC 6 Hour History</div>
+    <div class="txtsz250">History: KSLC 6 Hours</div>
     <table class="bordered gray">
         <tr><td><span class="txtsz200">Pressure</td>
             <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="green" id="kslc-alti-bar-0">&nbsp;</div></td>
@@ -293,7 +293,7 @@
 
     <!-- GRAPHICAL WX -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-        <div class="txtsz250">WX</div>
+        <div class="txtsz250">Forecast: Weather/WX</div>
         <div class="flex-graphical txtsz200">
             <div>1 (Morning)</div>
             <div>2 (Mid Day)</div>
@@ -309,12 +309,12 @@
 
     <!-- HOURLY FORECAST CHART -->
     <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-    <div class="txtsz250">2 Day Hourly</div>
+    <div class="txtsz250">Forecast: 48 Hours</div>
     <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a><br>
 
     <!-- NOAA 3 DAY FORECAST -->
     <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.X_EMLNhKiw4" target="_blank">
-    <div class="txtsz250">3 Day</div>
+    <div class="txtsz250">Forecast: 3 Days</div>
     <table class="bordered">
         <tr>
             <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
