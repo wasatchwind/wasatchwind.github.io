@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wasatch Wind</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js"></script>
+        <link href="ww.css" rel="stylesheet">
+    </head>
+<body>
+
+<!-- HEADING -->
+<a href="http://www.wasatchfreeflight.org" target="_blank">
+<table>
+    <tr>
+        <td rowspan="2"><img src="images/wfflogo.png" height="140"></td>
+        <td class="txtsz300 yellow">Wasatch Free Flight</td>
+        <td rowspan="2"><img src="images/pg.gif" height="140"></td>
+    </tr>
+    <tr><td class="txtsz250 ltblue" id="date"></td></tr>
+</table></a><hr>
+
+<a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
+<table>
+    <tr><td class="txtsz150" colspan="4" id="latest-time">&nbsp;</td></tr>
+    <tr>
+        <td><img src="images/pressure.png" height="90"></td>
+        <td><img src="images/temp.png" height="90"></td>
+        <td><img src="images/apz.png" height="90"></td>
+        <td><img src="images/wind.png" height="90"></td>
+    </tr>
+    <tr class="txtsz250 ltblue">
+        <td class="current" id="latest-pressure">&nbsp;</td>
+        <td class="current" id="latest-temp">&nbsp;</td>
+        <td class="current" id="apz">&nbsp;</td>
+        <td class="current" id="latest-wind">&nbsp;</td>
+    </tr>
+</table></a><hr>
+
+<button id="wind-btn" onclick="toggle_div('wind')">Wind</button>
+<button id="lift-btn" onclick="toggle_div('lift')">Lift</button>
+<button id="sky-btn" onclick="toggle_div('sky')">Sky Cover</button>
+<button id="temp&pressure-btn" onclick="toggle_div('temp&pressure')">Temp & Pressure</button>
+<button id="general-btn" onclick="toggle_div('general')">General Forecast</button>
+<button id="misc-btn" onclick="toggle_div('misc')">Misc.</button>
+
+<!-- WIND SECTION -->
+<div class="starthidden" id="wind">
+
+    <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
+    <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
+    <div class="txtsz250"><span>Surface Wind Map </span><span id="wind-map-timestamp"></span></div>
+    <!-- <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br> -->
+    <img src="https://wasatchwind.github.io/images/wind-map-save.png" width="100%"></a><br>
+
+    <!-- KSLC 1 HOUR HISTORY -->
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
+    <div class="txtsz250">History: KSLC 1 Hour</div>
+    <table class="bordered gray">
+        <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="green" id="kslc-wind-bar-0">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-1"></div><div class="green" id="kslc-wind-bar-1">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-2"></div><div class="green" id="kslc-wind-bar-2">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-3"></div><div class="green" id="kslc-wind-bar-3">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-4"></div><div class="green" id="kslc-wind-bar-4">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-5"></div><div class="green" id="kslc-wind-bar-5">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-6"></div><div class="green" id="kslc-wind-bar-6">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-7"></div><div class="green" id="kslc-wind-bar-7">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-8"></div><div class="green" id="kslc-wind-bar-8">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-9"></div><div class="green" id="kslc-wind-bar-9">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-10"></div><div class="green" id="kslc-wind-bar-10">&nbsp;</div></td>
+        </tr>
+        <tr class="txtsz200 ltcoral"><td class="white">Gust</td>
+            <td class="colorstripe" id="kslc-gust-0"></td>
+            <td id="kslc-gust-1"></td>
+            <td class="colorstripe"id="kslc-gust-2"></td>
+            <td id="kslc-gust-3"></td>
+            <td class="colorstripe"id="kslc-gust-4"></td>
+            <td id="kslc-gust-5"></td>
+            <td class="colorstripe"id="kslc-gust-6"></td>
+            <td id="kslc-gust-7"></td>
+            <td class="colorstripe"id="kslc-gust-8"></td>
+            <td id="kslc-gust-9"></td>
+            <td class="colorstripe"id="kslc-gust-10"></td>
+        </tr>
+        <tr class="txtsz200"><td>Dir</td>
+            <td class="colorstripe"><img id="kslc-dir-0" width="60"></td>
+            <td><img id="kslc-dir-1" width="60"></td>
+            <td class="colorstripe"><img id="kslc-dir-2" width="60"></td>
+            <td><img id="kslc-dir-3" width="60"></td>
+            <td class="colorstripe"><img id="kslc-dir-4" width="60"></td>
+            <td><img id="kslc-dir-5" width="60"></td>
+            <td class="colorstripe"><img id="kslc-dir-6" width="60"></td>
+            <td><img id="kslc-dir-7" width="60"></td>
+            <td class="colorstripe"><img id="kslc-dir-8" width="60"></td>
+            <td><img id="kslc-dir-9" width="60"></td>
+            <td class="colorstripe"><img id="kslc-dir-10" width="60"></td>
+        </tr>
+        <tr><td class="txtsz200">Time</td>
+            <td class="txtsz125 colorstripe" id="kslc-time-0"></td>
+            <td class="txtsz125" id="kslc-time-1"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-2"></td>
+            <td class="txtsz125" id="kslc-time-3"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-4"></td>
+            <td class="txtsz125" id="kslc-time-5"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-6"></td>
+            <td class="txtsz125" id="kslc-time-7"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-8"></td>
+            <td class="txtsz125" id="kslc-time-9"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-10"></td>
+        </tr>
+    </table></a>
+
+    <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
+    <div class="txtsz250">History: Alta Baldy 6 Hours</div>
+    <table class="bordered gray">
+        <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="green" id="amb-wind-bar-0">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-1"></div><div class="green" id="amb-wind-bar-1">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-2"></div><div class="green" id="amb-wind-bar-2">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-3"></div><div class="green" id="amb-wind-bar-3">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-4"></div><div class="green" id="amb-wind-bar-4">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-5"></div><div class="green" id="amb-wind-bar-5">&nbsp;</div></td>
+        </tr>
+        <tr class="txtsz200 ltcoral"><td class="white">Gust</td>
+            <td class="colorstripe" id="amb-gust-0"></td>
+            <td id="amb-gust-1"></td>
+            <td class="colorstripe" id="amb-gust-2"></td>
+            <td id="amb-gust-3"></td>
+            <td class="colorstripe" id="amb-gust-4"></td>
+            <td id="amb-gust-5"></td>
+        </tr>
+        <tr class="txtsz200"><td>Dir</td>
+            <td class="colorstripe"><img id="amb-dir-0" width="60"></td>
+            <td><img id="amb-dir-1" width="60"></td>
+            <td class="colorstripe"><img id="amb-dir-2" width="60"></td>
+            <td><img id="amb-dir-3" width="60"></td>
+            <td class="colorstripe"><img id="amb-dir-4" width="60"></td>
+            <td><img id="amb-dir-5" width="60"></td>
+        </tr>
+        <tr><td class="txtsz200">Time</td>
+            <td class="txtsz125 colorstripe" id="amb-time-0"></td>
+            <td class="txtsz125" id="amb-time-1"></td>
+            <td class="txtsz125 colorstripe" id="amb-time-2"></td>
+            <td class="txtsz125" id="amb-time-3"></td>
+            <td class="txtsz125 colorstripe" id="amb-time-4"></td>
+            <td class="txtsz125" id="amb-time-5"></td>
+        </tr>
+    </table></a>
+
+    <!-- JETSTREAM -->
+    <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
+    <div class="txtsz250">History: Jetstream 18 Hours</div>
+    <img src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%"></a><br>
+
+    <!-- GRAPHICAL SURFACE WIND -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+    <div class="txtsz250">Forecast: Surface</div>
+    <div class="flex-graphical txtsz200">
+        <div>1 (Morning)</div>
+        <div>2 (Mid Day)</div>
+    </div>
+    <img id="graphical-wind-0" width="49%">
+    <img id="graphical-wind-1" width="49%">
+    <div class="flex-graphical txtsz200">
+        <div>3 (Afternoon)</div>
+        <div>4 (Evening)</div>
+    </div>
+    <img id="graphical-wind-2" width="49%">
+    <img id="graphical-wind-3" width="49%"></a><br>
+
+    <!-- WIND ALOFT -->
+    <a id="wind-aloft-link" target="_blank">
+    <div class="txtsz250">Forecast: Wind Aloft</div>
+    <span class="txtsz200 ltblue" id="aloft-start"></span> &nbsp;&nbsp;to&nbsp;&nbsp; <span class="txtsz200 ltblue" id="aloft-end"></span>
+    <table class="bordered aloftbg darkblue">
+        <tr>
+            <td class="left" width="12%"><span class="txtsz300">18</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-3" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-3"><span><img src="images/leftbar.png"><img id="barwidth-3" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-3"></span></td>
+        </tr>
+        <tr><td class="right unbold">5486 m</td></tr>
+        <tr><td colspan="4"><hr class="dash"></td></tr>
+        <tr>
+            <td class="left" width="12%"><span class="txtsz300">12</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-2" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-2"><span><img src="images/leftbar.png"><img id="barwidth-2" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-2"></span></td>
+        </tr>
+        <tr><td class="right unbold">3658 m</td></tr>
+        <tr><td colspan="4"><hr class="dash"></td></tr>
+        <tr>
+            <td class="left" width="12%"><span class="txtsz300">9</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-1" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-1"><span><img src="images/leftbar.png"><img id="barwidth-1" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-1"></span></td>
+        </tr>
+        <tr><td class="right unbold">2743 m</td></tr>
+        <tr><td colspan="4"><hr class="dash"></td></tr>
+        <tr>
+            <td class="left" width="12%"><span class="txtsz300">6</span><span> k</span></td>
+            <td rowspan="2" width="15%"><img id="dir-0" height="100px"></td>
+            <td class="left" rowspan="2" id="aloft-0"><span><img src="images/leftbar.png"><img id="barwidth-0" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-0"></span></td>
+        </tr>
+        <tr><td class="right unbold" id="test">1288 m</td></tr>
+    </table></a>
+</div>
+
+<!-- LIFT SECTION  -->
+<div class="starthidden" id="lift">
+
+    <!-- SKEWT -->
+    <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
+    <div class="txtsz250">Morning Skew-T</div>
+    <img id="skew-t" width="100%"></a><br>
+
+    <!-- RAOB SOUNDING TEMP PLOT D3 -->
+    <div class="txtsz250">Simple Sounding Plot</div>
+    <div id="skewt"></div><br>
+    <span class="txtsz150">Max height of thermals at max forecast temp </span><span class="txtsz150" id="max-forecast-temp"></span>
+    <div class="txtsz200" id="thermal-max-height-forecast"></div>
+</div>
+
+<!-- SKY COVER SECTION -->
+<div class="starthidden" id="sky">
+
+    <!-- CLOUDS & PRECIP GIF -->
+    <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+    <div class="txtsz250">History: Clouds & Precip 1 Hour</div>
+    <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a><br>
+    
+    <!-- GRAPHICAL SKY COVER -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+    <div class="txtsz250">Forecast: Cloud Cover</div>
+    <div class="flex-graphical txtsz200">
+        <div>1 (Morning)</div>
+        <div>2 (Mid Day)</div>
+    </div>
+    <img id="graphical-sky-0" width="49%">
+    <img id="graphical-sky-1" width="49%">
+    <div class="flex-graphical txtsz200">
+        <div>3 (Afternoon)</div>
+        <div>4 (Evening)</div>
+    </div>
+    <img id="graphical-sky-2" width="49%">
+    <img id="graphical-sky-3" width="49%"></a><br>
+</div>
+
+<!-- TEMP & PRESSURE SECTION -->
+<div class="starthidden" id="temp&pressure">
+
+    <!-- KSLC 6 HOUR HISTORY -->
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
+    <div class="txtsz250">History: KSLC 6 Hours</div>
+    <table class="bordered gray">
+        <tr><td><span class="txtsz200">Pressure</td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="green" id="kslc-alti-bar-0">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-1"></div><div class="green" id="kslc-alti-bar-1">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-2"></div><div class="green" id="kslc-alti-bar-2">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-3"></div><div class="green" id="kslc-alti-bar-3">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-4"></div><div class="green" id="kslc-alti-bar-4">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-5"></div><div class="green" id="kslc-alti-bar-5">&nbsp;</div></td>
+        </tr>
+        <tr class="txtsz200 ltcoral"><td class="white">Temp &deg;F</td>
+            <td class="colorstripe" id="kslc-temp-0"></td>
+            <td id="kslc-temp-1"></td>
+            <td class="colorstripe" id="kslc-temp-2"></td>
+            <td id="kslc-temp-3"></td>
+            <td class="colorstripe" id="kslc-temp-4"></td>
+            <td id="kslc-temp-5"></td>
+        </tr>
+        <tr><td class="txtsz200">APZ</td>
+            <td class="colorstripe"><img id="kslc-apz-0"></td>
+            <td><img id="kslc-apz-1"></td>
+            <td class="colorstripe"><img id="kslc-apz-2"></td>
+            <td><img id="kslc-apz-3"></td>
+            <td class="colorstripe"><img id="kslc-apz-4"></td>
+            <td><img id="kslc-apz-5"></td>
+        </tr>
+        <tr><td class="txtsz200">Time</td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-0"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-1"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-2"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-3"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-4"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-5"></td>
+        </tr>
+    </table></a>
+    <a href="http://www.wasatchfreeflight.org/index.php/gauging-that-pressure" target="_blank">
+    <div class="txtsz200 yellow">What is APZ ???</div></a>
+</div>
+
+<!-- GENERAL SECTION -->
+<div class="starthidden" id="general">
+
+    <!-- GRAPHICAL WX -->
+    <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="txtsz250">Forecast: Weather/WX</div>
+        <div class="flex-graphical txtsz200">
+            <div>1 (Morning)</div>
+            <div>2 (Mid Day)</div>
+        </div>
+        <img id="graphical-wx-0" width="49%">
+        <img id="graphical-wx-1" width="49%">
+        <div class="flex-graphical txtsz200">
+            <div>3 (Afternoon)</div>
+            <div>4 (Evening)</div>
+        </div>
+        <img id="graphical-wx-2" width="49%">
+        <img id="graphical-wx-3" width="49%"></a><br>
+
+    <!-- HOURLY FORECAST CHART -->
+    <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+    <div class="txtsz250">Forecast: 48 Hours</div>
+    <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a><br>
+
+    <!-- NOAA 3 DAY FORECAST -->
+    <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.X_EMLNhKiw4" target="_blank">
+    <div class="txtsz250">Forecast: 3 Days</div>
+    <table class="bordered">
+        <tr>
+            <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
+            <td class="txtsz250 noaa-day" id="forecast-day1-day"></td>
+        </tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day1-txt"></td></tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day2-img" height=200px></td>
+            <td class="txtsz250 noaa-day" id="forecast-day2-day"></td>
+        </tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day2-txt"></td></tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td rowspan="2"><img id="forecast-day3-img" height=200px></td>
+            <td class="txtsz250 noaa-day" id="forecast-day3-day"></td>
+        </tr>
+        <tr><td class="txtsz125 noaa-text" id="forecast-day3-txt"></td></tr>
+    </table></a><br>
+</div><br>
+
+<!-- MISC. SECTION -->
+<div class="starthidden" id="misc">
+</div>
+
+<!-- LOCAL SCRIPTS -->
+<script src="d3soundingchart.js"></script>
+<script type="text/javascript" src="ww.js"></script>
+
+</body>
+</html>
