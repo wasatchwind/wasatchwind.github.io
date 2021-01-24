@@ -36,23 +36,21 @@
     </tr>
 </table></a><hr>
 
-<button onclick="toggle_div('wind')">Wind</button>
-<button onclick="toggle_div('lift')">Lift</button>
-<button onclick="toggle_div('sky')">Sky Cover</button>
-<button onclick="toggle_div('temp&pressure')">Temp & Pressure</button>
-<button onclick="toggle_div('general')">General Forecast</button>
-<button onclick="toggle_div('misc')">Misc.</button>
+<button id="wind-btn" onclick="toggle_div('wind')">Wind</button>
+<button id="lift-btn" onclick="toggle_div('lift')">Lift</button>
+<button id="sky-btn" onclick="toggle_div('sky')">Sky Cover</button>
+<button id="temp&pressure-btn" onclick="toggle_div('temp&pressure')">Temp & Pressure</button>
+<button id="general-btn" onclick="toggle_div('general')">General Forecast</button>
+<button id="misc-btn" onclick="toggle_div('misc')">Misc.</button>
 
 <!-- WIND SECTION -->
 <div class="starthidden" id="wind">
-    <div class="txtsz300">Wind</div><br>
 
     <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
     <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
-    <div class="txtsz250">Surface Wind Map</div>
-    <span class="txtsz200" id="wind-map-timestamp"></span>
+    <div class="txtsz250"><span>Surface Wind Map </span><span id="wind-map-timestamp"></span></div>
     <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br>
-<!--     <img src="" width="100%"></a><br> -->
+    <!-- <img src="" width="100%"></a><br> -->
 
     <!-- KSLC 1 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
@@ -112,7 +110,7 @@
         </tr>
     </table></a>
 
-    <!-- Alta Mount Baldy (AMB) 12 HOUR HISTORY -->
+    <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
     <div class="txtsz250">Alta Baldy 6 Hour History</div>
     <table class="bordered gray">
@@ -208,7 +206,6 @@
 
 <!-- LIFT SECTION  -->
 <div class="starthidden" id="lift">
-    <div class="txtsz300">Lift</div><br>
 
     <!-- SKEWT -->
     <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
@@ -217,14 +214,13 @@
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
     <div class="txtsz250">Simple Sounding Plot</div>
-    <div id="skewt"></div><br>
+    <div class="txtsz300 ltcoral" id="skewt"></div><br>
     <span class="txtsz150">Max height of thermals at max forecast temp </span><span class="txtsz150" id="max-forecast-temp"></span>
     <div class="txtsz200" id="thermal-max-height-forecast"></div>
 </div>
 
 <!-- SKY COVER SECTION -->
 <div class="starthidden" id="sky">
-    <div class="txtsz300">Sky Cover</div><br>
 
     <!-- CLOUDS & PRECIP GIF -->
     <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
@@ -250,12 +246,50 @@
 
 <!-- TEMP & PRESSURE SECTION -->
 <div class="starthidden" id="temp&pressure">
-    <div class="txtsz300">Temp & Pressure</div><br>
+
+    <!-- KSLC 6 HOUR HISTORY -->
+    <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
+    <div class="txtsz250">KSLC 6 Hour History</div>
+    <table class="bordered gray">
+        <tr><td><span class="txtsz200">Pressure</td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="green" id="kslc-alti-bar-0">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-1"></div><div class="green" id="kslc-alti-bar-1">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-2"></div><div class="green" id="kslc-alti-bar-2">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-3"></div><div class="green" id="kslc-alti-bar-3">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-4"></div><div class="green" id="kslc-alti-bar-4">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-5"></div><div class="green" id="kslc-alti-bar-5">&nbsp;</div></td>
+        </tr>
+        <tr class="txtsz200 ltcoral"><td class="white">Temp &deg;F</td>
+            <td class="colorstripe" id="kslc-temp-0"></td>
+            <td id="kslc-temp-1"></td>
+            <td class="colorstripe" id="kslc-temp-2"></td>
+            <td id="kslc-temp-3"></td>
+            <td class="colorstripe" id="kslc-temp-4"></td>
+            <td id="kslc-temp-5"></td>
+        </tr>
+        <tr><td class="txtsz200">APZ</td>
+            <td class="colorstripe"><img id="kslc-apz-0"></td>
+            <td><img id="kslc-apz-1"></td>
+            <td class="colorstripe"><img id="kslc-apz-2"></td>
+            <td><img id="kslc-apz-3"></td>
+            <td class="colorstripe"><img id="kslc-apz-4"></td>
+            <td><img id="kslc-apz-5"></td>
+        </tr>
+        <tr><td class="txtsz200">Time</td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-0"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-1"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-2"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-3"></td>
+            <td class="txtsz125 colorstripe" id="kslc-time-tempalti-4"></td>
+            <td class="txtsz125" id="kslc-time-tempalti-5"></td>
+        </tr>
+    </table></a>
+    <a href="http://www.wasatchfreeflight.org/index.php/gauging-that-pressure" target="_blank">
+    <div class="txtsz200 yellow">What is APZ ???</div></a>
 </div>
 
-<!-- SYNOPTIC SECTION -->
+<!-- GENERAL SECTION -->
 <div class="starthidden" id="general">
-    <div class="txtsz300">General Forecast</div><br>
 
     <!-- GRAPHICAL WX -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
@@ -304,7 +338,6 @@
 
 <!-- MISC. SECTION -->
 <div class="starthidden" id="misc">
-    <div class="txtsz300">Misc.</div><br>
 </div>
 
 <!-- LOCAL SCRIPTS -->
