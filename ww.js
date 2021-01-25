@@ -185,7 +185,7 @@ function get_morning_skew_t() {
     let dateString = now.toLocaleDateString('en-ZA').replaceAll('/', '');
     let skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
     skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
-    document.getElementById('skew-t').src = skewTurl;
+    //document.getElementById('skew-t').src = skewTurl;
 }
 
 noaa_time_series_api_async();
