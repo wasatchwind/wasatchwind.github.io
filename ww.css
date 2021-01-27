@@ -42,33 +42,39 @@ a:active {
 .txtsz350 { font-size: 350%; }
 .left { text-align: left; }
 .right { text-align: right; }
+.indent { margin-left: 2%; }
 .unbold { font-weight: normal; }
-.underline { text-decoration: underline;}
+.underline { text-decoration: underline; }
 .ltblue { color: lightblue; }
-.yellow { color: yellow; }
-.ltcoral { color: lightcoral; }
+.yellow { color: #FCDC99; }
+.ltred { color: #FB6962; }
 .white { color: white; }
+.starthidden { display: none; }
 hr.dash { border: 1px dashed white; }
 table { width: 100%; }
+table.gray { background-color: rgb(80, 80, 80); }
 table.bordered {
     border: 2px solid white;
     border-radius: 25px;
     padding: 10px;
+    border-spacing: 0px;
 }
-table.gray { background-color: rgb(100, 100, 100); }
-table.darkblue { background-color: #000034; }
-td.colorstripe { background-color: rgb(85, 85, 85); }
+table.baldy {
+    background-image: url('images/baldy.png');
+    background-size: 100% 100%;
+    border-spacing: 0px;
+}
+table.slc {
+    background-image: url('images/slc.jpg');
+    background-size: 100% 100%;
+    border-spacing: 0px;
+}
+td.colorstripe { background-color: rgb(100, 100, 100, 0.5); }
 td.current { width: 25%; }
 td.kslc-wind { width: 7.75%; }
 td.amb-wind { width: 14.25%; }
-.bottom { vertical-align: bottom; }
-div.green {
-    background-color: lightgreen;
-    width: 80%; margin: auto;
-}
 td.top { vertical-align: top; }
-span.aloft { vertical-align: top; }
-/* td { border: 1px solid white; } */
+td.bottom { vertical-align: bottom; }
 td.noaa-text {
     vertical-align: text-top;
     padding-left: 20px;
@@ -80,7 +86,6 @@ td.noaa-day {
     vertical-align: top;
     color: lightblue;
 }
-.starthidden { display: none; }
 button {
     background-color: rgb(100, 100, 100);
     color: white;
@@ -96,6 +101,8 @@ button {
     margin-left: 1%;
     margin-right: 1%;
 }
+div.bar { width: 80%; margin: auto; }
+span.aloft { vertical-align: top; }
 .flex-graphical {
     display: flex;
     justify-content: space-around;
