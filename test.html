@@ -48,28 +48,28 @@
 
     <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
     <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
-    <div class="txtsz250"><span>Surface Wind Map </span><span id="wind-map-timestamp"></span></div>
+    <div class="txtsz250"><span>Surface Wind Map @ </span><span id="wind-map-timestamp"></span></div>
     <!-- <img src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png" width="100%"></a><br> -->
     <img src="https://wasatchwind.github.io/images/wind-map-save.png" width="100%"></a><br>
 
     <!-- KSLC 1 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
     <div class="txtsz250">History: KSLC 1 Hour</div>
-    <table class="bordered gray">
+    <table class="bordered slc">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="green" id="kslc-wind-bar-0">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-1"></div><div class="green" id="kslc-wind-bar-1">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-2"></div><div class="green" id="kslc-wind-bar-2">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-3"></div><div class="green" id="kslc-wind-bar-3">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-4"></div><div class="green" id="kslc-wind-bar-4">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-5"></div><div class="green" id="kslc-wind-bar-5">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-6"></div><div class="green" id="kslc-wind-bar-6">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-7"></div><div class="green" id="kslc-wind-bar-7">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-8"></div><div class="green" id="kslc-wind-bar-8">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-9"></div><div class="green" id="kslc-wind-bar-9">&nbsp;</div></td>
-            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-10"></div><div class="green" id="kslc-wind-bar-10">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="bar" id="kslc-wind-bar-0">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-1"></div><div class="bar" id="kslc-wind-bar-1">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-2"></div><div class="bar" id="kslc-wind-bar-2">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-3"></div><div class="bar" id="kslc-wind-bar-3">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-4"></div><div class="bar" id="kslc-wind-bar-4">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-5"></div><div class="bar" id="kslc-wind-bar-5">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-6"></div><div class="bar" id="kslc-wind-bar-6">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-7"></div><div class="bar" id="kslc-wind-bar-7">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-8"></div><div class="bar" id="kslc-wind-bar-8">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind"><div id="kslc-wind-num-9"></div><div class="bar" id="kslc-wind-bar-9">&nbsp;</div></td>
+            <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-10"></div><div class="bar" id="kslc-wind-bar-10">&nbsp;</div></td>
         </tr>
-        <tr class="txtsz200 ltcoral"><td class="white">Gust</td>
+        <tr class="txtsz200 ltred"><td class="white">Gust</td>
             <td class="colorstripe" id="kslc-gust-0"></td>
             <td id="kslc-gust-1"></td>
             <td class="colorstripe"id="kslc-gust-2"></td>
@@ -113,16 +113,16 @@
     <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
     <div class="txtsz250">History: Alta Baldy 6 Hours</div>
-    <table class="bordered gray">
+    <table class="bordered baldy">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
-            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="green" id="amb-wind-bar-0">&nbsp;</div></td>
-            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-1"></div><div class="green" id="amb-wind-bar-1">&nbsp;</div></td>
-            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-2"></div><div class="green" id="amb-wind-bar-2">&nbsp;</div></td>
-            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-3"></div><div class="green" id="amb-wind-bar-3">&nbsp;</div></td>
-            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-4"></div><div class="green" id="amb-wind-bar-4">&nbsp;</div></td>
-            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-5"></div><div class="green" id="amb-wind-bar-5">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="bar" id="amb-wind-bar-0">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-1"></div><div class="bar" id="amb-wind-bar-1">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-2"></div><div class="bar" id="amb-wind-bar-2">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-3"></div><div class="bar" id="amb-wind-bar-3">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-4"></div><div class="bar" id="amb-wind-bar-4">&nbsp;</div></td>
+            <td class="txtsz250 bottom amb-wind"><div id="amb-wind-num-5"></div><div class="bar" id="amb-wind-bar-5">&nbsp;</div></td>
         </tr>
-        <tr class="txtsz200 ltcoral"><td class="white">Gust</td>
+        <tr class="txtsz200 ltred"><td class="white">Gust</td>
             <td class="colorstripe" id="amb-gust-0"></td>
             <td id="amb-gust-1"></td>
             <td class="colorstripe" id="amb-gust-2"></td>
@@ -177,28 +177,28 @@
         <tr>
             <td class="left" width="12%"><span class="txtsz300">18</span><span> k</span></td>
             <td rowspan="2" width="15%"><img id="dir-3" height="100px"></td>
-            <td class="left" rowspan="2" id="aloft-3"><span><img src="images/leftbar.png"><img id="barwidth-3" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-3"></span></td>
+            <td class="left" rowspan="2" id="aloft-3"><span><img id="barwidth-3" height="80px"></span><span class="aloft" id="spd-3"></span></td>
         </tr>
         <tr><td class="right unbold">5486 m</td></tr>
         <tr><td colspan="4"><hr class="dash"></td></tr>
         <tr>
             <td class="left" width="12%"><span class="txtsz300">12</span><span> k</span></td>
             <td rowspan="2" width="15%"><img id="dir-2" height="100px"></td>
-            <td class="left" rowspan="2" id="aloft-2"><span><img src="images/leftbar.png"><img id="barwidth-2" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-2"></span></td>
+            <td class="left" rowspan="2" id="aloft-2"><span><img id="barwidth-2" height="80px"></span><span class="aloft" id="spd-2"></span></td>
         </tr>
         <tr><td class="right unbold">3658 m</td></tr>
         <tr><td colspan="4"><hr class="dash"></td></tr>
         <tr>
             <td class="left" width="12%"><span class="txtsz300">9</span><span> k</span></td>
             <td rowspan="2" width="15%"><img id="dir-1" height="100px"></td>
-            <td class="left" rowspan="2" id="aloft-1"><span><img src="images/leftbar.png"><img id="barwidth-1" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-1"></span></td>
+            <td class="left" rowspan="2" id="aloft-1"><span><img id="barwidth-1" height="80px"></span><span class="aloft" id="spd-1"></span></td>
         </tr>
         <tr><td class="right unbold">2743 m</td></tr>
         <tr><td colspan="4"><hr class="dash"></td></tr>
         <tr>
             <td class="left" width="12%"><span class="txtsz300">6</span><span> k</span></td>
             <td rowspan="2" width="15%"><img id="dir-0" height="100px"></td>
-            <td class="left" rowspan="2" id="aloft-0"><span><img src="images/leftbar.png"><img id="barwidth-0" height="80px"><img src="images/rightbar.png"></span><span class="aloft" id="spd-0"></span></td>
+            <td class="left" rowspan="2" id="aloft-0"><span><img id="barwidth-0" height="80px"></span><span class="aloft" id="spd-0"></span></td>
         </tr>
         <tr><td class="right unbold" id="test">1288 m</td></tr>
     </table></a>
@@ -210,7 +210,7 @@
     <!-- SKEWT -->
     <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
     <div class="txtsz250">Morning Skew-T</div>
-    <img src="https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.20210125.12.gif" id="skew-t" width="100%"></a>
+    <img id="skew-t" width="100%"></a>
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
     <div class="txtsz250">Simple Sounding Plot</div>
@@ -252,14 +252,14 @@
     <div class="txtsz250">History: KSLC 6 Hours</div>
     <table class="bordered gray">
         <tr><td><span class="txtsz200">Pressure</td>
-            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="green" id="kslc-alti-bar-0">&nbsp;</div></td>
-            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-1"></div><div class="green" id="kslc-alti-bar-1">&nbsp;</div></td>
-            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-2"></div><div class="green" id="kslc-alti-bar-2">&nbsp;</div></td>
-            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-3"></div><div class="green" id="kslc-alti-bar-3">&nbsp;</div></td>
-            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-4"></div><div class="green" id="kslc-alti-bar-4">&nbsp;</div></td>
-            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-5"></div><div class="green" id="kslc-alti-bar-5">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="bar" id="kslc-alti-bar-0">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-1"></div><div class="bar" id="kslc-alti-bar-1">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-2"></div><div class="bar" id="kslc-alti-bar-2">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-3"></div><div class="bar" id="kslc-alti-bar-3">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-4"></div><div class="bar" id="kslc-alti-bar-4">&nbsp;</div></td>
+            <td class="txtsz200 bottom amb-wind"><div id="kslc-alti-num-5"></div><div class="bar" id="kslc-alti-bar-5">&nbsp;</div></td>
         </tr>
-        <tr class="txtsz200 ltcoral"><td class="white">Temp &deg;F</td>
+        <tr class="txtsz200 ltred"><td class="white">Temp &deg;F</td>
             <td class="colorstripe" id="kslc-temp-0"></td>
             <td id="kslc-temp-1"></td>
             <td class="colorstripe" id="kslc-temp-2"></td>
@@ -337,12 +337,38 @@
 </div><br>
 
 <!-- MISC. SECTION -->
-<div class="starthidden" id="misc">
-</div>
+<div class="starthidden txtsz250" id="misc">
+    <div>Weather / Wind Resources</div><hr>
+        <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+            <div class="left indent unbold yellow underline">Area Forecast Discussion</div></a>
+        <a href="http://online.saiawos.com/KU42/ios/display.html#TopOfPage" target="_blank">
+            <div class="left indent unbold yellow underline">Airport 2 (per minute)</div></a>
+    <br><div>Web Cams</div><hr>
+        <a href="http://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_hour.mp4" target="_blank">
+            <div class="left indent unbold yellow underline">SLC 👀 West</div></a>
+        <a href="http://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_hour.mp4" target="_blank">
+            <div class="left indent unbold yellow underline">SLC 👀 South</div></a>
+        <a href="http://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_hour.mp4" target="_blank">
+            <div class="left indent unbold yellow underline">West Valley 👀 East</div></a>
+        <a href="http://northcam.uhgpga.org/#view" target="_blank">
+            <div class="left indent unbold yellow underline">Northside</div></a>
+        <a href="http://southcam.uhgpga.org/#view" target="_blank">
+            <div class="left indent unbold yellow underline">Southside</div></a>
+    <br><div>Who's Flying?</div><hr>
+        <a href="https://livetrack24.com/tracks/country/us" target="_blank">
+            <div class="left indent unbold yellow underline">Livetrack24</div></a>
+        <a href="http://xcfind.paraglide.us/map.html?id=15" target="_blank">
+            <div class="left indent unbold yellow underline">XCFind</div></a>
+        <a href="https://www.xctrack.me" target="_blank">
+            <div class="left indent unbold yellow underline">XCTrack</div></a>
+    <br><div>Other</div><hr>
+        <a href="https://skyvector.com" target="_blank">
+            <div class="left indent unbold yellow underline">TFR / Skyvector</div></a>
+</div><br>
 
 <!-- LOCAL SCRIPTS -->
 <script src="d3soundingchart.js"></script>
-<script type="text/javascript" src="wwtest.js"></script>
+<script type="text/javascript" src="ww.js"></script>
 
 </body>
 </html>
