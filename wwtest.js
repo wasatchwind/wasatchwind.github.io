@@ -10,7 +10,7 @@ function get_morning_skew_t() {
     skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
     console.log('dateString: ' + dateString);
     console.log('skewTurl: ' + skewTurl);
-    console.log('working url: https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.20210128.12.gif); 
+    console.log('working url: https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.20210128.12.gif'); 
     document.getElementById('skew-t').src = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.20210128.12.gif'
 //     document.getElementById('skew-t').src = skewTurl;
 }
