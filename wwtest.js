@@ -5,10 +5,10 @@ const now = new Date();
 })();
 
 function get_morning_skew_t() {
-    let dateString = now.toLocaleDateString('en-ZA').replaceAll('/', '');
+    const dateString = now.toJSON().slice(0,10).replaceAll('-', '');
     let skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
 //     skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
-    document.getElementById('skew-t').src = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + 20210128 + '.12.gif';
+    document.getElementById('skew-t').src = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
 //     document.getElementById('skew-t').src = skewTurl;
 }
 
