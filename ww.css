@@ -101,7 +101,7 @@ button {
     margin-left: 1%;
     margin-right: 1%;
 }
-div.bar { width: 80%; margin: auto; }
+.bar { width: 80%; margin: auto; }
 span.aloft { vertical-align: top; }
 .flex-graphical {
     display: flex;
