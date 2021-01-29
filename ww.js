@@ -5,31 +5,21 @@ const now = new Date();
 })();
 
 function get_morning_skew_t() {
-    const dateString = now.toJSON().slice(0,10).replaceAll('-', '');
+    let dateString = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
+    dateString = dateString[2] + dateString[0] + dateString[1];
     let skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + dateString + '.12.gif';
     skewTurl = (now.getHours() < 7) ? 'images/unskewt.png' : skewTurl;
     document.getElementById('skew-t').src = skewTurl;
 }
 
 function get_all_graphical_forecast_images() {
+    const url = 'https://graphical.weather.gov/images/slc/';
     let timeString = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1;
-    let url = 'https://graphical.weather.gov/images/slc/';
     for (i=0; i<4; i++) {
         document.getElementById('graphical-wind-' + i).src = url + 'WindSpd' + (timeString + i) + '_slc.png';
         document.getElementById('graphical-sky-' + i).src = url + 'Sky' + (timeString + i) + '_slc.png';
         document.getElementById('graphical-wx-' + i).src = url + 'Wx' + (timeString + i) + '_slc.png';
     }
-}
-
-function determine_wind_map_time() {
-    hour = now.getHours();
-    min = now.getMinutes();
-    if (hour > 12 && hour < 20) {
-        min = (min < 15) ? '00' : (min < 30) ? 15 : (min < 45) ? 30 : 45;
-    } else min = '00';
-    ampm = (hour < 12 && hour >= 7) ? ' am' : ' pm';
-    hour = (hour >= 7 && hour <= 20) ? (hour % 12 === 0) ? 12 : hour % 12 : 8;
-    document.getElementById('wind-map-timestamp').innerHTML = hour + ':' + min + ampm;
 }
 
 function reset_all_main_divs() {
@@ -50,6 +40,19 @@ function toggle_div(element) {
     }
 }
 
+async function get_surface_wind_map_image_gcp_async() {
+    // const imageUrl = 'https://wasatchwind.github.io/images/wind-map-save.png'; // test image
+    // const createdTime = '4:15 pm';
+    const imageUrl = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'; // gcp image
+    const imageMetaUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'; // gcp meta
+    const response = await fetch(imageMetaUrl);
+    const data = await response.json();
+    let createdTime = new Date(data.timeCreated);
+    createdTime = createdTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+    document.getElementById('wind-map-timestamp').innerHTML = createdTime;
+    document.getElementById('surface-wind-map').src = imageUrl;
+}
+
 async function noaa_time_series_api_async() { //https://developers.synopticdata.com/mesonet
     const stations = ['KSLC', 'AMB'];
     const historyMinutes = 420;
@@ -67,8 +70,7 @@ async function noaa_three_day_forecast_api_async() {
     const noaaPublicForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
     const response = await fetch(noaaPublicForecastUrl);
     const data = await response.json();
-    let position = 0;
-    position = (data.properties.periods[0].isDaytime) ? position : 1;
+    let position = (data.properties.periods[0].isDaytime) ? 0 : 1;
     const maxTemp = data.properties.periods[position].temperature;
     if (data.properties.periods[0].isDaytime) { raob_data_gcp_storage_async(maxTemp); }
     else { document.getElementById('skewt').innerHTML = 'Updated after next morning sounding!'; }
@@ -84,7 +86,7 @@ async function raob_data_gcp_storage_async(maxTemp) {
     const gcpRaobDataUrl = 'https://storage.googleapis.com/wasatch-wind-static/raob.json';
     const response = await fetch(gcpRaobDataUrl);
     const data = await response.json();
-    // const data = [{"Pressure_mb": 870.0, "Altitude_m": 1289, "Temp_c": -0.7, "Dewpoint_c": -6.7, "Wind_Direction": 170, "Wind_Speed_kt": 8}, {"Pressure_mb": 868.0, "Altitude_m": 1307, "Temp_c": -0.5, "Dewpoint_c": -8.5, "Wind_Direction": 170, "Wind_Speed_kt": 9}, {"Pressure_mb": 850.0, "Altitude_m": 1475, "Temp_c": -1.3, "Dewpoint_c": -10.3, "Wind_Direction": 175, "Wind_Speed_kt": 19}, {"Pressure_mb": 848.0, "Altitude_m": 1494, "Temp_c": -1.5, "Dewpoint_c": -10.5, "Wind_Direction": 175, "Wind_Speed_kt": 20}, {"Pressure_mb": 812.7, "Altitude_m": 1829, "Temp_c": -4.2, "Dewpoint_c": -11.5, "Wind_Direction": 180, "Wind_Speed_kt": 38}, {"Pressure_mb": 787.0, "Altitude_m": 2083, "Temp_c": -6.3, "Dewpoint_c": -12.3, "Wind_Direction": 176, "Wind_Speed_kt": 38}, {"Pressure_mb": 781.8, "Altitude_m": 2134, "Temp_c": -6.7, "Dewpoint_c": -12.5, "Wind_Direction": 175, "Wind_Speed_kt": 38}, {"Pressure_mb": 751.7, "Altitude_m": 2438, "Temp_c": -9.2, "Dewpoint_c": -13.4, "Wind_Direction": 180, "Wind_Speed_kt": 42}, {"Pressure_mb": 723.0, "Altitude_m": 2740, "Temp_c": -11.7, "Dewpoint_c": -14.4, "Wind_Direction": 180, "Wind_Speed_kt": 41}, {"Pressure_mb": 722.7, "Altitude_m": 2743, "Temp_c": -11.7, "Dewpoint_c": -14.4, "Wind_Direction": 180, "Wind_Speed_kt": 41}, {"Pressure_mb": 700.0, "Altitude_m": 2987, "Temp_c": -12.1, "Dewpoint_c": -18.1, "Wind_Direction": 200, "Wind_Speed_kt": 32}, {"Pressure_mb": 689.0, "Altitude_m": 3108, "Temp_c": -12.1, "Dewpoint_c": -21.1, "Wind_Direction": 202, "Wind_Speed_kt": 28}, {"Pressure_mb": 667.2, "Altitude_m": 3353, "Temp_c": -12.7, "Dewpoint_c": -24.5, "Wind_Direction": 205, "Wind_Speed_kt": 20}, {"Pressure_mb": 666.0, "Altitude_m": 3367, "Temp_c": -12.7, "Dewpoint_c": -24.7, "Wind_Direction": 206, "Wind_Speed_kt": 20}, {"Pressure_mb": 650.0, "Altitude_m": 3553, "Temp_c": -12.1, "Dewpoint_c": -29.1, "Wind_Direction": 215, "Wind_Speed_kt": 26}, {"Pressure_mb": 641.1, "Altitude_m": 3658, "Temp_c": -12.7, "Dewpoint_c": -34.5, "Wind_Direction": 220, "Wind_Speed_kt": 29}, {"Pressure_mb": 628.0, "Altitude_m": 3815, "Temp_c": -13.5, "Dewpoint_c": -42.5, "Wind_Direction": 223, "Wind_Speed_kt": 29}, {"Pressure_mb": 622.0, "Altitude_m": 3889, "Temp_c": -12.9, "Dewpoint_c": -44.9, "Wind_Direction": 224, "Wind_Speed_kt": 29}, {"Pressure_mb": 605.0, "Altitude_m": 4099, "Temp_c": -14.3, "Dewpoint_c": -37.3, "Wind_Direction": 227, "Wind_Speed_kt": 29}, {"Pressure_mb": 596.0, "Altitude_m": 4212, "Temp_c": -14.9, "Dewpoint_c": -28.9, "Wind_Direction": 229, "Wind_Speed_kt": 29}, {"Pressure_mb": 591.7, "Altitude_m": 4267, "Temp_c": -15.2, "Dewpoint_c": -24.9, "Wind_Direction": 230, "Wind_Speed_kt": 29}, {"Pressure_mb": 588.0, "Altitude_m": 4315, "Temp_c": -15.5, "Dewpoint_c": -21.5, "Wind_Direction": 231, "Wind_Speed_kt": 29}, {"Pressure_mb": 572.0, "Altitude_m": 4522, "Temp_c": -17.5, "Dewpoint_c": -19.6, "Wind_Direction": 236, "Wind_Speed_kt": 30}, {"Pressure_mb": 545.4, "Altitude_m": 4877, "Temp_c": -19.3, "Dewpoint_c": -22.3, "Wind_Direction": 245, "Wind_Speed_kt": 31}, {"Pressure_mb": 528.0, "Altitude_m": 5118, "Temp_c": -20.5, "Dewpoint_c": -24.2, "Wind_Direction": 251, "Wind_Speed_kt": 32}, {"Pressure_mb": 511.0, "Altitude_m": 5360, "Temp_c": -20.9, "Dewpoint_c": -27.9, "Wind_Direction": 257, "Wind_Speed_kt": 33}, {"Pressure_mb": 502.3, "Altitude_m": 5486, "Temp_c": -22.2, "Dewpoint_c": -29.2, "Wind_Direction": 260, "Wind_Speed_kt": 33}, {"Pressure_mb": 500.0, "Altitude_m": 5520, "Temp_c": -22.5, "Dewpoint_c": -29.5, "Wind_Direction": 260, "Wind_Speed_kt": 33}, {"Pressure_mb": 495.0, "Altitude_m": 5594, "Temp_c": -22.9, "Dewpoint_c": -28.9, "Wind_Direction": 259, "Wind_Speed_kt": 33}, {"Pressure_mb": 488.0, "Altitude_m": 5698, "Temp_c": -23.5, "Dewpoint_c": -31.5, "Wind_Direction": 257, "Wind_Speed_kt": 33}, {"Pressure_mb": 475.0, "Altitude_m": 5895, "Temp_c": -24.9, "Dewpoint_c": -30.9, "Wind_Direction": 254, "Wind_Speed_kt": 33}, {"Pressure_mb": 462.0, "Altitude_m": 6096, "Temp_c": -26.6, "Dewpoint_c": -33.6, "Wind_Direction": 250, "Wind_Speed_kt": 33}, {"Pressure_mb": 448.0, "Altitude_m": 6318, "Temp_c": -28.5, "Dewpoint_c": -36.5, "Wind_Direction": 252, "Wind_Speed_kt": 35}, {"Pressure_mb": 409.0, "Altitude_m": 6964, "Temp_c": -33.9, "Dewpoint_c": -38.9, "Wind_Direction": 258, "Wind_Speed_kt": 41}, {"Pressure_mb": 400.0, "Altitude_m": 7120, "Temp_c": -35.1, "Dewpoint_c": -41.1, "Wind_Direction": 260, "Wind_Speed_kt": 43}, {"Pressure_mb": 373.0, "Altitude_m": 7604, "Temp_c": -38.9, "Dewpoint_c": -49.9, "Wind_Direction": 265, "Wind_Speed_kt": 39}, {"Pressure_mb": 372.1, "Altitude_m": 7620, "Temp_c": -39.0, "Dewpoint_c": -49.9, "Wind_Direction": 265, "Wind_Speed_kt": 39}, {"Pressure_mb": 357.0, "Altitude_m": 7903, "Temp_c": -41.5, "Dewpoint_c": -49.5, "Wind_Direction": 266, "Wind_Speed_kt": 45}];
+    // const data = [{"Pressure_mb": 871.0, "Altitude_m": 1289, "Temp_c": 3.6, "Dewpoint_c": -3.4, "Wind_Direction": 140, "Wind_Speed_kt": 7}, {"Pressure_mb": 868.0, "Altitude_m": 1316, "Temp_c": 3.6, "Dewpoint_c": -4.4, "Wind_Direction": 143, "Wind_Speed_kt": 9}, {"Pressure_mb": 850.0, "Altitude_m": 1482, "Temp_c": 2.6, "Dewpoint_c": -5.4, "Wind_Direction": 160, "Wind_Speed_kt": 23}, {"Pressure_mb": 820.0, "Altitude_m": 1772, "Temp_c": 1.0, "Dewpoint_c": -7.0, "Wind_Direction": 173, "Wind_Speed_kt": 41}, {"Pressure_mb": 814.2, "Altitude_m": 1829, "Temp_c": 1.8, "Dewpoint_c": -6.6, "Wind_Direction": 175, "Wind_Speed_kt": 44}, {"Pressure_mb": 807.0, "Altitude_m": 1901, "Temp_c": 2.8, "Dewpoint_c": -6.2, "Wind_Direction": 176, "Wind_Speed_kt": 44}, {"Pressure_mb": 783.9, "Altitude_m": 2134, "Temp_c": 1.1, "Dewpoint_c": -7.9, "Wind_Direction": 180, "Wind_Speed_kt": 44}, {"Pressure_mb": 757.0, "Altitude_m": 2415, "Temp_c": -0.9, "Dewpoint_c": -9.9, "Wind_Direction": 194, "Wind_Speed_kt": 42}, {"Pressure_mb": 754.8, "Altitude_m": 2438, "Temp_c": -0.9, "Dewpoint_c": -10.2, "Wind_Direction": 195, "Wind_Speed_kt": 42}, {"Pressure_mb": 738.0, "Altitude_m": 2618, "Temp_c": -1.3, "Dewpoint_c": -12.3, "Wind_Direction": 204, "Wind_Speed_kt": 35}, {"Pressure_mb": 726.4, "Altitude_m": 2743, "Temp_c": -2.4, "Dewpoint_c": -13.4, "Wind_Direction": 210, "Wind_Speed_kt": 30}, {"Pressure_mb": 700.0, "Altitude_m": 3036, "Temp_c": -4.9, "Dewpoint_c": -15.9, "Wind_Direction": 215, "Wind_Speed_kt": 33}, {"Pressure_mb": 689.0, "Altitude_m": 3160, "Temp_c": -5.9, "Dewpoint_c": -16.9, "Wind_Direction": 216, "Wind_Speed_kt": 37}, {"Pressure_mb": 646.2, "Altitude_m": 3658, "Temp_c": -10.1, "Dewpoint_c": -16.1, "Wind_Direction": 220, "Wind_Speed_kt": 54}, {"Pressure_mb": 646.0, "Altitude_m": 3661, "Temp_c": -10.1, "Dewpoint_c": -16.1, "Wind_Direction": 220, "Wind_Speed_kt": 54}, {"Pressure_mb": 638.0, "Altitude_m": 3757, "Temp_c": -9.7, "Dewpoint_c": -12.8, "Wind_Direction": 222, "Wind_Speed_kt": 56}, {"Pressure_mb": 612.0, "Altitude_m": 4077, "Temp_c": -11.3, "Dewpoint_c": -12.6, "Wind_Direction": 227, "Wind_Speed_kt": 62}, {"Pressure_mb": 597.0, "Altitude_m": 4267, "Temp_c": -12.1, "Dewpoint_c": -13.5, "Wind_Direction": 230, "Wind_Speed_kt": 66}, {"Pressure_mb": 583.0, "Altitude_m": 4448, "Temp_c": -12.9, "Dewpoint_c": -14.3, "Wind_Direction": 233, "Wind_Speed_kt": 65}, {"Pressure_mb": 550.6, "Altitude_m": 4877, "Temp_c": -15.9, "Dewpoint_c": -17.6, "Wind_Direction": 240, "Wind_Speed_kt": 63}, {"Pressure_mb": 528.6, "Altitude_m": 5182, "Temp_c": -18.1, "Dewpoint_c": -20.0, "Wind_Direction": 240, "Wind_Speed_kt": 64}, {"Pressure_mb": 500.0, "Altitude_m": 5600, "Temp_c": -21.1, "Dewpoint_c": -23.2, "Wind_Direction": 240, "Wind_Speed_kt": 64}, {"Pressure_mb": 485.0, "Altitude_m": 5824, "Temp_c": -22.5, "Dewpoint_c": -24.8, "Wind_Direction": 238, "Wind_Speed_kt": 64}, {"Pressure_mb": 467.1, "Altitude_m": 6096, "Temp_c": -24.5, "Dewpoint_c": -27.0, "Wind_Direction": 235, "Wind_Speed_kt": 64}, {"Pressure_mb": 424.0, "Altitude_m": 6798, "Temp_c": -29.7, "Dewpoint_c": -32.6, "Wind_Direction": 229, "Wind_Speed_kt": 67}, {"Pressure_mb": 400.0, "Altitude_m": 7210, "Temp_c": -33.5, "Dewpoint_c": -36.7, "Wind_Direction": 225, "Wind_Speed_kt": 68}, {"Pressure_mb": 377.0, "Altitude_m": 7620, "Temp_c": -37.1, "Dewpoint_c": -40.8, "Wind_Direction": 230, "Wind_Speed_kt": 70}, {"Pressure_mb": 364.0, "Altitude_m": 7864, "Temp_c": -39.3, "Dewpoint_c": -43.2, "Wind_Direction": 230, "Wind_Speed_kt": 69}, {"Pressure_mb": 360.7, "Altitude_m": 7925, "Temp_c": -39.5, "Dewpoint_c": -43.5, "Wind_Direction": 230, "Wind_Speed_kt": 69}, {"Pressure_mb": 333.0, "Altitude_m": 8470, "Temp_c": -41.5, "Dewpoint_c": -45.8, "Wind_Direction": 236, "Wind_Speed_kt": 91}, {"Pressure_mb": 315.2, "Altitude_m": 8839, "Temp_c": -44.2, "Dewpoint_c": -48.6, "Wind_Direction": 240, "Wind_Speed_kt": 106}, {"Pressure_mb": 301.2, "Altitude_m": 9144, "Temp_c": -46.5, "Dewpoint_c": -50.9, "Wind_Direction": 240, "Wind_Speed_kt": 110}, {"Pressure_mb": 300.0, "Altitude_m": 9170, "Temp_c": -46.7, "Dewpoint_c": -51.1, "Wind_Direction": 240, "Wind_Speed_kt": 111}, {"Pressure_mb": 254.0, "Altitude_m": 258, "Temp_c": -54.1, "Dewpoint_c": -59.1, "Wind_Direction": 235, "Wind_Speed_kt": 121}, {"Pressure_mb": 250.0, "Altitude_m": 360, "Temp_c": -54.5, "Dewpoint_c": -59.5, "Wind_Direction": 235, "Wind_Speed_kt": 122}, {"Pressure_mb": 241.0, "Altitude_m": 594, "Temp_c": -56.0, "Dewpoint_c": -60.9, "Wind_Direction": 240, "Wind_Speed_kt": 124}, {"Pressure_mb": 238.2, "Altitude_m": 668, "Temp_c": -56.4, "Dewpoint_c": -61.4, "Wind_Direction": 240, "Wind_Speed_kt": 124}, {"Pressure_mb": 232.0, "Altitude_m": 836, "Temp_c": -57.5, "Dewpoint_c": -62.4, "Wind_Direction": 240, "Wind_Speed_kt": 122}];
     const dalr = 5.38;
     draw_lapse_chart(data, maxTemp, dalr);
     document.getElementById('max-forecast-temp').innerHTML = maxTemp + ' \u00B0F';
@@ -173,7 +175,7 @@ function calculate_max_height_of_thermal (raobData, maxTemp, dalr) {
 function set_wind_aloft_link() {
     let range = '06';
     range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : range;
-    let linkURL = 'https://www.aviationweather.gov/windtemp/data?level=low&fcst=' + range + '&region=slc&layout=on&date=';
+    const linkURL = 'https://www.aviationweather.gov/windtemp/data?level=low&fcst=' + range + '&region=slc&layout=on&date=';
     document.getElementById('wind-aloft-link').setAttribute('href', linkURL);
 }
 
@@ -204,7 +206,7 @@ function build_tempalti_history_chart(data) {
 
 get_morning_skew_t();
 get_all_graphical_forecast_images();
-determine_wind_map_time(); // Find a way to pull the timestamp from the image - EXIF?
+get_surface_wind_map_image_gcp_async();
 noaa_time_series_api_async();
 noaa_three_day_forecast_api_async();
 wind_aloft_gcp_function_async();
