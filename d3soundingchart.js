@@ -91,7 +91,7 @@ function draw_lapse_chart (data, maxTemp, dalr) {
         .attr('class', 'dalrLabel')
         .attr('x', visibleScreenWidth * 0.47)
         .attr('y', -160)
-        .attr('transform', 'rotate(42)')
+        .attr('transform', 'rotate(43)')
         .text('\u2190 DALR (-5.38 \u00B0F / 1000 ft) \u2192');
     svg.append('line') // Legend green line
         .attr('stroke', 'lightgreen')
