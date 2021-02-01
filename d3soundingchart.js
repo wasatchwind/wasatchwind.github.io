@@ -1,5 +1,6 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
-    let visibleScreenWidth = window.screen.width * 0.9;
+    let visibleScreenWidth = window.screen.availWidth * 0.9;
+    document.getElementById('swidth').innerHTML = visibleScreenWidth;
     let margin = {top: 15, right: visibleScreenWidth * 0.026, bottom: 80, left: visibleScreenWidth * 0.09};
     let width = visibleScreenWidth - margin.left - margin.right;
     let height = 660 - margin.top - margin.bottom;
