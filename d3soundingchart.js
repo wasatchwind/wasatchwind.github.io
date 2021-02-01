@@ -1,7 +1,7 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
     let visibleScreenWidth = document.documentElement.clientWidth * 0.9;
     document.getElementById('swidth').innerHTML = 'screen.width: ' + screen.width * window.devicePixelRatio * 0.9;
-    document.getElementById('swidth3').innerHTML = 'client (current): ' + document.documentElement.clientWidth * 0.9;
+    document.getElementById('swidth2').innerHTML = 'client (current): ' + document.documentElement.clientWidth * 0.9;
     let margin = {top: 15, right: visibleScreenWidth * 0.026, bottom: 80, left: visibleScreenWidth * 0.09};
     let width = visibleScreenWidth - margin.left - margin.right;
     let height = 660 - margin.top - margin.bottom;
