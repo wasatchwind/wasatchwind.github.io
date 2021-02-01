@@ -1,7 +1,5 @@
 function draw_lapse_chart (data, maxTemp, dalr) {
     let visibleScreenWidth = document.documentElement.clientWidth * 0.9;
-    document.getElementById('swidth').innerHTML = 'screen.width: ' + screen.width * window.devicePixelRatio * 0.9;
-    document.getElementById('swidth2').innerHTML = 'client (current): ' + document.documentElement.clientWidth * 0.9;
     let margin = {top: 15, right: visibleScreenWidth * 0.026, bottom: 80, left: visibleScreenWidth * 0.09};
     let width = visibleScreenWidth - margin.left - margin.right;
     let height = 660 - margin.top - margin.bottom;
@@ -93,7 +91,7 @@ function draw_lapse_chart (data, maxTemp, dalr) {
         .attr('class', 'dalrLabel')
         .attr('x', visibleScreenWidth * 0.47)
         .attr('y', -160)
-        .attr('transform', 'rotate(41)')
+        .attr('transform', 'rotate(42)')
         .text('\u2190 DALR (-5.38 \u00B0F / 1000 ft) \u2192');
     svg.append('line') // Legend green line
         .attr('stroke', 'lightgreen')
