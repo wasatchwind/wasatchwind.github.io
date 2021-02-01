@@ -124,11 +124,18 @@ span.aloft { vertical-align: top; }
     font-size: 150%;
 }
 .xLabel {
-    fill: lightblue;
+    fill: red;
     font-size: 150%;
 }
-.yTicks { opacity: 0.7; }
-.xTicks {
-    opacity: 0.7;
+.grid-ticks {
+    color: lightgray;
+    opacity: 0.9;
+}
+.svg-bg {
+    fill: #000034;
+    background-color: #000030;
+}
+.grid-dalr {
+    opacity: 0.3;
     stroke: white;
 }
