@@ -26,7 +26,8 @@ function reset_all_main_divs() {
     const divNames = ['wind', 'lift', 'sky', 'temp&pressure', 'general', 'misc'];
     for (i=0; i<divNames.length; i++) {
         document.getElementById(divNames[i]).style.display = 'none';
-        document.getElementById(divNames[i] + '-btn').style.backgroundColor = 'rgb(100, 100, 100)';
+        document.getElementById(divNames[i] + '-btn').style.backgroundColor = 'rgb(100,100,100)';
+        document.getElementById(divNames[i] + '-btn').style.color = 'white';
     }
 }
 
@@ -37,6 +38,7 @@ function toggle_div(element) {
     else {
         div.style.display = 'block';
         document.getElementById(element + '-btn').style.backgroundColor = '#79DE79';
+        document.getElementById(element + '-btn'). style.color = 'rgb(80,80,80)';
     }
 }
 
