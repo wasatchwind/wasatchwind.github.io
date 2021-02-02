@@ -48,11 +48,12 @@ a:active {
 .ltblue { color: lightblue; }
 .yellow { color: #FCDC99; }
 .ltred { color: #FB6962; }
+.ltgreen { color: lightgreen; }
 .white { color: white; }
 .starthidden { display: none; }
 hr.dash { border: 1px dashed white; }
 table { width: 100%; }
-table.gray { background-color: rgb(80, 80, 80); }
+table.gray { background-color: rgb(80,80,80); }
 table.bordered {
     border: 2px solid white;
     border-radius: 25px;
@@ -69,7 +70,7 @@ table.slc {
     background-size: 100% 100%;
     border-spacing: 0px;
 }
-td.colorstripe { background-color: rgb(100, 100, 100, 0.5); }
+td.colorstripe { background-color: rgb(100,100,100,0.5); }
 td.current { width: 25%; }
 td.kslc-wind { width: 7.75%; }
 td.amb-wind { width: 14.25%; }
@@ -87,10 +88,10 @@ td.noaa-day {
     color: lightblue;
 }
 button {
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(100,100,100);
     color: white;
     font-weight: bold;
-    font-size: 230%;
+    font-size: 220%;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 47%;
@@ -136,6 +137,6 @@ span.aloft { vertical-align: top; }
     background-color: #000030;
 }
 .grid-dalr {
-    opacity: 0.3;
+    opacity: 0.4;
     stroke: white;
 }
