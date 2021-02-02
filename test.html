@@ -24,7 +24,7 @@
 
 <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
 <table>
-    <tr><td class="txtsz150" colspan="4" id="latest-time">&nbsp;</td></tr>
+    <tr><td class="txtsz200" colspan="4" id="latest-time">&nbsp;</td></tr>
     <tr>
         <td><img src="images/pressure.png" height="90"></td>
         <td><img src="images/temp.png" height="90"></td>
@@ -202,7 +202,7 @@
             <td rowspan="2" width="15%"><img id="dir-0" height="100px"></td>
             <td class="left" rowspan="2" id="aloft-0"><span><img id="barwidth-0" height="80px"></span><span class="aloft" id="spd-0"></span></td>
         </tr>
-        <tr><td class="right unbold" id="test">1288 m</td></tr>
+        <tr><td class="right unbold">1288 m</td></tr>
     </table></a>
 </div>
 
@@ -216,35 +216,37 @@
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
     <div class="txtsz250">(Un)Skew-T Simple Sounding<br>(Temp vs Altitude)</div><br>
-    <div id="skewt"></div><br>
+    <div id="skewt"></div>
+    <div class="txtsz150">Forecast Max Temp:&nbsp;<span class="ltgreen" id="max-temp"></span></div><br>
 
     <!-- SOARING DEETS -->
     <a href="https://www.weather.gov/slc/Soar" target="_blank">
     <div class="txtsz250">Soarcast</div>
-    <table class="bordered gray">
+    <table class="left bordered gray">
         <tr class="txtsz200">
             <td>&nbsp;</td>
-            <td>Soarcast</td>
+            <td>NWS</td>
             <td>Custom</td>
         </tr>
+        <tr><td colspan="3"><hr></td></tr>
         <tr class="txtsz200">
-            <td class="left">Top of Lift (ft)</td>
+            <td>Top of Lift (ft)</td>
             <td id="soarcast-tol"></td>
             <td id="thermal-max-height-forecast"></td>
         </tr>
+        <tr><td colspan="3"><hr></td></tr>
         <tr class="txtsz200">
-            <td class="left">Top of -3 Index (ft)</td>
+            <td>Top of -3 Index (ft)</td>
             <td id="soarcast-neg3"></td>
             <td>tbd</td>
         </tr>
+        <tr><td colspan="3"><hr></td></tr>
         <tr class="txtsz200">
-            <td class="left">Max RoL (ft/min)</td>
+            <td>Max RoL (ft/min)</td>
             <td id="soarcast-rol"></td>
             <td>tbd</td>
         </tr>
     </table></a>
-    <br><br><div class="txtsz200" id="swidth"></div>
-    <br><br><div class="txtsz200" id="swidth2"></div>
 </div>
 
 <!-- SKY COVER SECTION -->
