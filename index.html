@@ -2,9 +2,8 @@
 <html>
     <head>
         <title>Wasatch Wind</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js"></script>
-        <link href="ww.css" rel="stylesheet">
+        <link rel="stylesheet" href="ww.css" >
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -25,7 +24,7 @@
 
 <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
 <table>
-    <tr><td class="txtsz150" colspan="4" id="latest-time">&nbsp;</td></tr>
+    <tr><td class="txtsz200" colspan="4" id="latest-time">&nbsp;</td></tr>
     <tr>
         <td><img src="images/pressure.png" height="90"></td>
         <td><img src="images/temp.png" height="90"></td>
@@ -203,7 +202,7 @@
             <td rowspan="2" width="15%"><img id="dir-0" height="100px"></td>
             <td class="left" rowspan="2" id="aloft-0"><span><img id="barwidth-0" height="80px"></span><span class="aloft" id="spd-0"></span></td>
         </tr>
-        <tr><td class="right unbold" id="test">1288 m</td></tr>
+        <tr><td class="right unbold">1288 m</td></tr>
     </table></a>
 </div>
 
@@ -216,10 +215,38 @@
     <img id="skew-t" width="100%"></a>
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
-    <div class="txtsz250">Simple Sounding Plot</div>
-    <div id="skewt"></div><br>
-    <span class="txtsz150">Max height of thermals at max forecast temp </span><span class="txtsz150" id="max-forecast-temp"></span>
-    <div class="txtsz200" id="thermal-max-height-forecast"></div>
+    <div class="txtsz250">(Un)Skew-T Simple Sounding<br>(Temp vs Altitude)</div><br>
+    <div id="skewt"></div>
+    <div class="txtsz150">Forecast Max Temp:&nbsp;<span class="ltgreen" id="max-temp"></span></div><br>
+
+    <!-- SOARING DEETS -->
+    <a href="https://www.weather.gov/slc/Soar" target="_blank">
+    <div class="txtsz250">Soarcast</div>
+    <table class="left bordered gray">
+        <tr class="txtsz200">
+            <td>&nbsp;</td>
+            <td>NWS</td>
+            <td>Custom</td>
+        </tr>
+        <tr><td colspan="3"><hr></td></tr>
+        <tr class="txtsz200">
+            <td>Top of Lift (ft)</td>
+            <td id="soarcast-tol"></td>
+            <td id="thermal-max-height-forecast"></td>
+        </tr>
+        <tr><td colspan="3"><hr></td></tr>
+        <tr class="txtsz200">
+            <td>Top of -3 Index (ft)</td>
+            <td id="soarcast-neg3"></td>
+            <td>tbd</td>
+        </tr>
+        <tr><td colspan="3"><hr></td></tr>
+        <tr class="txtsz200">
+            <td>Max RoL (ft/min)</td>
+            <td id="soarcast-rol"></td>
+            <td>tbd</td>
+        </tr>
+    </table></a>
 </div>
 
 <!-- SKY COVER SECTION -->
@@ -288,7 +315,7 @@
         </tr>
     </table></a>
     <a href="http://www.wasatchfreeflight.org/index.php/gauging-that-pressure" target="_blank">
-    <div class="txtsz150 yellow">What is APZ ???</div></a>
+    <br></btr><div class="txtsz150 yellow">What is APZ ???</div></a>
 </div>
 
 <!-- GENERAL SECTION -->
@@ -340,33 +367,33 @@
 </div><br>
 
 <!-- MISC. SECTION -->
-<div class="starthidden txtsz250" id="misc">
-    <div>Weather / Wind Resources</div><hr>
+<div class="starthidden" id="misc">
+    <div class="txtsz250">Weather / Wind Resources</div><hr><br>
         <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
-            <div class="left indent unbold yellow underline">Area Forecast Discussion</div></a>
+            <div class="txtsz150 unbold yellow underline">Area Forecast Discussion</div></a>
         <a href="http://online.saiawos.com/KU42/ios/display.html#TopOfPage" target="_blank">
-            <div class="left indent unbold yellow underline">Airport 2 (per minute)</div></a>
-    <br><div>Web Cams</div><hr>
+            <div class="txtsz150 unbold yellow underline">Airport 2 (per minute)</div></a>
+    <br><hr><div class="txtsz250">Web Cams</div><hr><br>
         <a href="http://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_hour.mp4" target="_blank">
-            <div class="left indent unbold yellow underline">SLC 👀 West</div></a>
+            <div class="txtsz150 unbold yellow underline">SLC 👀 West</div></a>
         <a href="http://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_hour.mp4" target="_blank">
-            <div class="left indent unbold yellow underline">SLC 👀 South</div></a>
+            <div class="txtsz150 unbold yellow underline">SLC 👀 South</div></a>
         <a href="http://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_hour.mp4" target="_blank">
-            <div class="left indent unbold yellow underline">West Valley 👀 East</div></a>
+            <div class="txtsz150 unbold yellow underline">West Valley 👀 East</div></a>
         <a href="http://northcam.uhgpga.org/#view" target="_blank">
-            <div class="left indent unbold yellow underline">Northside</div></a>
+            <div class="txtsz150 unbold yellow underline">Northside</div></a>
         <a href="http://southcam.uhgpga.org/#view" target="_blank">
-            <div class="left indent unbold yellow underline">Southside</div></a>
-    <br><div>Who's Flying?</div><hr>
+            <div class="txtsz150 unbold yellow underline">Southside</div></a>
+    <br><hr><div class="txtsz250">Who's Flying?</div><hr><br>
         <a href="https://livetrack24.com/tracks/country/us" target="_blank">
-            <div class="left indent unbold yellow underline">Livetrack24</div></a>
+            <div class="txtsz150 unbold yellow underline">Livetrack24</div></a>
         <a href="http://xcfind.paraglide.us/map.html?id=15" target="_blank">
-            <div class="left indent unbold yellow underline">XCFind</div></a>
+            <div class="txtsz150 unbold yellow underline">XCFind</div></a>
         <a href="https://www.xctrack.me" target="_blank">
-            <div class="left indent unbold yellow underline">XCTrack</div></a>
-    <br><div>Other</div><hr>
+            <div class="txtsz150 unbold yellow underline">XCTrack</div></a>
+    <br><hr><div class="txtsz250">Other</div><hr><br>
         <a href="https://skyvector.com" target="_blank">
-            <div class="left indent unbold yellow underline">TFR / Skyvector</div></a>
+            <div class="txtsz150 unbold yellow underline">TFR / Skyvector</div></a>
 </div><br>
 
 <!-- LOCAL SCRIPTS -->
