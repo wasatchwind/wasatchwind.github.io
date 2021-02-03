@@ -65,8 +65,11 @@ async function get_soaring_forecast_gcp_async() {
     // const data = {"OD_TIME": "None", "0": {}, "REPORT_DATE": "Mon, Feb 1", "MAX_RATE_OF_LIFT": "142", "MAX_RATE_OF_LIFT_MS": "0.7 m/s", "NEG_3_INDEX": "4,900", "NEG_3_INDEX_M": "1493 m", "TOP_OF_LIFT": "5,700", "TOP_OF_LIFT_M": "1737 m"};
     // LOCAL TESTING LINE(S) ^^^
     document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
+    document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
     document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
+    document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
     document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
+    document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
 }
 
 async function noaa_time_series_api_async() { //https://developers.synopticdata.com/mesonet
@@ -90,7 +93,9 @@ async function noaa_three_day_forecast_api_async() {
     const maxTemp = data.properties.periods[position].temperature;
     document.getElementById('max-temp').innerHTML = maxTemp + '&deg;';
     if (data.properties.periods[0].isDaytime) { raob_data_gcp_storage_async(maxTemp); }
-    else { document.getElementById('skewt').innerHTML = 'Updated after next morning sounding!'; }
+    else {
+        document.getElementById('skewt').innerHTML = 'Updated after next morning sounding!';
+        document.getElementById('skew-t').src = 'images/unskewt.png'; }
     // LOCAL TESTING LINE(S) vvv
     // raob_data_gcp_storage_async(43);
     // document.getElementById('max-temp').innerHTML = 43 + '&deg;';
@@ -112,7 +117,9 @@ async function raob_data_gcp_storage_async(maxTemp) {
     // LOCAL TESTING LINE(S) ^^^
     const dalr = 5.38;
     draw_lapse_chart(data, maxTemp, dalr);
-    document.getElementById('thermal-max-height-forecast').innerHTML = calculate_max_height_of_thermal(data, maxTemp, dalr);
+    const maxThermalHeight = calculate_max_height_of_thermal(data, maxTemp, dalr);
+    document.getElementById('thermal-max-height-forecast').innerHTML = maxThermalHeight.toLocaleString();
+    document.getElementById('thermal-max-height-forecast-m').innerHTML = Math.round(maxThermalHeight / 3.28) + ' m';
 }
 
 async function wind_aloft_gcp_function_async() {
