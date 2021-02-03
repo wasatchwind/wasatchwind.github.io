@@ -42,6 +42,7 @@ a:active {
 .txtsz350 { font-size: 350%; }
 .left { text-align: left; }
 .right { text-align: right; }
+.center { text-align: center; }
 .indent { margin-left: 2%; }
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline; }
@@ -87,6 +88,7 @@ td.noaa-day {
     vertical-align: top;
     color: lightblue;
 }
+td.soarbg { background-color: rgb(100,100,100); }
 button {
     background-color: rgb(100,100,100);
     color: white;
@@ -125,7 +127,7 @@ span.aloft { vertical-align: top; }
     font-size: 150%;
 }
 .xLabel {
-    fill: red;
+    fill: lightblue;
     font-size: 150%;
 }
 .grid-ticks {
@@ -133,8 +135,8 @@ span.aloft { vertical-align: top; }
     opacity: 0.9;
 }
 .svg-bg {
-    fill: #000034;
-    background-color: #000030;
+    fill: #000080;
+    background-color: #000080;
 }
 .grid-dalr {
     opacity: 0.4;
