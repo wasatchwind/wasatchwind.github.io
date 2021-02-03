@@ -215,7 +215,8 @@
     <img id="skew-t" width="100%"></a>
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
-    <div class="txtsz250">(Un)Skew-T Simple Sounding<br>(Temp vs Altitude)</div><br>
+    <div class="txtsz250">(un)Skew-T</div>
+    <div class="txtsz200">Simple Sounding (Temp vs Altitude)</div>
     <div id="skewt"></div>
     <div class="txtsz150">Forecast Max Temp:&nbsp;<span class="ltgreen" id="max-temp"></span></div><br>
 
@@ -225,26 +226,38 @@
     <table class="left bordered gray">
         <tr class="txtsz200">
             <td>&nbsp;</td>
-            <td>NWS</td>
-            <td>Custom</td>
+            <td class="center ltblue soarbg current" colspan="2">NWS</td>
+            <td class="center current" colspan="2">(un)Skew-T</td>
         </tr>
-        <tr><td colspan="3"><hr></td></tr>
-        <tr class="txtsz200">
-            <td>Top of Lift (ft)</td>
-            <td id="soarcast-tol"></td>
-            <td id="thermal-max-height-forecast"></td>
+        <tr><td><hr></td>
+            <td colspan="2" class="soarbg"><hr></td>
+            <td colspan="2"><hr></td>
         </tr>
-        <tr><td colspan="3"><hr></td></tr>
-        <tr class="txtsz200">
-            <td>Top of -3 Index (ft)</td>
-            <td id="soarcast-neg3"></td>
-            <td>tbd</td>
+        <tr><td class="txtsz200">Top of Lift (ft)</td>
+            <td class="txtsz200 ltblue soarbg" id="soarcast-tol"></td>
+            <td class="bottom ltblue soarbg" id="soarcast-tol-m"></td>
+            <td class="txtsz200" id="thermal-max-height-forecast"></td>
+            <td class="bottom" id="thermal-max-height-forecast-m"></td>
         </tr>
-        <tr><td colspan="3"><hr></td></tr>
-        <tr class="txtsz200">
-            <td>Max RoL (ft/min)</td>
-            <td id="soarcast-rol"></td>
-            <td>tbd</td>
+        <tr><td><hr></td>
+            <td colspan="2" class="soarbg"><hr></td>
+            <td colspan="2"><hr></td>
+        </tr>
+        <tr><td class="txtsz200">Top of -3 Index (ft)</td>
+            <td class="txtsz200 ltblue soarbg" id="soarcast-neg3"></td>
+            <td class="bottom ltblue soarbg" id="soarcast-neg3-m"></td>
+            <td class="txtsz200"></td>
+            <td class="bottom"></td>
+        </tr>
+        <tr><td><hr></td>
+            <td colspan="2" class="soarbg"><hr></td>
+            <td colspan="2"><hr></td>
+        </tr>
+        <tr><td class="txtsz200">Max RoL (ft/min)</td>
+            <td class="txtsz200 ltblue soarbg" id="soarcast-rol"></td>
+            <td class="bottom ltblue soarbg" id="soarcast-rol-m"></td>
+            <td class="txtsz200"></td>
+            <td class="bottom"></td>
         </tr>
     </table></a>
 </div>
