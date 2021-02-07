@@ -77,6 +77,7 @@ td.kslc-wind { width: 7.75%; }
 td.amb-wind { width: 14.25%; }
 td.top { vertical-align: top; }
 td.bottom { vertical-align: bottom; }
+td.vertpad { padding: 2%; }
 td.noaa-text {
     vertical-align: text-top;
     padding-left: 20px;
@@ -90,10 +91,10 @@ td.noaa-day {
 }
 td.soarbg { background-color: rgb(100,100,100); }
 button {
-    background-color: rgb(100,100,100);
+    background-color: rgb(80,80,80);
     color: white;
     font-weight: bold;
-    font-size: 220%;
+    font-size: 250%;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 47%;
@@ -115,19 +116,15 @@ span.aloft { vertical-align: top; }
     background-image: url('images/aloft.png');
     background-size: 100% 100%;
 }
-.dalrLabel {
-    fill: white;
+.xAxis { font-size: 150%; }
+.yAxis { font-size: 150%; }
+.xLabel {
+    fill: lightblue;
     font-size: 150%;
 }
-.yAxis { font-size: 150%; }
-.xAxis { font-size: 150%; }
 .yLabel {
     fill: lightblue;
     text-anchor: middle;
-    font-size: 150%;
-}
-.xLabel {
-    fill: lightblue;
     font-size: 150%;
 }
 .grid-ticks {
@@ -141,4 +138,8 @@ span.aloft { vertical-align: top; }
 .grid-dalr {
     opacity: 0.4;
     stroke: white;
+}
+.dalrLabel {
+    fill: white;
+    font-size: 150%;
 }
