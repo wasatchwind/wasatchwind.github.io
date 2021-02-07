@@ -1,9 +1,9 @@
-function draw_lapse_chart (data, maxTemp, dalr) {
+function draw_d3_lapse_chart (data, maxTemp) {
     const visibleScreenWidth = document.documentElement.clientWidth * 0.9;
     const margin = {top: 15, right: visibleScreenWidth * 0.026, bottom: 80, left: visibleScreenWidth * 0.09};
     const width = visibleScreenWidth - margin.left - margin.right;
     const height = 660 - margin.top - margin.bottom;
-    const svg = d3.select('#skewt').append('svg')
+    const svg = d3.select('#skew-t-d3').append('svg')
         .attr('class', 'svg-bg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
@@ -92,7 +92,7 @@ function draw_lapse_chart (data, maxTemp, dalr) {
         .attr('class', 'dalrLabel')
         .attr('transform', dalrLabelPosition)
         .style('text-anchor', 'start')
-        .text('\u2190 DALR (-5.38 \u00B0F / 1000 ft) \u2192');
+        .text('\u2190 DALR (-5.38 \u00B0F / 1,000 ft) \u2192');
     svg.append('line') // Legend green line
         .attr('stroke', 'lightgreen')
         .attr('stroke-width', 4)
