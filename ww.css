@@ -72,6 +72,7 @@ table.slc {
     border-spacing: 0px;
 }
 td.colorstripe { background-color: rgb(100,100,100,0.5); }
+td.soarcast { width: 30%; }
 td.current { width: 25%; }
 td.kslc-wind { width: 7.75%; }
 td.amb-wind { width: 14.25%; }
