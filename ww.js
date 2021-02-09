@@ -255,8 +255,7 @@ function reset_all_main_divs() {
 function toggle_div(element) {
     reset_all_main_divs();
     let div = document.getElementById(element);
-    if (!element) { // Un-comment for LOCAL TESTING Lift section regardless of time
-    // if ((!beforeSunset || now.getHours() < 7) && element === 'lift') {
+    if ((!beforeSunset || now.getHours() < 7) && element === 'lift') {
         div.style.display = 'none';
         document.getElementById('lift-off').style.display = 'block';
     } else {
