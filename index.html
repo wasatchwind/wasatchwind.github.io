@@ -75,7 +75,7 @@
             <td id="OGP-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="OGP-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="OGP-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>9,570' -&nbsp;</span><span class="unbold" id="OGP-time"></span></td>
         </tr>
         <tr><td colspan="4"><hr></td>
         </tr>
@@ -85,7 +85,7 @@
             <td id="C8948-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="C8948-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="C8948-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>4,216' -&nbsp;</span><span class="unbold" id="C8948-time"></span></td>
         </tr>
         <tr><td colspan="4"><hr></td>
         </tr>
@@ -95,7 +95,7 @@
             <td id="UTOLY-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="UTOLY-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="UTOLY-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>4,972' -&nbsp;</span><span class="unbold" id="UTOLY-time"></span></td>
         </tr>
         <tr><td colspan="4"><hr></td>
         </tr>
@@ -105,7 +105,7 @@
             <td id="PKC-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="PKC-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="PKC-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>10,015' -&nbsp;</span><span class="unbold" id="PKC-time"></span></td>
         </tr>
         <tr><td colspan="4"><hr></td>
         </tr>
@@ -115,7 +115,7 @@
             <td id="KU42-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="KU42-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="KU42-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>4,596' -&nbsp;</span><span class="unbold" id="KU42-time"></span></td>
         </tr>
         <tr><td colspan="4"><hr></td>
         </tr>
@@ -125,13 +125,13 @@
             <td id="FPS-wind-gust" class="ltred txtsz250" rowspan="2"></td>
             <td rowspan="2"><img id="FPS-wind-dir-img" height="80"></td>
         </tr>
-        <tr><td id="FPS-time" class="left unbold txtsz150"></td>
+        <tr><td class="left txtsz150"><span>5,202' -&nbsp;</span><span class="unbold" id="FPS-time"></span></td>
         </tr>
     </table>
 
     <!-- KSLC 1 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-    <div class="txtsz250">History: KSLC 1 Hour</div>
+    <div class="txtsz250">History: KSLC 1 Hour (4,229')</div>
     <table class="bordered slc">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="bar" id="kslc-wind-bar-0">&nbsp;</div></td>
@@ -189,7 +189,7 @@
 
     <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
-    <div class="txtsz250">History: Alta Baldy 6 Hours</div>
+    <div class="txtsz250">History: Alta Baldy 6 Hours (11,066')</div>
     <table class="bordered baldy">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="bar" id="amb-wind-bar-0">&nbsp;</div></td>
@@ -296,7 +296,7 @@
     <div class="txtsz200">Forecast Max Temp:&nbsp;<span class="ltgreen" id="max-temp"></span></div>
     <div id="skew-t-d3"></div>
 
-    <!-- SOARING DEETS -->
+    <!-- SOARING DETAILS -->
     <a href="https://www.weather.gov/slc/Soar" target="_blank">
     <div class="txtsz250">Soarcast</div>
     <table class="left bordered gray">
@@ -311,9 +311,9 @@
         </tr>
         <tr><td class="txtsz200">Top of Lift (ft)</td>
             <td class="txtsz250 ltblue soarbg" id="soarcast-tol"></td>
-            <td class="bottom ltblue soarbg" id="soarcast-tol-m"></td>
+            <td class="txtsz150 unbold bottom ltblue soarbg" id="soarcast-tol-m"></td>
             <td class="txtsz250" id="thermal-max-height-forecast"></td>
-            <td class="bottom" id="thermal-max-height-forecast-m"></td>
+            <td class="txtsz150 unbold bottom" id="thermal-max-height-forecast-m"></td>
         </tr>
         <tr><td><hr></td>
             <td colspan="2" class="soarbg"><hr></td>
@@ -321,9 +321,9 @@
         </tr>
         <tr><td class="txtsz200">Top of -3 Index (ft)</td>
             <td class="txtsz250 ltblue soarbg" id="soarcast-neg3"></td>
-            <td class="bottom ltblue soarbg" id="soarcast-neg3-m"></td>
+            <td class="txtsz150 unbold bottom ltblue soarbg" id="soarcast-neg3-m"></td>
             <td class="txtsz250"></td>
-            <td class="bottom"></td>
+            <td class="txtsz150 unbold bottom"></td>
         </tr>
         <tr><td><hr></td>
             <td colspan="2" class="soarbg"><hr></td>
@@ -331,9 +331,9 @@
         </tr>
         <tr><td class="txtsz200">Max RoL (ft/min)</td>
             <td class="txtsz250 ltblue soarbg" id="soarcast-rol"></td>
-            <td class="bottom ltblue soarbg" id="soarcast-rol-m"></td>
+            <td class="txtsz150 unbold bottom ltblue soarbg" id="soarcast-rol-m"></td>
             <td class="txtsz250"></td>
-            <td class="bottom"></td>
+            <td class="txtsz150 unbold bottom"></td>
         </tr>
     </table></a>
 </div>
