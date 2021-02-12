@@ -44,6 +44,7 @@ a:active {
 .right { text-align: right; }
 .center { text-align: center; }
 .indent { margin-left: 2%; }
+.justify {text-align: justify; }
 .unbold { font-weight: normal; }
 .underline { text-decoration: underline; }
 .ltblue { color: lightblue; }
@@ -143,4 +144,7 @@ span.aloft { vertical-align: top; }
 .dalrLabel {
     fill: white;
     font-size: 150%;
+}
+.venmo {
+    vertical-align: middle;
 }
