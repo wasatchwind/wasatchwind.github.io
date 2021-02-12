@@ -115,7 +115,7 @@ function get_and_display_kslc_latest_stats(data, gust) {
     document.getElementById('latest-pressure').innerHTML = alti;
     document.getElementById('latest-temp').innerHTML = temp;
     document.getElementById('apz').innerHTML = calculate_apz(alti, temp);
-    document.getElementById('latest-wind').innerHTML = wind + gust;
+    document.getElementById('latest-wind').innerHTML = wind + '<span class="ltred unbold">' + gust + '</span>';
 }
 
 function build_wind_history_chart(stationName, data, historyLength, ylw, red, gust = []) {
