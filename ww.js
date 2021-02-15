@@ -1,6 +1,6 @@
 const now = new Date();
 const dalr = 5.38;
-let beforeSunset;
+let beforeSunset, currentDiv;
 
 (function () {
     document.getElementById('heading-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
@@ -107,8 +107,10 @@ function get_and_display_kslc_latest_stats(data, gust) {
     const alti = data.altimeter_set_1[position].toFixed(2);
     const temp = Math.round(data.air_temp_set_1[position]);
     let wind = Math.round(data.wind_speed_set_1[position]);
+    let wdir = data.wind_cardinal_direction_set_1d[position];
+    wdir = (wdir === null) ? '' : wdir;
     wind = (wind === 0) ? 'Calm' : wind;
-    wind = (wind === 'Calm') ? wind : data.wind_cardinal_direction_set_1d[position] + '&nbsp;' + wind;
+    wind = (wind === 'Calm') ? wind : wdir + '&nbsp;' + wind;
     try { gust = (Math.round(data.wind_gust_set_1[position]) > 0) ? 'g' + Math.round(data.wind_gust_set_1[position]) : ''; }
     catch { gust = ''; }
     document.getElementById('latest-time').innerHTML = data.date_time[position].toLowerCase() + ' @ KSLC';
@@ -130,7 +132,7 @@ function build_wind_history_chart(stationName, data, historyLength, ylw, red, gu
         document.getElementById(stationName + '-wind-num-' + i).innerHTML = wind[i];
         document.getElementById(stationName + '-wind-bar-' + i).style.height = wind[i]*4 + 'px';
         document.getElementById(stationName + '-wind-bar-' + i).style.backgroundColor = windColor[i];
-        document.getElementById(stationName + '-dir-' + i).src = wind[i] > 0 ? 'images/arrow.png' : 'images/calm.png';
+        document.getElementById(stationName + '-dir-' + i).src = (wind[i] > 0 && dir[i] !== null) ? 'images/arrow.png' : wind[i] === '' ? 'images/calm.png' : 'images/nodata.png';
         document.getElementById(stationName + '-dir-' + i).style.transform = wind[i] > 0 ? 'rotate(' + dir[i] + 'deg)' : '';
         document.getElementById(stationName + '-gust-' + i).innerHTML = gust[i];
     }
@@ -209,7 +211,7 @@ async function noaa_three_day_forecast_api_async() {
     const data = await response.json();
     beforeSunset = data.properties.periods[0].isDaytime; // Global variable
     let position = (beforeSunset) ? 0 : 1;
-    if (beforeSunset) {
+    if (beforeSunset || beforeSunset === undefined) {
         const maxTemp = data.properties.periods[position].temperature;
         document.getElementById('max-temp').innerHTML = maxTemp + '&deg;';
         raob_data_gcp_storage_async(maxTemp);
@@ -242,28 +244,20 @@ function get_morning_skew_t() {
 }
 get_morning_skew_t();
 
-function reset_all_main_divs() {
-    const divNames = ['wind', 'lift', 'sky', 'temp&pressure', 'general', 'misc'];
-    document.getElementById('lift-off').style.display = 'none';
-    for (i=0; i<divNames.length; i++) {
-        document.getElementById(divNames[i]).style.display = 'none';
-        document.getElementById(divNames[i] + '-btn').style.backgroundColor = 'rgb(80,80,80)';
-        document.getElementById(divNames[i] + '-btn').style.color = 'white';
-    }
+function reset_previous_button_and_section() {
+    if (document.getElementById('lift-off').style.display === 'block') document.getElementById('lift-off').style.display = 'none';
+    document.getElementById(currentDiv).style.display = 'none';
+    document.getElementById(currentDiv + '-btn').style.backgroundColor = 'rgb(80,80,80)';
+    document.getElementById(currentDiv + '-btn').style.color = 'white';
 }
 
-function toggle_div(element) {
-    reset_all_main_divs();
-    let div = document.getElementById(element);
-    if ((!beforeSunset || now.getHours() < 7) && element === 'lift') {
-        div.style.display = 'none';
+function toggle_div(newBtn) {
+    if (currentDiv !== undefined) reset_previous_button_and_section();
+    currentDiv = newBtn;
+    document.getElementById(currentDiv + '-btn').style.backgroundColor = '#79DE79';
+    document.getElementById(currentDiv + '-btn').style.color = '#000050';
+    if ((!beforeSunset || now.getHours() < 7) && currentDiv === 'lift') {
+        document.getElementById(currentDiv).style.display = 'none';
         document.getElementById('lift-off').style.display = 'block';
-    } else {
-        if (div.style.display === 'block') div.style.display = 'none';
-        else {
-            div.style.display = 'block';
-            document.getElementById(element + '-btn').style.backgroundColor = '#79DE79';
-            document.getElementById(element + '-btn'). style.color = '#000050';
-        }
-    }
+    } else { document.getElementById(currentDiv).style.display = 'block'; }
 }
