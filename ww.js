@@ -211,7 +211,7 @@ async function noaa_three_day_forecast_api_async() {
     const data = await response.json();
     beforeSunset = data.properties.periods[0].isDaytime; // Global variable
     let position = (beforeSunset) ? 0 : 1;
-    if (beforeSunset || beforeSunset === undefined) {
+    if (beforeSunset) {
         const maxTemp = data.properties.periods[position].temperature;
         document.getElementById('max-temp').innerHTML = maxTemp + '&deg;';
         raob_data_gcp_storage_async(maxTemp);
