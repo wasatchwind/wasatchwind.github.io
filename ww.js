@@ -1,6 +1,6 @@
 const now = new Date();
 const dalr = 5.38;
-let beforeSunset = true, currentDiv;
+let currentDiv;
 
 (function () {
     document.getElementById('heading-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
@@ -52,6 +52,8 @@ async function get_soaring_forecast_gcp_async() {
     const gcpSoaringDataUrl = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json';
     const response = await fetch(gcpSoaringDataUrl);
     const data = await response.json();
+    document.getElementById('max-temp').innerHTML = data.MAX_TEMP + '&deg;';
+    raob_data_gcp_storage_async(data.MAX_TEMP);
     document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
     document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
     document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
@@ -209,14 +211,8 @@ async function noaa_three_day_forecast_api_async() {
     const noaaPublicForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
     const response = await fetch(noaaPublicForecastUrl, {mode: 'cors'});
     const data = await response.json();
-    beforeSunset = data.properties.periods[0].isDaytime; // Global variable
+    beforeSunset = data.properties.periods[0].isDaytime;
     let position = (beforeSunset) ? 0 : 1;
-    if (beforeSunset) {
-        const maxTemp = data.properties.periods[position].temperature;
-        document.getElementById('unskew-t').innerHTML = 'Forecast Max Temp:&nbsp';
-        document.getElementById('max-temp').innerHTML = maxTemp + '&deg;';
-        raob_data_gcp_storage_async(maxTemp);
-    }
     for (i=1; i<4; i++) {
         document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
         document.getElementById('forecast-day' + i +'-txt').innerHTML = data.properties.periods[position].detailedForecast;
@@ -246,7 +242,6 @@ function get_morning_skew_t() {
 get_morning_skew_t();
 
 function reset_previous_button_and_section() {
-    if (document.getElementById('lift-off').style.display === 'block') document.getElementById('lift-off').style.display = 'none';
     document.getElementById(currentDiv).style.display = 'none';
     document.getElementById(currentDiv + '-btn').style.backgroundColor = 'rgb(80,80,80)';
     document.getElementById(currentDiv + '-btn').style.color = 'white';
@@ -255,10 +250,7 @@ function reset_previous_button_and_section() {
 function toggle_div(newBtn) {
     if (currentDiv !== undefined) reset_previous_button_and_section();
     currentDiv = newBtn;
+    document.getElementById(currentDiv).style.display = 'block';
     document.getElementById(currentDiv + '-btn').style.backgroundColor = '#79DE79';
     document.getElementById(currentDiv + '-btn').style.color = '#000050';
-    if ((!beforeSunset || now.getHours() < 7) && currentDiv === 'lift') {
-        document.getElementById(currentDiv).style.display = 'none';
-        document.getElementById('lift-off').style.display = 'block';
-    } else { document.getElementById(currentDiv).style.display = 'block'; }
 }
