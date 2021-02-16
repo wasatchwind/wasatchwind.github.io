@@ -1,6 +1,6 @@
 const now = new Date();
 const dalr = 5.38;
-let beforeSunset, currentDiv;
+let beforeSunset = true, currentDiv;
 
 (function () {
     document.getElementById('heading-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
@@ -207,12 +207,13 @@ async function raob_data_gcp_storage_async(maxTemp) {
 
 async function noaa_three_day_forecast_api_async() {
     const noaaPublicForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
-    const response = await fetch(noaaPublicForecastUrl);
+    const response = await fetch(noaaPublicForecastUrl, {mode: 'cors'});
     const data = await response.json();
     beforeSunset = data.properties.periods[0].isDaytime; // Global variable
     let position = (beforeSunset) ? 0 : 1;
     if (beforeSunset) {
         const maxTemp = data.properties.periods[position].temperature;
+        document.getElementById('unskew-t').innerHTML = 'Forecast Max Temp:&nbsp';
         document.getElementById('max-temp').innerHTML = maxTemp + '&deg;';
         raob_data_gcp_storage_async(maxTemp);
     }
