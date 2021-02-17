@@ -148,3 +148,7 @@ span.aloft { vertical-align: top; }
 .venmo {
     vertical-align: middle;
 }
+div.subhead {
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
