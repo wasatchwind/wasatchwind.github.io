@@ -51,12 +51,14 @@
 
     <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
     <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
-    <div class="txtsz250"><span>Surface Wind Map @ </span><span id="wind-map-timestamp"></span></div>
+    <div class="txtsz250 subhead"><span>Surface Wind Map @ </span><span id="wind-map-timestamp"></span></div>
     <img id="surface-wind-map" width="100%"></a>
 
     <!-- LATEST READINGS KEY STATIONS -->
-    <div class="txtsz250">Current: Key Stations</div>
-    <div class="txtsz150 unbold">Listed North to South</div>
+    <div class="subhead">
+        <div class="txtsz250">Current: Key Stations</div>
+        <div class="txtsz150 unbold">Listed North to South</div>
+    </div>
     <table class="bordered gray">
         <tr class="txtsz200">
             <td rowspan="2">Station</td>
@@ -132,8 +134,10 @@
 
     <!-- KSLC 1 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-    <div class="txtsz250">History: KSLC 1 Hour</div>
-    <div class="txtsz150 unbold">(4,229')</div>
+    <div class="subhead">
+        <div class="txtsz250">History: KSLC 1 Hour</div>
+        <div class="txtsz150 unbold">(4,229')</div>
+    </div>
     <table class="bordered slc">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom kslc-wind colorstripe"><div id="kslc-wind-num-0"></div><div class="bar" id="kslc-wind-bar-0">&nbsp;</div></td>
@@ -191,8 +195,10 @@
 
     <!-- Alta Mount Baldy (AMB) 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
-    <div class="txtsz250">History: Alta Baldy 6 Hours</div>
-    <div class="txtsz150 unbold">(11,066')</div>
+    <div class="subhead">
+        <div class="txtsz250">History: Alta Baldy 6 Hours</div>
+        <div class="txtsz150 unbold">(11,066')</div>
+    </div>
     <table class="bordered baldy">
         <tr><td><span class="txtsz200">Wind</span><br>(mph)</td>
             <td class="txtsz250 bottom amb-wind colorstripe"><div id="amb-wind-num-0"></div><div class="bar" id="amb-wind-bar-0">&nbsp;</div></td>
@@ -230,29 +236,31 @@
 
     <!-- JETSTREAM -->
     <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
-    <div class="txtsz250">History: Jetstream 18 Hours</div>
+    <div class="txtsz250 subhead">History: Jetstream 18 Hours</div>
     <img src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%"></a><br>
 
     <!-- GRAPHICAL SURFACE WIND -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-    <div class="txtsz250">Forecast: Surface</div>
-    <div class="flex-graphical txtsz200">
+    <div class="txtsz250 subhead">Forecast: Surface</div>
+    <div class="txtsz200 flex-graphical">
         <div>1 (Morning)</div>
         <div>2 (Mid Day)</div>
     </div>
     <img id="graphical-wind-0" width="49%">
-    <img id="graphical-wind-1" width="49%">
-    <div class="flex-graphical txtsz200">
+    <img id="graphical-wind-1" width="49%"><br><br>
+    <div class="txtsz200 flex-graphical">
         <div>3 (Afternoon)</div>
         <div>4 (Evening)</div>
     </div>
     <img id="graphical-wind-2" width="49%">
-    <img id="graphical-wind-3" width="49%"></a><br>
+    <img id="graphical-wind-3" width="49%"></a>
 
     <!-- WIND ALOFT -->
     <a id="wind-aloft-link" target="_blank">
-    <div class="txtsz250">Forecast: Wind Aloft</div>
-    <span class="txtsz200 ltblue" id="aloft-start"></span>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;<span class="txtsz200 ltblue" id="aloft-end"></span>
+    <div class="subhead">
+        <div class="txtsz250">Forecast: Wind Aloft</div>
+        <div class="txtsz200"><span class="ltblue" id="aloft-start"></span>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;<span class="ltblue" id="aloft-end"></span></div>
+    </div>
     <table class="bordered aloftbg darkblue">
         <tr>
             <td class="left" width="12%"><span class="txtsz300">18</span><span>&nbsp;k</span></td>
@@ -288,18 +296,21 @@
 <div class="starthidden" id="lift">
 
     <!-- SKEWT -->
-    <div class="txtsz250">Morning Skew-T</div>
-    <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank"><img id="skew-t-img" width="100%"></a>
+    <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
+    <div class="txtsz250 subhead">Morning Skew-T</div>
+    <img id="skew-t-img" width="100%"></a>
 
     <!-- RAOB SOUNDING TEMP PLOT D3 -->
-    <div class="txtsz250">(un)Skew-T</div>
-    <div class="txtsz200">(Reformatted Sounding)</div>
-    <div class="txtsz200 ltgreen">Forecast Max Temp:&nbsp<span id="max-temp"></span></div>
+    <div class="subhead">
+        <div class="txtsz250">(un)Skew-T</div>
+        <div class="txtsz200">(Reformatted Sounding)</div>
+        <div class="txtsz200 ltgreen">Forecast Max Temp:&nbsp<span id="max-temp"></span></div>
+    </div>
     <div id="skew-t-d3"></div>
 
     <!-- SOARING DETAILS -->
-    <div class="txtsz250">Soarcast</div>
     <a href="https://www.weather.gov/slc/Soar" target="_blank">
+    <div class="txtsz250 subhead">Soarcast</div>
     <table class="left bordered gray">
         <tr class="txtsz200">
             <td>&nbsp;</td>
@@ -344,24 +355,24 @@
 
     <!-- CLOUDS & PRECIP GIF -->
     <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
-    <div class="txtsz250">History: Clouds & Precip 1 Hour</div>
+    <div class="txtsz250 subhead">History: Clouds & Precip 1 Hour</div>
     <img src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%"></a><br>
     
     <!-- GRAPHICAL SKY COVER -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-    <div class="txtsz250">Forecast: Cloud Cover</div>
+    <div class="txtsz250 subhead">Forecast: Cloud Cover</div>
     <div class="flex-graphical txtsz200">
         <div>1 (Morning)</div>
         <div>2 (Mid Day)</div>
     </div>
     <img id="graphical-sky-0" width="49%">
-    <img id="graphical-sky-1" width="49%">
+    <img id="graphical-sky-1" width="49%"><br><br>
     <div class="flex-graphical txtsz200">
         <div>3 (Afternoon)</div>
         <div>4 (Evening)</div>
     </div>
     <img id="graphical-sky-2" width="49%">
-    <img id="graphical-sky-3" width="49%"></a><br>
+    <img id="graphical-sky-3" width="49%"></a>
 </div>
 
 <!-- TEMP & PRESSURE SECTION -->
@@ -369,7 +380,7 @@
 
     <!-- KSLC 6 HOUR HISTORY -->
     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-    <div class="txtsz250">History: KSLC 6 Hours</div>
+    <div class="txtsz250 subhead">History: KSLC 6 Hours</div>
     <table class="bordered gray">
         <tr><td><span class="txtsz200">Pressure</td>
             <td class="txtsz200 bottom amb-wind colorstripe"><div id="kslc-alti-num-0"></div><div class="bar" id="kslc-alti-bar-0">&nbsp;</div></td>
@@ -413,28 +424,28 @@
 
     <!-- GRAPHICAL WX -->
     <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-        <div class="txtsz250">Forecast: Weather/WX</div>
+        <div class="txtsz250 subhead">Forecast: Weather/WX</div>
         <div class="flex-graphical txtsz200">
             <div>1 (Morning)</div>
             <div>2 (Mid Day)</div>
         </div>
         <img id="graphical-wx-0" width="49%">
-        <img id="graphical-wx-1" width="49%">
+        <img id="graphical-wx-1" width="49%"><br><br>
         <div class="flex-graphical txtsz200">
             <div>3 (Afternoon)</div>
             <div>4 (Evening)</div>
         </div>
         <img id="graphical-wx-2" width="49%">
-        <img id="graphical-wx-3" width="49%"></a><br>
+        <img id="graphical-wx-3" width="49%"></a>
 
     <!-- HOURLY FORECAST CHART -->
     <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-    <div class="txtsz250">Forecast: 48 Hours</div>
+    <div class="txtsz250 subhead">Forecast: 48 Hours</div>
     <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%"></a><br>
 
     <!-- NOAA 3 DAY FORECAST -->
     <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.X_EMLNhKiw4" target="_blank">
-    <div class="txtsz250">Forecast: 3 Days</div>
+    <div class="txtsz250 subhead">Forecast: 3 Days</div>
     <table class="bordered">
         <tr>
             <td rowspan="2"><img id="forecast-day1-img" height=200px></td>
@@ -453,12 +464,13 @@
             <td class="txtsz250 noaa-day" id="forecast-day3-day"></td>
         </tr>
         <tr><td class="txtsz125 noaa-text" id="forecast-day3-txt"></td></tr>
-    </table></a><br>
-</div><br>
+    </table></a>
+</div>
 
 <!-- MISC. SECTION -->
 <div class="starthidden" id="misc">
-    <div class="txtsz250">Weather / Wind Resources</div><hr><br>
+
+    <div class="txtsz250 subhead">Weather / Wind Resources<hr></div>
         <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
             <div class="txtsz150 unbold yellow underline">Area Forecast Discussion</div></a>
         <a href="http://online.saiawos.com/KU42/ios/display.html#TopOfPage" target="_blank">
