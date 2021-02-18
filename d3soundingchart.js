@@ -1,10 +1,17 @@
 function draw_d3_lapse_chart (data, maxTemp) {
-    const visibleScreenWidth = document.documentElement.clientWidth * 0.9;
-    const margin = {top: 15, right: visibleScreenWidth * 0.026, bottom: 80, left: visibleScreenWidth * 0.09};
+    let visibleScreenWidth = document.documentElement.clientWidth;
+    visibleScreenWidth = (visibleScreenWidth > 1080) ? visibleScreenWidth * 0.6 : visibleScreenWidth * 0.89;
+    const visibleScreenHeight = visibleScreenWidth * 0.679;
+    const margin = {
+        top: visibleScreenHeight * 0.023,
+        right: visibleScreenWidth * 0.026,
+        bottom: visibleScreenHeight * 0.123,
+        left: visibleScreenWidth * 0.09
+    };
     const width = visibleScreenWidth - margin.left - margin.right;
-    const height = 660 - margin.top - margin.bottom;
+    const height = visibleScreenHeight - margin.top - margin.bottom;
     const svg = d3.select('#skew-t-d3').append('svg')
-        .attr('class', 'svg-bg')
+        .attr('class', 'svgbg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
@@ -15,11 +22,14 @@ function draw_d3_lapse_chart (data, maxTemp) {
     const y = d3.scaleLinear()
         .range([height, 0])
         .domain([4,18]);
-    const c1 = x(25);
-    const c2 = x(100);
-    const c3 = y(4);
-    const polygon = 'M ' + c1 + ' 0, L ' + c2 + ' ' + c3 + ', L ' + (width + margin.right) + ' ' + c3 + ', L ' + (width + margin.right) + ' 0, L ' + c1 + ' 0';
-    const dalrLabelPosition = 'rotate(43, 0, ' + visibleScreenWidth * 0.8 + ')';
+    const p1 = 'M ' + x(25) + ' 0, ';
+    const p2 = 'L ' + x(100) + ' ' + y(4) + ', ';
+    const p3 = 'L ' + (width + margin.right) + ' ' + y(4) + ', ';
+    const p4 = 'L ' + (width + margin.right) + (0 - margin.top) + ', ';
+    const p5 = 'L ' + x(25) + (0 - margin.top) + ', ';
+    const p6 = 'L ' + x(25) + ' 0';
+    const polygon = p1 + p2 + p3 + p4 + p5 + p6;
+    const dalrLabelPosition = 'rotate(41, 0, ' + width * 0.8 + ')';
     const xAxisGrid = d3.axisTop(x)
         .tickSize(0-y(4))
         .tickFormat('')
@@ -32,14 +42,14 @@ function draw_d3_lapse_chart (data, maxTemp) {
         .x(function(d) { return x((d.Temp_c * 9 / 5) + 32); })
         .y(function(d) { return y(d.Altitude_m * 3.281 / 1000); });
     svg.append('g') // Draw vertical x axis gridlines
-        .attr('class', 'grid-ticks')
+        .attr('class', 'gridticks')
         .call(xAxisGrid);
     svg.append('g') // Draw horizontal y axis gridlines
-        .attr('class', 'grid-ticks')
+        .attr('class', 'gridticks')
         .call(yAxisGrid);
     svg.append('g').selectAll("dalr-lines") // Draw skewed DALR x axis gridlines
         .data(dalrAxisGrid).enter().append("line")
-        .attr('class', 'grid-dalr')
+        .attr('class', 'dalrgrid')
         .attr('x1', function(d) { return x(d-75) })
         .attr('x2', function(d) { return x(d) })
         .attr('y1', y(18))
@@ -50,13 +60,13 @@ function draw_d3_lapse_chart (data, maxTemp) {
         .attr('stroke-width', 5)
         .attr('d', tempLine);
     svg.append('g').append('rect') // Draw blank rectangle to clip temp line above chart
-        .attr('class', 'svg-bg')
+        .attr('class', 'svgbg')
         .attr('x', 0 - margin.left)
         .attr('y', 0 - margin.top)
         .attr('width', width)
         .attr('height', margin.top);
     svg.append('g').append('rect') // Draw blank rectangle to clip temp line left of chart
-        .attr('class', 'svg-bg')
+        .attr('class', 'svgbg')
         .attr('x', 0 - margin.left)
         .attr('y', 0)
         .attr('width', margin.left)
@@ -89,7 +99,7 @@ function draw_d3_lapse_chart (data, maxTemp) {
         .attr('d', polygon)
         .attr('fill', 'rgb(80,80,80)');
     svg.append('text') // DALR label
-        .attr('class', 'dalrLabel')
+        .attr('class', 'textlabel')
         .attr('transform', dalrLabelPosition)
         .style('text-anchor', 'start')
         .text('\u2190 DALR (-5.38 \u00B0F / 1,000 ft) \u2192');
@@ -101,7 +111,7 @@ function draw_d3_lapse_chart (data, maxTemp) {
         .attr('x2', x(45))
         .attr('y2', y(17));
     svg.append('text') // Legend green line text label
-        .attr('class', 'dalrLabel')
+        .attr('class', 'textlabel')
         .attr('x', x(47))
         .attr('y', y(17))
         .text('Forecast Max Temp DALR Line');
@@ -113,7 +123,7 @@ function draw_d3_lapse_chart (data, maxTemp) {
         .attr('x2', x(55))
         .attr('y2', y(15.5));
     svg.append('text') // Legend red line text label
-        .attr('class', 'dalrLabel')
+        .attr('class', 'textlabel')
         .attr('x', x(57))
         .attr('y', y(15.5))
         .text('Sounding Temperature');
