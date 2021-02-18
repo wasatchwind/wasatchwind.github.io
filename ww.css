@@ -63,7 +63,7 @@ button {
 
 /* Text Alignment */
 .left { text-align: left; }
-.indent { margin-left: 2%; } /* Used in JS file */
+.indent { padding-left: 2%; }
 .justify { text-align: justify; }
 
 /* Weight and Colors */
