@@ -5,7 +5,7 @@ function draw_d3_lapse_chart (data, maxTemp) {
     const margin = {
         top: visibleScreenHeight * 0.023,
         right: visibleScreenWidth * 0.026,
-        bottom: visibleScreenHeight * 0.123,
+        bottom: visibleScreenHeight * 0.131,
         left: visibleScreenWidth * 0.09
     };
     const width = visibleScreenWidth - margin.left - margin.right;
