@@ -122,11 +122,12 @@ function get_and_display_kslc_latest_stats(data, gust) {
     document.getElementById('latest-wind').innerHTML = wind + '<span class="ltred unbold">' + gust + '</span>';
 }
 
-function build_wind_history_chart(stationName, data, historyLength, ylw, red, gust = []) {
+function build_wind_history_chart(stationName, data, historyLength, ylw, red, dir = [], gust = []) {
     const time = data.date_time.slice(-historyLength).map(d => d.slice(0,-3));
     const wind = data.wind_speed_set_1.slice(-historyLength).map(d => Math.round(d) === 0 ? '' : Math.round(d));
     const windColor = wind.map(d => (d > ylw && d < red) ? '#FCDC99' : d >= red ? '#FB6962' : '#79DE79');
-    const dir = data.wind_direction_set_1.slice(-historyLength).map(d => d);
+    try { dir = data.wind_direction_set_1.slice(-historyLength).map(d => d); }
+    catch { for (i=0; i<historyLength; i++) dir[i] = null; }
     try { gust = data.wind_gust_set_1.slice(-historyLength).map(d => Math.round(d) > 0 ? Math.round(d) : '-'); }
     catch { for (i=0; i<historyLength; i++) gust[i] = '-'; }
     for (i=0; i<historyLength; i++) {
