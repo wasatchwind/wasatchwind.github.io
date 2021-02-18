@@ -138,7 +138,7 @@ td.pressure {
 td.soarcast {
     font-size: 200%;
     text-align: center;
-    width: 34%;
+    width: 36%;
 }
 td.subm {
     font-weight: normal;
@@ -149,7 +149,7 @@ td.vertpad { padding: 2%; }
 
 /* Span */
 span.top { vertical-align: top; }
-span.currenttime {
+span.subright {
     float: right;
     font-weight: normal;
     margin-right: 5%;
