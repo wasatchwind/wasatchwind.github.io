@@ -74,8 +74,6 @@ async function wind_aloft_gcp_function_async() {
     const response = await fetch(gcpWindAloftFuncUrl);
     const data = await response.json();
     set_wind_aloft_link();
-    const spdStr = '<span class="indent txtsz350 ltblue">';
-    const mphStr = '</span><span class="unbold white"> mph</span>';
     const ylwSpds = [9, 12, 15, 21];
     const redSpds = [12, 18, 24, 36];
     document.getElementById('aloft-start').innerHTML = data.Start;
@@ -84,7 +82,7 @@ async function wind_aloft_gcp_function_async() {
         document.getElementById('dir-' + i).src = 'images/dirs/' + data.Directions_6k_9k_12k_18k[i] + '.gif';
         if (data.Directions_6k_9k_12k_18k[i] === 'calm') document.getElementById('aloft-' + i).style.display = 'none';
         else {
-            document.getElementById('spd-' + i).innerHTML = spdStr + data.Speeds_6k_9k_12k_18k[i] + mphStr;
+            document.getElementById('spd-' + i).innerHTML = data.Speeds_6k_9k_12k_18k[i];
             document.getElementById('barwidth-' + i).style.width = data.Speeds_6k_9k_12k_18k[i]*0.8 + '%';
             let speed = data.Speeds_6k_9k_12k_18k[i];
             let color = (speed > ylwSpds[i] && speed < redSpds[i]) ? '#FCDC99' : (speed >= redSpds[i] ? '#FB6962' : '#79DE79');
@@ -123,7 +121,7 @@ function get_and_display_kslc_latest_stats(data, gust) {
 }
 
 function build_wind_history_chart(stationName, data, historyLength, ylw, red, dir = [], gust = []) {
-    const time = data.date_time.slice(-historyLength).map(d => d.slice(0,-3));
+    const time = (stationName === 'kslc') ? data.date_time.slice(-historyLength).map(d => d.slice(0,-3)) : data.date_time.slice(-historyLength).map(d => d.toLowerCase().replace(':00', ''));
     const wind = data.wind_speed_set_1.slice(-historyLength).map(d => Math.round(d) === 0 ? '' : Math.round(d));
     const windColor = wind.map(d => (d > ylw && d < red) ? '#FCDC99' : d >= red ? '#FB6962' : '#79DE79');
     try { dir = data.wind_direction_set_1.slice(-historyLength).map(d => d); }
