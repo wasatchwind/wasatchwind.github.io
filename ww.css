@@ -59,7 +59,7 @@ button {
 .txtsz200 { font-size: 200%; }
 .txtsz250 { font-size: 250%; }
 .txtsz300 { font-size: 300%; }
-.txtsz350 { font-size: 350%; } /* Used in JS file */
+.txtsz350 { font-size: 350%; }
 
 /* Text Alignment */
 .left { text-align: left; }
@@ -125,15 +125,15 @@ td.noaaday {
 td.noaatext {
     font-size: 125%;
     vertical-align: text-top;
-    padding-left: 20px;
+    padding-left: 2%;
     text-align: justify;
     font-weight: normal;
 }
-td.padright { padding-right: 2.5%;}
+td.padright { padding-right: 2%;}
 td.pressure {
     font-size: 200%;
     vertical-align: bottom;
-    width: 14.25;
+    width: 14.25%;
 }
 td.soarcast {
     font-size: 200%;
@@ -148,12 +148,13 @@ td.subm {
 td.vertpad { padding: 2%; }
 
 /* Span */
-span.top { vertical-align: top; }
+span.mid { vertical-align: 75%; }
 span.subright {
     float: right;
     font-weight: normal;
     margin-right: 5%;
 }
+span.top { vertical-align: top; }
 
 /* Div */
 div.misc {
