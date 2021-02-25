@@ -101,7 +101,7 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
     const response = await fetch(imageMetaUrl);
     const data = await response.json();
     let screenshotTime = new Date(data.timeCreated);
-    // screenshotTime = screenshotTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+    screenshotTime = screenshotTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
     document.getElementById('wind-map-timestamp').innerHTML = screenshotTime;
     document.getElementById('surface-wind-map').src = imageUrl;
 })();
