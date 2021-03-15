@@ -152,7 +152,7 @@ function set_wind_aloft_link() {
 }
 
 (async function wind_aloft_gcp_function_async() {
-    const gcpWindAloftFuncUrl = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-020721';
+    const gcpWindAloftFuncUrl = 'https://us-central1-wasatchwind.cloudfunctions.net/wind-aloft-ftp-031521';
     const response = await fetch(gcpWindAloftFuncUrl);
     const data = await response.json();
     set_wind_aloft_link();
