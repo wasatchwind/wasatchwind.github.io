@@ -138,7 +138,12 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 (function get_all_graphical_forecast_images() {
     const url = 'https://graphical.weather.gov/images/slc/';
     const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1;
+    let forecastDay = '';
+    if (now.getHours() > 18) {
+        forecastDay = new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'});
+    }
     for (i=0; i<4; i++) {
+        if (i<3) { document.getElementsByClassName('graphical-day')[i].innerHTML = forecastDay };
         document.getElementById('graphical-wind-' + i).src = url + 'WindSpd' + (timeStr + i) + '_slc.png';
         document.getElementById('graphical-sky-' + i).src = url + 'Sky' + (timeStr + i) + '_slc.png';
         document.getElementById('graphical-wx-' + i).src = url + 'Wx' + (timeStr + i) + '_slc.png';
