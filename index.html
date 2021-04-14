@@ -473,75 +473,82 @@
 
         <!-- SOARING DETAILS -->
         <a href="https://www.weather.gov/slc/Soar" target="_blank">
-            <div class="subhead250">Soarcast</div>
-            <table class="left bordered graybg">
-                <tr>
-                    <td>&nbsp;</td>
-                    <td class="ltblue grayoverlay soarcast" colspan="2">NWS</td>
-                    <td class="soarcast" colspan="2">(un)Skew-T</td>
-                </tr>
-                <tr>
-                    <td>
-                        <hr>
-                    </td>
-                    <td class="grayoverlay" colspan="2">
-                        <hr>
-                    </td>
-                    <td colspan="2">
-                        <hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="txtsz200">Top of Lift</div>
-                        <div class="unbold">(ft)</div></td>
-                    <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-tol"></td>
-                    <td class="ltblue grayoverlay subm padright" id="soarcast-tol-m"></td>
-                    <td class="txtsz250 indent" id="thermal-max-height-forecast"></td>
-                    <td class="subm padright" id="thermal-max-height-forecast-m"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <hr>
-                    </td>
-                    <td class="grayoverlay" colspan="2">
-                        <hr>
-                    </td>
-                    <td colspan="2">
-                        <hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="txtsz200">-3 Index</div>
-                        <div class="unbold">(ft)</div></td>
-                    <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-neg3"></td>
-                    <td class="ltblue grayoverlay subm padright" id="soarcast-neg3-m"></td>
-                    <td class="txtsz250 indent"></td>
-                    <td class="subm padright"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <hr>
-                    </td>
-                    <td class="grayoverlay" colspan="2">
-                        <hr>
-                    </td>
-                    <td colspan="2">
-                        <hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="txtsz200">Max RoL</div>
-                        <div class="unbold">(ft/min)</div></td>
-                    <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-rol"></td>
-                    <td class="ltblue grayoverlay subm padright" id="soarcast-rol-m"></td>
-                    <td class="txtsz250 indent"></td>
-                    <td class="subm padright"></td>
-                </tr>
-            </table>
+            <div id="soarcast-section">
+                <div class="subhead250">Soarcast</div>
+                <table class="left bordered graybg">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="ltblue grayoverlay soarcast" colspan="2">NWS</td>
+                        <td class="soarcast" colspan="2">(un)Skew-T</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                        </td>
+                        <td class="grayoverlay" colspan="2">
+                            <hr>
+                        </td>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="txtsz200">Top of Lift</div>
+                            <div class="unbold">(ft)</div></td>
+                        <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-tol"></td>
+                        <td class="ltblue grayoverlay subm padright" id="soarcast-tol-m"></td>
+                        <td class="txtsz250 indent" id="thermal-max-height-forecast"></td>
+                        <td class="subm padright" id="thermal-max-height-forecast-m"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                        </td>
+                        <td class="grayoverlay" colspan="2">
+                            <hr>
+                        </td>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="txtsz200">-3 Index</div>
+                            <div class="unbold">(ft)</div></td>
+                        <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-neg3"></td>
+                        <td class="ltblue grayoverlay subm padright" id="soarcast-neg3-m"></td>
+                        <td class="txtsz250 indent"></td>
+                        <td class="subm padright"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                        </td>
+                        <td class="grayoverlay" colspan="2">
+                            <hr>
+                        </td>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="txtsz200">Max RoL</div>
+                            <div class="unbold">(ft/min)</div></td>
+                        <td class="txtsz250 indent ltblue grayoverlay" id="soarcast-rol"></td>
+                        <td class="ltblue grayoverlay subm padright" id="soarcast-rol-m"></td>
+                        <td class="txtsz250 indent"></td>
+                        <td class="subm padright"></td>
+                    </tr>
+                </table>
+            </div>
         </a>
+
+        <!-- OVERDEVELOPMENT (OD) -->
+        <div class="subhead starthidden" id="od-section">! Overdevelopment Time !
+            <div class="txtsz250 ltred" id="od-time"></div>
+        </div>
     </div>
 
     <!-- SKY COVER SECTION -->
