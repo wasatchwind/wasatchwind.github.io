@@ -1,9 +1,10 @@
 const now = new Date();
+const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
 const dalr = 5.38;
 let currentDiv;
 
 (function () {
-    document.getElementById('heading-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
+    document.getElementById('heading-date').innerHTML = headingDate;
 })();
 
 function calculate_apz(alti, temp, apz, currentZones = []) {
@@ -206,14 +207,17 @@ async function raob_data_gcp_storage_async(maxTemp) {
     const gcpSoaringDataUrl = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json';
     const response = await fetch(gcpSoaringDataUrl);
     const data = await response.json();
-    document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + data.MAX_TEMP + '&deg;';
-    raob_data_gcp_storage_async(data.MAX_TEMP);
-    document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
-    document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
-    document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
-    document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
-    document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
-    document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
+    if (data.REPORT_DATE === headingDate) {
+        document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + data.MAX_TEMP + '&deg;';
+        raob_data_gcp_storage_async(data.MAX_TEMP);
+        document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
+        document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
+        document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
+        document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
+        document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
+        document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
+    }
+    else { document.getElementById('unskewt').style.display = 'none'; }
 })();
 
 (async function noaa_three_day_forecast_api_async() {
