@@ -216,8 +216,15 @@ async function raob_data_gcp_storage_async(maxTemp) {
         document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
         document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
         document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
+        if (data.OD_TIME !== "None") {
+            document.getElementById('od-section').style.display = 'block';
+            document.getElementById('od-time').innerHTML = data.OD_TIME;
+        }
     }
-    else { document.getElementById('unskewt').style.display = 'none'; }
+    else {
+        document.getElementById('unskewt').style.display = 'none';
+        document.getElementById('soarcast-section').style.display = 'none';
+    }
 })();
 
 (async function noaa_three_day_forecast_api_async() {
