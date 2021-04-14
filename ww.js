@@ -208,7 +208,7 @@ async function raob_data_gcp_storage_async(maxTemp) {
     const response = await fetch(gcpSoaringDataUrl);
     const data = await response.json();
     if (data.REPORT_DATE === headingDate) {
-        document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + data.MAX_TEMP + '&deg;';
+        document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + parseInt(data.MAX_TEMP) + '&deg;';
         raob_data_gcp_storage_async(data.MAX_TEMP);
         document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
         document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
