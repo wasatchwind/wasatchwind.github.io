@@ -7,6 +7,13 @@ let currentDiv;
     document.getElementById('heading-date').innerHTML = headingDate;
 })();
 
+(function get_morning_skew_t() {
+    let skewTDateStr = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
+    skewTDateStr = skewTDateStr[2] + skewTDateStr[0] + skewTDateStr[1];
+    const skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + skewTDateStr + '.12.gif';
+    document.getElementById('skew-t-img').src = skewTurl;
+})();
+
 function calculate_apz(alti, temp, apz, currentZones = []) {
     const apzSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62];
     const apzIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65];
@@ -239,13 +246,6 @@ async function raob_data_gcp_storage_async(maxTemp) {
         document.getElementById('forecast-day' + i +'-img').src = data.properties.periods[position].icon;
         position += 2;
     }
-})();
-
-(function get_morning_skew_t() {
-    let skewTDateStr = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
-    skewTDateStr = skewTDateStr[2] + skewTDateStr[0] + skewTDateStr[1];
-    const skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + skewTDateStr + '.12.gif';
-    document.getElementById('skew-t-img').src = skewTurl;
 })();
 
 function reset_previous_button_and_section() {
