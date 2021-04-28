@@ -104,8 +104,8 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 })();
 
 (async function get_surface_wind_map_image_gcp_async() {
-    const imageUrl = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save1.png';
-    const imageMetaUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save1.png';
+    const imageUrl = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png';
+    const imageMetaUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
     const response = await fetch(imageMetaUrl);
     const data = await response.json();
     let screenshotTime = new Date(data.timeCreated);
