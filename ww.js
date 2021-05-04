@@ -99,8 +99,8 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
     const data = await response.json();
     get_and_display_kslc_latest_stats(data.STATION[0].OBSERVATIONS);
     build_wind_history_chart('kslc', data.STATION[0].OBSERVATIONS, 11, 9, 19);
-    build_wind_history_chart('amb', data.STATION[1].OBSERVATIONS, 6, 19, 29);
     build_tempalti_history_chart(data.STATION[0].OBSERVATIONS);
+    build_wind_history_chart('amb', data.STATION[1].OBSERVATIONS, 6, 19, 29);
 })();
 
 (async function get_surface_wind_map_image_gcp_async() {
