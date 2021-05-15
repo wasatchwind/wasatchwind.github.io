@@ -1,7 +1,8 @@
+'use strict';
 const now = new Date();
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'});
 const dalr = 5.38;
-let currentDiv;
+let currentDiv, i;
 
 (function () {
     document.getElementById('heading-date').innerHTML = headingDate;
@@ -10,7 +11,7 @@ let currentDiv;
 (function get_morning_skew_t() {
     let skewTDateStr = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
     skewTDateStr = skewTDateStr[2] + skewTDateStr[0] + skewTDateStr[1];
-    const skewTurl = 'https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.' + skewTDateStr + '.12.gif';
+    const skewTurl = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${skewTDateStr}.12.gif`;
     document.getElementById('skew-t-img').src = skewTurl;
 })();
 
@@ -39,7 +40,7 @@ function get_and_display_kslc_latest_stats(data, gust) {
     document.getElementById('latest-pressure').innerHTML = alti;
     document.getElementById('latest-temp').innerHTML = temp;
     document.getElementById('apz').innerHTML = calculate_apz(alti, temp);
-    document.getElementById('latest-wind').innerHTML = wind + '<span class="ltred unbold">' + gust + '</span>';
+    document.getElementById('latest-wind').innerHTML = `${wind}<span class="ltred unbold">${gust}</span>`;
 }
 
 function build_wind_history_chart(stationName, data, historyLength, ylw, red, dir = [], gust = []) {
@@ -88,15 +89,16 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 
 (async function noaa_time_series_api_async() { //https://developers.synopticdata.com/mesonet
     const baseUrl = 'https://api.mesowest.net/v2/station/timeseries?';
-    const stations = '&stid=KSLC&stid=AMB';
+    const stations = '&stid=KSLC&stid=HDP';
     const historyMinutes = '&recent=420';
     const timeFormat = '&obtimezone=local&timeformat=%-I:%M%20%p';
     const dataPoints = '&vars=air_temp,altimeter,wind_cardinal_direction,wind_direction,wind_gust,wind_speed';
     const units = '&units=english,speed|mph,temp|F';
     const token = '&token=6243aadc536049fc9329c17ff2f88db3';
-    const noaaTimeSeriesUrl = baseUrl + stations + historyMinutes + timeFormat + dataPoints + units + token;
+    const noaaTimeSeriesUrl = `${baseUrl}${stations}${historyMinutes}${timeFormat}${dataPoints}${units}${token}`;
     const response = await fetch(noaaTimeSeriesUrl);
     const data = await response.json();
+    console.log(data);
     get_and_display_kslc_latest_stats(data.STATION[0].OBSERVATIONS);
     build_wind_history_chart('kslc', data.STATION[0].OBSERVATIONS, 11, 9, 19);
     build_tempalti_history_chart(data.STATION[0].OBSERVATIONS);
@@ -116,12 +118,12 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 
 (async function noaa_latest_api_async() { //https://developers.synopticdata.com/mesonet
     const baseUrl = 'https://api.synopticdata.com/v2/stations/latest?';
-    const stations = '&stid=OGP&stid=C8948&stid=UTOLY&stid=KU42&stid=FPS&stid=PKC';
+    const stations = '&stid=OGP&stid=C8948&stid=UTOLY&stid=KU42&stid=FPS';
     const timeFormat = '&obtimezone=local&timeformat=%-I:%M%20%p';
     const dataPoints = '&vars=wind_direction,wind_gust,wind_speed';
     const units = '&units=english,speed|mph';
     const token = '&token=6243aadc536049fc9329c17ff2f88db3';
-    const noaaLatestUrl = baseUrl + stations + timeFormat + dataPoints + units + token;
+    const noaaLatestUrl = `${baseUrl}${stations}${timeFormat}${dataPoints}${units}${token}`;
     const response = await fetch(noaaLatestUrl);
     const data = await response.json();
     for (i=0; i<data.STATION.length; i++) {
@@ -152,15 +154,15 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
     }
     for (i=0; i<4; i++) {
         document.getElementsByClassName('next-day')[i].innerHTML = forecastDay;
-        document.getElementById('graphical-wind-' + i).src = url + 'WindSpd' + (timeStr + i) + '_slc.png';
-        document.getElementById('graphical-sky-' + i).src = url + 'Sky' + (timeStr + i) + '_slc.png';
-        document.getElementById('graphical-wx-' + i).src = url + 'Wx' + (timeStr + i) + '_slc.png';
+        document.getElementById('graphical-wind-' + i).src = url + `WindSpd${timeStr + i}_slc.png`;
+        document.getElementById('graphical-sky-' + i).src = url + `Sky${timeStr + i}_slc.png`;
+        document.getElementById('graphical-wx-' + i).src = url + `Wx${timeStr + i}_slc.png`;
     }
 })();
 
 function set_wind_aloft_link() {
     let range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06';
-    const linkURL = 'https://www.aviationweather.gov/windtemp/data?level=low&fcst=' + range + '&region=slc&layout=on&date=';
+    const linkURL = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${range}&region=slc&layout=on&date=`;
     document.getElementById('wind-aloft-link').setAttribute('href', linkURL);
 }
 
@@ -231,6 +233,7 @@ async function raob_data_gcp_storage_async(maxTemp) {
     else {
         document.getElementById('unskewt').style.display = 'none';
         document.getElementById('soarcast-section').style.display = 'none';
+        document.getElementById('soarcast-fail').style.display = 'block';
     }
 })();
 
@@ -238,7 +241,7 @@ async function raob_data_gcp_storage_async(maxTemp) {
     const noaaPublicForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
     const response = await fetch(noaaPublicForecastUrl, {mode: 'cors'});
     const data = await response.json();
-    beforeSunset = data.properties.periods[0].isDaytime;
+    let beforeSunset = data.properties.periods[0].isDaytime;
     let position = (beforeSunset) ? 0 : 1;
     for (i=1; i<4; i++) {
         document.getElementById('forecast-day' + i +'-day').innerHTML = data.properties.periods[position].name;
