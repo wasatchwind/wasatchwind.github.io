@@ -98,7 +98,6 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
     const noaaTimeSeriesUrl = `${baseUrl}${stations}${historyMinutes}${timeFormat}${dataPoints}${units}${token}`;
     const response = await fetch(noaaTimeSeriesUrl);
     const data = await response.json();
-    console.log(data);
     get_and_display_kslc_latest_stats(data.STATION[0].OBSERVATIONS);
     build_wind_history_chart('kslc', data.STATION[0].OBSERVATIONS, 11, 9, 19);
     build_tempalti_history_chart(data.STATION[0].OBSERVATIONS);
