@@ -89,7 +89,7 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 
 (async function noaa_time_series_api_async() { //https://developers.synopticdata.com/mesonet
     const baseUrl = 'https://api.mesowest.net/v2/station/timeseries?';
-    const stations = '&stid=KSLC&stid=HDP';
+    const stations = '&stid=KSLC&stid=AMB';
     const historyMinutes = '&recent=420';
     const timeFormat = '&obtimezone=local&timeformat=%-I:%M%20%p';
     const dataPoints = '&vars=air_temp,altimeter,wind_cardinal_direction,wind_direction,wind_gust,wind_speed';
