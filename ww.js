@@ -215,18 +215,33 @@ async function raob_data_gcp_storage_async(maxTemp) {
     const gcpSoaringDataUrl = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json';
     const response = await fetch(gcpSoaringDataUrl);
     const data = await response.json();
-    if (data.REPORT_DATE === headingDate) {
-        document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + parseInt(data.MAX_TEMP) + '&deg;';
-        raob_data_gcp_storage_async(data.MAX_TEMP);
-        document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
-        document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
-        document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
-        document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
-        document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
-        document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
-        if (data.OD_TIME !== "None") {
+    const reportdate = new Date(data["Report date"]);
+//     if (data.REPORT_DATE === headingDate) {
+//         document.getElementById('max-temp').innerHTML = 'Forecast Max Temp: ' + parseInt(data.MAX_TEMP) + '&deg;';
+//         raob_data_gcp_storage_async(data.MAX_TEMP);
+//         document.getElementById('soarcast-tol').innerHTML = data.TOP_OF_LIFT;
+//         document.getElementById('soarcast-tol-m').innerHTML = data.TOP_OF_LIFT_M;
+//         document.getElementById('soarcast-neg3').innerHTML = data.NEG_3_INDEX;
+//         document.getElementById('soarcast-neg3-m').innerHTML = data.NEG_3_INDEX_M;
+//         document.getElementById('soarcast-rol').innerHTML = data.MAX_RATE_OF_LIFT;
+//         document.getElementById('soarcast-rol-m').innerHTML = data.MAX_RATE_OF_LIFT_MS;
+//         if (data.OD_TIME !== "None") {
+//             document.getElementById('od-section').style.display = 'block';
+//             document.getElementById('od-time').innerHTML = data.OD_TIME;
+//         }
+//     }
+        if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === headingDate) {
+        raob_data_gcp_storage_async(data['Max temp']);
+        document.getElementById('max-temp').innerHTML = `Forecast Max Temp: ${data['Max temp']}&deg;`;
+        document.getElementById('soarcast-tol').innerHTML = parseInt(data['Top of lift']).toLocaleString();
+        document.getElementById('soarcast-tol-m').innerHTML = `${Math.round(parseInt(data['Top of lift'])/3.281)} m`;
+        document.getElementById('soarcast-neg3').innerHTML = parseInt(data['Height of -3 index']).toLocaleString();
+        document.getElementById('soarcast-neg3-m').innerHTML = `${Math.round(parseInt(data['Height of -3 index'])/3.281)} m`;
+        document.getElementById('soarcast-rol').innerHTML = parseInt(data['Max rate of lift']).toLocaleString();
+        document.getElementById('soarcast-rol-m').innerHTML = `${Math.round((parseInt(data['Max rate of lift'])/197)*10)/10} m/s`;
+        if (data['Overdevelopment time'] !== "None") {
             document.getElementById('od-section').style.display = 'block';
-            document.getElementById('od-time').innerHTML = data.OD_TIME;
+            document.getElementById('od-time').innerHTML = data['Overdevelopment time'];
         }
     }
     else {
