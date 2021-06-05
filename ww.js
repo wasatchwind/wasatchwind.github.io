@@ -177,7 +177,7 @@ function set_wind_aloft_link() {
     document.getElementById('aloft-end').innerHTML = data["End time"];
     for (i=0; i<4; i++) {
         document.getElementById('dir-' + i).src = 'images/dirs/' + data.Dirs[alts[i]] + '.gif';
-        if (data.Dirs[alts[i]] === 'Calm') document.getElementById('aloft-' + i).style.display = 'none';
+        if (data.Dirs[alts[i]] === 'calm') document.getElementById('aloft-' + i).style.display = 'none';
         else {
             document.getElementById('spd-' + i).innerHTML = data.Spds[alts[i]];
             document.getElementById('barwidth-' + i).style.width = data.Spds[alts[i]]*0.8 + '%';
