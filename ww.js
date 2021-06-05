@@ -170,17 +170,18 @@ function set_wind_aloft_link() {
     const response = await fetch(gcpWindAloftFuncUrl);
     const data = await response.json();
     set_wind_aloft_link();
+    const alts = ['6k', '9k', '12k', '18k'];
     const ylwSpds = [9, 12, 15, 21];
     const redSpds = [12, 18, 24, 36];
-    document.getElementById('aloft-start').innerHTML = data.Start;
-    document.getElementById('aloft-end').innerHTML = data.End;
+    document.getElementById('aloft-start').innerHTML = data["Start time"];
+    document.getElementById('aloft-end').innerHTML = data["End time"];
     for (i=0; i<4; i++) {
-        document.getElementById('dir-' + i).src = 'images/dirs/' + data.Directions_6k_9k_12k_18k[i] + '.gif';
-        if (data.Directions_6k_9k_12k_18k[i] === 'calm') document.getElementById('aloft-' + i).style.display = 'none';
+        document.getElementById('dir-' + i).src = 'images/dirs/' + data.Dirs[alts[i]] + '.gif';
+        if (data.Dirs[alts[i]] === 'Calm') document.getElementById('aloft-' + i).style.display = 'none';
         else {
-            document.getElementById('spd-' + i).innerHTML = data.Speeds_6k_9k_12k_18k[i];
-            document.getElementById('barwidth-' + i).style.width = data.Speeds_6k_9k_12k_18k[i]*0.8 + '%';
-            let speed = data.Speeds_6k_9k_12k_18k[i];
+            document.getElementById('spd-' + i).innerHTML = data.Spds[alts[i]];
+            document.getElementById('barwidth-' + i).style.width = data.Spds[alts[i]]*0.8 + '%';
+            let speed = data.Spds[alts[i]];
             let color = (speed > ylwSpds[i] && speed < redSpds[i]) ? '#FCDC99' : (speed >= redSpds[i] ? '#FB6962' : '#79DE79');
             document.getElementById('barwidth-' + i).style.backgroundColor = color;
         }
