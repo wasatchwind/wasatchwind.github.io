@@ -169,6 +169,7 @@ function set_wind_aloft_link() {
     const gcpWindAloftFuncUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp';
     const response = await fetch(gcpWindAloftFuncUrl);
     const data = await response.json();
+    console.log(data);
     set_wind_aloft_link();
     const alts = ['6k', '9k', '12k', '18k'];
     const ylwSpds = [9, 12, 15, 21];
