@@ -117,7 +117,7 @@ function build_tempalti_history_chart(data, max, min, time = [], alti = [], temp
 
 (async function noaa_latest_api_async() { //https://developers.synopticdata.com/mesonet
     const baseUrl = 'https://api.synopticdata.com/v2/stations/latest?';
-    const stations = '&stid=OGP&stid=C8948&stid=KU42&stid=FPS';//&stid=UTOLY&stid=PKC';
+    const stations = '&stid=OGP&stid=C8948&stid=KU42&stid=FPS&stid=UTOLY'//&stid=PKC';
     const timeFormat = '&obtimezone=local&timeformat=%-I:%M%20%p';
     const dataPoints = '&vars=wind_direction,wind_gust,wind_speed';
     const units = '&units=english,speed|mph';
