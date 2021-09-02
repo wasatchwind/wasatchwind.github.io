@@ -1,0 +1,111 @@
+@media only screen and (min-width: 1081px) {
+  body {
+      margin-left: 35%;
+      margin-right: 35%;
+      zoom: 0.5;
+  }
+}
+body {
+  background-color: #000050;
+  color: white;
+  text-align: center;
+}
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:active {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+.pink { color: pink; }
+.bg { background-color: #000050; }
+.bg-KSLC {
+  background-image: url('/Staging/images/slcnew.png');
+  background-size: 100% 100%;
+}
+.bg-AMB {
+  background-image: url('/Staging/images/baldynew.png');
+  background-size: 100% 100%;
+}
+.bg-UTOLY {
+  background-image: url('/Staging/images/utoly.png');
+  background-size: 100% 100%;
+}
+.bg-KU42 {
+  background-image: url('/Staging/images/ku42new1.png');
+  background-size: 100% 100%;
+}
+.bg-FPS {
+  background-image: url('/Staging/images/fps.png');
+  background-size: 100% 100%;
+}
+.bg-C8948 {
+  background-image: url('/Staging/images/C8948.png');
+  background-size: 100% 100%;
+}
+.bg-OGP {
+  background-image: url('/Staging/images/OGP.png');
+  background-size: 100% 100%;
+}
+.bg-aloft {
+  background-image: url('/Staging/images/aloft.png');
+  background-size: 100% 100%;
+}
+hr.dash { border: 3px dashed white !important; }
+.mb-div-end { margin-bottom: 8rem !important; }
+.wwborder {
+  border-radius: 1rem !important;
+}
+
+/* D3 */
+.dalrgrid {
+  opacity: 0.25;
+  stroke: white;
+}
+.gridticks {
+  color: lightgray;
+  opacity: 0.5;
+}
+.svgbg { fill: #212529; }
+.textlabel {
+  fill: white;
+  font-size: 150%;
+}
+.xAxis { font-size: 150%; }
+.xLabel {
+  fill: #0dcaf0;
+  font-size: 150%;
+}
+.yAxis { font-size: 150%; }
+.yLabel {
+  fill: #0dcaf0;
+  text-anchor: middle;
+  font-size: 150%;
+}
+.templabel {
+  fill: #0dcaf0;
+  font-size: 200%;
+  font-weight: bold;
+}
+.raoblabel {
+  fill: #dc3545;
+  font-size: 200%;
+  font-weight: bold;
+}
+.dewpointlabel {
+  fill: #20c997;
+  font-size: 200%;
+  font-weight: bold;
+}
+.dalrlabel {
+  fill: white;
+  font-size: 150%;
+}
