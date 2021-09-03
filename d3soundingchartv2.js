@@ -156,6 +156,8 @@ function drawD3LapseChart(data, maxTemp) {
 function d3Update() {
     userTemp = parseInt(document.getElementById('user-temp').value)
     userTemp = (userTemp>110 || isNaN(userTemp)) ? -10 : userTemp
+    console.log(userTemp)
+    console.log(roabData)
     if (userTemp!==-10 && userTemp>=(raobData[0].Temp_c*9/5)+32) {
         drawD3LapseChart(raobData, maxTemp)
         calculateMaxHeightOfThermal(raobData, userTemp)
