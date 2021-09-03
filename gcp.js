@@ -40,6 +40,7 @@
 
 // GCP SOARING FORECAST
 (async () => {
+    console.log('test')
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
     const response = await fetch(url)
     const soarData = await response.json()
@@ -67,7 +68,6 @@
         const altMaxTempresponse = await fetch(altMaxTempurl, {mode: 'cors'})
         const altMaxTempData = await altMaxTempresponse.json()
         maxTemp = (altMaxTempData.properties.maxTemperature.values[0].value*9/5)+32
-        console.log('test')
         raob(maxTemp)
     }
 })()
