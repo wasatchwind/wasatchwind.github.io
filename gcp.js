@@ -67,6 +67,7 @@
         const altMaxTempresponse = await fetch(altMaxTempurl, {mode: 'cors'})
         const altMaxTempData = await altMaxTempresponse.json()
         maxTemp = (altMaxTempData.properties.maxTemperature.values[0].value*9/5)+32
+        console.log('test')
         raob(maxTemp)
     }
 })()
@@ -76,6 +77,5 @@ async function raob(maxTemp) {
     const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
     const response = await fetch(url)
     const raobData = await response.json()
-    console.log(raobData)
     drawD3LapseChart(raobData, maxTemp)
 }
