@@ -40,13 +40,14 @@
 
 // GCP SOARING FORECAST
 (async () => {
-    console.log('test')
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     const reportdate = new Date(soarData['Report date'])
+    console.log(reportdate)
     if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
+        console.log('report date match')
         maxTemp = soarData['Max temp']
         raob(maxTemp)
         document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
@@ -64,6 +65,7 @@
         }
     }
     else {
+        console.log('report date did NOT match')
         const altMaxTempurl = 'https://api.weather.gov/gridpoints/SLC/97,175'
         const altMaxTempresponse = await fetch(altMaxTempurl, {mode: 'cors'})
         const altMaxTempData = await altMaxTempresponse.json()
