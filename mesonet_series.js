@@ -63,8 +63,8 @@ function calculateZone(alti, temp, currentZones = []) {
 }
 
 function windChart(data) {
-    let ylwLim = (data.stid==='AMB') ? 19 : 9
-    let redLim = (data.stid==='AMB') ? 29 : 19
+    let ylwLim = (data.stid==='AMB' || data.stid==='OGP') ? 19 : 9
+    let redLim = (data.stid==='AMB' || data.stid==='OGP') ? 29 : 19
     let length = (data.stid==='AMB') ? 6 : 12
     document.getElementById(`${data.stid}-main`).style.display = 'block'
     for (let key in data) data[key] = data[key].slice(-length)
