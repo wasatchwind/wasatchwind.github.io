@@ -49,6 +49,7 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     const reportdate = new Date(soarData['Report date'])
+    console.log(soarData)
     if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
         maxTemp = soarData['Max temp']
         raob(maxTemp)
