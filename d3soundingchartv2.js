@@ -1,29 +1,30 @@
 'use strict';
 // https://stackoverflow.com/questions/13313043/d3-js-animate-rotation
 let surfaceAlt = 4229/1000 // KSLC elevation
-    let visibleScreenWidth = document.documentElement.clientWidth
-    visibleScreenWidth = (visibleScreenWidth > 1080) ? visibleScreenWidth * 0.6 : visibleScreenWidth * 0.89
-    const visibleScreenHeight = visibleScreenWidth * 0.679
-    const margin = {
-        top: visibleScreenHeight * 0.023,
-        right: visibleScreenWidth * 0.028,
-        bottom: visibleScreenHeight * 0.133,
-        left: visibleScreenWidth * 0.09
-    }
-    const width = visibleScreenWidth - margin.left - margin.right
-    const height = visibleScreenHeight - margin.top - margin.bottom
-    const svg = d3.select('#skew-t-d3').append('svg')
-        .attr('class', 'svgbg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`)
-    const x = d3.scaleLinear()
-        .range([-10, width])
-        .domain([-10, 110])
-    const y = d3.scaleLinear()
-        .range([height, 0])
-        .domain([surfaceAlt, 18])
+let visibleScreenWidth = document.documentElement.clientWidth
+visibleScreenWidth = (visibleScreenWidth > 1080) ? visibleScreenWidth * 0.6 : visibleScreenWidth * 0.89
+const visibleScreenHeight = visibleScreenWidth * 0.679
+const margin = {
+    top: visibleScreenHeight * 0.023,
+    right: visibleScreenWidth * 0.028,
+    bottom: visibleScreenHeight * 0.133,
+    left: visibleScreenWidth * 0.09
+}
+const width = visibleScreenWidth - margin.left - margin.right
+const height = visibleScreenHeight - margin.top - margin.bottom
+const dalr = 5.38
+const svg = d3.select('#skew-t-d3').append('svg')
+    .attr('class', 'svgbg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`)
+const x = d3.scaleLinear()
+    .range([-10, width])
+    .domain([-10, 110])
+const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([surfaceAlt, 18])
 function drawD3LapseChart(data, maxTemp) {
     svg.selectAll('*').remove()
     const p1 = `M ${x(36)} -1, `
@@ -74,13 +75,6 @@ function drawD3LapseChart(data, maxTemp) {
         .attr('stroke-width', 4)
         .attr('x1', x(maxTemp-(18-surfaceAlt)*dalr))
         .attr('x2', x(maxTemp))
-        .attr('y1', y(18))
-        .attr('y2', y(surfaceAlt))
-    svg.append('line') // Draw User Temp DALR line
-        .attr('stroke', wwYlw)
-        .attr('stroke-width', 4)
-        .attr('x1', x(userTemp-(18-surfaceAlt)*dalr))
-        .attr('x2', x(userTemp))
         .attr('y1', y(18))
         .attr('y2', y(surfaceAlt))
     svg.append('g').append('rect') // Draw blank rectangle to clip temp line above chart
@@ -135,40 +129,34 @@ function drawD3LapseChart(data, maxTemp) {
         .attr('x', x(87))
         .attr('y', y(14))
         .text('Dewpoint')
-    // svg.append('svg:image')
-    //     .attr('xlink:href', 'images/arrowbox.png')
-    //     .attr('width', 50)
-    //     .attr('height', 50)
-    //     .attr('x', x(-9))
-    //     .attr('y', y(10.67))
-    //     .attr('transform', 'rotate(-10)')
-    // svg.append('svg:image')
-    //     .attr('xlink:href', 'images/arrowbox.png')
-    //     .attr('width', 50)
-    //     .attr('height', 50)
-    //     .attr('x', x(-9))
-    //     .attr('y', y(10.67))
-    //     .attrTween('transform', function(d, i, a) {
-    //         return d3.interpolateString('translate(0,0) rotate(0)'), 'translate(0,0)' + 'rotate(' + d * 1.8 + ', 63, 54.77)'
-    //     })
 }
 
 function d3Update() {
-    userTemp = parseInt(document.getElementById('user-temp').value)
+    let userTemp = parseInt(document.getElementById('user-temp').value)
     userTemp = (userTemp>110 || isNaN(userTemp)) ? -10 : userTemp
-    console.log(userTemp)
-    console.log(roabData)
-    if (userTemp!==-10 && userTemp>=(raobData[0].Temp_c*9/5)+32) {
-        drawD3LapseChart(raobData, maxTemp)
-        calculateMaxHeightOfThermal(raobData, userTemp)
+    svg.select('line.userline').remove()
+    if (userTemp<111 && userTemp>(raobDataStored[0].Temp_c*9/5)+32) {
+        const xCutoff = -8.5
+        svg.append('g').append('line')
+            .attr('class', 'userline')
+            .attr('stroke', wwYlw)
+            .attr('stroke-width', 4)
+            .attr('x1', function() {
+                if (x(userTemp-(18-surfaceAlt)*dalr)>x(xCutoff)) return x(userTemp-(18-surfaceAlt)*dalr)
+                else { return x(xCutoff)}
+            })
+            .attr('x2', x(userTemp))
+            .attr('y1', function() {
+                if (x(userTemp-(18-surfaceAlt)*dalr)<x(xCutoff)) return y(-1/dalr*(xCutoff-userTemp)+surfaceAlt)
+            })
+            .attr('y2', y(surfaceAlt))
+        calculateMaxHeightOfThermal(raobDataStored, userTemp)
     }
     else { d3Clear() }
 }
 
 function d3Clear() {
-    userTemp = -10
-    svg.selectAll('*').remove()
-    drawD3LapseChart(raobData, maxTemp)
+    svg.select('line.userline').remove()
     document.getElementById('user-temp').value = null
     document.getElementById('user-input-tol').innerHTML = '&nbsp;'
     document.getElementById('user-input-tol-m').innerHTML = '&nbsp;'
