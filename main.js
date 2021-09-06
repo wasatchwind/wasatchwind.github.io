@@ -9,10 +9,7 @@ const wwRed = '#dc3545' // bootstrap red (danger)
 const wwBlu = '#0dcaf0' // bootstrap cyan (info)
 const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
 const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
-const dalr = 5.38
-let raobData = {}
-let userTemp = -10
-let maxTemp
+let raobDataStored = {}
 
 let currentDiv = 'Wind'
 document.getElementById('current-div').innerHTML = currentDiv
@@ -54,6 +51,7 @@ function toggleWindChart(div) {
 // NOAA PUBLIC API FOR 3 DAY FORECAST IN GENERAL DIV
 (async () => {
     const url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
+//     const url = 'https://wasatchwind.github.io/noaa_forecast_example.json'
     const response = await fetch(url, {mode: 'cors'})
     const noaaData = await response.json()
     if (noaaData) {
@@ -65,7 +63,7 @@ function toggleWindChart(div) {
             position += 2
         }
     }
-})()
+})();
 
 function getMorningSkewT() {
     const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
