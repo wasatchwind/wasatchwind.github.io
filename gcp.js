@@ -68,7 +68,7 @@
         }
     }
     else {
-        console.log('report error')
+        console.log('report date error')
         const altMaxTempurl = 'https://api.weather.gov/gridpoints/SLC/97,175'
         const altMaxTempresponse = await fetch(altMaxTempurl, {mode: 'cors'})
         const altMaxTempData = await altMaxTempresponse.json()
