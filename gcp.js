@@ -9,6 +9,8 @@
     gcpImageTime = gcpImageTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
     document.getElementById('wind-map-timestamp').innerHTML = gcpImageTime
     document.getElementById('surface-wind-map').src = gcpImageURL;
+//     document.getElementById('wind-map-timestamp').innerHTML = '2:45 pm'
+//     document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'
 })();
 
 // GCP WIND ALOFT
@@ -20,6 +22,7 @@
     const redSpds = [14, 18, 24, 30]
     const alts = ['6k', '9k', '12k', '18k']
     const url = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
+//     const url = 'https://wasatchwind.github.io/wind_aloft_example.json'
     const response = await fetch(url)
     const aloftData = await response.json()
     document.getElementById('aloft-start').innerHTML = aloftData['Start time']
@@ -41,6 +44,7 @@
 // GCP SOARING FORECAST
 (async () => {
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
+//     const url = 'https://wasatchwind.github.io/soaring_forecast_example.json'
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
@@ -73,8 +77,24 @@
 
 // GCP ROAB
 async function raob(maxTemp) {
-    const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+    // const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+    const url = 'https://wasatchwind.github.io/raob_example.json'
     const response = await fetch(url)
     const raobData = await response.json()
-    drawD3LapseChart(raobData, maxTemp)
+    fetch(url)
+    .then(response => {
+        return response.json()
+    })
+    .then(raobData => {
+        drawD3LapseChart(raobData, maxTemp)
+        raobDataStored = raobData
+    })
 }
+
+// GCP ROAB
+// async function raob(maxTemp) {
+//     const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+//     const response = await fetch(url)
+//     const raobData = await response.json()
+//     drawD3LapseChart(raobData, maxTemp)
+// }
