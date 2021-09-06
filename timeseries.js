@@ -71,7 +71,7 @@ function windChart(data) {
     for (let key in data) data[key] = data[key].slice(-length)
     time(data.stid, data.date_time)
     wind(data.stid, data.wind_speed_set_1, ylwLim, redLim)
-    wdir(data.stid, data.wind_direction_set_1)
+    if (data.wind_direction_set_1) wdir(data.stid, data.wind_direction_set_1)
     if (data.wind_gust_set_1) gust(data.stid, data.wind_gust_set_1, data.wind_speed_set_1)
     else { for (let i=0; i<length; i++) { document.getElementById(`${data.stid}-gust-${i}`).innerHTML = '&nbsp;' } }
 }
