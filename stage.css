@@ -1,11 +1,11 @@
-@media only screen and (min-width: 1080px) {
+@media only screen and (min-width: 1081px) {
   body {
     margin-left: 35%;
     margin-right: 35%;
     zoom: 0.5;
   }
 }
-@media only screen and (max-width: 1079px) {
+@media only screen and (max-width: 1080px) {
   body {
     width: 90%;
   }
