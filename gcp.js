@@ -49,7 +49,6 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     const reportdate = new Date(soarData['Report date'])
-    console.log(soarData)
     if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
         maxTemp = soarData['Max temp']
         raob(maxTemp)
@@ -78,8 +77,8 @@
 
 // GCP ROAB
 async function raob(maxTemp) {
-    // const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-    const url = 'https://wasatchwind.github.io/raob_example.json'
+    const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+//     const url = 'https://wasatchwind.github.io/raob_example.json'
     const response = await fetch(url)
     const raobData = await response.json()
     fetch(url)
@@ -91,11 +90,3 @@ async function raob(maxTemp) {
         raobDataStored = raobData
     })
 }
-
-// GCP ROAB
-// async function raob(maxTemp) {
-//     const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-//     const response = await fetch(url)
-//     const raobData = await response.json()
-//     drawD3LapseChart(raobData, maxTemp)
-// }
