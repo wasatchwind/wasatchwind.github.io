@@ -50,7 +50,7 @@
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     const reportdate = new Date(soarData['Report date'])
     if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
-        maxTemp = soarData['Max temp']
+        const maxTemp = soarData['Max temp']
         raob(maxTemp)
         document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
         document.getElementById('soarcast-tol-m').innerHTML = `${Math.round(parseInt(soarData['Top of lift'])/3.281).toLocaleString()} m`
@@ -70,7 +70,7 @@
         const altMaxTempurl = 'https://api.weather.gov/gridpoints/SLC/97,175'
         const altMaxTempresponse = await fetch(altMaxTempurl, {mode: 'cors'})
         const altMaxTempData = await altMaxTempresponse.json()
-        maxTemp = (altMaxTempData.properties.maxTemperature.values[0].value*9/5)+32
+        const maxTemp = (altMaxTempData.properties.maxTemperature.values[0].value*9/5)+32
         raob(maxTemp)
     }
 })()
