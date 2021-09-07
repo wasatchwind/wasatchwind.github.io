@@ -51,7 +51,6 @@
     const reportdate = new Date(soarData['Report date'])
     console.log(soarData)
     console.log('now: ', now)
-    console.log('utc test: ', now.UTC)
     console.log('report date: ', reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}))
     console.log('now date: ', now.toLocaleString('en-us', {timezone: 'America/Denver', weekday: 'short', month: 'short', day: 'numeric'}))
     if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
