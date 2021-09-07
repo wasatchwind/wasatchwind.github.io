@@ -36,35 +36,35 @@ a:active {
 .pink { color: pink; }
 .bg { background-color: #000050; }
 .bg-KSLC {
-  background-image: url('/Staging/images/slcnew.png');
+  background-image: url('images/slcnew.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
-  background-image: url('/Staging/images/baldynew.png');
+  background-image: url('images/baldynew.png');
   background-size: 100% 100%;
 }
 .bg-UTOLY {
-  background-image: url('/Staging/images/utoly.png');
+  background-image: url('images/utoly.png');
   background-size: 100% 100%;
 }
 .bg-KU42 {
-  background-image: url('/Staging/images/ku42new1.png');
+  background-image: url('images/ku42new1.png');
   background-size: 100% 100%;
 }
 .bg-FPS {
-  background-image: url('/Staging/images/fps.png');
+  background-image: url('images/fps.png');
   background-size: 100% 100%;
 }
 .bg-C8948 {
-  background-image: url('/Staging/images/C8948.png');
+  background-image: url('images/C8948.png');
   background-size: 100% 100%;
 }
 .bg-OGP {
-  background-image: url('/Staging/images/OGP.png');
+  background-image: url('images/OGP.png');
   background-size: 100% 100%;
 }
 .bg-aloft {
-  background-image: url('/Staging/images/aloft.png');
+  background-image: url('images/aloft.png');
   background-size: 100% 100%;
 }
 hr.dash { border: 3px dashed white !important; }
