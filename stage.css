@@ -6,12 +6,8 @@
   }
 }
 @media only screen and (max-width: 1080px) {
-  body {
-    width: 90%;
-  }
-  .container-fluid {
-    margin-left: 5%;
-  }
+  body { width: 90%; }
+  .container-fluid { margin-left: 5%; }
 }
 body {
   background-color: #000050;
