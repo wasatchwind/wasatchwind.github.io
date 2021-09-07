@@ -48,11 +48,8 @@
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
-    const reportdate = new Date(soarData['Report date'])
-    console.log('now: ', now)
-    console.log('now formatted: ', now.now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}))
-    console.log('report date: ', reportdate)
-    if (reportdate.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'}) === now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})) {
+    if (soarData['Report date']===now.toLocaleString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'})) {
+        console.log('match')
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
         document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
