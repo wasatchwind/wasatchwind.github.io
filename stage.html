@@ -61,7 +61,7 @@
 
         <!-- WIND KSLC INT'L (KSLC)-->
         <div class="border rounded container-fluid collapse mb-5" id="KSLC-main" onclick="toggleWindChart('KSLC')">
-            <div class="row border-bottom bg-KSLC">
+<!--             <div class="row border-bottom bg-KSLC">
                 <div class="border-end col-1 display-1 fw-bold bg-secondary text-warning py-3" id="KSLC-toggle">+</div>
                 <div class="col align-self-center">
                     <div class="text-start display-3 fw-bold mb-2 text-warning">KSLC Int'l</div>
@@ -77,7 +77,24 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            
+            <div class="row border-bottom bg-warning">
+                <div class="col-1 border-end display-1 fw-bold align-self-center text-secondary" id="KSLC-toggle">+</div>
+                <div class="col row align-items-center bg-KSLC m-0">
+                    <div class="col px-0">
+                        <div class="text-start display-3 fw-bold text-warning">KSLC</div>
+                        <div class="text-start fs-3 fw-bold" id="KSLC-time"></div>
+                        <div class="text-start fs-3">4,226 ft&nbsp;&nbsp;&nbsp;&#9650;&nbsp;&nbsp;&nbsp;1,288 m</div>
+                    </div>
+                    <div class="col-5 row pe-0">
+                        <span class="col display-1" id="KSLC-wdir"></span>
+                        <span class="col display-1 fw-bold text-info" id="KSLC-wind"></span>
+                        <span class="col display-4 fw-bold pink" id="KSLC-gust"></span>
+                    </div>
+                </div>
             </div>
+            
             <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
             <div class="collapse" id="KSLC">
                 <div class="row align-items-end bg-dark border border-2 border-warning rounded">
