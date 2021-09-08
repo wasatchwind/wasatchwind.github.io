@@ -32,31 +32,31 @@ a:active {
 .pink { color: pink; }
 .bg { background-color: #000050; }
 .bg-KSLC {
-  background-image: url('images/slcnew.png');
+  background-image: url('images/SLC.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
-  background-image: url('images/baldynew.png');
+  background-image: url('images/AMB.png');
   background-size: 100% 100%;
 }
 .bg-UTOLY {
-  background-image: url('images/utoly.png');
+  background-image: url('images/UTOLY.png');
   background-size: 100% 100%;
 }
 .bg-KU42 {
-  background-image: url('images/ku42new1.PNG');
+  background-image: url('images/KU42.png');
   background-size: 100% 100%;
 }
 .bg-FPS {
-  background-image: url('images/fps.png');
+  background-image: url('images/FPS.png');
   background-size: 100% 100%;
 }
 .bg-C8948 {
-  background-image: url('images/C8948.PNG');
+  background-image: url('images/C8948.png');
   background-size: 100% 100%;
 }
 .bg-OGP {
-  background-image: url('images/OGP.PNG');
+  background-image: url('images/OGP.png');
   background-size: 100% 100%;
 }
 .bg-aloft {
