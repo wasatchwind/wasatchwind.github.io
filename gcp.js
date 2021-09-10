@@ -49,6 +49,7 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     console.log('report date: ', soarData['Report date'])
+    console.log('now date raw: ', now)
     console.log('now date: ', now.toLocaleString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'}))
     if (soarData['Report date']===now.toLocaleString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'})) {
         console.log('match')
