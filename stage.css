@@ -7,7 +7,10 @@
 }
 @media only screen and (max-width: 1080px) {
   body { width: 90%; }
-  .container-fluid { margin-left: 5%; }
+  .container-fluid {
+    margin-left: 5%;
+    margin-left: 5%;
+  }
 }
 body {
   background-color: #000050;
@@ -30,9 +33,9 @@ a:active {
   text-decoration: none;
 }
 .pink { color: pink; }
-.bg { background-color: #000050; }
+.bg-heading { background-color: #000050; }
 .bg-KSLC {
-  background-image: url('images/KSLC.png');
+  background-image: url('images/kslctest1p35.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
