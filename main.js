@@ -1,7 +1,7 @@
 'use strict';
 const date = new Date().toUTCString()
 const now = new Date(date)
-console.log(now)
+console.log('initial now: ', now)
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 document.getElementById('heading-date').innerHTML = headingDate
 const wwGrn = '#20c997' // bootstrap teal
