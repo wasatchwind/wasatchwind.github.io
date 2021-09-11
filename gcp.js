@@ -48,6 +48,8 @@
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
+    console.log('report date: ', soarData['Report date'])
+    console.log('now date: ', formatter.format(now))
     if (soarData['Report date']===formatter.format(now)) {
 //     if (soarData['Report date']===now.toLocaleDateString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'})) {
         const maxTemp = soarData['Max temp']
