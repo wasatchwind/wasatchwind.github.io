@@ -5,6 +5,8 @@ const now = new Date(date)
 const test = new Date()
 console.log('date: ', test.getDate())
 console.log('month: ', test.getMonth())
+const formatter = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'})
+console.log(formatter.format(test))
 
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 document.getElementById('heading-date').innerHTML = headingDate
