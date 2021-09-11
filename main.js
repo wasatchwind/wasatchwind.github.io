@@ -1,12 +1,12 @@
 'use strict';
-const date = new Date().toUTCString()
-const now = new Date(date)
+// const date = new Date().toUTCString()
+// const now = new Date(date)
 
-const test = new Date()
+const now = new Date()
 console.log('date: ', test.getDate())
 console.log('month: ', test.getMonth())
 const formatter = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'})
-console.log(formatter.format(test))
+console.log(formatter.format(now))
 
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 document.getElementById('heading-date').innerHTML = headingDate
