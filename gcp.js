@@ -52,7 +52,6 @@
     console.log('now: ', now)
     console.log('now formatted: ', now.toLocaleString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'}))
     if (soarData['Report date']===now.toLocaleString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'})) {
-        console.log('match')
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
         document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
