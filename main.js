@@ -3,6 +3,7 @@ const date = new Date().toUTCString()
 const now = new Date(date)
 console.log('initial now: ', now)
 console.log('formatted now: ', now.toLocaleDateString())
+console.log('formatted now w/ parameters: ', now.toLocaleDateString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'}))
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 document.getElementById('heading-date').innerHTML = headingDate
 const wwGrn = '#20c997' // bootstrap teal
