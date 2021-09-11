@@ -3,8 +3,8 @@
 // const now = new Date(date)
 
 const now = new Date()
-console.log('date: ', test.getDate())
-console.log('month: ', test.getMonth())
+// console.log('date: ', test.getDate())
+// console.log('month: ', test.getMonth())
 const formatter = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'})
 console.log(formatter.format(now))
 
