@@ -49,7 +49,7 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     console.log('now raw: ', now)
-    console.log('now formatted, no parameters: ', now.toLocaleDateString()
+    console.log('now formatted, no parameters: ', now.toLocaleDateString())
     console.log('now formatted: ', now.toLocaleDateString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'}))
     if (soarData['Report date']===now.toLocaleDateString('en-us', {month: '2-digit', day: '2-digit', year: 'numeric'})) {
         const maxTemp = soarData['Max temp']
