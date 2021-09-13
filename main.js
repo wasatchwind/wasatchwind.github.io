@@ -2,6 +2,7 @@
 const now = new Date()
 const date = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}).format(now)
 const headingDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
+console.log(now.getTimezoneOffset()/60)
 document.getElementById('heading-date').innerHTML = headingDate
 const wwGrn = '#20c997' // bootstrap teal
 const wwYlw = '#ffc107' // bootstrap yellow (warning)
