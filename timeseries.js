@@ -1,8 +1,8 @@
 'use strict';
 // Mesonet API: https://developers.synopticdata.com/mesonet
 (async () => {
-    // const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
-    const url = 'https://wasatchwind.github.io/time_series_example1.json'
+    const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
+//     const url = 'https://wasatchwind.github.io/time_series_example1.json'
     const response = await fetch(url)
     const tsData = await response.json()
     if (tsData) {
