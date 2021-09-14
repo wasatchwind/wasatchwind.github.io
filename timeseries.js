@@ -1,8 +1,8 @@
 'use strict';
 // Mesonet API: https://developers.synopticdata.com/mesonet
 (async () => {
-    const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
-//     const url = 'https://wasatchwind.github.io/time_series_example.json'
+    // const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
+    const url = 'https://wasatchwind.github.io/time_series_example1.json'
     const response = await fetch(url)
     const tsData = await response.json()
     if (tsData) {
@@ -88,7 +88,7 @@ function wind(stid, data, ylwLim, redLim, barHeight=[], barColor=[]) {
     data = data.map(d => (Math.round(d) >= 1) ? Math.round(d) : (d===null) ? '&nbsp;' : '<span class="fs-3 fw-normal">Calm</span>')
     barHeight = data.map(d => (d!=='') ? `${d*4}px` : '0px')
     barColor = data.map(d => (d>ylwLim && d<redLim) ? wwYlw : (d>=redLim) ? wwOrg : wwGrn)
-    document.getElementById(`${stid}-wind`).innerHTML = (typeof data[data.length-1]==='string') ? '<span class="fs-1 fw-bold">Calm</span>' : data[data.length-1]
+    document.getElementById(`${stid}-wind`).innerHTML = (typeof data[data.length-1]==='string') ? '<span class="display-5 fw-bold">Calm</span>' : data[data.length-1]
     for (let i=0; i<data.length; i++) {
         document.getElementById(`${stid}-wind-${i}`).innerHTML = data[i]
         let element = document.getElementById(`${stid}-wbar-${i}`)
@@ -112,8 +112,10 @@ function wdir(stid, data, wimg=[], wdir=[]) {
 function gust(stid, data, wind, barHeight=[]) {
     for (let i=0; i<data.length; i++) barHeight.push((data[i]>=1) ? `${(data[i]-wind[i])*4}px` : '0px')
     data = data.map(d => (d>=1) ? `g${Math.round(d)}` : '&nbsp;')
-    document.getElementById(`${stid}-gust`).innerHTML = data[data.length-1]
-    if (data!=='&nbsp;') document.getElementById(`${stid}-gust`).style.display = 'block'
+    if (data[data.length-1]!=='&nbsp;') {
+        document.getElementById(`${stid}-gust`).innerHTML = data[data.length-1]
+        document.getElementById(`${stid}-gust`).style.display = 'block'
+    }
     for (let i=0; i<data.length; i++) {
         document.getElementById(`${stid}-gust-${i}`).innerHTML = data[i]
         document.getElementById(`${stid}-gbar-${i}`).style.height = barHeight[i]
