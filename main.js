@@ -51,8 +51,8 @@ function toggleWindChart(div) {
 
 // NOAA PUBLIC API FOR 3 DAY FORECAST IN GENERAL DIV
 (async () => {
-    const url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
-//     const url = 'https://wasatchwind.github.io/noaa_forecast_example.json'
+//     const url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
+    const url = 'https://wasatchwind.github.io/noaa_forecast_example.json'
     const response = await fetch(url, {mode: 'cors'})
     const noaaData = await response.json()
     if (noaaData) {
