@@ -94,6 +94,6 @@ function getAllGraphicalForecastImages() {
     }
 }
 
-// getMorningSkewT()
+getMorningSkewT()
 getAllGraphicalForecastImages()
 if (now.getHours()>=6 && now.getHours()<=14) windSurfaceForecastGraphical()
