@@ -48,13 +48,14 @@
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
+    const neg3 = (soarData['Height of -3 index']) === 'None') ? 0 : soarData['Height of -3 index']
     if (soarData['Report date']===date) {
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
         document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
         document.getElementById('soarcast-tol-m').innerHTML = `${Math.round(parseInt(soarData['Top of lift'])/3.281).toLocaleString()} m`
-        document.getElementById('soarcast-neg3').innerHTML = parseInt(soarData['Height of -3 index']).toLocaleString()
-        document.getElementById('soarcast-neg3-m').innerHTML = `${Math.round(parseInt(soarData['Height of -3 index'])/3.281).toLocaleString()} m`
+        document.getElementById('soarcast-neg3').innerHTML = parseInt(neg3).toLocaleString()
+        document.getElementById('soarcast-neg3-m').innerHTML = `${Math.round(parseInt(neg3)/3.281).toLocaleString()} m`
         document.getElementById('soarcast-rol').innerHTML = parseInt(soarData['Max rate of lift']).toLocaleString()
         document.getElementById('soarcast-rol-m').innerHTML = `${Math.round((parseInt(soarData['Max rate of lift'])/197)*10)/10} m/s`
         if (odt !== 'None') {
