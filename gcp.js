@@ -49,6 +49,7 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
     const neg3 = (soarData['Height of -3 index']) === 'None') ? 0 : soarData['Height of -3 index']
+    console.log(neg3)
     if (soarData['Report date']===date) {
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
