@@ -35,11 +35,11 @@ a:active {
 .pink { color: pink; }
 .bg-heading { background-color: #000050; }
 .bg-KSLC {
-  background-image: url('images/kslc2500x420p10.png');
+  background-image: url('images/kslc2500x420p0.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
-  background-image: url('images/amb3kx5hp20.png');
+  background-image: url('images/amb3kx5hp10.png');
   background-size: 100% 100%;
 }
 .bg-UTOLY {
