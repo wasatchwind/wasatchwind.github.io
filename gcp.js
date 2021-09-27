@@ -37,6 +37,7 @@
             document.getElementById(`aloft-${i}`).style.width = `${aloftData.Spds[alts[i]]*0.8}%`
             document.getElementById(`spd-${i}`).innerHTML = aloftData.Spds[alts[i]]
             document.getElementById(`aloft-${i}`).style.backgroundColor = (aloftData.Spds[alts[i]] > ylwSpds[i] && aloftData.Spds[alts[i]] < redSpds[i]) ? wwYlw : (aloftData.Spds[alts[i]] >= redSpds[i] ? wwRed : wwGrn)
+            document.getElementById(`mph-${i}`).innerHTML = 'mph'
         }
     }
 })();
@@ -44,7 +45,7 @@
 // GCP SOARING FORECAST
 (async () => {
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
-//     const url = 'https://wasatchwind.github.io/soaring_forecast_example.json'
+//     const url = 'https://wasatchwind.github.io/soaring_forecast_example921.json'
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
@@ -78,7 +79,7 @@
 // GCP ROAB
 async function raob(maxTemp) {
     const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-//     const url = 'https://wasatchwind.github.io/raob_example.json'
+//     const url = 'https://wasatchwind.github.io/raob_example921.json'
     const response = await fetch(url)
     const raobData = await response.json()
     fetch(url)
