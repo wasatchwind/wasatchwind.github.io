@@ -17,17 +17,12 @@
 })();
 
 function kslcAltiTempZone(data, time=[], alti=[], temp=[]) {
-    let latestTime = (data.date_time.slice(-1)[0]).toLowerCase()
+    let latestTime = (data.date_time.slice(-1)[0])
     let latestAlti = parseFloat(data.altimeter_set_1.slice(-1)).toFixed(2)
     let latestTemp = Math.round(data.air_temp_set_1.slice(-1))
     let latestZone = calculateZone(latestAlti, latestTemp)
     let zoneColor = (latestZone===0 || latestZone===7) ? wwRed : (latestZone===1 || latestZone===6) ? wwOrg : (latestZone===2 || latestZone===5) ? wwYlw : wwGrn
     latestZone = (latestZone===0) ? '&#9471;' : (latestZone==='LoP') ? 'LoP' : `&#1010${latestZone+1}`
-    document.getElementById('KSLC-latest-time').innerHTML = latestTime
-    document.getElementById('KSLC-latest-alti').innerHTML = latestAlti
-    document.getElementById('KSLC-latest-temp').innerHTML = latestTemp
-    document.getElementById('KSLC-latest-zone').innerHTML = latestZone
-    document.getElementById('KSLC-latest-zone').style.color = zoneColor
     document.getElementById('KSLC-zone').innerHTML = latestZone
     document.getElementById('KSLC-zone').style.color = zoneColor
     for (let i=0; i<data.date_time.length; i++) {
