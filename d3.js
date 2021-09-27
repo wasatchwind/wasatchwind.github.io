@@ -1,6 +1,5 @@
 'use strict';
-// https://stackoverflow.com/questions/13313043/d3-js-animate-rotation
-let surfaceAlt = 4229/1000 // KSLC elevation
+let surfaceAlt = 4229/1000 // KSLC elevation adjusted to d3 y-axis scale
 let visibleScreenWidth = document.documentElement.clientWidth
 visibleScreenWidth = (visibleScreenWidth > 1080) ? visibleScreenWidth * 0.6 : visibleScreenWidth * 0.89
 const visibleScreenHeight = visibleScreenWidth * 0.679
@@ -12,7 +11,9 @@ const margin = {
 }
 const width = visibleScreenWidth - margin.left - margin.right
 const height = visibleScreenHeight - margin.top - margin.bottom
-const dalr = 5.38
+const dalr = 5.4 // Equivalent to 3°C
+let dalrYInt
+const dalrSlope = -1/dalr
 const svg = d3.select('#skew-t-d3').append('svg')
     .attr('class', 'svgbg')
     .attr('width', width + margin.left + margin.right)
@@ -29,8 +30,8 @@ function drawD3LapseChart(data, maxTemp) {
     svg.selectAll('*').remove()
     const p1 = `M ${x(36)} -1, `
     const p2 = `L ${x(110)} ${y(surfaceAlt)}, `
-    const p3 = `L ${width + margin.right - 3} ${y(surfaceAlt)}, `
-    const p4 = `L ${width + margin.right - 3} -1, `
+    const p3 = `L ${width + margin.right} ${y(surfaceAlt)}, `
+    const p4 = `L ${width + margin.right} -1, `
     const p5 = `L ${x(36)} -1`
     const polygon = p1 + p2 + p3 + p4 + p5
     const xAxisGrid = d3.axisTop(x)
@@ -113,21 +114,30 @@ function drawD3LapseChart(data, maxTemp) {
         .attr('class', 'dalrlabel')
         .attr('transform', `rotate(46, ${x(5)}, ${y(3)})`)
         .style('text-anchor', 'start')
-        .text(`Dry Adiabatic Lapse Rate: -5.38 °F / 1,000 ft`)
-    svg.append('text') // Legend Max Temp text label
+        .text(`Dry Adiabatic Lapse Rate: -5.4 °F / 1,000 ft`)
+    svg.append('text') // Legend: "Forecast Max Temp" text label
         .attr('class', 'templabel')
-        .attr('x', x(58))
+        .attr('text-anchor', 'end')
+        .attr('x', x(110))
         .attr('y', y(17))
-        .text(`Forecast Max Temp: ${maxTemp}°`) // What if no Soarcast for high temp??? !!!!!!!!!!!!!!!!!!!
-    svg.append('text') // Legend Sounding text label
-        .attr('class', 'raoblabel')
-        .attr('x', x(75))
+        .text(`Forecast Max Temp: ${maxTemp}° F`)
+    svg.append('text') // Legend: "Alternate Max Temp" text label
+        .attr('class', 'alternatemax')
+        .attr('text-anchor', 'end')
+        .attr('x', x(110))
         .attr('y', y(15.5))
-        .text('Sounding Temp')
-    svg.append('text') // Legend Dew Point text label
-        .attr('class', 'dewpointlabel')
-        .attr('x', x(87))
+        .text('Alternate Max Temp')
+    svg.append('text') // Legend: "Sounding Temp" text label
+        .attr('class', 'raoblabel')
+        .attr('text-anchor', 'end')
+        .attr('x', x(110))
         .attr('y', y(14))
+        .text('Sounding Temp')
+    svg.append('text') // Legend: "Dewpoint" text label
+        .attr('class', 'dewpointlabel')
+        .attr('text-anchor', 'end')
+        .attr('x', x(110))
+        .attr('y', y(12.5))
         .text('Dewpoint')
 }
 
@@ -150,7 +160,16 @@ function d3Update() {
                 if (x(userTemp-(18-surfaceAlt)*dalr)<x(xCutoff)) return y(-1/dalr*(xCutoff-userTemp)+surfaceAlt)
             })
             .attr('y2', y(surfaceAlt))
-        calculateMaxHeightOfThermal(raobDataStored, userTemp)
+        dalrYInt = (userTemp/dalr) + surfaceAlt
+        const tol = calculateToL()
+        const neg3 = calculateNeg3()
+        const rol = calculateRoL(tol)
+        document.getElementById('user-input-tol').innerHTML = tol['Alt'].toLocaleString()
+        document.getElementById('user-input-tol-m').innerHTML = `${Math.round(tol['Alt']/3.281).toLocaleString()} m`
+        document.getElementById('user-input-neg3').innerHTML = neg3.toLocaleString()
+        document.getElementById('user-input-neg3-m').innerHTML = `${Math.round(neg3/3.281).toLocaleString()} m`
+        document.getElementById('user-input-rol').innerHTML = rol.toLocaleString()
+        document.getElementById('user-input-rol-m').innerHTML = `${Math.round(rol/19.7)/10} m/s`
     }
     else { d3Clear() }
 }
@@ -166,27 +185,60 @@ function d3Clear() {
     document.getElementById('user-input-rol-m').innerHTML = '&nbsp;'
 }
 
-function calculateMaxHeightOfThermal (raobData, maxTemp, maxPosition = 0) {
-    // While: Determine the position of the sounding data where it crosses the DALR to obtain interpolation points
-    // While DALR line > RAOB Temp Line:
-    while ((maxTemp-(((raobData[maxPosition].Altitude_m-raobData[0].Altitude_m)*3.281/1000)*dalr)) > ((raobData[maxPosition].Temp_c*9/5)+32))
-        maxPosition++
-    const yIntercept = (maxTemp/dalr) + 4.229 // SLC Altitude
-    const dalrSlope = -1 / dalr
-    const x1 = ((raobData[maxPosition].Temp_c*9/5)+32)
-    const y1 = raobData[maxPosition].Altitude_m*3.281/1000
-    const x2 = ((raobData[maxPosition-1].Temp_c*9/5)+32)
-    const y2 = raobData[maxPosition-1].Altitude_m*3.281/1000
-    const maxThermalHeight = Math.round((dalrSlope*((((x2-x1)/(y2-y1)*(y1-yIntercept))-x1)/((((x2-x1)/(y2-y1))*dalrSlope)-1))+yIntercept)*1000)
-    document.getElementById('user-input-tol').innerHTML = maxThermalHeight.toLocaleString()
-    document.getElementById('user-input-tol-m').innerHTML = Math.round(maxThermalHeight / 3.28) + ' m'
-    document.getElementById('user-input-neg3').innerHTML = 'tbd'
-    document.getElementById('user-input-neg3-m').innerHTML = 'tbd'
-    document.getElementById('user-input-rol').innerHTML = 'tbd'
-    document.getElementById('user-input-rol-m').innerHTML = 'tbd'
-    // EXPERIMENTAL!
-    // const maxThermalHeightTemp = (((maxThermalHeight/1000)-y1)/((y2-y1)/(x2-x1)))+x1
-    // console.log('Temp Max Height of Thermals: ' + maxThermalHeightTemp)
-    // console.log('Temp @ 4000 ft AGL: ' + 'TBD')
-    // END EXPERIMENTAL}
+function interpolate(x1, y1, x2, y2, input, inputType) {
+    const xDiff = (x1===x2) ? x1 : x2-x1
+    if (inputType==='x') return y1+((input-x1)*(y2-y1)/(xDiff))
+    return x1+((input-y1)*(xDiff)/(y2-y1))
+}
+
+function calculateToL(position = 0, tol = {}) {
+    // https://www.weather.gov/otx/Soaring_Forecast_Information
+    // Compare each RAOB data point temp °C with calculated DALR temp °C at the same altitude
+    // Calculated DALR temp: y=mx+b. Temp is the 'x' value, so x=(y-b)/m ('x' must be converted to °C)
+    // Where: y = roabDataStored[position].Altitude_m*3.281/1000 (convert to imperial for dalrYInt)
+    // Where: b = dalrYInt (imperial units)
+    // Where: m = dalrSlope (imperial units)
+    // While RAOB < DALR, lift exists. As altitude increases, the lines converge at Top of Lift (ToL)
+    // Temp difference below convergence is the Thermal Index (TI). At ToL, TI=0
+    // Convergence typically lies between RAOB data points, so interpolation is necessary
+    // Interpolation requires RAOB data postions above (position) and below (position-1) convergence
+    while (raobDataStored[position].Temp_c<((((raobDataStored[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9) position++
+    const raobLine = raobLineObj(position)
+    // Formula derivation: find where RAOB temp (x value) and DALR temp (x value) are equal
+    // Solve for x: x=(y-b)/m. ToL is where RAOB x: (y-b)/m equals DALR x: (y-b)/m
+    // Solve for y (since y is the same for both) for final formula:
+    // ToL=(RAOB y intercept/RAOB slope-DALR y intercept/DALR slope)/(1/RAOB slope-1/DALR Slope)
+    tol['Alt'] = Math.round((raobLine['YInt']/raobLine['Slope']-dalrYInt/dalrSlope)/(1/raobLine['Slope']-1/dalrSlope)*1000)
+    // Calculate ToL temp °F using ToL alt on DALR line: x=(y-b)/m (used in Max Rate of Lift calculation)
+    tol['Temp'] = ((tol['Alt']/1000)-dalrYInt)/dalrSlope
+    return tol
+}
+
+function calculateNeg3(position = 0) {
+    // Same as ToL, except find where temp difference is -3°C instead of equal
+    while (raobDataStored[position].Temp_c-((((raobDataStored[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9<-3) position++
+    const raobLine = raobLineObj(position)
+    return parseInt((((raobLine['YInt']/raobLine['Slope'])-(dalrYInt/dalrSlope)-5.4)/((1/raobLine['Slope'])-(1/dalrSlope)))*1000)
+}
+
+function calculateRoL(tol, position = 0) {
+    const firstUsableLiftAlt = surfaceAlt+4
+    while (raobDataStored[position].Altitude_m*3.281/1000<firstUsableLiftAlt) position++
+    const raobLine = raobLineObj(position)
+    const fulTemp = interpolate(raobLine['x1'], raobLine['y1'], raobLine['x2'], raobLine['y2'], firstUsableLiftAlt, 'y')
+    const fulYInt = firstUsableLiftAlt-(dalrSlope*fulTemp)
+    const fulSurfaceTemp = (((surfaceAlt-fulYInt)/dalrSlope)-32)*5/9
+    return Math.round(2.4*(tol['Alt']/3.281/100+10*(fulSurfaceTemp-((tol['Temp'])-32)*5/9)))
+}
+
+function raobLineObj(position, raobLine = {}) {
+    raobLine['x1'] = (raobDataStored[position].Temp_c*9/5)+32
+    raobLine['y1'] = raobDataStored[position].Altitude_m*3.281/1000
+    raobLine['x2'] = (raobDataStored[position-1].Temp_c*9/5)+32
+    raobLine['y2'] = raobDataStored[position-1].Altitude_m*3.281/1000
+    // In case RAOB Temps are the same (x1===x2), use xDiff (vertical line/infinite slope)
+    const xDiff = raobLine['x1']===raobLine['x2'] ? raobLine['x1'] : raobLine['x2']-raobLine['x1']
+    raobLine['Slope'] = (raobLine['y2']-raobLine['y1'])/xDiff // m=(y2-y1)/(x2-x1)
+    raobLine['YInt'] = raobLine['y1']-(raobLine['Slope']*raobLine['x1']) // b=y-mx
+    return raobLine
 }
