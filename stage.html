@@ -41,7 +41,7 @@
                         <div class="collapse col-auto display-4 fw-bold pink" id="KSLC-gust"></div>
                         <div class="row justify-content-end">
                             <div class="col-auto fs-1 align-self-end">Zone</div>
-                            <div class="col-auto display-4" id="KSLC-zone"></div>
+                            <div class="col-auto display-4" id="KSLC-zone">&nbsp;</div>
                         </div>
                     </div>
                 </div>
@@ -159,12 +159,10 @@
             </div>
             <div class="dropdown-menu bg-secondary px-5 text-warning fw-bold" id="menu">
                 <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Wind')">Wind</div>
-                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Sky')">Sky</div>
                 <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Lift')">Lift</div>
-                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Pressure')">Pressure</div>
-                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('General')">General</div>
-                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Cams')">Cams</div>
-                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Trackers')">Trackers</div>
+                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Pressure, Temp')">Pressure, Temp</div>
+                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Weather')">Weather</div>
+                <div class="py-3 display-1 fw-bold" onclick="toggleDiv('Cams, Trackers')">Cams, Trackers</div>
                 <div class="py-3 display-1 fw-bold" onclick="toggleDiv('About')">About</div>
             </div>
         </div>
@@ -173,7 +171,7 @@
     <!-- WIND DIV -->
     <div class="mb-div-end" id="Wind">
 
-        <!-- GRAPHICAL SURFACE WIND FORECAST (MORNING ONLY) -->
+        <!-- GRAPHICAL SURFACE WIND FORECAST (SHOWN ONLY BEFORE 2PM LOCAL TIME) -->
         <div class="collapse container-fluid p-0" id="graphical-wind-div">
             <div class="display-3 fw-bold pt-4">Surface Forecast</div>
             <div class="row fw-bold fs-1 justify-content-center">
@@ -183,8 +181,8 @@
             </div>
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
                 <div class="border wwborder border-4 border-warning">
-                    <img class="img-fluid" id="graphical-wind-img" width="49.7%">
-                    <img class="img-fluid" id="graphical-gust-img" width="49.7%">
+                    <img class="img-fluid me-1" id="graphical-wind-img" width="49%">
+                    <img class="img-fluid ms-1" id="graphical-gust-img" width="49%">
                 </div>
             </a>
         </div>
@@ -194,7 +192,6 @@
             <a id="wind-aloft-link" target="_blank">
                 <div class="pt-4">
                     <div class="display-3 fw-bold">Wind Aloft Forecast</div>
-                    <div class="fs-2">( converted from knots to mph )</div>
                 </div>
                 <div class="fs-1 pb-2 text-info fw-bold">
                     <span class="" id="aloft-start"></span>
@@ -209,7 +206,8 @@
                         </div>
                         <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-3"></div>
                         <div class="border col-md-auto align-self-center display-4" id="aloft-3">&nbsp;</div>
-                        <div class="col-1 display-3 align-self-center fw-bold text-info ms-3" id="spd-3"></div>
+                        <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-3"></div>
+                        <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-3"></div>
                     </div><hr class="m-0 dash">
                     <div class="row mx-0">
                         <div class="col-2 display-3 fw-bold text-start ps-2">12
@@ -217,7 +215,8 @@
                         </div>
                         <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-2"></div>
                         <div class="border col-md-auto align-self-center display-4" id="aloft-2">&nbsp;</div>
-                        <div class="col-1 display-3 align-self-center fw-bold text-info ms-3" id="spd-2"></div>
+                        <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-2"></div>
+                        <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-2"></div>
                     </div><hr class="m-0 dash">
                     <div class="row mx-0">
                         <div class="col-2 display-3 fw-bold text-start ps-2">9
@@ -225,7 +224,8 @@
                         </div>
                         <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-1"></div>
                         <div class="border col-md-auto align-self-center display-4" id="aloft-1">&nbsp;</div>
-                        <div class="col-1 display-3 align-self-center fw-bold text-info ms-3" id="spd-1"></div>
+                        <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-1"></div>
+                        <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-1"></div>
                     </div><hr class="m-0 dash">
                     <div class="row mx-0">
                         <div class="col-2 display-3 fw-bold text-start ps-2">6
@@ -233,7 +233,8 @@
                         </div>
                         <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-0"></div>
                         <div class="border col-md-auto align-self-center display-4" id="aloft-0">&nbsp;</div>
-                        <div class="col-1 display-3 align-self-center fw-bold text-info ms-3" id="spd-0"></div>
+                        <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-0"></div>
+                        <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-0"></div>
                     </div>
                 </div>
             </a>
@@ -949,91 +950,11 @@
             </a>
         </div>
 
-        <!-- GRAPHICAL SURFACE WIND -->
-        <!-- <div class="container-fluid p-0">
-            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="display-5 fw-bold pt-4">Forecast: Surface Wind</div>
-                <div class="fs-1 next-day text-info pb-2"></div>
-                <div class="border wwborder border-4 border-warning">
-                    <div class="row">
-                        <div class="col fs-1">Morning</div>
-                        <div class="col fs-1">Mid Day</div>
-                    </div>
-                    <img id="graphical-wind-0" width="49%">
-                    <img id="graphical-wind-1" width="49%">
-                    <div class="row pt-2">
-                        <div class="col fs-1">Afternoon</div>
-                        <div class="col fs-1">Evening</div>
-                    </div>
-                    <img id="graphical-wind-2" width="49%">
-                    <img id="graphical-wind-3" width="49%">
-                </div>
-            </a>
-        </div> -->
-
-        <!-- GRAPHICAL SURFACE GUST -->
-        <!-- <div class="container-fluid p-0">
-            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="display-5 fw-bold pt-4">Forecast: Surface Gust</div>
-                <div class="fs-1 next-day text-info pb-2"></div>
-                <div class="border wwborder border-4 border-warning">
-                    <div class="row">
-                        <div class="col fs-1">Morning (Gust)</div>
-                        <div class="col fs-1">Mid Day (Gust)</div>
-                    </div>
-                    <img id="graphical-gust-0" width="49%">
-                    <img id="graphical-gust-1" width="49%">
-                    <div class="row pt-2">
-                        <div class="col fs-1">Afternoon (Gust)</div>
-                        <div class="col fs-1">Evening (Gust)</div>
-                    </div>
-                    <img id="graphical-gust-2" width="49%">
-                    <img id="graphical-gust-3" width="49%">
-                </div>
-            </a>
-        </div> -->
-
         <!-- JETSTREAM -->
         <div class="container-fluid p-0">
             <a href="https://www.wunderground.com/maps/wind/jet-stream" target="_blank">
                 <div class="display-4 fw-bold py-4">Jetstream: Last 18 Hours</div>
                     <img class="border wwborder border-4 border-warning" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%">
-            </a>
-        </div>
-    </div>
-
-    <!-- SKY DIV -->
-    <div class="collapse mb-div-end" id="Sky">
-        
-        <!-- CLOUDS & PRECIP GIF -->
-        <div class="container-fluid p-0">
-            <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
-                <div class="display-5 fw-bold py-4">Clouds & Precip Last Hour</div>
-                    <img class="border wwborder border-4 border-warning" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%">
-            </a>
-        </div>
-
-        <!-- GRAPHICAL SKY COVER -->
-        <div class="container-fluid p-0">
-            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="display-5 fw-bold pt-4">Forecast: Cloud Cover</div>
-                <div class="fs-1 next-day text-info pb-2"></div>
-                <div class="border wwborder border-4 border-warning">
-                    <div class="row">
-                        <div class="col fs-1">Morning</div>
-                        <div class="col fs-1">Mid Day</div>
-                    </div>
-                    <img id="graphical-sky-0" width="49%">
-                    <img id="graphical-sky-1" width="49%">
-                    <div class="py-2"></div>
-                    <div class="row pt-2">
-                        <div class="col fs-1">Afternoon</div>
-                        <div class="col fs-1">Evening</div>
-                    </div>
-                    <img id="graphical-sky-2" width="49%">
-                    <img id="graphical-sky-3" width="49%">
-                </div>
-
             </a>
         </div>
     </div>
@@ -1044,49 +965,48 @@
         <!-- SOUNDING SKEW-T -->
         <div class="container-fluid p-0">
             <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
-                <div class="display-5 fw-bold py-4">Morning Sounding Skew-T</div>
+                <div class="display-3 fw-bold py-4">Morning Sounding Skew-T</div>
                     <img class="border wwborder border-4 border-warning" id="skew-t-img" width="100%">
             </a>
         </div>
 
         <!-- SOUNDING DISTILLED -->
         <div class="container-fluid p-0">
-            <div class="display-5 fw-bold py-4">Morning Sounding Distilled</div>
+            <div class="display-3 fw-bold py-4">Morning Sounding Distilled</div>
             <div class="border rounded bg-dark" id="skew-t-d3"></div>
         </div>
 
         <!-- USER INPUT TEMP -->
-        <div class="border wwborder container-fluid pb-4 mt-4 bg-dark">
-            <div class="display-5 fw-bold pb-4">User Input Temp</div>
-            <div class="row">
-                <div class="col-4 text-end">
-                    <input class="display-1 text-primary fw-bold bg-warning pb-3 text-center" type="text" id="user-temp" size="1">
+        <div class="border rounded container-fluid pb-4 mt-0 bg-dark">
+            <div class="display-3 fw-bold pb-4">Enter Alternate Max Temp</div>
+            <div class="row display-3">
+                <div class="col text-end">
+                    <input class="text-primary fw-bold bg-warning pb-3 px-4 text-center" type="text" placeholder="__&deg;" id="user-temp" size="1">
                 </div>
-                <div class="col-4">
-                    <button class="display-1 text-primary fw-bold bg-warning pb-3" onclick="d3Update()">Update</button>
+                <div class="col">
+                    <button class="text-primary fw-bold bg-warning pb-3 px-4" onclick="d3Update()">Enter</button>
                 </div>
-                <div class="col-4 text-start">
-                    <button class="display-1 text-primary fw-bold bg-warning pb-3" onclick="d3Clear()">Clear</button>
+                <div class="col text-start">
+                    <button class="text-primary fw-bold bg-warning pb-3 px-4" onclick="d3Clear()">Clear</button>
                 </div>
             </div>
         </div>
 
         <!-- NWS SOARCAST -->
         <div class="container-fluid p-0">
-            <div class="display-5 fw-bold py-4">Soaring Details</div>
+            <div class="display-3 fw-bold py-4">Soaring Details</div>
             <div class="collapse fs-1 pb-4" id="od-div">
-                <span>NWS overdevelopment time: </span>
-                <span class="text-info fw-bold" id="od-time"></span>
+                <span>NWS Overdevelopment Time:&nbsp;</span>
+                <span class="text-danger display-4 fw-bold" id="od-time"></span>
             </div>
             <div class="border rounded bg-dark pb-3">
-                <div class="row display-5 fw-bold py-2 mx-0">
-                    <div class="col">
+                <div class="row mx-2 display-4 fw-bold">
+                    <div class="col text-start">
                         <a href="https://www.weather.gov/slc/Soar" target="_blank">
                             <span class="text-warning text-decoration-underline">NWS Soarcast</span>
                         </a>
                     </div>
-                    <div class="col-1">|</div>
-                    <div class="col">User Input</div>
+                    <div class="col text-end">Alternate Max</div>
                 </div><hr class="dash">
                 <div class="row">
                     <div class="row col-3 ms-2">
@@ -1094,7 +1014,7 @@
                         <div class="fs-3 text-end" id="soarcast-tol-m">Soarcast Error</div>
                     </div>
                     <div class="col-6 fs-1 fw-bold">Top of Lift
-                        <div class="fs-3 fw-normal">(ft)</div>
+                        <div class="fs-3 fw-normal">(ft MSL)</div>
                     </div>
                     <div class="row col-3 me-2">
                         <div class="display-3 fw-bold text-start text-info" id="user-input-tol">&nbsp;</div>
@@ -1107,7 +1027,7 @@
                         <div class="fs-3 text-end" id="soarcast-neg3-m">Soarcast Error</div>
                     </div>
                     <div class="col-6 fs-1 fw-bold">Height of -3 Index
-                        <div class="fs-3 fw-normal">(ft)</div>
+                        <div class="fs-3 fw-normal">(ft MSL)</div>
                     </div>
                     <div class="row col-3 me-2">
                         <div class="display-3 fw-bold text-start text-info" id="user-input-neg3">&nbsp;</div>
@@ -1130,111 +1050,113 @@
             </div>
         </div>
     </div>
-    
-    <!-- PRESSURE DIV -->
-    <div class="collapse mb-div-end" id="Pressure">
 
-        <!-- WHAT IS ZONE? -->
-        <div class="container-fluid p-0">
-            <a href="http://www.wasatchfreeflight.org/index.php/gauging-that-pressure" target="_blank">
-                <div class="fs-2 pt-4 text-warning text-decoration-underline">What is Zone?</div>
-            </a>
-        </div>
-
-        <!-- LATEST PRESSURE, TEMP, AND ZONE @ KSLC INT'L -->
-        <div class="container-fluid p-0">
-            <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-                <div class="display-5 fw-bold pt-4">KSLC Int'l Pressure, Temp, and Zone</div>
-                <div class="fs-1 text-info pb-2" id="KSLC-latest-time"></div>
-                <div class="border wwborder border-2 border-warning row fs-1 bg-dark mx-0">
-                    <div class="col">
-                        <div class="display-3 fw-bold text-info" id="KSLC-latest-alti"></div>
-                        <div class="fs-4">inHg</div>
-                    </div><div class="col">
-                        <div class="display-3 fw-bold" id="KSLC-latest-zone"></div>
-                        <div class="fs-4">Zone</div>
-                    </div>
-                    <div class="col">
-                        <div class="display-3 fw-bold text-info" id="KSLC-latest-temp"></div>
-                        <div class="fs-4">&deg;F</div>
-                    </div>
-                </div>
-            </a>
-        </div>
+    <!-- PRESSURE, TEMP DIV -->
+    <div class="collapse mb-div-end" id="Pressure, Temp">
 
         <!-- PRESSURE, TEMP, & ZONE LAST 6 HOURS -->
         <div class="container-fluid p-0">
             <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-                <div class="fs-1 text-info py-2">Last 6 Hours</div>
+                <div class="display-3 fw-bold py-4">Pressure, Temp, & Zone</div>
                 <div class="border wwborder border-2 border-warning row align-items-end bg-dark mx-0">
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-0"></div></div>
                         <div class="bg-info" id="KSLC-altibar-0"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-0"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-0"></div>
+                        <div class="display-2" id="KSLC-zone-0"></div>
                         <div class="fs-4" id="KSLC-alti-time-0"></div>
                     </div>
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-1"></div></div>
                         <div class="bg-info" id="KSLC-altibar-1"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-1"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-1"></div>
+                        <div class="display-2" id="KSLC-zone-1"></div>
                         <div class="fs-4" id="KSLC-alti-time-1"></div>
                     </div>
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-2"></div></div>
                         <div class="bg-info" id="KSLC-altibar-2"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-2"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-2"></div>
+                        <div class="display-2" id="KSLC-zone-2"></div>
                         <div class="fs-4" id="KSLC-alti-time-2"></div>
                     </div>
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-3"></div></div>
                         <div class="bg-info" id="KSLC-altibar-3"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-3"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-3"></div>
+                        <div class="display-2" id="KSLC-zone-3"></div>
                         <div class="fs-4" id="KSLC-alti-time-3"></div>
                     </div>
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-4"></div></div>
                         <div class="bg-info" id="KSLC-altibar-4"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-4"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-4"></div>
+                        <div class="display-2" id="KSLC-zone-4"></div>
                         <div class="fs-4" id="KSLC-alti-time-4"></div>
                     </div>
                     <div class="col px-1">
                         <div class="fs-1 fw-bold mb-2"><div id="KSLC-alti-5"></div></div>
                         <div class="bg-info" id="KSLC-altibar-5"></div>
                         <div class="fs-2 bg-secondary fw-bold py-3" id="KSLC-temp-5"></div>
-                        <div class="display-2 fw-bold" id="KSLC-zone-5"></div>
+                        <div class="display-2" id="KSLC-zone-5"></div>
                         <div class="fs-4" id="KSLC-alti-time-5"></div>
                     </div>
                 </div>
             </a>
         </div>
 
+        <!-- WHAT IS ZONE? -->
+        <div class="container-fluid p-0">
+            <a href="http://www.wasatchfreeflight.org/index.php/gauging-that-pressure" target="_blank">
+                <div class="display-4 fw-bold py-4 text-warning text-decoration-underline">What is Zone?</div>
+            </a>
+        </div>
+
         <!-- CURRENT FRONTS -->
         <div class="container-fluid p-0">
-            <div class="display-5 fw-bold py-4">Current Fronts</div>
+            <div class="display-3 fw-bold py-4">Current Fronts</div>
             <img class="wwborder" src="https://uni.edu/storm/wximages/images/fronts.gif" width="100%">
         </div>
     </div>
 
-    <!-- GENERAL DIV -->
-    <div class="collapse mb-div-end" id="General">
+    <!-- WEATHER DIV -->
+    <div class="collapse mb-div-end" id="Weather">
 
-        <!-- HOURLY FORECAST CHART -->
+        <!-- CLOUDS & PRECIP GIF -->
         <div class="container-fluid p-0">
-            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-                <div class="display-5 fw-bold py-4">Next 48 Hours</div>
-                <img class="border wwborder border-4 border-warning" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%">
+            <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+                <div class="display-3 fw-bold py-4">Clouds & Precip Last Hour</div>
+                    <img class="border wwborder border-4 border-warning" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%">
             </a>
         </div>
 
+        <!-- GRAPHICAL SKY COVER -->
+        <div class="container-fluid p-0">
+            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+                <div class="display-3 fw-bold pt-4">Forecast: Cloud Cover</div>
+                <div class="fs-1 next-day text-info pb-2"></div>
+                <div class="border wwborder border-4 border-warning">
+                    <div class="row">
+                        <div class="col fs-1">Morning</div>
+                        <div class="col fs-1">Mid Day</div>
+                    </div>
+                    <img id="graphical-sky-0" width="49%">
+                    <img id="graphical-sky-1" width="49%">
+                    <div class="py-2"></div>
+                    <div class="row pt-2">
+                        <div class="col fs-1">Afternoon</div>
+                        <div class="col fs-1">Evening</div>
+                    </div>
+                    <img id="graphical-sky-2" width="49%">
+                    <img id="graphical-sky-3" width="49%">
+                </div>
+            </a>
+        </div>
+        
         <!-- GRAPHICAL WX -->
         <div class="container-fluid p-0">
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="display-5 fw-bold pt-4">Forecast: WX</div>
+                <div class="display-3 fw-bold pt-4">Forecast: WX</div>
                 <div class="fs-1 next-day text-info pb-2"></div>
                 <div class="border wwborder border-4 border-warning">
                     <div class="row">
@@ -1254,10 +1176,18 @@
             </a>
         </div>
 
+        <!-- HOURLY FORECAST CHART -->
+        <div class="container-fluid p-0">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+                <div class="display-3 fw-bold py-4">Next 48 Hours</div>
+                <img class="border wwborder border-4 border-warning" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%">
+            </a>
+        </div>
+
         <!-- NEXT 3 DAYS -->
         <div class="container-fluid p-0">
             <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.YSqo945KhhF" target="_blank">
-                <div class="display-5 fw-bold py-4">Next 3 Days</div>
+                <div class="display-3 fw-bold py-4">Next 3 Days</div>
                 <div class="border wwborder border-4 border-warning bg-dark py-3">
                     <div class="row mx-0">
                         <div class="col-3 align-self-center text-start">
@@ -1265,7 +1195,7 @@
                         </div>
                         <div class="col">
                             <div class="display-5 text-info text-center fw-bold mb-3" id="forecast-day1-day"></div>
-                            <div class="fs-3 text-start" id="forecast-day1-txt"></div>
+                            <div class="fs-2 text-start" id="forecast-day1-txt"></div>
                         </div><hr class="dash mt-3">
                     </div>
                     <div class="row mx-0">
@@ -1274,7 +1204,7 @@
                         </div>
                         <div class="col">
                             <div class="display-5 text-info text-center fw-bold mb-3" id="forecast-day2-day"></div>
-                            <div class="fs-3 text-start" id="forecast-day2-txt"></div>
+                            <div class="fs-2 text-start" id="forecast-day2-txt"></div>
                         </div><hr class="dash mt-3">
                     </div>
                     <div class="row mx-0">
@@ -1283,7 +1213,7 @@
                         </div>
                         <div class="col">
                             <div class="display-5 text-info text-center fw-bold mb-3" id="forecast-day3-day"></div>
-                            <div class="fs-3 text-start" id="forecast-day3-txt"></div>
+                            <div class="fs-2 text-start" id="forecast-day3-txt"></div>
                         </div>
                     </div>
                 </div>
@@ -1291,71 +1221,67 @@
         </div>
 
         <!-- AREA FORECAST DISCUSSION -->
-        <div class="container-fluid p-0">
+        <div class="container-fluid p-0 mt-5">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
-                <div class="display-5 fw-bold py-4">Area Forecast Discussion - SLC</div>
-                <img class="border wwborder border-4 border-warning" src="images/slctopo.png" width="50%">
+                <div class="display-4 fw-bold py-4 text-warning text-decoration-underline">Area Forecast Discussion - SLC</div>
             </a>
         </div>
     </div>
 
-    <!-- CAMS DIV -->
-    <div class="collapse mb-div-end" id="Cams">
+    <!-- CAMS & TRACKERS DIV -->
+    <div class="collapse mb-div-end" id="Cams, Trackers">
 
         <!-- CAMS -->
         <div class="container-fluid p-0">
             <div class="row display-5 fw-bold pt-4">
-                <div class="col">👀 West
+                <div class="col">&#128247; 👀 West
                     <a href="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_hour.mp4" target="_blank">
                         <img class="border wwborder border-4 border-warning img-fluid mt-4" src="images/slccamwest.png">
                     </a>
                 </div>
-                <div class="col">👀 South
+                <div class="col">&#128247; 👀 South
                     <a href="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_hour.mp4" target="_blank">
                         <img class="border wwborder border-4 border-warning img-fluid mt-4" src="images/slccamsouth.png">
                     </a>
                 </div>
-                <div class="col">👀 East
+                <div class="col">&#128247; 👀 East
                     <a href="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_hour.mp4" target="_blank">
                         <img class="border wwborder border-4 border-warning img-fluid mt-4" src="images/slccameast.png">
                     </a>
                 </div>
             </div>
             <div class="row display-5 fw-bold py-4">
-                <div class="col px-5">Northside
+                <div class="col px-5">Northside &#128247;
                     <a href="http://northcam.uhgpga.org/view/view.shtml" target="_blank">
                         <img class="border wwborder border-4 border-warning img-fluid mt-4" src="images/slccamnorthside.png">
                     </a>
                 </div>
-                <div class="col px-5">Southside
+                <div class="col px-5">Southside &#128247;
                     <a href="http://southcam.uhgpga.org/#view" target="_blank">
                         <img class="border wwborder border-4 border-warning img-fluid mt-4" src="images/slccamsouthside.png">
                     </a>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- TRACKERS DIV -->
-    <div class="collapse mb-div-end" id="Trackers">
 
         <!-- TRACKERS -->
         <div class="container-fluid p-0">
-                <div class="my-5">
-                    <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
-                        <img class="border wwborder border-4 border-warning" src="images/livetrack24.png" width="50%">
-                    </a>
-                </div>
-                <div class="my-5">
-                    <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
-                        <img class="border wwborder border-4 border-warning" src="images/xcfind.png" width="50%">
-                    </a>
-                </div>
-                <div class="my-5">
-                    <a href="https://www.xctrack.me/" target="_blank">
-                        <img class="border wwborder border-4 border-warning" src="images/xctrack.png" width="50%">
-                    </a>
-                </div>
+            <div class="display-3 fw-bold pb-4">Pilot Trackers</div>
+            <div>
+                <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
+                    <img class="border wwborder border-4 border-warning" src="images/livetrack24.png" width="60%">
+                </a>
+            </div>
+            <div class="my-5">
+                <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
+                    <img class="border wwborder border-4 border-warning" src="images/xcfind.png" width="60%">
+                </a>
+            </div>
+            <div>
+                <a href="https://www.xctrack.me/" target="_blank">
+                    <img class="border wwborder border-4 border-warning" src="images/xctrack.png" width="60%">
+                </a>
+            </div>
         </div>
     </div>
 
