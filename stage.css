@@ -34,6 +34,10 @@ a:active {
 }
 .pink { color: pink; }
 .bg-heading { background-color: #000050; }
+.bg-aloft {
+  background-image: url('images/aloft.png');
+  background-size: 100% 100%;
+}
 .bg-KSLC {
   background-image: url('images/kslc2500x420p10.png');
   background-size: 100% 100%;
@@ -54,16 +58,12 @@ a:active {
   background-image: url('images/fps3000x500p30.png');
   background-size: 100% 100%;
 }
-.bg-C8948 {
-  background-image: url('images/c89483kx5hp0.png');
-  background-size: 100% 100%;
-}
 .bg-OGP {
   background-image: url('images/ogp3kx5hp0.png');
   background-size: 100% 100%;
 }
-.bg-aloft {
-  background-image: url('images/aloft.png');
+.bg-C8948 {
+  background-image: url('images/c89483kx5hp0.png');
   background-size: 100% 100%;
 }
 hr.dash { border: 3px dashed white !important; }
@@ -88,14 +88,16 @@ hr.dash { border: 3px dashed white !important; }
 }
 .xAxis { font-size: 150%; }
 .xLabel {
-  fill: #0dcaf0;
+  fill: white;
   font-size: 150%;
+  font-weight: bold;
 }
 .yAxis { font-size: 150%; }
 .yLabel {
-  fill: #0dcaf0;
+  fill: white;
   text-anchor: middle;
   font-size: 150%;
+  font-weight: bold;
 }
 .templabel {
   fill: #0dcaf0;
@@ -115,4 +117,9 @@ hr.dash { border: 3px dashed white !important; }
 .dalrlabel {
   fill: white;
   font-size: 150%;
+}
+.alternatemax {
+  fill: #ffc107;
+  font-size: 200%;
+  font-weight: bold;
 }
