@@ -87,8 +87,6 @@ function getAllGraphicalForecastImages() {
     const nextDayClassCount = 3
     if (nextDay) for (let i=0; i<nextDayClassCount; i++) document.getElementsByClassName('next-day')[i].innerHTML = nextDay
     for (let i=0; i<4; i++) {
-        // document.getElementById(`graphical-wind-${i}`).src = `${url}WindSpd${timeStr+i}_slc.png`
-        // document.getElementById(`graphical-gust-${i}`).src = `${url}WindGust${timeStr+i}_slc.png`
         document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
         document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
     }
