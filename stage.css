@@ -68,9 +68,7 @@ a:active {
 }
 hr.dash { border: 3px dashed white !important; }
 .mb-div-end { margin-bottom: 8rem !important; }
-.wwborder {
-  border-radius: 1rem !important;
-}
+.wwborder { border-radius: 1rem !important; }
 
 /* D3 */
 .dalrgrid {
