@@ -39,7 +39,7 @@ function kslcAltiTempZone(data, time=[], alti=[], temp=[]) {
 function zone(data, zDigit=[], zColor=[], zFormatted=[], min, max, barHeight = []) {
     for (let i=0; i<data.alti.length; i++) zDigit.push(calculateZone(parseFloat(data.alti[i]), parseInt(data.temp[i])))
     zColor = zDigit.map(d => (d===0 || d===7) ? wwRed : (d===1 || d===6) ? wwOrg : (d===2 || d===5) ? wwYlw : wwGrn)
-    zFormatted = zDigit.map(d => (d===0) ? '&#9471;' : (d==='LoP') ? '<span class="fs-3 fw-bold">LoP</span>' : `&#1010${d+1}`)
+    zFormatted = zDigit.map(d => (d===0) ? '&#9471;' : (d==='LoP') ? '<span class="display-3 fw-bold">LoP</span>' : `&#1010${d+1}`)
     min = Math.min(...data.alti)
     max = Math.max(...data.alti)
     barHeight = data.alti.map(d => `${(((d-min)*80)/(max-min))+10}px`)
