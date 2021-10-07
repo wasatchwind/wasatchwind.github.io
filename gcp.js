@@ -15,16 +15,16 @@
 
 // GCP WIND ALOFT
 (async () => {
+//     const url = 'https://wasatchwind.github.io/example_wind_aloft.json'
+    const url = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
+    const response = await fetch(url)
+    const aloftData = await response.json()
     const range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
     const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${range}&region=slc&layout=on&date=`
     document.getElementById('wind-aloft-link').setAttribute('href', link)
     const ylwSpds = [9, 12, 15, 21]
     const redSpds = [14, 18, 24, 30]
     const alts = ['6k', '9k', '12k', '18k']
-    const url = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
-//     const url = 'https://wasatchwind.github.io/wind_aloft_example.json'
-    const response = await fetch(url)
-    const aloftData = await response.json()
     document.getElementById('aloft-start').innerHTML = aloftData['Start time']
     document.getElementById('aloft-end').innerHTML = aloftData['End time']
     for (let i=0; i<4; i++) {
@@ -44,8 +44,8 @@
 
 // GCP SOARING FORECAST
 (async () => {
+//     const url = 'https://wasatchwind.github.io/example_soaring_forecast.json'
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
-//     const url = 'https://wasatchwind.github.io/soaring_forecast_example921.json'
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
@@ -78,16 +78,12 @@
 
 // GCP ROAB
 async function raob(maxTemp) {
+//     const url = 'https://wasatchwind.github.io/example_raob.json'
     const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-//     const url = 'https://wasatchwind.github.io/raob_example921.json'
-    const response = await fetch(url)
-    const raobData = await response.json()
     fetch(url)
-    .then(response => {
-        return response.json()
-    })
-    .then(raobData => {
-        drawD3LapseChart(raobData, maxTemp)
-        raobDataStored = raobData
-    })
+        .then(response => { return response.json() })
+        .then(data => {
+            raobData = data
+            drawD3LapseChart(raobData, maxTemp)
+        })
 }
