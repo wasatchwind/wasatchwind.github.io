@@ -1,31 +1,4 @@
 'use strict';
-let surfaceAlt = 4229/1000 // KSLC elevation adjusted to d3 y-axis scale
-let visibleScreenWidth = document.documentElement.clientWidth
-visibleScreenWidth = (visibleScreenWidth > 1080) ? visibleScreenWidth * 0.6 : visibleScreenWidth * 0.89
-const visibleScreenHeight = visibleScreenWidth * 0.679
-const margin = {
-    top: visibleScreenHeight * 0.023,
-    right: visibleScreenWidth * 0.028,
-    bottom: visibleScreenHeight * 0.133,
-    left: visibleScreenWidth * 0.09
-}
-const width = visibleScreenWidth - margin.left - margin.right
-const height = visibleScreenHeight - margin.top - margin.bottom
-const dalr = 5.4 // Equivalent to 3°C
-let dalrYInt
-const dalrSlope = -1/dalr
-const svg = d3.select('#skew-t-d3').append('svg')
-    .attr('class', 'svgbg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`)
-const x = d3.scaleLinear()
-    .range([-10, width])
-    .domain([-10, 110])
-const y = d3.scaleLinear()
-    .range([height, 0])
-    .domain([surfaceAlt, 18])
 function drawD3LapseChart(data, maxTemp) {
     svg.selectAll('*').remove()
     const p1 = `M ${x(36)} -1, `
@@ -34,14 +7,9 @@ function drawD3LapseChart(data, maxTemp) {
     const p4 = `L ${width + margin.right} -1, `
     const p5 = `L ${x(36)} -1`
     const polygon = p1 + p2 + p3 + p4 + p5
-    const xAxisGrid = d3.axisTop(x)
-        .tickSize(0-y(4))
-        .tickFormat('')
-        .ticks(19)
+    const xAxisGrid = d3.axisTop(x).tickSize(0-y(4)).tickFormat('').ticks(19)
     const dalrAxisGrid = d3.range(-5,111,5)
-    const yAxisGrid = d3.axisLeft(y)
-        .tickSize(-innerWidth)
-        .tickFormat('')
+    const yAxisGrid = d3.axisLeft(y).tickSize(-innerWidth).tickFormat('')
     const tempLine = d3.line()
         .x(function(d) { return x((d.Temp_c * 9 / 5) + 32) })
         .y(function(d) { return y(d.Altitude_m * 3.281 / 1000) })
@@ -72,7 +40,7 @@ function drawD3LapseChart(data, maxTemp) {
         .attr('stroke-width', 4)
         .attr('d', dpLine)
     svg.append('line') // Draw Max Temp DALR line
-        .attr('stroke', wwBlu)
+        .attr('stroke', '#0dcaf0') // Bootstrap cyan (info)
         .attr('stroke-width', 4)
         .attr('x1', x(maxTemp-(18-surfaceAlt)*dalr))
         .attr('x2', x(maxTemp))
@@ -141,28 +109,31 @@ function drawD3LapseChart(data, maxTemp) {
         .text('Dewpoint')
 }
 
+function drawD3UserTempLine(userTemp, xCutoff = -8.5) {
+    svg.append('g').append('line')
+        .attr('class', 'userline')
+        .attr('stroke', wwYlw)
+        .attr('stroke-width', 4)
+        .attr('x1', function() {
+            if (x(userTemp-(18-surfaceAlt)*dalr)>x(xCutoff)) return x(userTemp-(18-surfaceAlt)*dalr)
+            else { return x(xCutoff)}
+        })
+        .attr('x2', x(userTemp))
+        .attr('y1', function() {
+            if (x(userTemp-(18-surfaceAlt)*dalr)<x(xCutoff)) return y(-1/dalr*(xCutoff-userTemp)+surfaceAlt)
+        })
+        .attr('y2', y(surfaceAlt))
+}
+
 function d3Update() {
     let userTemp = parseInt(document.getElementById('user-temp').value)
     userTemp = (userTemp>110 || isNaN(userTemp)) ? -10 : userTemp
     svg.select('line.userline').remove()
-    if (userTemp<111 && userTemp>(raobDataStored[0].Temp_c*9/5)+32) {
-        const xCutoff = -8.5
-        svg.append('g').append('line')
-            .attr('class', 'userline')
-            .attr('stroke', wwYlw)
-            .attr('stroke-width', 4)
-            .attr('x1', function() {
-                if (x(userTemp-(18-surfaceAlt)*dalr)>x(xCutoff)) return x(userTemp-(18-surfaceAlt)*dalr)
-                else { return x(xCutoff)}
-            })
-            .attr('x2', x(userTemp))
-            .attr('y1', function() {
-                if (x(userTemp-(18-surfaceAlt)*dalr)<x(xCutoff)) return y(-1/dalr*(xCutoff-userTemp)+surfaceAlt)
-            })
-            .attr('y2', y(surfaceAlt))
-        dalrYInt = (userTemp/dalr) + surfaceAlt
-        const tol = calculateToL()
-        const neg3 = calculateNeg3()
+    if (userTemp<111 && userTemp>(raobData[0].Temp_c*9/5)+32) {
+        drawD3UserTempLine(userTemp)
+        const dalrYInt = (userTemp/dalr) + surfaceAlt
+        const tol = calculateToL(dalrYInt)
+        const neg3 = calculateNeg3(dalrYInt)
         const rol = calculateRoL(tol)
         document.getElementById('user-input-tol').innerHTML = tol['Alt'].toLocaleString()
         document.getElementById('user-input-tol-m').innerHTML = `${Math.round(tol['Alt']/3.281).toLocaleString()} m`
@@ -185,13 +156,7 @@ function d3Clear() {
     document.getElementById('user-input-rol-m').innerHTML = '&nbsp;'
 }
 
-function interpolate(x1, y1, x2, y2, input, inputType) {
-    const xDiff = (x1===x2) ? x1 : x2-x1
-    if (inputType==='x') return y1+((input-x1)*(y2-y1)/(xDiff))
-    return x1+((input-y1)*(xDiff)/(y2-y1))
-}
-
-function calculateToL(position = 0, tol = {}) {
+function calculateToL(dalrYInt, position = 0, tol = {}) {
     // https://www.weather.gov/otx/Soaring_Forecast_Information
     // Compare each RAOB data point temp °C with calculated DALR temp °C at the same altitude
     // Calculated DALR temp: y=mx+b. Temp is the 'x' value, so x=(y-b)/m ('x' must be converted to °C)
@@ -202,7 +167,7 @@ function calculateToL(position = 0, tol = {}) {
     // Temp difference below convergence is the Thermal Index (TI). At ToL, TI=0
     // Convergence typically lies between RAOB data points, so interpolation is necessary
     // Interpolation requires RAOB data postions above (position) and below (position-1) convergence
-    while (raobDataStored[position].Temp_c<((((raobDataStored[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9) position++
+    while (raobData[position].Temp_c<((((raobData[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9) position++
     const raobLine = raobLineObj(position)
     // Formula derivation: find where RAOB temp (x value) and DALR temp (x value) are equal
     // Solve for x: x=(y-b)/m. ToL is where RAOB x: (y-b)/m equals DALR x: (y-b)/m
@@ -214,16 +179,28 @@ function calculateToL(position = 0, tol = {}) {
     return tol
 }
 
-function calculateNeg3(position = 0) {
+function raobLineObj(position, raobLine = {}) {
+    raobLine['x1'] = (raobData[position].Temp_c*9/5)+32
+    raobLine['y1'] = raobData[position].Altitude_m*3.281/1000
+    raobLine['x2'] = (raobData[position-1].Temp_c*9/5)+32
+    raobLine['y2'] = raobData[position-1].Altitude_m*3.281/1000
+    // In case RAOB Temps are the same (x1===x2), use xDiff (vertical line/infinite slope)
+    const xDiff = raobLine['x1']===raobLine['x2'] ? raobLine['x1'] : raobLine['x2']-raobLine['x1']
+    raobLine['Slope'] = (raobLine['y2']-raobLine['y1'])/xDiff // m=(y2-y1)/(x2-x1)
+    raobLine['YInt'] = raobLine['y1']-(raobLine['Slope']*raobLine['x1']) // b=y-mx
+    return raobLine
+}
+
+function calculateNeg3(dalrYInt, position = 0) {
     // Same as ToL, except find where temp difference is -3°C instead of equal
-    while (raobDataStored[position].Temp_c-((((raobDataStored[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9<-3) position++
+    while (raobData[position].Temp_c-((((raobData[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9<-3) position++
     const raobLine = raobLineObj(position)
     return parseInt((((raobLine['YInt']/raobLine['Slope'])-(dalrYInt/dalrSlope)-5.4)/((1/raobLine['Slope'])-(1/dalrSlope)))*1000)
 }
 
 function calculateRoL(tol, position = 0) {
     const firstUsableLiftAlt = surfaceAlt+4
-    while (raobDataStored[position].Altitude_m*3.281/1000<firstUsableLiftAlt) position++
+    while (raobData[position].Altitude_m*3.281/1000<firstUsableLiftAlt) position++
     const raobLine = raobLineObj(position)
     const fulTemp = interpolate(raobLine['x1'], raobLine['y1'], raobLine['x2'], raobLine['y2'], firstUsableLiftAlt, 'y')
     const fulYInt = firstUsableLiftAlt-(dalrSlope*fulTemp)
@@ -231,14 +208,8 @@ function calculateRoL(tol, position = 0) {
     return Math.round(2.4*(tol['Alt']/3.281/100+10*(fulSurfaceTemp-((tol['Temp'])-32)*5/9)))
 }
 
-function raobLineObj(position, raobLine = {}) {
-    raobLine['x1'] = (raobDataStored[position].Temp_c*9/5)+32
-    raobLine['y1'] = raobDataStored[position].Altitude_m*3.281/1000
-    raobLine['x2'] = (raobDataStored[position-1].Temp_c*9/5)+32
-    raobLine['y2'] = raobDataStored[position-1].Altitude_m*3.281/1000
-    // In case RAOB Temps are the same (x1===x2), use xDiff (vertical line/infinite slope)
-    const xDiff = raobLine['x1']===raobLine['x2'] ? raobLine['x1'] : raobLine['x2']-raobLine['x1']
-    raobLine['Slope'] = (raobLine['y2']-raobLine['y1'])/xDiff // m=(y2-y1)/(x2-x1)
-    raobLine['YInt'] = raobLine['y1']-(raobLine['Slope']*raobLine['x1']) // b=y-mx
-    return raobLine
+function interpolate(x1, y1, x2, y2, input, inputType) {
+    const xDiff = (x1===x2) ? x1 : x2-x1
+    if (inputType==='x') return y1+((input-x1)*(y2-y1)/(xDiff))
+    return x1+((input-y1)*(xDiff)/(y2-y1))
 }
