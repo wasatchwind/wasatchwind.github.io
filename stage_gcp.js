@@ -1,22 +1,22 @@
 'use strict';
 // GCP WIND MAP IMAGE
 (async () => {
-    // const gcpImageURL = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png';
-    // const imageMetaUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
-    // const response = await fetch(imageMetaUrl);
-    // const data = await response.json();
-    // let gcpImageTime = new Date(data.timeCreated);
-    // gcpImageTime = gcpImageTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
-    // document.getElementById('wind-map-timestamp').innerHTML = gcpImageTime
-    // document.getElementById('surface-wind-map').src = gcpImageURL;
-    document.getElementById('wind-map-timestamp').innerHTML = '2:45 pm'
-    document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'
+    const gcpImageURL = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png';
+    const imageMetaUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
+    const response = await fetch(imageMetaUrl);
+    const data = await response.json();
+    let gcpImageTime = new Date(data.timeCreated);
+    gcpImageTime = gcpImageTime.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+    document.getElementById('wind-map-timestamp').innerHTML = gcpImageTime
+    document.getElementById('surface-wind-map').src = gcpImageURL;
+//     document.getElementById('wind-map-timestamp').innerHTML = '2:45 pm'
+//     document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'
 })();
 
 // GCP WIND ALOFT
 (async () => {
-    const url = 'https://wasatchwind.github.io/example_wind_aloft.json'
-    // const url = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
+//     const url = 'https://wasatchwind.github.io/example_wind_aloft.json'
+    const url = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
     const response = await fetch(url)
     const aloftData = await response.json()
     const range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
@@ -44,8 +44,8 @@
 
 // GCP SOARING FORECAST
 (async () => {
-    const url = 'https://wasatchwind.github.io/example_soaring_forecast.json'
-    // const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
+//     const url = 'https://wasatchwind.github.io/example_soaring_forecast.json'
+    const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
@@ -78,8 +78,8 @@
 
 // GCP ROAB
 async function raob(maxTemp) {
-    const url = 'https://wasatchwind.github.io/example_raob.json'
-    // const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+//     const url = 'https://wasatchwind.github.io/example_raob.json'
+    const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
     fetch(url)
         .then(response => { return response.json() })
         .then(data => {
