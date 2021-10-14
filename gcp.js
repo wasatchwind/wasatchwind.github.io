@@ -48,8 +48,8 @@
     const url = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
     const response = await fetch(url)
     const soarData = await response.json()
-    const odt = (soarData['Overdevelopment time'] === '0000') ? 'None' : soarData['Overdevelopment time']
-    const neg3 = (soarData['Height of -3 index'] === 'None') ? 0 : soarData['Height of -3 index']
+    const odt = (soarData['Overdevelopment time']==='0000') ? 'None' : soarData['Overdevelopment time']
+    const neg3 = (soarData['Height of -3 index']==='None') ? 0 : soarData['Height of -3 index']
     if (soarData['Report date']===date) {
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
