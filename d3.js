@@ -194,6 +194,7 @@ function raobLineObj(position, raobLine = {}) {
 function calculateNeg3(dalrYInt, position = 0) {
     // Same as ToL, except find where temp difference is -3°C instead of equal
     while (raobData[position].Temp_c-((((raobData[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9<-3) position++
+    if (position===0) return surfaceAlt*1000
     const raobLine = raobLineObj(position)
     return parseInt((((raobLine['YInt']/raobLine['Slope'])-(dalrYInt/dalrSlope)-5.4)/((1/raobLine['Slope'])-(1/dalrSlope)))*1000)
 }
