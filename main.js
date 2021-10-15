@@ -1,7 +1,7 @@
 'use strict';
 // Globals
 const now = new Date()
-const date = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: '2-digit'}).format(now)
+const date = new Intl.DateTimeFormat('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}).format(now)
 const wwGrn = '#20c997' // Bootstrap teal
 const wwYlw = '#ffc107' // Bootstrap yellow (warning)
 const wwOrg = '#fd7e14' // Bootstrap orange
