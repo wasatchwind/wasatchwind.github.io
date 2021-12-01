@@ -84,6 +84,7 @@ async function raob(maxTemp) {
         .then(response => { return response.json() })
         .then(data => {
             raobData = data
+            console.log(raobData)
             drawD3LapseChart(raobData, maxTemp)
         })
 }
