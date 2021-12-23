@@ -34,7 +34,7 @@
         element.style.transform = `rotate(${aloftData.Dirs[alts[i]]+90}deg)`
         if (aloftData.Dirs[alts[i]]==='calm') document.getElementById(`aloft-${i}`).style.display = 'none'
         else {
-            document.getElementById(`aloft-${i}`).style.width = `${aloftData.Spds[alts[i]]*0.7}%`
+            document.getElementById(`aloft-${i}`).style.width = `${aloftData.Spds[alts[i]]*0.6}%`
             document.getElementById(`spd-${i}`).innerHTML = aloftData.Spds[alts[i]]
             document.getElementById(`aloft-${i}`).style.backgroundColor = (aloftData.Spds[alts[i]] > ylwSpds[i] && aloftData.Spds[alts[i]] < redSpds[i]) ? wwYlw : (aloftData.Spds[alts[i]] >= redSpds[i] ? wwRed : wwGrn)
             document.getElementById(`mph-${i}`).innerHTML = 'mph'
