@@ -50,11 +50,12 @@
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time']==='0000') ? 'None' : soarData['Overdevelopment time']
     const neg3 = (soarData['Height of -3 index']==='None') ? 0 : soarData['Height of -3 index']
+    const tol = (soarData['Top of lift'].substr(0,5)==='Error') ? 0 : parseInt(soarData['Top of lift'])
     if (soarData['Report date']===date) {
         const maxTemp = soarData['Max temp']
         raob(maxTemp)
-        document.getElementById('soarcast-tol').innerHTML = parseInt(soarData['Top of lift']).toLocaleString()
-        document.getElementById('soarcast-tol-m').innerHTML = `${Math.round(parseInt(soarData['Top of lift'])/3.281).toLocaleString()} m`
+        document.getElementById('soarcast-tol').innerHTML = tol.toLocaleString()
+        document.getElementById('soarcast-tol-m').innerHTML = `${Math.round(tol/3.281).toLocaleString()} m`
         document.getElementById('soarcast-neg3').innerHTML = parseInt(neg3).toLocaleString()
         document.getElementById('soarcast-neg3-m').innerHTML = `${Math.round(parseInt(neg3)/3.281).toLocaleString()} m`
         document.getElementById('soarcast-rol').innerHTML = parseInt(soarData['Max rate of lift']).toLocaleString()
