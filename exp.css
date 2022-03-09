@@ -15,7 +15,6 @@
 body {
   background-color: #000050;
   color: white;
-  padding-left: 5%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 a:link {
@@ -33,6 +32,9 @@ a:active {
   background-color: transparent;
   text-decoration: none;
 }
-.font-landing { font-size: 500%; }
-.mt-landing { margin-top: 20% }
+.font-landing { font-size: 600%; }
+.my-landing {
+  margin-top: 12%;
+  margin-bottom: 12%;
+}
 .wwborder { border-radius: 1rem !important; }
