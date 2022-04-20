@@ -49,6 +49,9 @@
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time']==='0000') ? 'None' : soarData['Overdevelopment time']
+    //
+    console.log(odt)
+    //
     const neg3 = (soarData['Height of -3 index']==='None') ? 0 : soarData['Height of -3 index']
     const tol = (soarData['Top of lift'].substr(0,5)==='Error') ? 0 : parseInt(soarData['Top of lift'])
     if (soarData['Report date']===date) {
@@ -64,6 +67,9 @@
             let odhour = parseInt(odt.substr(0,2))
             let odmins = odt.substr(2,4)
             let odtime = (odhour>12) ? `${odhour -= 12}:${odmins} pm` : (odhour===12 && odmins==='00') ? 'Noon' : (odhour===12 && odmins>0) ? `${odhour}:${odmins} pm`: `${odhour}:${odmins} am`
+            //
+            console.log(odtime)
+            //
             document.getElementById('od-div').style.display = 'block'
             document.getElementById('od-time').innerHTML = odtime
         }
