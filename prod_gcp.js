@@ -63,7 +63,7 @@
         document.getElementById('soarcast-neg3-m').innerHTML = `${Math.round(parseInt(neg3)/3.281).toLocaleString()} m`
         document.getElementById('soarcast-rol').innerHTML = parseInt(soarData['Max rate of lift']).toLocaleString()
         document.getElementById('soarcast-rol-m').innerHTML = `${Math.round((parseInt(soarData['Max rate of lift'])/197)*10)/10} m/s`
-        if (odt !== 'None' || odt !=='NONE' && odt !== 'Error: Failed to extract overdevelopment time') {
+        if (odt !== 'None' && odt !== 'Error: Failed to extract overdevelopment time') {
             let odhour = parseInt(odt.substr(0,2))
             let odmins = odt.substr(2,4)
             let odtime = (odhour>12) ? `${odhour -= 12}:${odmins} pm` : (odhour===12 && odmins==='00') ? 'Noon' : (odhour===12 && odmins>0) ? `${odhour}:${odmins} pm`: `${odhour}:${odmins} am`
