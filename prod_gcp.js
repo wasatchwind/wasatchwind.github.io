@@ -49,6 +49,9 @@
     const response = await fetch(url)
     const soarData = await response.json()
     const odt = (soarData['Overdevelopment time']==='0000' || soarData['Overdevelopment time']==='NONE') ? 'None' : soarData['Overdevelopment time']
+    
+    console.log(odt)
+    
     const neg3 = (soarData['Height of -3 index']==='None') ? 0 : soarData['Height of -3 index']
     const tol = (soarData['Top of lift'].substr(0,5)==='Error') ? 0 : parseInt(soarData['Top of lift'])
     if (soarData['Report date']===date) {
