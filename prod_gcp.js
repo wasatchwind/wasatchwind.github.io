@@ -80,12 +80,12 @@
 // GCP ROAB
 async function raob(maxTemp) {
 //     const url = 'https://wasatchwind.github.io/example_raob.json'
-    const url = 'https://storage.googleapis.com/wasatch-wind-static/raob1.json'
+    const url = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
     fetch(url)
         .then(response => { return response.json() })
         .then(data => {
             raobData = data
-            console.log(data)
+            // // //console.log(data)
             drawD3LapseChart(raobData, maxTemp)
         })
 }
