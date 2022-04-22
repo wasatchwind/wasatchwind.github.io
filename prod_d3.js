@@ -169,7 +169,7 @@ function calculateToL(dalrYInt, position = 0, tol = {}) {
     // Interpolation requires RAOB data postions above (position) and below (position-1) convergence
     while (raobData[position].Temp_c<((((raobData[position].Altitude_m*3.281/1000)-dalrYInt)/dalrSlope)-32)*5/9) position++
     const raobLine = raobLineObj(position)
-    console.log(raobData[position].Altitude_m)
+    // // //console.log(raobData[position].Altitude_m)
     // Formula derivation: find where RAOB temp (x value) and DALR temp (x value) are equal
     // Solve for x: x=(y-b)/m. ToL is where RAOB x: (y-b)/m equals DALR x: (y-b)/m
     // Solve for y (since y is the same for both) for final formula:
