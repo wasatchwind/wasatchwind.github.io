@@ -35,7 +35,7 @@ a:active {
 .pink { color: pink; }
 .bg-heading { background-color: #000050; }
 .bg-aloft {
-  background-image: url('images/aloft.png');
+  background-image: url('./images/aloft.png');
   background-size: 100% 100%;
 }
 .bg-KSLC {
