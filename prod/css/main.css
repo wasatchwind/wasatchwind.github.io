@@ -39,35 +39,35 @@ a:active {
   background-size: 100% 100%;
 }
 .bg-KSLC {
-  background-image: url('prod/images/kslc2500x420p10.png');
+  background-image: url('images/kslc2500x420p10.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
-  background-image: url('prod/images/amb3kx5hp10.png');
+  background-image: url('images/amb3kx5hp10.png');
   background-size: 100% 100%;
 }
 .bg-UTOLY {
-  background-image: url('prod/images/utoly936wp20.png');
+  background-image: url('images/utoly936wp20.png');
   background-size: 100% 100%;
 }
 .bg-KU42 {
-  background-image: url('prod/images/ku423000x500p0.png');
+  background-image: url('images/ku423000x500p0.png');
   background-size: 100% 100%;
 }
 .bg-HF012 {
-    background-image: url('prod/images/hf0123kx5hp0.png');
+    background-image: url('images/hf0123kx5hp0.png');
     background-size: 100% 100%;
 }
 .bg-FPS {
-  background-image: url('prod/images/fps3000x500p30.png');
+  background-image: url('images/fps3000x500p30.png');
   background-size: 100% 100%;
 }
 .bg-OGP {
-  background-image: url('prod/images/ogp3kx5hp0.png');
+  background-image: url('images/ogp3kx5hp0.png');
   background-size: 100% 100%;
 }
 .bg-C8948 {
-  background-image: url('prod/images/c89483kx5hp0.png');
+  background-image: url('images/c89483kx5hp0.png');
   background-size: 100% 100%;
 }
 hr.dash { border: 3px dashed white !important; }
