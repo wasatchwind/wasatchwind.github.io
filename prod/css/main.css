@@ -35,11 +35,11 @@ a:active {
 .pink { color: pink; }
 .bg-heading { background-color: #000050; }
 .bg-aloft {
-  background-image: url('./images/aloft.png');
+  background-image: url('./prod/images/aloft.png');
   background-size: 100% 100%;
 }
 .bg-KSLC {
-  background-image: url('../images/kslc2500x420p10.png');
+  background-image: url('../prod/images/kslc2500x420p10.png');
   background-size: 100% 100%;
 }
 .bg-AMB {
