@@ -47,11 +47,11 @@ a:active {
   background-size: 100% 100%;
 }
 .bg-UTOLY {
-  background-image: url('images/utoly936wp20.png');
+  background-image: url('/prod/images/utoly936wp20.png');
   background-size: 100% 100%;
 }
 .bg-KU42 {
-  background-image: url('images/ku423000x500p0.png');
+  background-image: url('./images/ku423000x500p0.png');
   background-size: 100% 100%;
 }
 .bg-HF012 {
