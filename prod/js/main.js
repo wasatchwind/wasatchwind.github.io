@@ -71,7 +71,8 @@ function toggleWindChart(div) {
 (async () => {
 //     const url = 'https://wasatchwind.github.io/example_noaa_forecast.json'
     const url = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
-    const response = await fetch(url, {mode: 'cors'})
+//     const response = await fetch(url, {mode: 'cors'})
+    const response = await fetch(url)
     const noaaData = await response.json()
     if (noaaData) {
         let position = noaaData.properties.periods[0].isDaytime ? 0 : 1
