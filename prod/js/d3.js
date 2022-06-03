@@ -1,5 +1,6 @@
 'use strict';
 function drawD3LapseChart(data, maxTemp) {
+    console.log(data)
     svg.selectAll('*').remove()
     const p1 = `M ${x(36)} -1, `
     const p2 = `L ${x(110)} ${y(surfaceAlt)}, `
