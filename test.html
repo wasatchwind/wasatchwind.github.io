@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wasatch Wind</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="test.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+</head>
+
+<body>
+<div class="container">
+    <!-- STICKY TOP -->
+    <div class="bg-sticky border-5 border-bottom sticky-top pb-2">
+
+        <!-- ROW 1: TOP/TITLE -->
+        <div class="align-items-center d-flex justify-content-between">
+            <div class="col-2"><img class="img-fluid" src="./images/pg.gif"></div>
+            <div class="text-nowrap">
+                <div class="display-title fw-bold">Wasatch Wind</div>
+                <div class="d-flex justify-content-between display-5 mb-2">
+                    <div class="col-auto" id="title-time">4:05 pm</div>
+                    <div class="col-auto">&#8226;</div>
+                    <div class="col-auto" id="title-date">Thursday, Jun 30</div>
+                </div>
+            </div>
+            <div class="col-2"><img class="img-fluid" src="./images//refresh.png" onclick="reload()"></div>
+        </div>
+
+        <!-- ROW 2: SCROLL TILES -->
+        <div id="tile-container">
+            <div id="tiles">
+
+                <!-- WIND TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('wind')">
+                    <div class="tile-border-selected" id="wind-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div class="display-1" id="wdir-container">
+                                <div id="wind-tile-wdir">&#10148;</div>
+                            </div>
+                            <div class="display-title fw-bold" id="wind-tile-wspd">9</div>
+                            <div class="display-5 fw-bold gust-color mt-4" id="wind-tile-gust">g22</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold" id="wind-title">Wind</div>
+                </div>
+
+            <!-- WIND TILE -->
+            <!-- <div class="container col left-side mx-1" onclick="toggleDiv('wind')">
+                <div id="wind-tile">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="display-1" id="wdir-container">
+                            <div id="wind-tile-wdir"></div>
+                        </div>
+                        <div id="wind-tile-wspd"></div>
+                        <div class="display-5 fw-bold gust-color mt-4" id="wind-tile-gust"></div>
+                    </div>
+                </div>
+                <div id="wind-title">Wind</div>
+            </div> -->
+
+
+                <!-- ZONE TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('zone')">
+                    <div class="tile-border" id="zone-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="zone-title">Zone</div>
+                </div>
+
+                <!-- LIFT TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('lift')">
+                    <div class="tile-border" id="lift-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="lift-title">Lift</div>
+                </div>
+
+                <!-- METEO TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('meteo')">
+                    <div class="tile-border" id="meteo-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="meteo-title">Meteo</div>
+                </div>
+
+                <!-- CAMS TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('cams')">
+                    <div class="tile-border" id="cams-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="cams-title">Cams</div>
+                </div>
+
+                <!-- GPS TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('gps')">
+                    <div class="tile-border" id="gps-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="gps-title">GPS</div>
+                </div>
+
+                <!-- ABOUT TILE -->
+                <div class="col tile mx-1" onclick="toggleDiv('about')">
+                    <div class="tile-border" id="about-border">
+                        <div class="tile-height align-items-center d-flex justify-content-around">
+                            <div>Tile Content</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-bold text-warning" id="about-title">About</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIND DIV -->
+    <div class="collapse mb-div-end" id="wind">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">Wind</div>
+        </div>
+    </div>
+
+    <!-- ZONE DIV -->
+    <div class="collapse mb-div-end" id="zone">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">Zone</div>
+        </div>
+    </div>
+
+    <!-- LIFT DIV -->
+    <div class="collapse mb-div-end" id="lift">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">Lift</div>
+        </div>
+    </div>
+
+    <!-- METEO DIV -->
+    <div class="collapse mb-div-end" id="meteo">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">Meteo</div>
+        </div>
+    </div>
+
+    <!-- CAMS DIV -->
+    <div class="collapse mb-div-end" id="cams">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">Cams</div>
+        </div>
+    </div>
+
+    <!-- GPS DIV -->
+    <div class="collapse mb-div-end" id="gps">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">GPS</div>
+        </div>
+    </div>
+
+    <!-- ABOUT DIV -->
+    <div class="collapse mb-div-end" id="about">
+        <div class="container p-0">
+            <div class="display-3 fw-bold py-4">About</div>
+        </div>
+    </div>
+
+</div>
+    
+</body>
+</html>
