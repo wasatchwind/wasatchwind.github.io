@@ -9,8 +9,8 @@ body {
   background-color: var(--bs-gray-dark);
   color: white;
   text-align: center;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 1%;
+  margin-right: 1%;
 }
 .mb-div-end { margin-bottom: 8rem !important; }
 
