@@ -2,11 +2,7 @@ body {
   background-color: var(--bs-gray-dark);
   color: white;
   text-align: center;
-}
-.container-fluid {
-  width: 100%;
-  margin-left: 0%;
-  margin-right: 0%;
+  width: 100vw important;
 }
 .mb-div-end { margin-bottom: 8rem !important; }
 
