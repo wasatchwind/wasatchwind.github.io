@@ -1,4 +1,4 @@
-@media only screen and (min-width: 1081px) {
+/*@media only screen and (min-width: 1081px) {
   body {
     margin-left: 35%;
     margin-right: 35%;
@@ -11,7 +11,7 @@
     margin-left: 5%;
     margin-left: 5%;
   }
-}
+}*/
 body {
   background-color: var(--bs-gray-dark);
   color: white;
