@@ -2,7 +2,6 @@ body {
   background-color: var(--bs-gray-dark);
   color: white;
   text-align: center;
-  width: 100vw important;
 }
 .mb-div-end { margin-bottom: 8rem !important; }
 
