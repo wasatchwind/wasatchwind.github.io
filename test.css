@@ -3,7 +3,7 @@ body {
   color: white;
   text-align: center;
 }
-.mb-div-end { margin-bottom: 8rem !important; }
+.mb-div-end { margin-bottom: 8rem;}
 
 /* LINKS */
 a:link {
