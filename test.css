@@ -12,23 +12,8 @@
     margin-left: 5%;
   }
 }*/
-
-@media only screen and (min-width: 1081px) {
-  body {
-    margin-left: 35%;
-    margin-right: 35%;
-    zoom: 0.5;
-  }
-}
-@media only screen and (max-width: 1080px) {
-  body { width: 90%; }
-  .container-fluid {
-    margin-left: 5%;
-    margin-left: 5%;
-  }
-}
-
 body {
+  Width: 100vw important;
   background-color: var(--bs-gray-dark);
   color: white;
   text-align: center;
