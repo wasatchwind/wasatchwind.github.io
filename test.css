@@ -13,7 +13,8 @@
   }
 }*/
 body {
-  Width: 90%;
+  margin-left: 0%;
+  margin-right: 0%;
   background-color: var(--bs-gray-dark);
   color: white;
   text-align: center;
