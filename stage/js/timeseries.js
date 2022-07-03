@@ -1,26 +1,26 @@
 'use strict';
 function timeSeries(data) {
-    latest('kslc', data.STATION[0].OBSERVATIONS)
+    recent('kslc', data.STATION[0].OBSERVATIONS)
 };
 
-function latest(stid, data, object = {}) {
-    const indexEnd = data.date_time.length - 1
-    for (const key in data) object[key] = data[key][indexEnd]
-    object.air_temp_set_1 = Math.round(object.air_temp_set_1)
-    object.altimeter_set_1 = object.altimeter_set_1.toFixed(2)
-    object.date_time = object.date_time.toLowerCase()
-    object.id = stid
-    titleDate(object.date_time)
+function recent(stid, data, object = {}) {
+    for (const key in data) object[key] = data[key].slice(-12)
     console.log(object)
-    document.getElementById('latest-temp').innerHTML = object.air_temp_set_1
-    document.getElementById('latest-alti').innerHTML = object.altimeter_set_1
-    document.getElementById('latest-time').innerHTML = object.date_time
-    document.getElementById('latest-wdir').innerHTML = object.wind_direction_set_1
-    document.getElementById('latest-wind').innerHTML = object.air_temp_set_1
+    object.air_temp_set_1 = object.air_temp_set_1.map(d => !d ? null : `${Math.round(d)}&deg;`)
+    object.altimeter_set_1 = object.altimeter_set_1.map(d => !d ? null : d.toFixed(2))
+    object.date_time = object.date_time.map(d => !d ? null : d.toLowerCase())
+    object.wind_direction_set_1 = object.wind_direction_set_1.map(d => !d ? null : `rotate(${d + 90}deg)`)
+    object.wimg = object.wind_direction_set_1.map(d => !d ? null : '&#10148;')
+    object.wind_speed_set_1 = object.wind_speed_set_1.map(d => d === null ? d : d < 0.5 ? 'Calm' : Math.round(d))
+    if (object.wind_gust_set_1) object.wind_gust_set_1 = object.wind_gust_set_1.map(d => !d ? null : `g${Math.round(d)}`)
+    if (stid === 'kslc') latest(object)
 };
 
-function titleDate(time) {
-    const dayDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
-    document.getElementById('title-time').innerHTML = time
-    document.getElementById('title-date').innerHTML = dayDate
+function latest(data) {
+    for (const key in data) {
+        const element = document.getElementById(`latest-${key}`)
+        const elementRotate = document.getElementById('latest-wimg')
+        if (key === 'wind_direction_set_1') elementRotate.style.transform = data[key][11]
+        else element.innerHTML = data[key][11]
+    }
 };
