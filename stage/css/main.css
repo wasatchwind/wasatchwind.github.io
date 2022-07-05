@@ -61,7 +61,7 @@ a:active {
   --bs-border-opacity: 1;
   border-color: rgba(var(--bs-white-rgb), var(--bs-border-opacity)) !important;
 }
-.tile-height { height: 10rem; }
+.tile-height { height: 12rem; }
 .tile-img { height: 100%; }
 
 /* WIND ALOFT & STATIONS BACKGROUND IMAGES */
