@@ -37,13 +37,17 @@
 
                 <!-- WIND TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('wind')">
-                    <div class="tile-border-selected" id="wind-border">
-                        <div class="tile-height align-items-center d-flex justify-content-around">
-                            <div class="display-1">
-                                <div id="latest-wimg"></div>
+                    <div class="tile-border-selected tile-height" id="wind-border">
+                        <div class="tile-height d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-around">
+                                <div class="display-1 align-self-end" id="wdir-div">
+                                    <div id="latest-wimg"></div>
+                                </div>
+                                <div class="display-title fw-bold" id="latest-wind_speed_set_1"></div>
                             </div>
-                            <div class="display-title fw-bold" id="latest-wind_speed_set_1"></div>
-                            <div class="display-5 fw-bold gust-color mt-4" id="latest-wind_gust_set_1"></div>
+                            <div class="d-flex justify-content-around align-items-center" id="gust-div">
+                                <div class="display-4 fw-bold gust-color mb-2" id="latest-wind_gust_set_1"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="display-3 fw-bold" id="wind-title">Wind</div>
@@ -51,21 +55,19 @@
 
                 <!-- ZONE TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('zone')">
-                    <div class="tile-border" id="zone-border">
-                        <div class="tile-height align-items-center d-flex justify-content-around">
-                            <div class="container p-0">
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <div>
-                                        <div class="fs-5">Zone</div>
-                                        <div class="display-6 fw-bold" id="latest-zone"></div>
-                                    </div>
-                                    <div class="display-2 fw-bold" id="latest-altimeter_set_1"></div>
+                    <div class="tile-border tile-height" id="zone-border">
+                        <div class="tile-height d-flex flex-column justify-content-around">
+                            <div class="d-flex justify-content-around align-items-center">
+                                <div>
+                                    <div class="fs-5">Zone</div>
+                                    <div class="display-4 fw-bold" id="latest-zone"></div>
                                 </div>
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <div class="display-4 fw-bold" id="latest-air_temp_set_1"></div>
-                                    <div class="fs-1">/</div>
-                                    <div class="display-4 fw-bold" id="max-temp"></div>
-                                </div>
+                                <div class="display-2 fw-bold" id="latest-altimeter_set_1"></div>
+                            </div>
+                            <div class="d-flex justify-content-around align-items-center mb-2">
+                                <div class="display-4 fw-bold" id="latest-air_temp_set_1"></div>
+                                <div class="fs-1">/</div>
+                                <div class="display-4 fw-bold" id="max-temp"></div>
                             </div>
                         </div>
                     </div>
@@ -74,17 +76,15 @@
 
                 <!-- LIFT TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('lift')">
-                    <div class="tile-border" id="lift-border">
-                        <div class="tile-height align-items-center d-flex justify-content-around">
-                            <div class="container p-0">
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <div class="align-self-end mb-2 fs-5">ToL</div>
-                                    <div class="display-2 fw-bold" id="tol">12,353</div>
-                                </div>
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <div class="align-self-end mb-2 fs-5">To-3</div>
-                                    <div class="display-4 fw-bold" id="neg3">6,998</div>
-                                </div>
+                    <div class="tile-border tile-height" id="lift-border">
+                        <div class="tile-height d-flex flex-column justify-content-around">
+                            <div class="d-flex justify-content-around align-items-center">
+                                <div class="align-self-end mb-2 fs-5">ToL</div>
+                                <div class="display-2 fw-bold" id="tol">12,353</div>
+                            </div>
+                            <div class="d-flex justify-content-around align-items-center mb-2">
+                                <div class="align-self-end mb-2 fs-5">To-3</div>
+                                <div class="display-4 fw-bold" id="neg3">6,998</div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
 
                 <!-- METEO TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('meteo')">
-                    <div class="tile-border" id="meteo-border">
+                    <div class="tile-border tile-height" id="meteo-border">
                         <div class="tile-img d-flex">
                             <img class="rounded-4" id="latest-icon" width="100%" height="100%">
                         </div>
@@ -103,7 +103,7 @@
 
                 <!-- CAMS TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('cams')">
-                    <div class="tile-border" id="cams-border">
+                    <div class="tile-border tile-height" id="cams-border">
                         <div class="tile-img d-flex">
                             <img class="rounded-4" id="latest-cam" width="100%" height="100%">
                         </div>
@@ -113,7 +113,7 @@
 
                 <!-- GPS TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('gps')">
-                    <div class="tile-border" id="gps-border">
+                    <div class="tile-border tile-height" id="gps-border">
                         <div class="tile-img d-flex">
                             <img class="rounded-4" src="./images/gpstile.png" width="100%" height="100%">
                         </div>
@@ -123,7 +123,7 @@
 
                 <!-- ABOUT TILE -->
                 <div class="col tile mx-1" onclick="toggleDiv('about')">
-                    <div class="tile-border" id="about-border">
+                    <div class="tile-border tile-height" id="about-border">
                         <div class="tile-height align-items-center d-flex justify-content-around">
                             <div class="display-3 fw-bold">About</div>
                         </div>
