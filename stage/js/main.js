@@ -15,12 +15,16 @@ function reload() {
     location.reload()
 };
 
+function hideDiv(div) {
+    document.getElementById(`${div}-div`).style.display = 'none'
+};
+
 function toggleDiv(newDiv) {
     document.getElementById(currentDiv).style.display = 'none'
     document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-bold text-warning'
-    document.getElementById(`${currentDiv}-border`).className = 'tile-border'
+    document.getElementById(`${currentDiv}-border`).className = 'tile-border tile-height'
     document.getElementById(`${newDiv}-title`).className = 'display-3 fw-bold'
-    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected'
+    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected tile-height'
     document.getElementById(newDiv).style.display = 'block'
     currentDiv = newDiv
 };
