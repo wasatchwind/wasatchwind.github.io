@@ -4,6 +4,7 @@ body {
   text-align: center;
 }
 .mb-div-end { margin-bottom: 8rem; }
+.spinner-top { margin-top: 10rem; }
 
 /* LINKS */
 a:link {
