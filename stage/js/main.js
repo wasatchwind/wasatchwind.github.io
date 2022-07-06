@@ -1,14 +1,12 @@
 'use strict';
+let currentDiv = 'wind'
+
 // Global variable 'now' & set title date with IIAFE
 const now = new Date();
 (() => {
     const element = document.getElementById('title-date')
     element.innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 })();
-
-// Declare global variable 'currentDiv' and set it to display as the default div
-let currentDiv = 'wind'
-document.getElementById(currentDiv).style.display = 'block'
 
 function reload() {
     history.scrollRestoration = 'manual'
