@@ -4,7 +4,11 @@ body {
   text-align: center;
 }
 .mb-div-end { margin-bottom: 8rem; }
-.spinner-top { margin-top: 10rem; }
+.spinner-top {
+  width: 15rem;
+  height: 15rem;
+  margin-top: 15rem;
+}
 
 /* LINKS */
 a:link {
