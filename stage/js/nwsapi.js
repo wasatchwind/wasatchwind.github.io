@@ -8,3 +8,21 @@ function maxTemp(data) {
     element.className = fontSize
     return parseInt(maxTempF)
 };
+
+function hourlyForecast(data, object = {}) {
+    object.icon = [], object.temp = [], object.time = [], object.wdir = [], object.wspd =[]
+    for (let i=1; i<7; i++) {
+        object.icon.push(data.properties.periods[i].icon)
+        object.temp.push(`${data.properties.periods[i].temperature}&deg;`)
+        object.time.push(new Date(data.properties.periods[i].startTime).toLocaleString('en-us', {timeStyle: 'short'}).replace(':00','').toLowerCase())
+        object.wdir.push(cardinalToDeg(data.properties.periods[i].windDirection))
+        object.wspd.push(parseInt(data.properties.periods[i].windSpeed))
+    }
+    return object
+};
+
+function cardinalToDeg(data) {
+    const cardDegs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+    const index = cardDegs.findIndex(d => d === data)
+    return index * 22.5
+};
