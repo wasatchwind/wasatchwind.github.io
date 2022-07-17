@@ -21,13 +21,13 @@ function toggleWindChart(div) {
     const element = document.getElementById(div)
     if (element.style.display==='' || element.style.display==='none') {
         element.style.display = 'block'
-        document.getElementById(`${div}-toggle`).innerHTML = '-'
+        document.getElementById(`${div}-toggle`).innerHTML = '&#10134;'
     }
     else {
         element.style.display = 'none'
-        document.getElementById(`${div}-toggle`).innerHTML = '+'
+        document.getElementById(`${div}-toggle`).innerHTML = '&#10133;'
     }
-}
+};
 
 function tempTrend(history, latest, forecast) {
     const temp = history.temp.slice(-5).concat(latest.temp.slice(-1),forecast.temp.slice(-5))
