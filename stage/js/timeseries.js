@@ -18,21 +18,12 @@ function formatTimeSeries(data, object = {}) {
     return object
 };
 
-function latest(data) {
-    const lastIndex = data.time.length - 1
-    const zone = calculateZone(data.alti[lastIndex], parseInt(data.temp[lastIndex]))
-    const zoneElement = document.getElementById('latest-zone')
-    zoneElement.innerHTML = zone.num
-    zoneElement.style.color = zone.col
-    if (data.wdir[lastIndex] === null) document.getElementById('wdir-div').style.display = 'none'
-    for (const key in data) {
-        const element = document.getElementById(`latest-${key}`)
-        if (key === 'wdir' && data[key][lastIndex]) {
-            element.innerHTML = '&#10148;'
-            element.style.transform = `rotate(${data[key][lastIndex] + 90}deg)`
-        } else if (key === 'gust' && data[key][lastIndex]) element.innerHTML = `g${data[key][lastIndex]}`
-        else element.innerHTML = data[key][lastIndex]
-    }
+function zoneTile(alti, temp) {
+    const zone = calculateZone(alti, parseInt(temp))
+    document.getElementById(`latest-alti`).innerHTML = alti
+    document.getElementById(`latest-temp`).innerHTML = temp
+    document.getElementById(`latest-zone`).innerHTML = zone.num
+    document.getElementById(`latest-zone`).style.color = zone.col
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
@@ -73,14 +64,21 @@ function pressureHistory(alti, temp, time) {
 }
 
 function windChart(stid, data) {
-    for (const key in data) data[key] = data[key].slice(-12)
+    const slice = stid === 'AMB' ? 6 : 12
+    for (const key in data) data[key] = data[key].slice(-slice)
     if (data.wspd) wspd(stid, data.wspd)
     if (data.gust) gust(stid, data.gust, data.wspd)
     const wimg = data.wdir.map(d => !d ? '&nbsp;' : '&#10148;')
+    document.getElementById(`${stid}-main`).style.display = 'block'
     for (let i=0; i<data.time.length; i++) {
         document.getElementById(`${stid}-time-${i}`).innerHTML = (data.time[i]).slice(0,-3)
         document.getElementById(`${stid}-wdir-${i}`).innerHTML = wimg[i]
         document.getElementById(`${stid}-wdir-${i}`).style.transform = `rotate(${data.wdir[i] + 90}deg)`
+        if (i === data.time.length - 1) {
+            document.getElementById(`${stid}-time`).innerHTML = (data.time[i])
+            document.getElementById(`${stid}-wdir`).innerHTML = wimg[i]
+            document.getElementById(`${stid}-wdir`).style.transform = `rotate(${data.wdir[i] + 90}deg)`
+        }
     }
 };
 
@@ -94,6 +92,7 @@ function wspd(stid, wspd) {
         document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
         document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
         document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
+        if (i === wspd.length - 1) document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
     }
 };
 
@@ -102,5 +101,6 @@ function gust(stid, gust, wspd) {
     for (let i=0; i<gust.length; i++) {
         document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : null
         document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * 4}px` : null
+        if (i === gust.length - 1) document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : null
     }
 };
