@@ -99,7 +99,7 @@ function wspd(stid, wspd) {
 function gust(stid, gust, wspd) {
     wspd = wspd.map(d => d >= 0 ? d : 0)
     for (let i=0; i<gust.length; i++) {
-        document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : null
+        document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
         document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * 4}px` : null
         if (i === gust.length - 1) document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : null
     }
