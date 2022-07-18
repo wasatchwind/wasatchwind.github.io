@@ -4,6 +4,7 @@
     const kslcHourlyForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast/hourly'
     const nwsForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
     const nwsLatestUrl = 'https://api.weather.gov/stations/KSLC/observations/latest'
+    const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
     const timeSeriesData = await timeSeriesResponse.json()
@@ -13,18 +14,20 @@
     const nwsForecastData = await nwsForecastResponse.json()
     const nwsLatestResponse = await fetch(nwsLatestUrl)
     const nwsLatestData = await nwsLatestResponse.json()
+    const windAloftResponse = await fetch(windAloftUrl)
+    const windAloftData = await windAloftResponse.json()
 
     const recent = formatTimeSeries(timeSeriesData.STATION)
     const kslcHourlyHistory = hourlyHistory(recent.KSLC)
     const kslcHourlyForecast = hourlyForecast(kslcHourlyForecastData)
     zoneTile(recent.KSLC.alti.slice(-1), recent.KSLC.temp.slice(-1))
     for (const key in recent) windChart(key, recent[key])
+    windAloft(windAloftData)
     pressureHistory(kslcHourlyHistory.alti, kslcHourlyHistory.temp, kslcHourlyHistory.time)
     tempTrend(kslcHourlyHistory, recent.KSLC, kslcHourlyForecast)
-
     const maxTempF = maxTemp(nwsForecastData)
-    document.getElementById('latest-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
-    document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('latest-icon').src = nwsLatestData.properties.icon
+    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('title-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
