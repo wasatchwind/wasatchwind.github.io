@@ -244,111 +244,71 @@
         <!-- WIND ALOFT FORECAST -->
         <div class="display-3 fw-bold">Wind Aloft Forecast</div>
         <div class="d-flex fs-1 justify-content-center text-info">
-            <div class="fw-bold mx-2" id="aloft-start">Noon</div>
+            <div class="fw-bold mx-2" id="aloft-start"></div>
             <div class="mx-2">&#187;</div>
-            <div class="fw-bold mx-2" id="aloft-end">Midnight</div>
-            <div class="mx-2 next-day text-danger">(Mon)</div>
+            <div class="fw-bold mx-2" id="aloft-end"></div>
+            <div class="mx-2 next-day text-danger"></div>
         </div>
         <a id="wind-aloft-link" target="_blank">
             <div class="border border-2 border-warning bg-aloft m-2 rounded-4">
-                <div class="d-flex">
-                    <div class="col-auto me-3">
+                <div class="d-flex border-bottom">
+                    <div class="col-auto me-4">
                         <div class="display-3 fw-bold ms-2 text-start">18</div>
                         <div class="fs-3 ms-5">5,486 m</div>
                     </div>
                     <div class="d-flex">
-                        <div class="align-self-center display-1">&#10148;</div>
-                        <div class="border align-self-center mx-3 display-1 bg-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div class="align-self-center display-2 fw-bold" id="dir-3"></div>
+                        <div class="col-auto border align-self-center mx-4 display-3" id="aloft-3">&nbsp;</div>
                         <div class="d-flex align-self-center">
-                            <div class="display-1 fw-bold text-info">36</div>
-                            <div class="align-self-end fs-5 m-2">mph</div>
+                            <div class="display-1 fw-bold text-info" id="spd-3"></div>
+                            <div class="align-self-end fs-5 m-2" id="mph-3">mph</div>
                         </div>
                     </div>
                 </div>
-                <hr class="">
-                <div class="d-flex">
-                    <div class="col-auto me-3">
+                <div class="d-flex border-bottom">
+                    <div class="col-auto me-4">
                         <div class="display-3 fw-bold ms-2 text-start">12</div>
                         <div class="fs-3 ms-5">3,658 m</div>
                     </div>
                     <div class="d-flex">
-                        <div class="align-self-center display-1">&#10148;</div>
-                        <div class="border align-self-center mx-3 display-1 bg-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div class="align-self-center display-2 fw-bold" id="dir-2"></div>
+                        <div class="col-auto border align-self-center mx-4 display-3" id="aloft-2">&nbsp;</div>
                         <div class="d-flex align-self-center">
-                            <div class="display-1 fw-bold text-info">36</div>
-                            <div class="align-self-end fs-5 m-2">mph</div>
+                            <div class="display-1 fw-bold text-info" id="spd-2"></div>
+                            <div class="align-self-end fs-5 m-2" id="mph-2">mph</div>
                         </div>
                     </div>
                 </div>
-                <hr class="">
-                <div class="d-flex">
-                    <div class="col-auto me-3">
+                <div class="d-flex border-bottom">
+                    <div class="col-auto me-4">
                         <div class="display-3 fw-bold ms-2 text-start">9</div>
                         <div class="fs-3 ms-5">2,743 m</div>
                     </div>
                     <div class="d-flex">
-                        <div class="align-self-center display-1">&#10148;</div>
-                        <div class="border align-self-center mx-3 display-1 bg-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div class="align-self-center display-2 fw-bold" id="dir-1"></div>
+                        <div class="col-auto border align-self-center mx-4 display-3" id="aloft-1">&nbsp;</div>
                         <div class="d-flex align-self-center">
-                            <div class="display-1 fw-bold text-info">36</div>
-                            <div class="align-self-end fs-5 m-2">mph</div>
+                            <div class="display-1 fw-bold text-info" id="spd-1"></div>
+                            <div class="align-self-end fs-5 m-2" id="mph-1">mph</div>
                         </div>
                     </div>
                 </div>
-                <hr class="">
                 <div class="d-flex">
-                    <div class="col-auto me-3">
+                    <div class="col-auto me-4">
                         <div class="display-3 fw-bold ms-2 text-start">6</div>
                         <div class="fs-3 ms-5">1,829 m</div>
                     </div>
                     <div class="d-flex">
-                        <div class="align-self-center display-1">&#10148;</div>
-                        <div class="border align-self-center mx-3 display-1 bg-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div class="align-self-center display-2 fw-bold" id="dir-0"></div>
+                        <div class="col-auto border align-self-center mx-4 display-3" id="aloft-0">&nbsp;</div>
                         <div class="d-flex align-self-center">
-                            <div class="display-1 fw-bold text-info">36</div>
-                            <div class="align-self-end fs-5 m-2">mph</div>
+                            <div class="display-1 fw-bold text-info" id="spd-0"></div>
+                            <div class="align-self-end fs-5 m-2" id="mph-0">mph</div>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
-
-        <!-- <div class="row mx-0">
-            <div class="col-2 display-3 fw-bold text-start ps-2">18
-                <div class="fs-3 fw-normal text-end">5,486 m</div>
-            </div>
-            <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-3"></div>
-            <div class="border col-md-auto align-self-center display-4 green" id="aloft-3">&nbsp;</div>
-            <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-3"></div>
-            <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-3"></div>
-        </div><hr class="m-0 dash">
-        <div class="row mx-0">
-            <div class="col-2 display-3 fw-bold text-start ps-2">12
-                <div class="fs-3 fw-normal text-end">3,658 m</div>
-            </div>
-            <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-2"></div>
-            <div class="border col-md-auto align-self-center display-4" id="aloft-2">&nbsp;</div>
-            <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-2"></div>
-            <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-2"></div>
-        </div><hr class="m-0 dash">
-        <div class="row mx-0">
-            <div class="col-2 display-3 fw-bold text-start ps-2">9
-                <div class="fs-3 fw-normal text-end">2,743 m</div>
-            </div>
-            <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-1"></div>
-            <div class="border col-md-auto align-self-center display-4" id="aloft-1">&nbsp;</div>
-            <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-1"></div>
-            <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-1"></div>
-        </div><hr class="m-0 dash">
-        <div class="row mx-0">
-            <div class="col-2 display-3 fw-bold text-start ps-2">6
-                <div class="fs-3 fw-normal text-end">1,829 m</div>
-            </div>
-            <div class="col-1 display-2 align-self-center ms-1 me-4" id="dir-0"></div>
-            <div class="border col-md-auto align-self-center display-4" id="aloft-0">&nbsp;</div>
-            <div class="col-auto display-3 align-self-center fw-bold text-info ms-2 pe-0" id="spd-0"></div>
-            <div class="col-auto fs-5 align-self-end mb-3 ps-1" id="mph-0"></div>
-        </div> -->
 
         <!-- WIND CHART OLYMPUS (UTOLY) -->
         <div class="m-2">
@@ -1087,38 +1047,38 @@
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-0"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-0"></div>
-                <div class="display-3 mb-2" id="zonenum-0"></div>
-                <div class="fs-2" id="altitime-0"></div>
+                <div class="display-1 mb-2" id="zonenum-0"></div>
+                <div class="fs-1" id="altitime-0"></div>
             </div>
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-1"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-1"></div>
-                <div class="display-3 mb-2" id="zonenum-1"></div>
-                <div class="fs-2" id="altitime-1"></div>
+                <div class="display-1 mb-2" id="zonenum-1"></div>
+                <div class="fs-1" id="altitime-1"></div>
             </div>
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-2"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-2"></div>
-                <div class="display-3 mb-2" id="zonenum-2"></div>
-                <div class="fs-2" id="altitime-2"></div>
+                <div class="display-1 mb-2" id="zonenum-2"></div>
+                <div class="fs-1" id="altitime-2"></div>
             </div>
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-3"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-3"></div>
-                <div class="display-3 mb-2" id="zonenum-3"></div>
-                <div class="fs-2" id="altitime-3"></div>
+                <div class="display-1 mb-2" id="zonenum-3"></div>
+                <div class="fs-1" id="altitime-3"></div>
             </div>
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-4"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-4"></div>
-                <div class="display-3 mb-2" id="zonenum-4"></div>
-                <div class="fs-2" id="altitime-4"></div>
+                <div class="display-1 mb-2" id="zonenum-4"></div>
+                <div class="fs-1" id="altitime-4"></div>
             </div>
             <div class="col px-1">
                 <div class="display-5 fw-bold mb-2"><div id="alti-5"></div></div>
                 <div class="border mb-2 bg-primary" id="altibar-5"></div>
-                <div class="display-3 mb-2" id="zonenum-5"></div>
-                <div class="fs-2" id="altitime-5"></div>
+                <div class="display-1 mb-2" id="zonenum-5"></div>
+                <div class="fs-1" id="altitime-5"></div>
             </div>
         </div>
 
@@ -1275,6 +1235,7 @@
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/timeseries.js"></script>
 <script type="text/javascript" src="js/nwsapi.js"></script>
+<script type="text/javascript" src="js/gcp.js"></script>
 <script type="text/javascript" src="js/async.js"></script>
     
 </body>
