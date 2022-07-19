@@ -1036,6 +1036,12 @@
             </a>
         </div>
 
+        <!-- JETSTREAM -->
+        <div class="mx-2">
+            <div class="display-3 fw-bold">Jetstream: Last 18 Hours</div>
+            <img class="rounded-4" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png" width="100%">
+        </div>
+
     </div>
 
     <!-- ZONE DIV -->
@@ -1146,6 +1152,12 @@
             </div>
         </div>
 
+        <!-- CURRENT FRONTS -->
+        <div class="mt-5 mx-2">
+            <div class="display-3 fw-bold">Current Fronts</div>
+            <img class="rounded-4" src="https://uni.edu/storm/wximages/images/fronts.gif" width="100%">
+        </div>
+
         <!-- WHAT IS ZONE? -->
         <div class="fs-1">
             <div class="mt-5 text-warning text-decoration-underline" onclick="toggleZone()">What is "Zone"?</div>
@@ -1164,7 +1176,31 @@
 
     <!-- METEO DIV -->
     <div class="collapse mb-div-end" id="meteo">
-        <div class="display-3 fw-bold">Meteo</div>
+
+        <!-- CLOUDS & PRECIP GIF -->
+        <div class="mx-2">
+            <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+                <div class="display-3 fw-bold">Clouds & Precip Last Hour</div>
+                    <img class="rounded-4" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif" width="100%">
+            </a>
+        </div>
+        
+        <!-- SATELLITE GIF -->
+        <div class="mx-2">
+            <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
+                <div class="display-3 fw-bold">Satellite Last 4 Hours</div>
+                    <img class="rounded-4" src="https://cdn.star.nesdis.noaa.gov//GOES17/ABI/SECTOR/PNW/GEOCOLOR/GOES17-PNW-GEOCOLOR-600x600.gif" width="100%">
+            </a>
+        </div>
+
+        <!-- HOURLY FORECAST CHART -->
+        <div class="mx-2">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+                <div class="display-3 fw-bold">Next 48 Hours</div>
+                <img class="border border-4 border-warning rounded-4" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" width="100%">
+            </a>
+        </div>
+
     </div>
 
     <!-- CAMS DIV -->
