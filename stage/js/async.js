@@ -5,7 +5,6 @@
     const nwsForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
     const nwsLatestUrl = 'https://api.weather.gov/stations/KSLC/observations/latest'
     const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
-    const windMapImageUrl = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
     const windMapDataUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
