@@ -1,27 +1,41 @@
 'use strict';
-function windAloft(data) {
-    const range = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
-    const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${range}&region=slc&layout=on&date=`
+function windAloftTime(start, end) {
+    const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
+    const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${selector}&region=slc&layout=on&date=`
+    const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
     document.getElementById('wind-aloft-link').setAttribute('href', link)
-    const ylwSpds = [9, 12, 15, 21]
-    const redSpds = [14, 18, 24, 30]
-    const alts = ['6k', '9k', '12k', '18k']
-    const windBarWidthMulitplier = (Math.max(...Object.values(data.Spds)) > 79) ? 1.5 : 2.5
-    document.getElementById('aloft-start').innerHTML = data['Start time']
-    document.getElementById('aloft-end').innerHTML = data['End time']
-    for (let i=0; i<4; i++) {
-        let element = document.getElementById(`dir-${i}`)
-        let text = (data.Dirs[alts[i]]==='calm') ? 'Calm' : '&#10148;'
-        element.innerHTML = text
-        element.style.transform = `rotate(${data.Dirs[alts[i]] + 90}deg)`
-        if (data.Dirs[alts[i]]==='calm') {
-            document.getElementById(`aloft-${i}`).style.display = 'none'
-            document.getElementById(`mph-${i}`).style.display = 'none'
-        }
-        else {
-            document.getElementById(`spd-${i}`).innerHTML = data.Spds[alts[i]]
-            document.getElementById(`aloft-${i}`).style.width = `${data.Spds[alts[i]] * windBarWidthMulitplier}%`
-            document.getElementById(`aloft-${i}`).style.backgroundColor = (data.Spds[alts[i]] > ylwSpds[i] && data.Spds[alts[i]] < redSpds[i]) ? 'var(--bs-yellow)' : (data.Spds[alts[i]] >= redSpds[i] ? 'var(--bs-red)' : 'var(--bs-teal)')
-        }
+    document.getElementById('aloft-range').innerHTML = range
+};
+
+function windAloftDir(dirs) {
+    for (const key in dirs) {
+        const element = document.getElementById(`dir-${key}`)
+        element.innerHTML = dirs[key] === 'calm' ? 'Calm' : '&#10148;'
+        element.style.transform = `rotate(${dirs[key] + 90}deg)`
     }
+};
+
+function windAloftSpeed(spds, colors = {}) {
+    colors.ylw = {'6k':9, '9k':12, '12k':15, '18k':21}
+    colors.red = {'6k':14, '9k':18, '12k':24, '18k':30}
+    const mulitplier = (Math.max(...Object.values(spds)) > 79) ? 1.5 : 2.5
+    for (const key in spds) {
+        const elementSpd = document.getElementById(`spd-${key}`)
+        const elementBar = document.getElementById(`aloft-${key}`)
+        if (spds[key] === 0) {
+            document.getElementById(`mph-${key}`).style.display = 'none'
+            elementSpd.style.display = 'none'
+            elementBar.style.display = 'none'
+        }
+        elementSpd.innerHTML = spds[key]
+        elementBar.style.width = `${spds[key] * mulitplier}%`
+        if (spds[key] > colors.ylw[key] && spds[key] < colors.red[key]) elementBar.style.backgroundColor =  'var(--bs-yellow)'
+        else elementBar.style.backgroundColor = spds[key] >= colors.red[key] ? 'var(--bs-red)' : 'var(--bs-teal)'
+    }
+};
+
+function windMapImage(data) {
+    const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+    document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
+    document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'
 };
