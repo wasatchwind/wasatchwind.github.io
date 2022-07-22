@@ -26,3 +26,13 @@ function cardinalToDeg(data) {
     const index = cardDegs.findIndex(d => d === data)
     return index * 22.5
 };
+
+function nwsForecastProcess(data) {
+    let position = data.properties.periods[0].isDaytime ? 0 : 1
+    for (let i=0; i<3; i++) {
+        document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
+        document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
+        document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
+        position += 2
+    }
+};
