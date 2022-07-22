@@ -37,5 +37,5 @@ function windAloftSpeed(spds, colors = {}) {
 function windMapImage(data) {
     const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
     document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-    document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+    document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'//'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
 };
