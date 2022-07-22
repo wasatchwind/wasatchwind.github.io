@@ -36,7 +36,7 @@
 
                 <!-- WIND TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
-                    <div class="tile-border-selected tile-height" id="wind-border">
+                    <div class="tile-border-selected tile-height overflow-hidden" id="wind-border">
                         <div class="d-flex flex-column justify-content-center tile-height">
                             <div class="d-flex justify-content-around">
                                 <div class="align-self-end display-1" id="wdir-div">
@@ -54,11 +54,11 @@
 
                 <!-- ZONE TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('zone')">
-                    <div class="tile-border tile-height" id="zone-border">
+                    <div class="tile-border tile-height overflow-hidden" id="zone-border">
                         <div class="d-flex flex-column justify-content-around tile-height">
                             <div class="align-items-center d-flex justify-content-around">
                                 <div class="display-2" id="latest-zone"></div>
-                                <div class="display-2 fw-bold" id="latest-alti"></div>
+                                <div class="display-3 fw-bold" id="latest-alti"></div>
                             </div>
                             <div class="align-items-center d-flex justify-content-around mb-2">
                                 <div class="display-4 fw-bold" id="latest-temp"></div>
@@ -72,15 +72,15 @@
 
                 <!-- LIFT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('lift')">
-                    <div class="tile-border tile-height" id="lift-border">
+                    <div class="tile-border tile-height overflow-hidden" id="lift-border">
                         <div class="d-flex flex-column justify-content-around tile-height">
                             <div class="align-items-center d-flex justify-content-around">
                                 <div class="align-self-end fs-5 mb-2">ToL</div>
-                                <div class="display-2 fw-bold" id="tol">12,353</div>
+                                <div class="display-3 fw-bold" id="tol"></div>
                             </div>
                             <div class="align-items-center d-flex justify-content-around mb-2">
                                 <div class="align-self-end fs-5 mb-2">To-3</div>
-                                <div class="display-4 fw-bold" id="neg3">6,998</div>
+                                <div class="display-4 fw-bold" id="neg3"></div>
                             </div>
                         </div>
                     </div>
@@ -89,41 +89,31 @@
 
                 <!-- METEO TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('meteo')">
-                    <div class="tile-border tile-height" id="meteo-border">
-                        <div class="d-flex tile-img">
-                            <img class="h-100 rounded-4 w-100" id="latest-icon">
-                        </div>
+                    <div class="tile-border tile-height overflow-hidden" id="meteo-border">
+                        <img class="w-100" id="latest-icon">
                     </div>
                     <div class="display-3 fw-bold text-warning" id="meteo-title">Meteo</div>
                 </div>
 
                 <!-- CAMS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
-                    <div class="tile-border tile-height" id="cams-border">
-                        <div class="d-flex tile-img">
-                            <img class="h-100 rounded-4 w-100" id="latest-cam">
-                        </div>
+                    <div class="tile-border tile-height overflow-hidden" id="cams-border">
+                        <img class="w-100" id="latest-cam">
                     </div>
                     <div class="display-3 fw-bold text-warning" id="cams-title">Cams</div>
                 </div>
 
                 <!-- GPS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('gps')">
-                    <div class="tile-border tile-height" id="gps-border">
-                        <div class="d-flex tile-img">
-                            <img class="h-100 rounded-4 w-100" src="./images/gpstile.png">
-                        </div>
+                    <div class="tile-border tile-height overflow-hidden" id="gps-border">
+                        <img class="w-100" src="./images/gpstile.png">
                     </div>
                     <div class="display-3 fw-bold text-warning" id="gps-title">GPS</div>
                 </div>
 
                 <!-- ABOUT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('about')">
-                    <div class="tile-border tile-height" id="about-border">
-                        <div class="align-items-center d-flex justify-content-around tile-height">
-                            <div class="display-3 fw-bold">About</div>
-                        </div>
-                    </div>
+                    <div class="tile-border tile-height overflow-hidden" id="about-border"></div>
                     <div class="display-3 fw-bold text-warning" id="about-title">About</div>
                 </div>
             </div>
@@ -163,7 +153,7 @@
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-18k"></div>
-                        <div class="align-self-center border col-auto display-3 mx-4" id="aloft-18k">&nbsp;</div>
+                        <div class="align-self-center border border-2 col-auto display-3 mx-4" id="aloft-18k">&nbsp;</div>
                         <div class="align-self-center d-flex">
                             <div class="display-1 fw-bold text-info" id="spd-18k"></div>
                             <div class="align-self-end fs-5 m-2" id="mph-18k">mph</div>
@@ -177,7 +167,7 @@
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-12k"></div>
-                        <div class="align-self-center border col-auto display-3 mx-4" id="aloft-12k">&nbsp;</div>
+                        <div class="align-self-center border border-2 col-auto display-3 mx-4" id="aloft-12k">&nbsp;</div>
                         <div class="align-self-center d-flex">
                             <div class="display-1 fw-bold text-info" id="spd-12k"></div>
                             <div class="align-self-end fs-5 m-2" id="mph-12k">mph</div>
@@ -191,7 +181,7 @@
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-9k"></div>
-                        <div class="align-self-center border col-auto display-3 mx-4" id="aloft-9k">&nbsp;</div>
+                        <div class="align-self-center border border-2 col-auto display-3 mx-4" id="aloft-9k">&nbsp;</div>
                         <div class="align-self-center d-flex">
                             <div class="display-1 fw-bold text-info" id="spd-9k"></div>
                             <div class="align-self-end fs-5 m-2" id="mph-9k">mph</div>
@@ -205,7 +195,7 @@
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-6k"></div>
-                        <div class="align-self-center border col-auto display-3 mx-4" id="aloft-6k">&nbsp;</div>
+                        <div class="align-self-center border border-2 col-auto display-3 mx-4" id="aloft-6k">&nbsp;</div>
                         <div class="align-self-center d-flex">
                             <div class="display-1 fw-bold text-info" id="spd-6k"></div>
                             <div class="align-self-end fs-5 m-2" id="mph-6k">mph</div>
@@ -1126,41 +1116,41 @@
         </div>
         <div class="align-items-end bg-dark border border-2 d-flex mx-2 rounded-4">
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-0"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-0"></div>
                 <div class="border mb-2" id="tempbar-0"></div>
-                <div class="fs-1" id="temptime-0"></div>
+                <div class="fs-2" id="temptime-0"></div>
             </div>
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-1"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-1"></div>
                 <div class="border mb-2" id="tempbar-1"></div>
-                <div class="fs-1" id="temptime-1"></div>
+                <div class="fs-2" id="temptime-1"></div>
             </div>
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-2"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-2"></div>
                 <div class="border mb-2" id="tempbar-2"></div>
-                <div class="fs-1" id="temptime-2"></div>
+                <div class="fs-2" id="temptime-2"></div>
             </div>
             <div class="col-3 px-1">
-                <div class="display-1 fw-bold mb-2" id="temp-3"></div>
+                <div class="display-2 fw-bold mb-2" id="temp-3"></div>
                 <div class="border d-flex justify-content-center mb-2" id="tempbar-3">
                     <div class="align-self-end fs-1">Latest</div>
                 </div>
-                <div class="fs-1 fw-bold" id="temptime-3"></div>
+                <div class="fs-2 fw-bold" id="temptime-3"></div>
             </div>
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-4"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-4"></div>
                 <div class="border mb-2" id="tempbar-4"></div>
-                <div class="fs-1" id="temptime-4"></div>
+                <div class="fs-2" id="temptime-4"></div>
             </div>
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-5"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-5"></div>
                 <div class="border mb-2" id="tempbar-5"></div>
-                <div class="fs-1" id="temptime-5"></div>
+                <div class="fs-2" id="temptime-5"></div>
             </div>
             <div class="col px-1">
-                <div class="display-3 fw-bold mb-2" id="temp-6"></div>
+                <div class="display-4 fw-bold mb-2" id="temp-6"></div>
                 <div class="border mb-2" id="tempbar-6"></div>
-                <div class="fs-1" id="temptime-6"></div>
+                <div class="fs-2" id="temptime-6"></div>
             </div>
         </div>
 
@@ -1220,25 +1210,31 @@
         </a>
 
         <!-- GRAPHICAL SKY COVER -->
-        <div class="display-3 fw-bold">Forecast: Cloud Cover</div>
+        <div class="display-3 fw-bold">Sky Cover Forecast</div>
         <div class="fs-1 fw-bold text-info" id="sky-next-day"></div>
         <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-            <div class="border border-warning border-4 d-flex fs-1 fw-bold mx-2 overflow-hidden rounded-4 text-info">
+            <div class="d-flex fs-1 fw-bold text-info justify-content-around">
+                <div>Morning</div>
+                <div>Mid-day</div>
+                <div>Afternoon</div>
+                <div>Evening</div>
+            </div>
+            <div class="border border-warning border-4 d-flex mx-2 overflow-hidden rounded-4">
                 <div class="col">
-                    <div>Morning</div>
-                    <img class="img-fluid" id="graphical-sky-0">
+                    <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-0">
+                    <img class="img-fluid" id="graphical-wx-0">
+                </div>
+                <div class="col border-start border-end border-2 border-dark">
+                    <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-1">
+                    <img class="img-fluid" id="graphical-wx-1">
+                </div>
+                <div class="col border-end border-2 border-dark">
+                    <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-2">
+                    <img class="img-fluid" id="graphical-wx-2">
                 </div>
                 <div class="col">
-                    <div>Mid-day</div>
-                    <img class="img-fluid" id="graphical-sky-1">
-                </div>
-                <div class="col">
-                    <div>Afternoon</div>
-                    <img class="img-fluid" id="graphical-sky-2">
-                </div>
-                <div class="col">
-                    <div>Evening</div>
-                    <img class="img-fluid" id="graphical-sky-3">
+                    <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-3">
+                    <img class="img-fluid" id="graphical-wx-3">
                 </div>
             </div>
         </a>
@@ -1250,19 +1246,19 @@
             <div class="border border-warning border-4 d-flex fs-1 fw-bold mx-2 overflow-hidden rounded-4 text-info">
                 <div class="col">
                     <div>Morning</div>
-                    <img class="img-fluid" id="graphical-wx-0">
+                    <!-- <img class="img-fluid" id="graphical-wx-0"> -->
                 </div>
                 <div class="col">
                     <div>Mid-day</div>
-                    <img class="img-fluid" id="graphical-wx-1">
+
                 </div>
                 <div class="col">
                     <div>Afternoon</div>
-                    <img class="img-fluid" id="graphical-wx-2">
+
                 </div>
                 <div class="col">
                     <div>Evening</div>
-                    <img class="img-fluid" id="graphical-wx-3">
+
                 </div>
             </div>
         </a>
@@ -1394,6 +1390,7 @@
 <script type="text/javascript" src="js/timeseries.js"></script>
 <script type="text/javascript" src="js/nwsapi.js"></script>
 <script type="text/javascript" src="js/gcp.js"></script>
+<script type="text/javascript" src="js/d3.js"></script>
 <script type="text/javascript" src="js/async.js"></script>
     
 </body>
