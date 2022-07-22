@@ -6,6 +6,7 @@
     const nwsLatestUrl = 'https://api.weather.gov/stations/KSLC/observations/latest'
     const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
     const windMapDataUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
+    const soundingUrl = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
     const timeSeriesData = await timeSeriesResponse.json()
@@ -19,6 +20,8 @@
     const windAloftData = await windAloftResponse.json()
     const windMapResponse = await fetch(windMapDataUrl)
     const windMapData = await windMapResponse.json()
+    const soundingResponse = await fetch(soundingUrl)
+    const soundingData = await soundingResponse.json()
 
     const recent = formatTimeSeries(timeSeriesData.STATION)
     const kslcHourlyHistory = hourlyHistory(recent.KSLC)
@@ -34,6 +37,7 @@
     windMapImage(windMapData)
     if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
     nwsForecastProcess(nwsForecastData)
+    sounding(soundingData)
     document.getElementById('latest-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
     document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('title-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
