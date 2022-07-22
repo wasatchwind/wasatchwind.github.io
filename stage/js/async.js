@@ -32,7 +32,7 @@
     pressureHistory(kslcHourlyHistory.alti, kslcHourlyHistory.temp, kslcHourlyHistory.time)
     tempTrend(kslcHourlyHistory, recent.KSLC, kslcHourlyForecast)
     const maxTempF = maxTemp(nwsForecastData)
-    windMapImage(windMapdata)
+    windMapImage(windMapData)
     if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
     nwsForecastProcess(nwsForecastData)
     document.getElementById('latest-icon').src = nwsLatestData.properties.icon
