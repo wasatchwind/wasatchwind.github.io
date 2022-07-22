@@ -5,6 +5,8 @@
     const nwsForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
     const nwsLatestUrl = 'https://api.weather.gov/stations/KSLC/observations/latest'
     const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
+    const windMapImageUrl = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+    const windMapDataUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
     const timeSeriesData = await timeSeriesResponse.json()
@@ -16,16 +18,23 @@
     const nwsLatestData = await nwsLatestResponse.json()
     const windAloftResponse = await fetch(windAloftUrl)
     const windAloftData = await windAloftResponse.json()
+    const windMapResponse = await fetch(windMapDataUrl)
+    const windMapData = await windMapResponse.json()
 
     const recent = formatTimeSeries(timeSeriesData.STATION)
     const kslcHourlyHistory = hourlyHistory(recent.KSLC)
     const kslcHourlyForecast = hourlyForecast(kslcHourlyForecastData)
     zoneTile(recent.KSLC.alti.slice(-1), recent.KSLC.temp.slice(-1))
     for (const key in recent) windChart(key, recent[key])
-    windAloft(windAloftData)
+    windAloftDir(windAloftData.Dirs)
+    windAloftSpeed(windAloftData.Spds)
+    windAloftTime(windAloftData["Start time"], windAloftData["End time"])
     pressureHistory(kslcHourlyHistory.alti, kslcHourlyHistory.temp, kslcHourlyHistory.time)
     tempTrend(kslcHourlyHistory, recent.KSLC, kslcHourlyForecast)
     const maxTempF = maxTemp(nwsForecastData)
+    windMapImage(windImageMetadata)
+    if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
+    nwsForecastProcess(nwsForecastData)
     document.getElementById('latest-icon').src = nwsLatestData.properties.icon
     document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('title-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
