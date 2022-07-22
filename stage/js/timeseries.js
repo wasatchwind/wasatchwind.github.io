@@ -32,7 +32,7 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
     for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i]/-110*temp+zoneIntercept[i])*100)/100)
     zone.num = currentZones.findIndex(d => d >= alti)
     zone.col = (zone.num === 0 || zone.num === 7) ? 'var(--bs-red)' : (zone.num===1 || zone.num===6) ? 'var(--bs-orange)' : (zone.num===2 || zone.num===5) ? 'var(--bs-yellow)' : 'var(--bs-teal)'
-    zone.num = alti === currentZones[3] ? 'LoP' : zone.num
+    zone.num = alti == currentZones[3] ? 'LoP' : zone.num
     zone.num = zone.num === 0 ? '&#9471;' : (zone.num === 'LoP') ? 'LoP' : `&#1010${zone.num + 1};`
     return zone
 };
