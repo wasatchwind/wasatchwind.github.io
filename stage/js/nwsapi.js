@@ -11,7 +11,7 @@ function maxTemp(data) {
 
 function hourlyForecast(data, object = {}) {
     object.icon = [], object.temp = [], object.time = [], object.wdir = [], object.wspd =[]
-    for (let i=1; i<7; i++) {
+    for (let i=1; i<4; i++) {
         object.icon.push(data.properties.periods[i].icon)
         object.temp.push(`${data.properties.periods[i].temperature}&deg;`)
         object.time.push(new Date(data.properties.periods[i].startTime).toLocaleString('en-us', {timeStyle: 'short'}).replace(':00','').toLowerCase())
