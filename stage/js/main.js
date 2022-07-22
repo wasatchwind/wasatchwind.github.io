@@ -31,8 +31,8 @@ function toggleWindChart(div) {
 };
 
 function tempTrend(history, latest, forecast) {
-    const temp = history.temp.slice(-5).concat(latest.temp.slice(-1),forecast.temp.slice(-5))
-    const time = history.time.slice(-5).concat(latest.time.slice(-1),forecast.time.slice(-5))
+    const temp = history.temp.slice(-3).concat(latest.temp.slice(-1),forecast.temp)
+    const time = history.time.slice(-3).concat(latest.time.slice(-1),forecast.time)
     const tempInt = temp.map(d => parseInt(d))
     const min = Math.min(...tempInt)
     const max = Math.max(...tempInt)
