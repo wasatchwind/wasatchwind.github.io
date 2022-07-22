@@ -20,6 +20,7 @@ function formatTimeSeries(data, object = {}) {
 
 function zoneTile(alti, temp) {
     const zone = calculateZone(alti, parseInt(temp))
+    if (zone.num === 'LoP') document.getElementById(`latest-zone`).className = 'fs-1 fw-bold'
     document.getElementById(`latest-alti`).innerHTML = alti
     document.getElementById(`latest-temp`).innerHTML = temp
     document.getElementById(`latest-zone`).innerHTML = zone.num
@@ -31,6 +32,7 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
     const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
     for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i]/-110*temp+zoneIntercept[i])*100)/100)
     zone.num = currentZones.findIndex(d => d >= alti)
+    // fix to if/else vvv
     zone.col = (zone.num === 0 || zone.num === 7) ? 'var(--bs-red)' : (zone.num===1 || zone.num===6) ? 'var(--bs-orange)' : (zone.num===2 || zone.num===5) ? 'var(--bs-yellow)' : 'var(--bs-teal)'
     zone.num = alti == currentZones[3] ? 'LoP' : zone.num
     zone.num = zone.num === 0 ? '&#9471;' : (zone.num === 'LoP') ? 'LoP' : `&#1010${zone.num + 1};`
@@ -55,6 +57,7 @@ function pressureHistory(alti, temp, time) {
     for (let i=0; i<time.length; i++) {
         const zone = calculateZone(alti[i], parseInt(temp[i]))
         const altibar = `${(((alti[i] - min) * 100)/(max - min)) + 50}px`
+        if (zone.num === 'LoP') document.getElementById(`zonenum-${i}`).className = 'display-3 fw-bold'
         document.getElementById(`alti-${i}`).innerHTML = alti[i]
         document.getElementById(`altitime-${i}`).innerHTML = time[i].replace(':00', '')
         document.getElementById(`zonenum-${i}`).innerHTML = zone.num
