@@ -1,5 +1,6 @@
 'use strict';
 const now = new Date();
+const nextDay = now.getHours() > 19 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind'
 
 function reload() {
@@ -45,9 +46,33 @@ function tempTrend(history, latest, forecast) {
     }
 };
 
-document.getElementById('zone-details').style.display = 'none'
-function toggleZone() {
+function toggleWhatIsZoneChart() {
     const element = document.getElementById('zone-details')
-    const display = element.style.display === 'none' ? 'block' : 'none'
-    element.style.display = display
+    const display = element.className === 'collapse mx-2' ? 'mx-2' : 'collapse mx-2'
+    element.className = display
 };
+
+function windSurfaceForecastGraphical() {
+    const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '3 pm' : '2 pm'
+    document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
+    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/slc/WindSpd3_slc.png'
+    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/slc/WindGust3_slc.png'
+    document.getElementById('graphical-wind-div').style.display = 'block'
+};
+
+(function getAllGraphicalForecastImages() {
+    const url = 'https://graphical.weather.gov/images/slc/'
+    const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
+    document.getElementById('sky-next-day').innerHTML = nextDay
+    document.getElementById('wx-next-day').innerHTML = nextDay
+    for (let i=0; i<4; i++) {
+        document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
+        document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
+    }
+})();
+
+(function getMorningSkewT() {
+    const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
+    const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
+    document.getElementById('skew-t-img').src = url
+})();
