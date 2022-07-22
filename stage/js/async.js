@@ -34,8 +34,8 @@
     windMapImage(windMapData)
     if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
     nwsForecastProcess(nwsForecastData)
-    document.getElementById('latest-icon').src = nwsLatestData.properties.icon
-    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('latest-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
+    document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('title-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
