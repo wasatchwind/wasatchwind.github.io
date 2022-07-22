@@ -55,7 +55,7 @@ a:active {
 .tile-border {
   border-radius: var(--bs-border-radius-xl) !important;
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
-  --bs-border-width: 2px;
+  --bs-border-width: 3px;
   --bs-border-opacity: 1;
   border-color: rgba(var(--bs-warning-rgb), var(--bs-border-opacity)) !important;
 }
@@ -67,7 +67,6 @@ a:active {
   border-color: rgba(var(--bs-white-rgb), var(--bs-border-opacity)) !important;
 }
 .tile-height { height: 11rem; }
-.tile-img { height: 100%; }
 
 /* WIND ALOFT & STATIONS BACKGROUND IMAGES */
 .bg-aloft {
