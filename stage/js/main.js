@@ -64,7 +64,6 @@ function windSurfaceForecastGraphical() {
     const url = 'https://graphical.weather.gov/images/slc/'
     const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
     document.getElementById('sky-next-day').innerHTML = nextDay
-    document.getElementById('wx-next-day').innerHTML = nextDay
     for (let i=0; i<4; i++) {
         document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
         document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
