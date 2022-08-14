@@ -1,3 +1,10 @@
+@media only screen and (min-width: 1441px) {
+  body {
+    margin-left: 30%;
+    margin-right: 30%;
+    zoom: 0.4;
+  }
+}
 body {
   background-color: var(--bs-gray-dark);
   color: white;
@@ -107,10 +114,6 @@ a:active {
 }
 
 /* D3 */
-.dalrgrid {
-  opacity: 0.25;
-  stroke: white;
-}
 .gridticks {
   color: lightgray;
   opacity: 0.5;
@@ -120,40 +123,43 @@ a:active {
   fill: white;
   font-size: 150%;
 }
-.xAxis { font-size: 150%; }
+.xAxis { font-size: 175%; }
 .xLabel {
   fill: white;
-  font-size: 150%;
+  font-size: 200%;
   font-weight: bold;
 }
-.yAxis { font-size: 150%; }
+.yAxis { font-size: 175%; }
 .yLabel {
   fill: white;
   text-anchor: middle;
-  font-size: 150%;
+  font-size: 200%;
   font-weight: bold;
 }
-.templabel {
+.maxtemp {
   fill: #0dcaf0;
-  font-size: 200%;
+  font-size: 350%;
   font-weight: bold;
 }
-.raoblabel {
+.temp {
   fill: #dc3545;
-  font-size: 200%;
+  font-size: 350%;
   font-weight: bold;
 }
-.dewpointlabel {
+.dewpoint {
   fill: #20c997;
-  font-size: 200%;
+  font-size: 350%;
   font-weight: bold;
 }
 .dalrlabel {
   fill: white;
-  font-size: 150%;
-}
-.alternatemax {
-  fill: #ffc107;
   font-size: 200%;
-  font-weight: bold;
+}
+.neg3label {
+  fill: white;
+  font-size: 200%;
+}
+.tollabel {
+  fill: white;
+  font-size: 200%;
 }
