@@ -78,6 +78,7 @@ function windChart(stid, data) {
     for (let i=0; i<data.time.length; i++) {
         document.getElementById(`${stid}-time-${i}`).innerHTML = (data.time[i]).slice(0,-3)
         document.getElementById(`${stid}-wdir-${i}`).innerHTML = wimg[i]
+        console.log(stid, data.wdir[i])
         document.getElementById(`${stid}-wdir-${i}`).style.transform = `rotate(${data.wdir[i] + 90}deg)`
         if (i === data.time.length - 1) {
             document.getElementById(`${stid}-time`).innerHTML = (data.time[i])
