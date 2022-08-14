@@ -37,5 +37,42 @@ function windAloftSpeed(spds, colors = {}) {
 function windMapImage(data) {
     const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
     document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-    document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+    document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'//'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+};
+
+function getLiftParams(data, temp, position = 0, params = {}) {
+    const tempC = (temp - 32) * 5 / 9
+    const surfaceAlt_m = 1289
+    const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
+    const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
+    // Find height of -3 index first (thermal index is -3)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
+    let interpolateX1 = data[position].Temp_c
+    let interpolateY1 = data[position].Altitude_m
+    let interpolateX2 = data[position - 1].Temp_c
+    let interpolateY2 = data[position - 1].Altitude_m
+    if (interpolateX1 !== interpolateX2) {
+        let raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        let roabYInt = interpolateY1 - (raobSlope * interpolateX1)
+        const interpolateX = (roabYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
+        params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
+    }
+    else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
+    params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
+    document.getElementById('user-neg3').innerHTML = Math.round(params.neg3 * 3.28084).toLocaleString()
+    // Now find top of lift (thermal index is 0)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
+    interpolateX1 = data[position].Temp_c
+    interpolateY1 = data[position].Altitude_m
+    interpolateX2 = data[position - 1].Temp_c
+    interpolateY2 = data[position - 1].Altitude_m
+    if (interpolateX1 !== interpolateX2) {
+        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        roabYInt = interpolateY1 - (raobSlope * interpolateX1)
+        params.tol = ((dalrSlope * roabYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+    }
+    else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
+    params.tolTemp = (params.tol - dalrYInt) / dalrSlope
+    document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
+    return params
 };
