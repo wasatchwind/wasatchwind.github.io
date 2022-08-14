@@ -73,7 +73,7 @@ function windChart(stid, data) {
     if (data.gust) gust(stid, data.gust, data.wspd)
     if (stid === 'KSLC' && !data.wdir[slice - 1]) document.getElementById('wdir-div').style.display = 'none'
     if (stid === 'KSLC' && data.wspd[slice - 1] === 'Calm') document.getElementById('wdir-div').style.display = 'none'
-    const wimg = data.wdir.map(d => !d ? '&nbsp;' : '&#10148;')
+    const wimg = (data.wdir) ? data.wdir.map(d => '&#10148;') : '&nbsp;'
     document.getElementById(`${stid}-main`).style.display = 'block'
     for (let i=0; i<data.time.length; i++) {
         document.getElementById(`${stid}-time-${i}`).innerHTML = (data.time[i]).slice(0,-3)
