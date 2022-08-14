@@ -28,12 +28,32 @@ function zoneTile(alti, temp) {
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
+    // Revisit these numbers using Jeff's numbers!!!!!!!!!!!!!!!!!!
+    // case 0..<(-0.000714 * airTemp + 29.9214):
+    //   return("Zone 0")
+    // case (-0.000714 * airTemp + 29.9214)..<(-0.001714 * airTemp + 30.0514):
+    //   return("Zone 1")
+    // case (-0.001714 * airTemp + 30.0514)..<(-0.001714 * airTemp + 30.1114):
+    //   return("Zone 2L")
+    // case (-0.001714 * airTemp + 30.1114)..<(-0.003 * airTemp + 30.27):
+    //   return("Zone 3-")
+    // case (-0.003 * airTemp + 30.27)..<(-0.004286 * airTemp + 30.4286):
+    //   return("Zone 4+")
+    // case (-0.004286 * airTemp + 30.4286)..<(-0.004286 * airTemp + 30.4886):
+    //   return("Zone 5H")
+    // case (-0.004286 * airTemp + 30.4886)..<(-0.005429 * airTemp + 30.6228):
+    //   return("Zone 6")
+    // default:
+    //   return("Zone 7")
     const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
     const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
     for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i]/-110*temp+zoneIntercept[i])*100)/100)
     zone.num = currentZones.findIndex(d => d >= alti)
     // fix to if/else vvv
-    zone.col = (zone.num === 0 || zone.num === 7) ? 'var(--bs-red)' : (zone.num===1 || zone.num===6) ? 'var(--bs-orange)' : (zone.num===2 || zone.num===5) ? 'var(--bs-yellow)' : 'var(--bs-teal)'
+    if (zone.num === 0 || zone.num === 7) zone.col = 'var(--bs-red)'
+    else if (zone.num===1 || zone.num===6) zone.col = 'var(--bs-orange)'
+    else if (zone.num===2 || zone.num===5) zone.col = 'var(--bs-yellow)'
+    else zone.col = 'var(--bs-teal)'
     zone.num = alti == currentZones[3] ? 'LoP' : zone.num
     zone.num = zone.num === 0 ? '&#9471;' : (zone.num === 'LoP') ? 'LoP' : `&#1010${zone.num + 1};`
     return zone
@@ -71,19 +91,26 @@ function windChart(stid, data) {
     for (const key in data) data[key] = data[key].slice(-slice)
     if (data.wspd) wspd(stid, data.wspd)
     if (data.gust) gust(stid, data.gust, data.wspd)
+    if (data.wdir) wdir(stid, data.wdir)
     if (stid === 'KSLC' && !data.wdir[slice - 1]) document.getElementById('wdir-div').style.display = 'none'
     if (stid === 'KSLC' && data.wspd[slice - 1] === 'Calm') document.getElementById('wdir-div').style.display = 'none'
-    const wimg = (data.wdir) ? data.wdir.map(d => '&#10148;') : '&nbsp;'
     document.getElementById(`${stid}-main`).style.display = 'block'
     for (let i=0; i<data.time.length; i++) {
-        document.getElementById(`${stid}-time-${i}`).innerHTML = (data.time[i]).slice(0,-3)
+        const element = document.getElementById(`${stid}-time-${i}`)
+        element.innerHTML = stid === 'AMB' ? data.time[i].replace(':00','') : data.time[i].slice(0,-3)
+        if (i === data.time.length - 1) document.getElementById(`${stid}-time`).innerHTML = data.time[i]
+    }
+};
+
+function wdir(stid, wdir) {
+    const wimg = wdir.map(d => !d ? '&nbsp;' : '&#10148;')
+    const rotate = wdir.map(d => `rotate(${d + 90}deg)`)
+    for (let i=0; i<wdir.length; i++) {
         document.getElementById(`${stid}-wdir-${i}`).innerHTML = wimg[i]
-        console.log(stid, data.wdir[i])
-        document.getElementById(`${stid}-wdir-${i}`).style.transform = `rotate(${data.wdir[i] + 90}deg)`
-        if (i === data.time.length - 1) {
-            document.getElementById(`${stid}-time`).innerHTML = (data.time[i])
+        document.getElementById(`${stid}-wdir-${i}`).style.transform = rotate[i]
+        if (i === wdir.length - 1) {
             document.getElementById(`${stid}-wdir`).innerHTML = wimg[i]
-            document.getElementById(`${stid}-wdir`).style.transform = `rotate(${data.wdir[i] + 90}deg)`
+            document.getElementById(`${stid}-wdir`).style.transform = rotate[i]
         }
     }
 };
