@@ -7,6 +7,7 @@
     const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
     const windMapDataUrl = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
     const soundingUrl = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+    const soaringForecastUrl = 'https://storage.googleapis.com/wasatch-wind-static/soaring.json'
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
     const timeSeriesData = await timeSeriesResponse.json()
@@ -21,7 +22,9 @@
     const windMapResponse = await fetch(windMapDataUrl)
     const windMapData = await windMapResponse.json()
     const soundingResponse = await fetch(soundingUrl)
-    const soundingData = await soundingResponse.json()
+    soundingData = await soundingResponse.json()
+    const soaringForecastResponse = await fetch(soaringForecastUrl)
+    const soaringForecastData = await soaringForecastResponse.json()
 
     const recent = formatTimeSeries(timeSeriesData.STATION)
     const kslcHourlyHistory = hourlyHistory(recent.KSLC)
@@ -33,13 +36,19 @@
     windAloftTime(windAloftData["Start time"], windAloftData["End time"])
     pressureHistory(kslcHourlyHistory.alti, kslcHourlyHistory.temp, kslcHourlyHistory.time)
     tempTrend(kslcHourlyHistory, recent.KSLC, kslcHourlyForecast)
-    const maxTempF = maxTemp(nwsForecastData)
+    const soaringForecastMaxTempF = soaringForecastData["Max temp"]
+    const nwsForecastMaxTempF = nwsForecastData.properties.periods[0].temperature
+    maxTempF = now.getHours() > 6 ? soaringForecastMaxTempF : nwsForecastMaxTempF
     windMapImage(windMapData)
     if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
     nwsForecastProcess(nwsForecastData)
-    sounding(soundingData)
-    document.getElementById('latest-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
-    document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    liftParams = getLiftParams(soundingData, maxTempF)
+    decodedSkewTChart(soundingData, maxTempF, liftParams)
+    document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
+    document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
+    document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+    document.getElementById('latest-icon').src = nwsLatestData.properties.icon
+    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('title-date').innerHTML = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
