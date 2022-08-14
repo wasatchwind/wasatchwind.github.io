@@ -2,6 +2,9 @@
 const now = new Date();
 const nextDay = now.getHours() > 19 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind'
+let liftParams = {}
+let soundingData = {} // unblock this in prod when json.js is disabled
+let maxTempF
 
 function reload() {
     history.scrollRestoration = 'manual'
