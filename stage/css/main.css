@@ -4,7 +4,9 @@
     margin-right: 30%;
     zoom: 0.4;
   }
+  .tile-height { height: 30vh; }
 }
+@media only screen and (max-width: 1440px) { .tile-height { height: 10vh; } }
 body {
   background-color: black;
   color: white;
@@ -37,6 +39,7 @@ a:active {
 /* COLORS */
 .gust-color { color: hotpink; }
 .bg-sticky { background-color: black; }
+.bg-tile { background-color: var(--bs-gray-800); }
 
 /* SCROLL TILES */
 #tile-container {
@@ -48,7 +51,7 @@ a:active {
 #tiles {
   display: flex;
   align-items: center;
-  width: 200%;
+  width: 225%;
   margin-bottom: 4px;
 }
 .tile { scroll-snap-align: start; }
@@ -64,9 +67,8 @@ a:active {
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
   --bs-border-width: 5px;
   --bs-border-opacity: 1;
-  border-color: rgba(var(--bs-white-rgb), var(--bs-border-opacity)) !important;
+  border-color: rgba(var(--bs-info-rgb), var(--bs-border-opacity)) !important;
 }
-.tile-height { height: 11rem; }
 
 /* WIND ALOFT & STATIONS BACKGROUND IMAGES */
 .bg-aloft {
@@ -99,10 +101,6 @@ a:active {
 }
 .bg-OGP {
   background-image: url('../images/ogp3kx5hp0.png');
-  background-size: 100% 100%;
-}
-.bg-C8948 {
-  background-image: url('../images/c89483kx5hp0.png');
   background-size: 100% 100%;
 }
 
