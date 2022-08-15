@@ -6,7 +6,7 @@
   }
   .tile-height { height: 30vh; }
 }
-@media only screen and (max-width: 1440px) { .tile-height { height: 10vh; } }
+@media only screen and (max-width: 1440px) { .tile-height { height: 9.8vh; } }
 body {
   background-color: black;
   color: white;
@@ -51,7 +51,7 @@ a:active {
 #tiles {
   display: flex;
   align-items: center;
-  width: 225%;
+  width: 220%;
   margin-bottom: 4px;
 }
 .tile { scroll-snap-align: start; }
