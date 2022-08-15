@@ -6,7 +6,7 @@
   }
 }
 body {
-  background-color: var(--bs-gray-dark);
+  background-color: black;
   color: white;
   text-align: center;
 }
@@ -36,14 +36,7 @@ a:active {
 
 /* COLORS */
 .gust-color { color: hotpink; }
-.bg-sticky { background-color: var(--bs-gray-dark); }
-
-/* FONT SIZES */
-.display-title {
-  font-size: calc(1.675rem + 5.1vw);
-  font-weight: 300;
-  line-height: 1.2;
-}
+.bg-sticky { background-color: black; }
 
 /* SCROLL TILES */
 #tile-container {
