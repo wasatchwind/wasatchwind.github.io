@@ -51,7 +51,7 @@ a:active {
 #tiles {
   display: flex;
   align-items: center;
-  width: 220%;
+  width: 230%;
   margin-bottom: 4px;
 }
 .tile { scroll-snap-align: start; }
