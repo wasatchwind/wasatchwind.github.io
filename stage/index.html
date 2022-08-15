@@ -33,30 +33,31 @@
 
         <!-- ROW 2: SCROLL TILES -->
         <div id="tile-container">
-            <div id="tiles">
+            <div class="mb-3" id="tiles">
 
                 <!-- WIND TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
-                    <div class="tile-border-selected tile-height overflow-hidden" id="wind-border">
-                        <div class="d-flex flex-column justify-content-center tile-height">
+                    <div class="overflow-hidden tile-border-selected tile-height" id="wind-border">
+                        <div class="bg-tile d-flex flex-column justify-content-center tile-height">
                             <div class="d-flex justify-content-around">
                                 <div class="align-self-end display-1" id="wdir-div">
                                     <div id="KSLC-wdir"></div>
                                 </div>
                                 <div class="display-1 fw-bold" id="KSLC-wspd"></div>
                             </div>
-                            <div class="align-items-center d-flex justify-content-around">
-                                <div class="display-4 fw-bold gust-color mb-3" id="KSLC-gust"></div>
+                            <div class="d-flex">
+                                <div class="align-self-end col-5 fs-4 mb-1 text-info text-start">@KSLC</div>
+                                <div class="col-7 display-4 fw-bold gust-color mb-3 text-start" id="KSLC-gust"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="display-3 fw-bold" id="wind-title">Wind</div>
+                    <div class="display-3 fw-semibold text-info" id="wind-title">Wind</div>
                 </div>
 
                 <!-- ZONE TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('zone')">
-                    <div class="tile-border tile-height overflow-hidden" id="zone-border">
-                        <div class="d-flex flex-column justify-content-around tile-height">
+                    <div class="overflow-hidden tile-border tile-height" id="zone-border">
+                        <div class="bg-tile d-flex flex-column justify-content-around tile-height">
                             <div class="align-items-center d-flex justify-content-around">
                                 <div class="display-2" id="latest-zone"></div>
                                 <div class="display-3 fw-bold" id="latest-alti"></div>
@@ -68,13 +69,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="zone-title">Zone</div>
+                    <div class="display-3 fw-semibold text-warning" id="zone-title">Zone</div>
                 </div>
 
                 <!-- LIFT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('lift')">
-                    <div class="tile-border tile-height overflow-hidden" id="lift-border">
-                        <div class="d-flex flex-column justify-content-around tile-height">
+                    <div class="overflow-hidden tile-border tile-height" id="lift-border">
+                        <div class="bg-tile d-flex flex-column justify-content-around tile-height">
                             <div class="align-items-center d-flex justify-content-around">
                                 <div class="align-self-end fs-5 mb-2">ToL</div>
                                 <div class="display-3 fw-bold" id="tol"></div>
@@ -85,42 +86,55 @@
                             </div>
                         </div>
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="lift-title">Lift</div>
+                    <div class="display-3 fw-semibold text-warning" id="lift-title">Lift</div>
                 </div>
 
                 <!-- METEO TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('meteo')">
-                    <div class="tile-border tile-height overflow-hidden" id="meteo-border">
-                        <img class="w-100" id="latest-icon">
+                    <div class="overflow-hidden tile-border tile-height" id="meteo-border">
+                        <img class="h-100 w-100" id="latest-icon">
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="meteo-title">Meteo</div>
+                    <div class="display-3 fw-semibold text-warning" id="meteo-title">Meteo</div>
                 </div>
 
                 <!-- CAMS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
-                    <div class="tile-border tile-height overflow-hidden" id="cams-border">
-                        <img class="w-100" id="latest-cam">
+                    <div class="overflow-hidden tile-border tile-height" id="cams-border">
+                        <img class="h-100 w-100" id="latest-cam">
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="cams-title">Cams</div>
+                    <div class="display-3 fw-semibold text-warning" id="cams-title">Cams</div>
                 </div>
 
                 <!-- GPS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('gps')">
-                    <div class="tile-border tile-height overflow-hidden" id="gps-border">
-                        <img class="w-100" src="./images/gpstile.png">
+                    <div class="overflow-hidden tile-border tile-height" id="gps-border">
+                        <img class="h-100 w-100" src="./images/gpstile.png">
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="gps-title">GPS</div>
+                    <div class="display-3 fw-semibold text-warning" id="gps-title">GPS</div>
                 </div>
 
                 <!-- ABOUT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('about')">
-                    <div class="d-flex justify-content-around overflow-hidden tile-border tile-height" id="about-border">
-                        <div class="align-self-center display-4 fw-bold">Wasatch<br>Wind</div>
+                    <div class="overflow-hidden tile-border tile-height" id="about-border">
+                        <div class="bg-tile d-flex justify-content-center tile-height">
+                            <div class="align-self-center display-4">Wasatch<br>Wind</div>
+                        </div>
                     </div>
-                    <div class="display-3 fw-bold text-warning" id="about-title">About</div>
+                    <div class="display-3 fw-semibold text-warning" id="about-title">About</div>
+                </div>
+
+                <!-- SETTINGS TILE -->
+                <div class="col mx-2 tile" onclick="toggleDiv('settings')">
+                    <div class="overflow-hidden tile-border tile-height" id="settings-border">
+                        <div class="bg-tile d-flex justify-content-center tile-height">
+                            <div class="align-self-center display-4">Settings</div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-semibold text-warning" id="settings-title">Settings</div>
                 </div>
             </div>
         </div>
+
     </div>
     
     <!-- SPINNER -->
@@ -1376,6 +1390,11 @@
                 <img src="./images/me.png" height="150px">
             </div>
         </a>
+    </div>
+
+    <!-- SETTINGS DIV -->
+    <div class="collapse mb-div-end mx-2" id="settings">
+        <div class="display-3 fw-bold">Settings</div>
     </div>
 
 </div>
