@@ -3,7 +3,7 @@ const now = new Date();
 const nextDay = now.getHours() > 19 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind'
 let liftParams = {}
-let soundingData = {} // unblock this in prod when json.js is disabled
+let soundingData = {}
 let maxTempF
 
 function reload() {
@@ -13,9 +13,9 @@ function reload() {
 
 function toggleDiv(newDiv) {
     document.getElementById(currentDiv).style.display = 'none'
-    document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-bold text-warning'
+    document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-semibold text-warning'
     document.getElementById(`${currentDiv}-border`).className = 'tile-border tile-height overflow-hidden'
-    document.getElementById(`${newDiv}-title`).className = 'display-3 fw-bold'
+    document.getElementById(`${newDiv}-title`).className = 'display-3 fw-semibold text-info'
     document.getElementById(`${newDiv}-border`).className = 'tile-border-selected tile-height overflow-hidden'
     document.getElementById(newDiv).style.display = 'block'
     currentDiv = newDiv
