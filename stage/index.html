@@ -19,16 +19,17 @@
 
         <!-- ROW 1: TOP/TITLE -->
         <div class="align-items-center d-flex justify-content-around">
-            <img class="col-2" src="./images/pg.gif">
-            <div class="text-nowrap">
-                <div class="display-1 fw-semibold">Wasatch Wind</div>
-                <div class="display-5 d-flex justify-content-between mb-2 text-info">
+            <img src="./images/pg.gif" height="200px">
+            <div class="col-6 text-nowrap">
+                <div class="display-1 fw-semibold mx-4">Wasatch Wind</div>
+                <div class="fs-1 d-flex justify-content-center mb-2 text-info">
+                    <div class="col-auto">KSLC @&nbsp;</div>
                     <div class="col-auto" id="KSLC-time"></div>
-                    <div class="col-auto">&#8226;</div>
+                    <div class="col-auto mx-4">&#8226;</div>
                     <div class="col-auto" id="title-date"></div>
                 </div>
             </div>
-            <img class="col-2" src="./images//refresh.png" onclick="reload()">
+            <img src="./images//refresh.png" onclick="reload()" height="200px">
         </div>
 
         <!-- ROW 2: SCROLL TILES -->
@@ -38,16 +39,15 @@
                 <!-- WIND TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
                     <div class="overflow-hidden tile-border-selected tile-height" id="wind-border">
-                        <div class="bg-tile d-flex flex-column justify-content-center tile-height">
-                            <div class="d-flex justify-content-around">
-                                <div class="align-self-end display-1" id="wdir-div">
+                        <div class="bg-tile d-flex flex-column justify-content-around tile-height">
+                            <div class="align-items-center display-1 d-flex justify-content-around">
+                                <div class="align-self-end" id="wdir-div">
                                     <div id="KSLC-wdir"></div>
                                 </div>
-                                <div class="display-1 fw-bold" id="KSLC-wspd"></div>
+                                <div class="fw-bold" id="KSLC-wspd"></div>
                             </div>
-                            <div class="d-flex">
-                                <div class="align-self-end col-5 fs-4 mb-1 text-info text-start">@KSLC</div>
-                                <div class="col-7 display-4 fw-bold gust-color mb-3 text-start" id="KSLC-gust"></div>
+                            <div class="align-items-center display-4 d-flex fw-bold gust-color justify-content-around mb-2">
+                                <div id="KSLC-gust"></div>
                             </div>
                         </div>
                     </div>
