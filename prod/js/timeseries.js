@@ -1,8 +1,10 @@
 'use strict';
 // IIFE ASYNC MESONET PRIVATE API FOR TIME SERIES: https://developers.synopticdata.com/mesonet
 (async () => {
-//     const url = 'https://wasatchwind.github.io/example_time_series.json'
-    const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
+    const nwstokenUrl = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
+    const nwstokenResponse = await fetch(nwstokenUrl)
+    const nwstoken = await nwstokenResponse.json()
+    const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwstoken.token}`
     const response = await fetch(url)
     const tsData = await response.json()
     if (tsData) {
