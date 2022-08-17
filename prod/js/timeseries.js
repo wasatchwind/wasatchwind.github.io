@@ -4,6 +4,7 @@
     const nwstokenUrl = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
     const nwstokenResponse = await fetch(nwstokenUrl)
     const nwstoken = await nwstokenResponse.json()
+    console.log(nwstoken.token)
     const url = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=C8948&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwstoken.token}`
     const response = await fetch(url)
     const tsData = await response.json()
