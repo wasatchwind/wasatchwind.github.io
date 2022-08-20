@@ -12,6 +12,7 @@ body {
   color: white;
   text-align: center;
 }
+.border-20 { --bs-border-width: 20px; }
 .mb-div-end { margin-bottom: 8rem; }
 .spinner-top {
   width: 15rem;
