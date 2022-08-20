@@ -1,5 +1,6 @@
 'use strict';
 const now = new Date();
+const titleDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind'
 let liftParams = {}
