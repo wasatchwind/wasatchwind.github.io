@@ -22,7 +22,7 @@
             <img src="./images/pg.gif" height="150px">
             <div class="col-6 text-nowrap">
                 <div class="display-1 fw-semibold mx-4">Wasatch Wind</div>
-                <div class="collapse fs-1 d-flex justify-content-center mb-2 text-info" id="timedate">
+                <div class="fs-2 d-flex justify-content-center mb-2 text-info">
                     <div class="col-auto">KSLC @&nbsp;</div>
                     <div class="col-auto" id="KSLC-time"></div>
                     <div class="col-auto mx-4">&#8226;</div>
@@ -37,7 +37,7 @@
             <div class="mb-3" id="tiles">
 
                 <!-- WIND TILE -->
-                <div class="col mx-2 tile" onclick="toggleDiv('wind')">
+<!--                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
                     <div class="overflow-hidden tile-border-selected tile-height" id="wind-border">
                         <div class="bg-tile d-flex flex-column justify-content-around tile-height">
                             <div class="align-items-center display-1 d-flex justify-content-around">
@@ -48,6 +48,116 @@
                             </div>
                             <div class="align-items-center display-4 d-flex fw-bold gust-color justify-content-around mb-2">
                                 <div id="KSLC-gust"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="display-3 fw-semibold text-info" id="wind-title">Wind</div>
+                </div> -->
+                <div class="col mx-2 tile" onclick="toggleDiv('wind')">
+                    <div class="overflow-hidden tile-border-selected tile-height" id="wind-border">
+                        <div class="bg-tile d-flex flex-column justify-content-around tile-height">
+                            <div class="align-items-center display-1 d-flex justify-content-around">
+                                <div class="align-self-end" id="KSLC-wdir"></div>
+                                <div class="fw-bold" id="KSLC-wspd"></div>
+                                <div class="display-4 fw-bold gust-color" id="KSLC-gust"></div>
+                            </div>
+                            <div class="align-items-end d-flex">
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-0">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-0"></div>
+                                    <div id="KSLC-wbar-0"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-0"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-0"></div>
+                                    <!-- <div class="" id="KSLC-time-0"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-1">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-1"></div>
+                                    <div id="KSLC-wbar-1"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-1"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-1"></div>
+                                    <!-- <div class="" id="KSLC-time-1"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-2">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-2"></div>
+                                    <div id="KSLC-wbar-2"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-2"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-2"></div>
+                                    <!-- <div class="" id="KSLC-time-2"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-3">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-3"></div>
+                                    <div id="KSLC-wbar-3"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-3"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-3"></div>
+                                    <!-- <div class="" id="KSLC-time-3"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-4">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-4"></div>
+                                    <div id="KSLC-wbar-4"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-4"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-4"></div>
+                                    <!-- <div class="" id="KSLC-time-4"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-5">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-5"></div>
+                                    <div id="KSLC-wbar-5"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-5"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-5"></div>
+                                    <!-- <div class="" id="KSLC-time-5"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-6">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-6"></div>
+                                    <div id="KSLC-wbar-6"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-6"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-6"></div>
+                                    <!-- <div class="" id="KSLC-time-6"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-7">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-7"></div>
+                                    <div id="KSLC-wbar-7"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-7"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-7"></div>
+                                    <!-- <div class="" id="KSLC-time-7"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-8">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-8"></div>
+                                    <div id="KSLC-wbar-8"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-8"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-8"></div>
+                                    <!-- <div class="" id="KSLC-time-8"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-9">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-9"></div>
+                                    <div id="KSLC-wbar-9"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-9"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-9"></div>
+                                    <!-- <div class="" id="KSLC-time-9"></div> -->
+                                </div>
+                                <div class="col ms-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-10">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-10"></div>
+                                    <div id="KSLC-wbar-10"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-10"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-10"></div>
+                                    <!-- <div class="" id="KSLC-time-10"></div> -->
+                                </div>
+                                <div class="col mx-1">
+                                    <!-- <div class="gust-color" id="KSLC-gust-11">&nbsp;</div> -->
+                                    <div class="bg-danger" id="KSLC-gbar-11"></div>
+                                    <div id="KSLC-wbar-11"></div>
+                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-11"></span></div> -->
+                                    <div class="fs-3" id="KSLC-wdir-11"></div>
+                                    <!-- <div class="" id="KSLC-time-11"></div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
