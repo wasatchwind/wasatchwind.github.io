@@ -98,7 +98,6 @@ function windChart(stid, data) {
     for (let i=0; i<data.time.length; i++) {
         const element = document.getElementById(`${stid}-time-${i}`)
         element.innerHTML = stid === 'AMB' ? data.time[i].replace(':00','') : data.time[i].slice(0,-3)
-        if (i === data.time.length - 1) document.getElementById(`${stid}-time`).innerHTML = data.time[i]
     }
 };
 
