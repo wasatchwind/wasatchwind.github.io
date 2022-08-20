@@ -1,6 +1,6 @@
 'use strict';
 const now = new Date();
-const nextDay = now.getHours() > 19 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
+const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind'
 let liftParams = {}
 let soundingData = {}
