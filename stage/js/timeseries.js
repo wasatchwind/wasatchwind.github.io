@@ -138,10 +138,13 @@ function wdir(stid, wdir) {
             document.getElementById(`${stid}-wdir`).style.transform = rotate[i]
         }
     }
-}; // Hide on wind tile if no data
+};
 
 function time(stid, time) {
-    if (stid === 'tile') return
+    if (stid === 'tile') {
+        document.getElementById('KSLC-time-range').innerHTML = `${time[0]} - ${time[11]} @ KSLC`
+        return
+    }
     for (let i=0; i<time.length; i++) {
         const element = document.getElementById(`${stid}-time-${i}`)
         element.innerHTML = stid === 'AMB' ? time[i].replace(':00','') : time[i].slice(0,-3)
