@@ -87,17 +87,39 @@ function pressureHistory(alti, temp, time) {
 };
 
 function windChart(stid, data) {
-    const slice = stid === 'AMB' ? 6 : 12
-    for (const key in data) data[key] = data[key].slice(-slice)
+    const sliceLength = data.time.length < 12 ? 6 : 12
+    for (const key in data) data[key] = data[key].slice(-sliceLength)
     if (data.wspd) wspd(stid, data.wspd)
     if (data.gust) gust(stid, data.gust, data.wspd)
     if (data.wdir) wdir(stid, data.wdir)
-    if (stid === 'KSLC' && !data.wdir[slice - 1]) document.getElementById('wdir-div').style.display = 'none'
-    if (stid === 'KSLC' && data.wspd[slice - 1] === 'Calm') document.getElementById('wdir-div').style.display = 'none'
+    time(stid, data.time)
     document.getElementById(`${stid}-main`).style.display = 'block'
-    for (let i=0; i<data.time.length; i++) {
-        const element = document.getElementById(`${stid}-time-${i}`)
-        element.innerHTML = stid === 'AMB' ? data.time[i].replace(':00','') : data.time[i].slice(0,-3)
+};
+
+function wspd(stid, wspd) {
+    const multiplier = stid === 'tile' ? 2 : 4
+    const wbar = wspd.map(d => !d ? null : `${d * multiplier}px`)
+    const ylwLim = (stid==='AMB' || stid==='OGP') ? 19 : stid==='FPS' ? 15 : 9
+    const redLim = (stid==='AMB' || stid==='OGP') ? 29 : 19
+    const barColor = wspd.map(d => (d > ylwLim && d < redLim) ? 'var(--bs-yellow)' : d >= redLim ? 'var(--bs-orange)' : 'var(--bs-teal)')
+    for (let i=0; i<wspd.length; i++) {
+        if (stid === 'tile') document.getElementById(`${stid}-wspd-${i}`).style.display = 'none'
+        document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
+        document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
+        document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
+        document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
+        if (i === wspd.length - 1 && stid !== 'KSLC') document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
+    }
+};
+
+function gust(stid, gust, wspd) {
+    const multiplier = stid === 'tile' ? 2 : 4
+    wspd = wspd.map(d => d >= 0 ? d : 0)
+    for (let i=0; i<gust.length; i++) {
+        if (stid === 'tile') document.getElementById(`${stid}-gust-${i}`).style.display = 'none'
+        document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
+        document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * multiplier}px` : null
+        if (i === gust.length - 1 && stid !== 'KSLC') document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
     }
 };
 
@@ -107,32 +129,20 @@ function wdir(stid, wdir) {
     for (let i=0; i<wdir.length; i++) {
         document.getElementById(`${stid}-wdir-${i}`).innerHTML = wimg[i]
         document.getElementById(`${stid}-wdir-${i}`).style.transform = rotate[i]
-        if (i === wdir.length - 1) {
+        if (i === wdir.length - 1 && stid !== 'KSLC') {
             document.getElementById(`${stid}-wdir`).innerHTML = wimg[i]
             document.getElementById(`${stid}-wdir`).style.transform = rotate[i]
         }
     }
-};
+}; // Hide on wind tile if no data
 
-function wspd(stid, wspd) {
-    const wbar = wspd.map(d => !d ? null : `${d * 4}px`)
-    const ylwLim = (stid==='AMB' || stid==='OGP') ? 19 : stid==='FPS' ? 15 : 9
-    const redLim = (stid==='AMB' || stid==='OGP') ? 29 : 19
-    const barColor = wspd.map(d => (d > ylwLim && d < redLim) ? 'var(--bs-yellow)' : d >= redLim ? 'var(--bs-orange)' : 'var(--bs-teal)')
-    for (let i=0; i<wspd.length; i++) {
-//         document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
-        document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
-        document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
-        document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
-        if (i === wspd.length - 1) document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
-    }
-};
-
-function gust(stid, gust, wspd) {
-    wspd = wspd.map(d => d >= 0 ? d : 0)
-    for (let i=0; i<gust.length; i++) {
-        document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
-        document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * 4}px` : null
-        if (i === gust.length - 1) document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : null
+function time(stid, time) {
+    if (stid === 'tile') return
+    for (let i=0; i<time.length; i++) {
+        const element = document.getElementById(`${stid}-time-${i}`)
+        element.innerHTML = stid === 'AMB' ? time[i].replace(':00','') : time[i].slice(0,-3)
+        if (i === time.length - 1 && stid !== 'KSLC') {
+            document.getElementById(`${stid}-time`).innerHTML = time[i]
+        }
     }
 };
