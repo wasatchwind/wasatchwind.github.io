@@ -120,7 +120,7 @@ function wspd(stid, wspd) {
     const redLim = (stid==='AMB' || stid==='OGP') ? 29 : 19
     const barColor = wspd.map(d => (d > ylwLim && d < redLim) ? 'var(--bs-yellow)' : d >= redLim ? 'var(--bs-orange)' : 'var(--bs-teal)')
     for (let i=0; i<wspd.length; i++) {
-        document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
+//         document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
         document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
         document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
         document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
