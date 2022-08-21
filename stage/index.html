@@ -33,110 +33,109 @@
 
                 <!-- WIND TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
-                    <div class="overflow-hidden tile-border-selected tile-height" id="wind-border">
+                    <div class="overflow-hidden tile-border-selected" id="wind-border">
                         <div class="bg-tile d-flex flex-column justify-content-around tile-height">
-                            <div class="align-items-center display-1 d-flex justify-content-around">
-                                <div class="align-self-end" id="KSLC-wdir"></div>
-                                <div class="fw-bold" id="KSLC-wspd"></div>
-                                <div class="display-4 fw-bold gust-color" id="KSLC-gust"></div>
+                            <div class="align-items-center h-50 display-1 d-flex justify-content-around">
+                                <div class="align-self-end" id="tile-wdir"></div>
+                                <div class="fw-bold" id="tile-wspd"></div>
+                                <div class="display-4 fw-bold gust-color" id="tile-gust"></div>
                             </div>
-                            <div class="align-items-end d-flex">
-
-                            <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-0">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-0"></div>
-                                    <div id="KSLC-wbar-0"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-0"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-0"></div> -->
-                                    <!-- <div class="" id="KSLC-time-0"></div> -->
+                            <div class="align-items-end d-flex h-50" id="tile-main">
+                                <div class="col ms-1">
+                                    <div class="gust-color" id="tile-gust-0">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-0"></div>
+                                    <div id="tile-wbar-0"></div>
+                                    <div class="bg-secondary" id="tile-wspd-0"></div>
+                                    <div class="" id="tile-wdir-0"></div>
+                                    <div class="" id="tile-time-0"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-1">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-1"></div>
-                                    <div id="KSLC-wbar-1"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-1"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-1"></div> -->
-                                    <!-- <div class="" id="KSLC-time-1"></div> -->
+                                    <div class="gust-color" id="tile-gust-1">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-1"></div>
+                                    <div id="tile-wbar-1"></div>
+                                    <div class="bg-secondary" id="tile-wspd-1"></div>
+                                    <div class="" id="tile-wdir-1"></div>
+                                    <div class="" id="tile-time-1"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-2">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-2"></div>
-                                    <div id="KSLC-wbar-2"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-2"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-2"></div> -->
-                                    <!-- <div class="" id="KSLC-time-2"></div> -->
+                                    <div class="gust-color" id="tile-gust-2">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-2"></div>
+                                    <div id="tile-wbar-2"></div>
+                                    <div class="bg-secondary" id="tile-wspd-2"></div>
+                                    <div class="" id="tile-wdir-2"></div>
+                                    <div class="" id="tile-time-2"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-3">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-3"></div>
-                                    <div id="KSLC-wbar-3"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-3"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-3"></div> -->
-                                    <!-- <div class="" id="KSLC-time-3"></div> -->
+                                    <div class="gust-color" id="tile-gust-3">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-3"></div>
+                                    <div id="tile-wbar-3"></div>
+                                    <div class="bg-secondary" id="tile-wspd-3"></div>
+                                    <div class="" id="tile-wdir-3"></div>
+                                    <div class="" id="tile-time-3"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-4">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-4"></div>
-                                    <div id="KSLC-wbar-4"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-4"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-4"></div> -->
-                                    <!-- <div class="" id="KSLC-time-4"></div> -->
+                                    <div class="gust-color" id="tile-gust-4">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-4"></div>
+                                    <div id="tile-wbar-4"></div>
+                                    <div class="bg-secondary" id="tile-wspd-4"></div>
+                                    <div class="" id="tile-wdir-4"></div>
+                                    <div class="" id="tile-time-4"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-5">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-5"></div>
-                                    <div id="KSLC-wbar-5"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-5"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-5"></div> -->
-                                    <!-- <div class="" id="KSLC-time-5"></div> -->
+                                    <div class="gust-color" id="tile-gust-5">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-5"></div>
+                                    <div id="tile-wbar-5"></div>
+                                    <div class="bg-secondary" id="tile-wspd-5"></div>
+                                    <div class="" id="tile-wdir-5"></div>
+                                    <div class="" id="tile-time-5"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-6">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-6"></div>
-                                    <div id="KSLC-wbar-6"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-6"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-6"></div> -->
-                                    <!-- <div class="" id="KSLC-time-6"></div> -->
+                                    <div class="gust-color" id="tile-gust-6">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-6"></div>
+                                    <div id="tile-wbar-6"></div>
+                                    <div class="bg-secondary" id="tile-wspd-6"></div>
+                                    <div class="" id="tile-wdir-6"></div>
+                                    <div class="" id="tile-time-6"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-7">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-7"></div>
-                                    <div id="KSLC-wbar-7"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-7"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-7"></div> -->
-                                    <!-- <div class="" id="KSLC-time-7"></div> -->
+                                    <div class="gust-color" id="tile-gust-7">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-7"></div>
+                                    <div id="tile-wbar-7"></div>
+                                    <div class="bg-secondary" id="tile-wspd-7"></div>
+                                    <div class="" id="tile-wdir-7"></div>
+                                    <div class="" id="tile-time-7"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-8">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-8"></div>
-                                    <div id="KSLC-wbar-8"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-8"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-8"></div> -->
-                                    <!-- <div class="" id="KSLC-time-8"></div> -->
+                                    <div class="gust-color" id="tile-gust-8">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-8"></div>
+                                    <div id="tile-wbar-8"></div>
+                                    <div class="bg-secondary" id="tile-wspd-8"></div>
+                                    <div class="" id="tile-wdir-8"></div>
+                                    <div class="" id="tile-time-8"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-9">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-9"></div>
-                                    <div id="KSLC-wbar-9"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-9"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-9"></div> -->
-                                    <!-- <div class="" id="KSLC-time-9"></div> -->
+                                    <div class="gust-color" id="tile-gust-9">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-9"></div>
+                                    <div id="tile-wbar-9"></div>
+                                    <div class="bg-secondary" id="tile-wspd-9"></div>
+                                    <div class="" id="tile-wdir-9"></div>
+                                    <div class="" id="tile-time-9"></div>
                                 </div>
                                 <div class="col ms-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-10">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-10"></div>
-                                    <div id="KSLC-wbar-10"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-10"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-10"></div> -->
-                                    <!-- <div class="" id="KSLC-time-10"></div> -->
+                                    <div class="gust-color" id="tile-gust-10">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-10"></div>
+                                    <div id="tile-wbar-10"></div>
+                                    <div class="bg-secondary" id="tile-wspd-10"></div>
+                                    <div class="" id="tile-wdir-10"></div>
+                                    <div class="" id="tile-time-10"></div>
                                 </div>
                                 <div class="col mx-1">
-                                    <!-- <div class="gust-color" id="KSLC-gust-11">&nbsp;</div> -->
-                                    <div class="bg-danger" id="KSLC-gbar-11"></div>
-                                    <div id="KSLC-wbar-11"></div>
-                                    <!-- <div class="bg-secondary"><span id="KSLC-wspd-11"></span></div> -->
-                                    <!-- <div class="fs-3" id="KSLC-wdir-11"></div> -->
-                                    <!-- <div class="" id="KSLC-time-11"></div> -->
+                                    <div class="gust-color" id="tile-gust-11">&nbsp;</div>
+                                    <div class="bg-danger" id="tile-gbar-11"></div>
+                                    <div id="tile-wbar-11"></div>
+                                    <div class="bg-secondary" id="tile-wspd-11"></div>
+                                    <div class="" id="tile-wdir-11"></div>
+                                    <div class="" id="tile-time-11"></div>
                                 </div>
                             </div>
                         </div>
