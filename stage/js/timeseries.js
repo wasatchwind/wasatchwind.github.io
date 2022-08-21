@@ -119,7 +119,10 @@ function gust(stid, gust, wspd) {
         if (stid === 'tile') document.getElementById(`${stid}-gust-${i}`).style.display = 'none'
         document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
         document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * multiplier}px` : null
-        if (i === gust.length - 1 && stid !== 'KSLC') document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
+        if (i === gust.length - 1 && stid !== 'KSLC') {
+            if (gust[i] === null) document.getElementById(`${stid}-gust`).style.display = 'none'
+            document.getElementById(`${stid}-gust`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
+        }
     }
 };
 
@@ -130,6 +133,7 @@ function wdir(stid, wdir) {
         document.getElementById(`${stid}-wdir-${i}`).innerHTML = wimg[i]
         document.getElementById(`${stid}-wdir-${i}`).style.transform = rotate[i]
         if (i === wdir.length - 1 && stid !== 'KSLC') {
+            if (wimg[i] === '&nbsp;') document.getElementById(`${stid}-wdir`).style.display = 'none'
             document.getElementById(`${stid}-wdir`).innerHTML = wimg[i]
             document.getElementById(`${stid}-wdir`).style.transform = rotate[i]
         }
