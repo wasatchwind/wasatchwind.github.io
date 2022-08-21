@@ -51,6 +51,5 @@
     document.getElementById('latest-icon').src = nwsLatestData.properties.icon
     document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('spinner').style.display = 'none'
-    document.getElementById('title-date').innerHTML = `KSLC @ ${recent.KSLC.time[11]}&nbsp;&nbsp;&#8226;&nbsp;&nbsp;${titleDate}`
     document.getElementById('wind').style.display = 'block'
 })();
