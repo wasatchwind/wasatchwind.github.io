@@ -108,7 +108,12 @@ function wspd(stid, wspd) {
         document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
         document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
         document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
-        if (i === wspd.length - 1 && stid !== 'KSLC') document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
+        if (i === wspd.length - 1 && stid !== 'KSLC') {
+            document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
+            if (wspd[i] === null) {
+                document.getElementById(`${stid}-wspd`).style.display = 'none'
+            }
+        }
     }
 };
 
