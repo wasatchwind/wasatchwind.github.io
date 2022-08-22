@@ -6,7 +6,7 @@
   }
   .tile-height { height: 30vh; }
 }
-@media only screen and (max-width: 1440px) { .tile-height { height: 14vh; } }
+@media only screen and (max-width: 1440px) { .tile-height { height: 12vh; } }
 body {
   background-color: black;
   color: white;
