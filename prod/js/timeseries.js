@@ -8,7 +8,6 @@
     const response = await fetch(url)
     const tsData = await response.json()
     if (tsData) {
-        console.log(tsData)
         if (tsData.STATION[0].STID==='KSLC') kslcAltiTempZone(tsData.STATION[0].OBSERVATIONS)
         let stations = []
         for (let i=0; i<tsData.STATION.length; i++) {
