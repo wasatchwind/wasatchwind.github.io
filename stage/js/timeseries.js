@@ -103,16 +103,14 @@ function wspd(stid, wspd) {
     const redLim = (stid==='AMB' || stid==='OGP') ? 29 : 19
     const barColor = wspd.map(d => (d > ylwLim && d < redLim) ? 'var(--bs-yellow)' : d >= redLim ? 'var(--bs-orange)' : 'var(--bs-teal)')
     for (let i=0; i<wspd.length; i++) {
-        if (stid === 'tile') document.getElementById(`${stid}-wspd-${i}`).style.display = 'none'
-        document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
-        document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
+        if (stid !== 'tile') {
+            document.getElementById(`${stid}-wspd-${i}`).className = wspd[i] === 'Calm' ? 'fs-3 fw-normal' : 'fs-1'
+            document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i] ? wspd[i] : '&nbsp;'
+        }
         document.getElementById(`${stid}-wbar-${i}`).style.height = wbar[i]
         document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = barColor[i]
         if (i === wspd.length - 1 && stid !== 'KSLC') {
             document.getElementById(`${stid}-wspd`).innerHTML = wspd[i] ? wspd[i] : null
-            if (wspd[i] === null) {
-                document.getElementById(`${stid}-wspd`).style.display = 'none'
-            }
         }
     }
 };
@@ -121,8 +119,9 @@ function gust(stid, gust, wspd) {
     const multiplier = stid === 'tile' ? 2 : 4
     wspd = wspd.map(d => d >= 0 ? d : 0)
     for (let i=0; i<gust.length; i++) {
-        if (stid === 'tile') document.getElementById(`${stid}-gust-${i}`).style.display = 'none'
-        document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
+        if (stid !== 'tile') {
+            document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i] ? `g${gust[i]}` : '&nbsp;'
+        }
         document.getElementById(`${stid}-gbar-${i}`).style.height = gust[i] ? `${(gust[i] - wspd[i]) * multiplier}px` : null
         if (i === gust.length - 1 && stid !== 'KSLC') {
             if (gust[i] === null) document.getElementById(`${stid}-gust`).style.display = 'none'
