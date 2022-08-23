@@ -13,7 +13,6 @@ body {
   text-align: center;
 }
 .border-20 { --bs-border-width: 20px; }
-/* .h-60 { height: 60% !important; } */
 .mh-60 { max-height: 60% !important; }
 .mb-div-end { margin-bottom: 8rem; }
 .spinner-top {
