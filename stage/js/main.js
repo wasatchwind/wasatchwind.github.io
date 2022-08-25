@@ -16,9 +16,11 @@ function reload() {
 function toggleDiv(newDiv) {
     document.getElementById(currentDiv).style.display = 'none'
     document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-semibold text-warning'
-    document.getElementById(`${currentDiv}-border`).className = 'tile-border tile-height overflow-hidden'
+//     document.getElementById(`${currentDiv}-border`).className = 'tile-border tile-height overflow-hidden'
+    document.getElementById(`${currentDiv}-border`).className = 'tile-border'
     document.getElementById(`${newDiv}-title`).className = 'display-3 fw-semibold text-info'
-    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected tile-height overflow-hidden'
+//     document.getElementById(`${newDiv}-border`).className = 'tile-border-selected tile-height overflow-hidden'
+    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected'
     document.getElementById(newDiv).style.display = 'block'
     currentDiv = newDiv
 };
