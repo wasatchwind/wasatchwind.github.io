@@ -60,14 +60,14 @@ a:active {
 .tile-border {
   border-radius: var(--bs-border-radius-xl) !important;
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
-  --bs-border-width: 3px;
+  --bs-border-width: 4px;
   --bs-border-opacity: 1;
   border-color: rgba(var(--bs-warning-rgb), var(--bs-border-opacity)) !important;
 }
 .tile-border-selected {
   border-radius: var(--bs-border-radius-xl) !important;
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
-  --bs-border-width: 5px;
+  --bs-border-width: 4px;
   --bs-border-opacity: 1;
   border-color: rgba(var(--bs-info-rgb), var(--bs-border-opacity)) !important;
 }
