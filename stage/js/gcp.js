@@ -40,7 +40,7 @@ function windMapImage(data) {
     document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
 };
 
-function getLiftParams(data, temp, position = 0, params = {}) {
+function getLiftParams(data, temp, position = 0, raobSlope, params = {}) {
     const tempC = (temp - 32) * 5 / 9
     const surfaceAlt_m = 1289
     const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
@@ -52,7 +52,7 @@ function getLiftParams(data, temp, position = 0, params = {}) {
     let interpolateX2 = data[position - 1].Temp_c
     let interpolateY2 = data[position - 1].Altitude_m
     if (interpolateX1 !== interpolateX2) {
-        let raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
         let roabYInt = interpolateY1 - (raobSlope * interpolateX1)
         const interpolateX = (roabYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
         params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
