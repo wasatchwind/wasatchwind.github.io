@@ -48,9 +48,8 @@
     document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
     document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
     document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-    document.getElementById('current-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
-    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'//'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
-    document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('current-icon').src = nwsLatestData.properties.icon
+    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'    
 })();
