@@ -1,82 +1,78 @@
 'use strict';
-const now = new Date();
-const titleDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
-document.getElementById('title-date').innerHTML = titleDate
-const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
-let currentDiv = 'wind'
-let liftParams = {}
-let soundingData = {}
-let maxTempF
-
-function reload() {
-    history.scrollRestoration = 'manual'
-    location.reload()
+function windAloftTime(start, end) {
+    const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
+    const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${selector}&region=slc&layout=on&date=`
+    const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
+    document.getElementById('wind-aloft-link').setAttribute('href', link)
+    document.getElementById('aloft-range').innerHTML = range
 };
 
-function toggleDiv(newDiv) {
-    document.getElementById(currentDiv).style.display = 'none'
-    document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-semibold text-warning'
-    document.getElementById(`${currentDiv}-border`).className = 'tile-border overflow-hidden'
-    document.getElementById(`${newDiv}-title`).className = 'display-3 fw-semibold text-info'
-    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected overflow-hidden'
-    document.getElementById(newDiv).style.display = 'block'
-    currentDiv = newDiv
-};
-
-function toggleWindChart(div) {
-    const element = document.getElementById(div)
-    if (element.style.display==='' || element.style.display==='none') {
-        element.style.display = 'block'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#10134;'
-    }
-    else {
-        element.style.display = 'none'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#10133;'
+function windAloftDir(dirs) {
+    for (const key in dirs) {
+        const element = document.getElementById(`dir-${key}`)
+        element.innerHTML = dirs[key] === 'calm' ? 'Calm' : '&#10148;'
+        element.style.transform = `rotate(${dirs[key] + 90}deg)`
     }
 };
 
-function tempTrend(history, latest, forecast) {
-    const temp = history.temp.slice(-3).concat(latest.temp.slice(-1),forecast.temp)
-    const time = history.time.slice(-3).concat(latest.time.slice(-1),forecast.time)
-    const tempInt = temp.map(d => parseInt(d))
-    const min = Math.min(...tempInt)
-    const max = Math.max(...tempInt)
-    const tempBar = tempInt.map(d => `${Math.round((((d - min) * 100)/(max - min)) + 50)}px`)
-    const barColor = tempInt.map(d => `${100 - Math.round((((d - min) * 100)/(max - min)))}%`)
-    for (let i=0; i<temp.length; i++) {
-        document.getElementById(`temp-${i}`).innerHTML = temp[i]
-        document.getElementById(`temptime-${i}`).innerHTML = time[i]
-        document.getElementById(`tempbar-${i}`).style.height = tempBar[i]
-        document.getElementById(`tempbar-${i}`).style.background = `linear-gradient(to top, var(--bs-purple) ${barColor[i]}, var(--bs-red))`
+function windAloftSpeed(spds, colors = {}) {
+    colors.ylw = {'6k':9, '9k':12, '12k':15, '18k':21}
+    colors.red = {'6k':14, '9k':18, '12k':24, '18k':30}
+    const mulitplier = (Math.max(...Object.values(spds)) > 79) ? 1.5 : 2.5
+    for (const key in spds) {
+        const elementSpd = document.getElementById(`spd-${key}`)
+        const elementBar = document.getElementById(`aloft-${key}`)
+        if (spds[key] === 0) {
+            document.getElementById(`mph-${key}`).style.display = 'none'
+            elementSpd.style.display = 'none'
+            elementBar.style.display = 'none'
+        }
+        elementSpd.innerHTML = spds[key]
+        elementBar.style.width = `${spds[key] * mulitplier}%`
+        if (spds[key] > colors.ylw[key] && spds[key] < colors.red[key]) elementBar.style.backgroundColor =  'var(--bs-yellow)'
+        else elementBar.style.backgroundColor = spds[key] >= colors.red[key] ? 'var(--bs-red)' : 'var(--bs-teal)'
     }
 };
 
-// function toggleWhatIsZoneChart() {
-//     const element = document.getElementById('zone-details')
-//     const display = element.className === 'collapse mx-2' ? 'mx-2' : 'collapse mx-2'
-//     element.className = display
-// };
-
-function windSurfaceForecastGraphical() {
-    const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '3 pm' : '2 pm'
-    document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
-    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/slc/WindSpd3_slc.png'
-    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/slc/WindGust3_slc.png'
-    document.getElementById('graphical-wind-div').style.display = 'block'
+function windMapImage(data) {
+    const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+    document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
+    document.getElementById('surface-wind-map').src = '/Staging/images/wind-map-save.png'//'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
 };
 
-(function getAllGraphicalForecastImages() {
-    const url = 'https://graphical.weather.gov/images/slc/'
-    const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
-    document.getElementById('sky-next-day').innerHTML = nextDay
-    for (let i=0; i<4; i++) {
-        document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
-        document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
+function getLiftParams(data, temp, position = 0, raobSlope, params = {}) {
+    const tempC = (temp - 32) * 5 / 9
+    const surfaceAlt_m = 1289
+    const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
+    const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
+    // Find height of -3 index first (thermal index is -3)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
+    let interpolateX1 = data[position].Temp_c
+    let interpolateY1 = data[position].Altitude_m
+    let interpolateX2 = data[position - 1].Temp_c
+    let interpolateY2 = data[position - 1].Altitude_m
+    if (interpolateX1 !== interpolateX2) {
+        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        let roabYInt = interpolateY1 - (raobSlope * interpolateX1)
+        const interpolateX = (roabYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
+        params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
     }
-})();
-
-(function getMorningSkewT() {
-    const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
-    const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
-    document.getElementById('skew-t-img').src = url
-})();
+    else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
+    params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
+    document.getElementById('user-neg3').innerHTML = Math.round(params.neg3 * 3.28084).toLocaleString()
+    // Now find top of lift (thermal index is 0)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
+    interpolateX1 = data[position].Temp_c
+    interpolateY1 = data[position].Altitude_m
+    interpolateX2 = data[position - 1].Temp_c
+    interpolateY2 = data[position - 1].Altitude_m
+    if (interpolateX1 !== interpolateX2) {
+        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        roabYInt = interpolateY1 - (raobSlope * interpolateX1)
+        params.tol = ((dalrSlope * roabYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+    }
+    else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
+    params.tolTemp = (params.tol - dalrYInt) / dalrSlope
+    document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
+    return params
+};
