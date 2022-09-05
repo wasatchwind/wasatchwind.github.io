@@ -1,7 +1,9 @@
 'use strict';
 (async () => {
-    const timeSeriesUrl = 'https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3'
-    const kslcHourlyForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast/hourly'
+    const nwstokenUrl = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
+    const nwstokenResponse = await fetch(nwstokenUrl)
+    const nwstoken = await nwstokenResponse.json()
+    const timeSeriesUrl = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwstoken.token}`
     const nwsForecastUrl = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
     const nwsLatestUrl = 'https://api.weather.gov/stations/KSLC/observations/latest'
     const windAloftUrl = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
@@ -11,8 +13,6 @@
 
     const timeSeriesResponse = await fetch(timeSeriesUrl)
     const timeSeriesData = await timeSeriesResponse.json()
-    const kslcHourlyForecastResponse = await fetch(kslcHourlyForecastUrl)
-    const kslcHourlyForecastData = await kslcHourlyForecastResponse.json()
     const nwsForecastResponse = await fetch(nwsForecastUrl)
     const nwsForecastData = await nwsForecastResponse.json()
     const nwsLatestResponse = await fetch(nwsLatestUrl)
@@ -26,17 +26,17 @@
     const soaringForecastResponse = await fetch(soaringForecastUrl)
     const soaringForecastData = await soaringForecastResponse.json()
 
-    const recent = formatTimeSeries(timeSeriesData.STATION)
-    const kslcHourlyHistory = hourlyHistory(recent.KSLC)
-    const kslcHourlyForecast = hourlyForecast(kslcHourlyForecastData)
-    zoneTile(recent.KSLC.alti.slice(-1), recent.KSLC.temp.slice(-1))
-    windChart('tile', recent.KSLC)
-    for (const key in recent) windChart(key, recent[key])
-    windAloftDir(windAloftData.Dirs)
-    windAloftSpeed(windAloftData.Spds)
-    windAloftTime(windAloftData["Start time"], windAloftData["End time"])
-    pressureHistory(kslcHourlyHistory.alti, kslcHourlyHistory.temp, kslcHourlyHistory.time)
-    tempTrend(kslcHourlyHistory, recent.KSLC, kslcHourlyForecast)
+    // REAL CODE
+    if (timeSeriesData) {
+        ensureGustData(timeSeriesData)
+        for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
+    }
+    if (timeSeriesData && timeSeriesData.STATION[0].STID === 'KSLC') kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
+    if (windAloftData) {
+        windAloftDir(windAloftData.Dirs)
+        windAloftSpeed(windAloftData.Spds)
+        windAloftTime(windAloftData["Start time"], windAloftData["End time"])
+    }
     const soaringForecastMaxTempF = soaringForecastData["Max temp"]
     const nwsForecastMaxTempF = nwsForecastData.properties.periods[0].temperature
     maxTempF = now.getHours() > 6 ? soaringForecastMaxTempF : nwsForecastMaxTempF
@@ -48,8 +48,9 @@
     document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
     document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
     document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-    document.getElementById('latest-icon').src = nwsLatestData.properties.icon
-    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('current-icon').src = 'images/sct.png'//nwsLatestData.properties.icon
+    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'//'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('latest-cam').src = 'images/latest-cam.jpg'//'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('spinner').style.display = 'none'
-    document.getElementById('wind').style.display = 'block'
+    document.getElementById('wind').style.display = 'block'    
 })();
