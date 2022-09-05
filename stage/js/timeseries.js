@@ -99,6 +99,7 @@ function zone(temp, alti, time, count = 3, barHeight = [], start) {
     }
     barHeight = barHeightRange(barHeight, 0, 20).reverse()
     for (let i=0; i<barHeight.length; i++) {
+        document.getElementById(`altibar-${i}`).style.display = 'block'
         document.getElementById(`altibar-${i}`).style.height = `${barHeight[i]}px`
     }
     document.getElementById('zone-time-range').innerHTML = `${start} - ${time[time.length - 1].toLowerCase()} @KSLC`
