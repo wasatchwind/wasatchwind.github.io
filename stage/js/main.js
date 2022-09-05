@@ -16,9 +16,9 @@ function reload() {
 function toggleDiv(newDiv) {
     document.getElementById(currentDiv).style.display = 'none'
     document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-semibold text-warning'
-    document.getElementById(`${currentDiv}-border`).className = 'tile-border tile-height overflow-hidden'
+    document.getElementById(`${currentDiv}-border`).className = 'tile-border overflow-hidden'
     document.getElementById(`${newDiv}-title`).className = 'display-3 fw-semibold text-info'
-    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected tile-height overflow-hidden'
+    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected overflow-hidden'
     document.getElementById(newDiv).style.display = 'block'
     currentDiv = newDiv
 };
@@ -49,12 +49,6 @@ function tempTrend(history, latest, forecast) {
         document.getElementById(`tempbar-${i}`).style.height = tempBar[i]
         document.getElementById(`tempbar-${i}`).style.background = `linear-gradient(to top, var(--bs-purple) ${barColor[i]}, var(--bs-red))`
     }
-};
-
-function toggleWhatIsZoneChart() {
-    const element = document.getElementById('zone-details')
-    const display = element.className === 'collapse mx-2' ? 'mx-2' : 'collapse mx-2'
-    element.className = display
 };
 
 function windSurfaceForecastGraphical() {
