@@ -24,7 +24,7 @@
                 <div class="display-1 fw-semibold">Wasatch Wind</div>
                 <div class="fs-1 text-info" id="title-date"></div>
             </div>
-            <img src="./images/refresh1.png" onclick="reload()" height="125px">
+            <img src="./images//refresh1.png" onclick="reload()" height="125px">
         </div>
 
         <!-- ROW 2: SCROLL TILES -->
@@ -33,78 +33,78 @@
 
                 <!-- WIND TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('wind')">
-                    <div class="tile-border-selected overflow-hidden tile-height" id="wind-border">
-                        <div class="bg-tile d-flex flex-column justify-content-end h-100">
-                            <div class="h-100 d-flex flex-column justify-content-center">
-                                <div class="d-flex justify-content-around display-1 align-items-center">
-                                    <div id="tile-wdir"></div>
-                                    <div class="fw-bold" id="tile-wspd"></div>
-                                    <div class="display-4 fw-bold gust-color" id="tile-gust"></div>
+                    <div class="overflow-hidden tile-border-selected" id="wind-border">
+                        <div class="bg-tile d-flex flex-column justify-content-end tile-height">
+                            <div class="d-flex flex-column h-100 justify-content-center">
+                                <div class="align-items-center display-1 d-flex justify-content-around">
+                                    <div id="tile-wdir-12"></div>
+                                    <div class="fw-bold" id="tile-wspd-12"></div>
+                                    <div class="display-4 fw-bold gust-color" id="tile-gust-12"></div>
                                 </div>
                             </div>
-                            <div class="collapse d-flex align-items-end mh-60" id="tile-main">
+                            <div class="align-items-end collapse d-flex mh-60" id="tile-main">
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-0"></div>
-                                    <div class="border-1 border" id="tile-wbar-0"></div>
+                                    <div id="tile-wbar-0"></div>
                                     <div class="fs-4" id="tile-wdir-0"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-1"></div>
-                                    <div class="border-1 border" id="tile-wbar-1"></div>
+                                    <div id="tile-wbar-1"></div>
                                     <div class="fs-4" id="tile-wdir-1"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-2"></div>
-                                    <div class="border-1 border" id="tile-wbar-2"></div>
+                                    <div id="tile-wbar-2"></div>
                                     <div class="fs-4" id="tile-wdir-2"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-3"></div>
-                                    <div class="border-1 border" id="tile-wbar-3"></div>
+                                    <div id="tile-wbar-3"></div>
                                     <div class="fs-4" id="tile-wdir-3"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-4"></div>
-                                    <div class="border-1 border" id="tile-wbar-4"></div>
+                                    <div id="tile-wbar-4"></div>
                                     <div class="fs-4" id="tile-wdir-4"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-5"></div>
-                                    <div class="border-1 border" id="tile-wbar-5"></div>
+                                    <div id="tile-wbar-5"></div>
                                     <div class="fs-4" id="tile-wdir-5"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-6"></div>
-                                    <div class="border-1 border" id="tile-wbar-6"></div>
+                                    <div id="tile-wbar-6"></div>
                                     <div class="fs-4" id="tile-wdir-6"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-7"></div>
-                                    <div class="border-1 border" id="tile-wbar-7"></div>
+                                    <div id="tile-wbar-7"></div>
                                     <div class="fs-4" id="tile-wdir-7"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-8"></div>
-                                    <div class="border-1 border" id="tile-wbar-8"></div>
+                                    <div id="tile-wbar-8"></div>
                                     <div class="fs-4" id="tile-wdir-8"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-9"></div>
-                                    <div class="border-1 border" id="tile-wbar-9"></div>
+                                    <div id="tile-wbar-9"></div>
                                     <div class="fs-4" id="tile-wdir-9"></div>
                                 </div>
                                 <div class="col ms-1">
                                     <div class="bg-danger" id="tile-gbar-10"></div>
-                                    <div class="border-1 border" id="tile-wbar-10"></div>
+                                    <div id="tile-wbar-10"></div>
                                     <div class="fs-4" id="tile-wdir-10"></div>
                                 </div>
                                 <div class="col mx-1">
                                     <div class="bg-danger" id="tile-gbar-11"></div>
-                                    <div class="border-1 border" id="tile-wbar-11"></div>
+                                    <div id="tile-wbar-11"></div>
                                     <div class="fs-4" id="tile-wdir-11"></div>
                                 </div>
                             </div>
-                            <div class="fs-3" id="KSLC-time-range"></div>
+                            <div class="fs-3" id="wind-time-range"></div>
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-info" id="wind-title">Wind</div>
@@ -112,17 +112,38 @@
 
                 <!-- ZONE TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('zone')">
-                    <div class="bg-tile overflow-hidden tile-border tile-height" id="zone-border">
-                        <div class="d-flex flex-column justify-content-around tile-height">
-                            <div class="align-items-center d-flex justify-content-around">
-                                <div class="display-2" id="latest-zone"></div>
-                                <div class="display-3 fw-bold" id="latest-alti"></div>
+                    <div class="overflow-hidden tile-border" id="zone-border">
+                        <div class="bg-tile d-flex flex-column justify-content-end tile-height">
+                            <div class="d-flex flex-column h-100 justify-content-center">
+                                <div class="align-items-center display-1 d-flex justify-content-around">
+                                    <div class="fw-bold" id="latest-temp"></div>
+                                    <div class="display-4">/</div>
+                                    <div class="fw-bold" id="max-temp"></div>
+                                </div>
                             </div>
-                            <div class="align-items-center d-flex justify-content-around mb-2">
-                                <div class="display-4 fw-bold" id="latest-temp"></div>
-                                <div class="fs-1">/</div>
-                                <div class="display-4 fw-bold" id="max-temp"></div>
+                            <div class="align-items-end collapse d-flex mh-60" id="tile-main">
+                                <div class="col mx-1">
+                                    <div class="bg-primary border-1 border" id="altibar-0">&nbsp;</div>
+                                    <div class="fs-3" id="alti-0"></div>
+                                    <div class="fs-3" id="zone-0"></div>
+                                </div>
+                                <div class="col mx-1">
+                                    <div class="bg-primary border-1 border" id="altibar-1">&nbsp;</div>
+                                    <div class="fs-3" id="alti-1"></div>
+                                    <div class="fs-3" id="zone-1"></div>
+                                </div>
+                                <div class="col mx-1">
+                                    <div class="bg-primary border-1 border" id="altibar-2">&nbsp;</div>
+                                    <div class="fs-3" id="alti-2"></div>
+                                    <div class="fs-3" id="zone-2"></div>
+                                </div>
+                                <div class="col mx-1">
+                                    <div class="bg-primary border-1 border" id="altibar-3">&nbsp;</div>
+                                    <div class="fs-3" id="alti-3"></div>
+                                    <div class="fs-3" id="zone-3"></div>
+                                </div>
                             </div>
+                            <div class="fs-3" id="zone-time-range"></div>
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="zone-title">Zone</div>
@@ -130,49 +151,59 @@
 
                 <!-- LIFT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('lift')">
-                    <div class="bg-tile overflow-hidden tile-border tile-height" id="lift-border">
-                        <div class="d-flex flex-column justify-content-around tile-height">
-                            <div class="align-items-center d-flex justify-content-around">
-                                <div class="align-self-end fs-5 mb-2">ToL</div>
-                                <div class="display-3 fw-bold" id="tol"></div>
-                            </div>
-                            <div class="align-items-center d-flex justify-content-around mb-2">
-                                <div class="align-self-end fs-5 mb-2">To-3</div>
-                                <div class="display-4 fw-bold" id="neg3"></div>
-                            </div>
+                    <div class="overflow-hidden tile-border" id="lift-border">
+                        <div class="bg-tile d-flex flex-column justify-content-around tile-height">
+                            <div class="fs-3">Max Height of Thermals</div>
+                            <div class="display-3 fw-bold" id="tol"></div>
+                            <div class="fs-3 border-top border-2">Height of -3 Index</div>
+                            <div class="display-4 fw-bold" id="neg3"></div>
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="lift-title">Lift</div>
                 </div>
 
-                <!-- METEO TILE -->
-                <div class="col mx-2 tile" onclick="toggleDiv('meteo')">
-                    <div class="overflow-hidden tile-border tile-height" id="meteo-border">
-                        <img class="h-100 w-100" id="latest-icon">
+                <!-- WX TILE -->
+                <div class="col mx-2 tile" onclick="toggleDiv('wx')">
+                    <div class="overflow-hidden tile-border" id="wx-border">
+                        <div class="bg-tile d-flex tile-height justify-content-around">
+                            <div class="col align-self-center">
+                                <img class="w-75 rounded-4" id="current-icon">
+                                <div class="fs-1">Current</div>
+                            </div>
+                            <div class="col align-self-center">
+                                <img class="w-75 rounded-4" id="forecast-icon">
+                                <div class="fs-1">Forecast</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="display-3 fw-semibold text-warning" id="meteo-title">Meteo</div>
+                    <div class="display-3 fw-semibold text-warning" id="wx-title">Wx</div>
                 </div>
 
                 <!-- CAMS TILE -->
+                <!-- MORE CAMS? https://www.weather.gov/slc/cameras -->
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
-                    <div class="overflow-hidden tile-border tile-height" id="cams-border">
-                        <img class="h-100 w-100" id="latest-cam">
+                    <div class="overflow-hidden tile-border" id="cams-border">
+                        <div class="tile-height">
+                            <img class="h-100 w-100" id="latest-cam">
+                        </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="cams-title">Cams</div>
                 </div>
 
                 <!-- GPS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('gps')">
-                    <div class="overflow-hidden tile-border tile-height" id="gps-border">
-                        <img class="h-100 w-100" src="./images/gpstile.png">
+                    <div class="overflow-hidden tile-border" id="gps-border">
+                        <div class="tile-height">
+                            <img class="h-100 w-100" src="./images/gpstile.png">
+                        </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="gps-title">GPS</div>
                 </div>
 
                 <!-- ABOUT TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('about')">
-                    <div class="bg-tile overflow-hidden tile-border tile-height" id="about-border">
-                        <div class="d-flex justify-content-center tile-height">
+                    <div class="overflow-hidden tile-border" id="about-border">
+                        <div class="bg-tile d-flex justify-content-center tile-height">
                             <div class="align-self-center display-4">Wasatch<br>Wind</div>
                         </div>
                     </div>
@@ -181,8 +212,8 @@
 
                 <!-- SETTINGS TILE -->
                 <div class="col mx-2 tile" onclick="toggleDiv('settings')">
-                    <div class="bg-tile overflow-hidden tile-border tile-height" id="settings-border">
-                        <div class="d-flex justify-content-center tile-height">
+                    <div class="overflow-hidden tile-border" id="settings-border">
+                        <div class="bg-tile d-flex justify-content-center tile-height">
                             <div class="align-self-center display-4">Settings</div>
                         </div>
                     </div>
@@ -220,9 +251,9 @@
         <a id="wind-aloft-link" target="_blank">
             <div class="border border-warning border-4 bg-aloft mb-5 mx-2 rounded-4">
                 <div class="border-bottom d-flex">
-                    <div class="col-auto me-4">
-                        <div class="display-3 fw-bold ms-2 text-start">18</div>
-                        <div class="fs-3 ms-5">5,486 m</div>
+                    <div class="col-3 me-4">
+                        <div class="display-3 fw-bold ms-2 text-start">18,000'</div>
+                        <div class="fs-3">5,486 m</div>
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-18k"></div>
@@ -234,9 +265,9 @@
                     </div>
                 </div>
                 <div class="border-bottom d-flex">
-                    <div class="col-auto me-4">
-                        <div class="display-3 fw-bold ms-2 text-start">12</div>
-                        <div class="fs-3 ms-5">3,658 m</div>
+                    <div class="col-3 me-4">
+                        <div class="display-3 fw-bold ms-2 text-start">12,000'</div>
+                        <div class="fs-3">3,658 m</div>
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-12k"></div>
@@ -248,9 +279,9 @@
                     </div>
                 </div>
                 <div class="border-bottom d-flex">
-                    <div class="col-auto me-4">
-                        <div class="display-3 fw-bold ms-2 text-start">9</div>
-                        <div class="fs-3 ms-5">2,743 m</div>
+                    <div class="col-3 me-4">
+                        <div class="display-3 fw-bold ms-2 text-start">9,000'</div>
+                        <div class="fs-3">2,743 m</div>
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-9k"></div>
@@ -262,9 +293,9 @@
                     </div>
                 </div>
                 <div class="d-flex">
-                    <div class="col-auto me-4">
-                        <div class="display-3 fw-bold ms-2 text-start">6</div>
-                        <div class="fs-3 ms-5">1,829 m</div>
+                    <div class="col-3 me-4">
+                        <div class="display-3 fw-bold ms-2 text-start">6,000'</div>
+                        <div class="fs-3">1,829 m</div>
                     </div>
                     <div class="d-flex">
                         <div class="align-self-center display-2 fw-bold" id="dir-6k"></div>
@@ -287,105 +318,129 @@
         </a>
 
         <!-- WIND CHART KSLC -->
-        <div class="mx-2" id="KSLC-main">
-            <div class="display-3 fw-bold">KSLC History</div>
+        <div class="mb-5 mx-2">
+            <div class="collapse" id="KSLC-main" onclick="toggleWindChart('KSLC')">
+                <div class="border d-flex overflow-hidden rounded-4">
+                    <div class="bg-warning col-1 d-flex justify-content-around">
+                        <div class="align-self-center display-3 fw-bold text-secondary" id="KSLC-toggle">&#10133;</div>
+                    </div>
+                    <div class="bg-KSLC col d-flex">
+                        <div class="col ps-2 text-start">
+                            <div class="display-2 fw-bold text-warning">KSLC</div>
+                            <div class="fs-1 fw-bold" id="KSLC-time-12"></div>
+                            <div class="d-flex fs-2">
+                                <div>4,229 ft</div>
+                                <div class="mx-4">&#9650;</div>
+                                <div>1,289 m</div>
+                            </div>
+                        </div>
+                        <div class="align-self-start col-auto d-flex">
+                            <div class="display-1 me-4" id="KSLC-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="KSLC-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="KSLC-gust-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
-                <div class="align-items-end bg-dark border border-warning border-4 d-flex mb-5 rounded-4">
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-0">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-0"></div>
-                        <div id="KSLC-wbar-0"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-0"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-0"></div></div>
-                        <div class="fs-4" id="KSLC-time-0"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-1">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-1"></div>
-                        <div id="KSLC-wbar-1"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-1"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-1"></div></div>
-                        <div class="fs-4" id="KSLC-time-1"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-2">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-2"></div>
-                        <div id="KSLC-wbar-2"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-2"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-2"></div></div>
-                        <div class="fs-4" id="KSLC-time-2"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-3">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-3"></div>
-                        <div id="KSLC-wbar-3"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-3"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-3"></div></div>
-                        <div class="fs-4" id="KSLC-time-3"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-4">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-4"></div>
-                        <div id="KSLC-wbar-4"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-4"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-4"></div></div>
-                        <div class="fs-4" id="KSLC-time-4"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-5">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-5"></div>
-                        <div id="KSLC-wbar-5"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-5"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-5"></div></div>
-                        <div class="fs-4" id="KSLC-time-5"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-6">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-6"></div>
-                        <div id="KSLC-wbar-6"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-6"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-6"></div></div>
-                        <div class="fs-4" id="KSLC-time-6"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-7">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-7"></div>
-                        <div id="KSLC-wbar-7"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-7"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-7"></div></div>
-                        <div class="fs-4" id="KSLC-time-7"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-8">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-8"></div>
-                        <div id="KSLC-wbar-8"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-8"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-8"></div></div>
-                        <div class="fs-4" id="KSLC-time-8"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-9">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-9"></div>
-                        <div id="KSLC-wbar-9"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-9"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-9"></div></div>
-                        <div class="fs-4" id="KSLC-time-9"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-10">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-10"></div>
-                        <div id="KSLC-wbar-10"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-10"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-10"></div></div>
-                        <div class="fs-4" id="KSLC-time-10"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div class="gust-color h2" id="KSLC-gust-11">&nbsp;</div>
-                        <div class="bg-danger" id="KSLC-gbar-11"></div>
-                        <div id="KSLC-wbar-11"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-11"></span></div>
-                        <div><div class="display-4" id="KSLC-wdir-11"></div></div>
-                        <div class="fs-4" id="KSLC-time-11"></div>
+                <div class="collapse" id="KSLC">
+                    <div class="align-items-end bg-dark border border-warning border-4 d-flex mb-5 rounded-4">
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-0">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-0"></div>
+                            <div id="KSLC-wbar-0"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-0"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-0"></div></div>
+                            <div class="fs-4" id="KSLC-time-0"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-1">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-1"></div>
+                            <div id="KSLC-wbar-1"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-1"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-1"></div></div>
+                            <div class="fs-4" id="KSLC-time-1"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-2">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-2"></div>
+                            <div id="KSLC-wbar-2"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-2"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-2"></div></div>
+                            <div class="fs-4" id="KSLC-time-2"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-3">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-3"></div>
+                            <div id="KSLC-wbar-3"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-3"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-3"></div></div>
+                            <div class="fs-4" id="KSLC-time-3"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-4">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-4"></div>
+                            <div id="KSLC-wbar-4"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-4"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-4"></div></div>
+                            <div class="fs-4" id="KSLC-time-4"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-5">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-5"></div>
+                            <div id="KSLC-wbar-5"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-5"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-5"></div></div>
+                            <div class="fs-4" id="KSLC-time-5"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-6">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-6"></div>
+                            <div id="KSLC-wbar-6"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-6"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-6"></div></div>
+                            <div class="fs-4" id="KSLC-time-6"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-7">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-7"></div>
+                            <div id="KSLC-wbar-7"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-7"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-7"></div></div>
+                            <div class="fs-4" id="KSLC-time-7"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-8">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-8"></div>
+                            <div id="KSLC-wbar-8"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-8"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-8"></div></div>
+                            <div class="fs-4" id="KSLC-time-8"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-9">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-9"></div>
+                            <div id="KSLC-wbar-9"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-9"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-9"></div></div>
+                            <div class="fs-4" id="KSLC-time-9"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-10">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-10"></div>
+                            <div id="KSLC-wbar-10"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-10"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-10"></div></div>
+                            <div class="fs-4" id="KSLC-time-10"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-11">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-11"></div>
+                            <div id="KSLC-wbar-11"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-11"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-11"></div></div>
+                            <div class="fs-4" id="KSLC-time-11"></div>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -401,7 +456,7 @@
                     <div class="bg-UTOLY col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Olympus</div>
-                            <div class="fs-1 fw-bold" id="UTOLY-time"></div>
+                            <div class="fs-1 fw-bold" id="UTOLY-time-12"></div>
                             <div class="d-flex fs-2">
                                 <div>4,972 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -409,9 +464,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="UTOLY-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="UTOLY-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="UTOLY-gust"></div>
+                            <div class="display-1 me-4" id="UTOLY-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="UTOLY-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="UTOLY-gust-12"></div>
                         </div>
                     </div>
                 </div>
@@ -530,7 +585,7 @@
                     <div class="bg-AMB col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Alta Baldy</div>
-                            <div class="fs-1 fw-bold" id="AMB-time"></div>
+                            <div class="fs-1 fw-bold" id="AMB-time-6"></div>
                             <div class="d-flex fs-2">
                                 <div>11,066 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -538,9 +593,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="AMB-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="AMB-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="AMB-gust"></div>
+                            <div class="display-1 me-4" id="AMB-wdir-6"></div>
+                            <div class="display-1 fw-bold me-4" id="AMB-wspd-6"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="AMB-gust-6"></div>
                         </div>
                     </div>
                 </div>
@@ -611,7 +666,7 @@
                     <div class="bg-KU42 col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Airport 2</div>
-                            <div class="fs-1 fw-bold" id="KU42-time"></div>
+                            <div class="fs-1 fw-bold" id="KU42-time-12"></div>
                             <div class="d-flex fs-2">
                                 <div>4,596 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -619,9 +674,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="KU42-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="KU42-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="KU42-gust"></div>
+                            <div class="display-1 me-4" id="KU42-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="KU42-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="KU42-gust-12"></div>
                         </div>
                     </div>
                 </div>
@@ -740,7 +795,7 @@
                     <div class="bg-HF012 col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Northside</div>
-                            <div class="fs-1 fw-bold" id="HF012-time"></div>
+                            <div class="fs-1 fw-bold" id="HF012-time-12"></div>
                             <div class="d-flex fs-2">
                                 <div>6,194 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -748,9 +803,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="HF012-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="HF012-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="HF012-gust"></div>
+                            <div class="display-1 me-4" id="HF012-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="HF012-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="HF012-gust-12"></div>
                         </div>
                     </div>
                 </div>
@@ -869,7 +924,7 @@
                     <div class="bg-FPS col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Southside</div>
-                            <div class="fs-1 fw-bold" id="FPS-time"></div>
+                            <div class="fs-1 fw-bold" id="FPS-time-12"></div>
                             <div class="d-flex fs-2">
                                 <div>5,202 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -877,9 +932,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="FPS-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="FPS-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="FPS-gust"></div>
+                            <div class="display-1 me-4" id="FPS-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="FPS-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="FPS-gust-12"></div>
                         </div>
                     </div>
                 </div>
@@ -999,7 +1054,7 @@
                     <div class="bg-OGP col d-flex">
                         <div class="col ps-2 text-start">
                             <div class="display-2 fw-bold text-warning">Ogden Peak</div>
-                            <div class="fs-1 fw-bold" id="OGP-time"></div>
+                            <div class="fs-1 fw-bold" id="OGP-time-12"></div>
                             <div class="d-flex fs-2">
                                 <div>9,570 ft</div>
                                 <div class="mx-4">&#9650;</div>
@@ -1007,9 +1062,9 @@
                             </div>
                         </div>
                         <div class="align-self-start col-auto d-flex">
-                            <div class="display-1 me-4" id="OGP-wdir"></div>
-                            <div class="display-1 fw-bold me-4" id="OGP-wspd"></div>
-                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="OGP-gust"></div>
+                            <div class="display-1 me-4" id="OGP-wdir-12"></div>
+                            <div class="display-1 fw-bold me-4" id="OGP-wspd-12"></div>
+                            <div class="align-self-center display-2 fw-bold gust-color me-4" id="OGP-gust-12"></div>
                         </div>
                     </div>
                 </div>
@@ -1129,116 +1184,10 @@
     <!-- ZONE DIV -->
     <div class="collapse mb-div-end" id="zone">
 
-        <!-- PRESSURE & ZONE LAST 6 HOURS -->
-        <div class="display-3 fw-bold">Pressure History</div>
-        <div class="align-items-end border border-2 bg-dark d-flex mb-5 mx-2 rounded-4">
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-0"></div>
-                <div class="bg-primary border mb-2" id="altibar-0"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-0"></span>
-                </div>
-                <div class="fs-1" id="altitime-0"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-1"></div>
-                <div class="bg-primary border mb-2" id="altibar-1"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-1"></span>
-                </div>
-                <div class="fs-1" id="altitime-1"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-2"></div>
-                <div class="bg-primary border mb-2" id="altibar-2"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-2"></span>
-                </div>
-                <div class="fs-1" id="altitime-2"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-3"></div>
-                <div class="bg-primary border mb-2" id="altibar-3"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-3"></span>
-                </div>
-                <div class="fs-1" id="altitime-3"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-4"></div>
-                <div class="bg-primary border mb-2" id="altibar-4"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-4"></span>
-                </div>
-                <div class="fs-1" id="altitime-4"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-5 fw-bold mb-2" id="alti-5"></div>
-                <div class="bg-primary border mb-2" id="altibar-5"></div>
-                <div class="display-1 mb-2">
-                    <span id="zonenum-5"></span>
-                </div>
-                <div class="fs-1" id="altitime-5"></div>
-            </div>
-        </div>
-
-        <!-- TEMP CHART -->
-        <div class="d-flex justify-content-between mx-2">
-            <div class="align-self-end fs-1 fw-bold text-info">&#171; History</div>
-            <div class="display-3 fw-bold">Temp Trend</div>
-            <div class="align-self-end fs-1 fw-bold text-info">Forecast &#187;</div>
-        </div>
-        <div class="align-items-end bg-dark border border-2 d-flex mb-5 mx-2 rounded-4">
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-0"></div>
-                <div class="border mb-2" id="tempbar-0"></div>
-                <div class="fs-2" id="temptime-0"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-1"></div>
-                <div class="border mb-2" id="tempbar-1"></div>
-                <div class="fs-2" id="temptime-1"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-2"></div>
-                <div class="border mb-2" id="tempbar-2"></div>
-                <div class="fs-2" id="temptime-2"></div>
-            </div>
-            <div class="col-3 px-1">
-                <div class="display-2 fw-bold mb-2" id="temp-3"></div>
-                <div class="border d-flex justify-content-center mb-2" id="tempbar-3">
-                    <div class="align-self-end fs-1">Latest</div>
-                </div>
-                <div class="fs-2 fw-bold" id="temptime-3"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-4"></div>
-                <div class="border mb-2" id="tempbar-4"></div>
-                <div class="fs-2" id="temptime-4"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-5"></div>
-                <div class="border mb-2" id="tempbar-5"></div>
-                <div class="fs-2" id="temptime-5"></div>
-            </div>
-            <div class="col px-1">
-                <div class="display-4 fw-bold mb-2" id="temp-6"></div>
-                <div class="border mb-2" id="tempbar-6"></div>
-                <div class="fs-2" id="temptime-6"></div>
-            </div>
-        </div>
-
-        <!-- CURRENT FRONTS -->
-        <div class="display-3 fw-bold">Current Fronts</div>
-        <div class="mb-5 mx-2">
-            <img class="rounded-4 w-100" src="https://uni.edu/storm/wximages/images/fronts.gif">
-        </div>
-
         <!-- WHAT IS ZONE? -->
-        <div class="display-3 fw-bold text-warning text-decoration-underline" onclick="toggleWhatIsZoneChart()">What is "Zone"?</div>
-        <div class="collapse mx-2" id="zone-details">
-            <div class="display-5 fw-bold my-4">Created by Jeff Ambrose using many years of accumlated empirical pressure and temperature data to estimate relative turbulence and general flying air quality.</div>
-            <img class="rounded-4 w-100" src="images/zonechart.jpg">
+        <div class="mx-2">
+            <img class="my-2 rounded-4 w-100" src="images/zonechart1.jpg">
+            <div class="display-4 mt-2 text-info">Created by Jeff Ambrose based on many years of accumlated empirical pressure and temperature data to estimate relative air quality.</div>
         </div>
 
     </div>
@@ -1283,8 +1232,8 @@
 
     </div>
 
-    <!-- METEO DIV -->
-    <div class="collapse mb-div-end" id="meteo">
+    <!-- Wx DIV -->
+    <div class="collapse mb-div-end" id="wx">
 
         <!-- CLOUDS & PRECIP GIF -->
         <div class="display-3 fw-bold">Clouds & Precip Last Hour</div>
@@ -1342,7 +1291,7 @@
         
         <!-- NEXT 3 DAYS -->
         <div class="display-3 fw-bold">Next 3 Days</div>
-        <a href="https://forecast.weather.gov/MapClick.php?lat=40.76031000000006&lon=-111.88821999999999#.YSqo945KhhF" target="_blank">
+        <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
             <div class="bg-dark border border-warning border-4 mb-5 mx-2 overflow-hidden rounded-4">
                 <div class="d-flex">
                     <img class="align-self-center col-3" id="forecast-day0-img">
@@ -1367,6 +1316,12 @@
                 </div>
             </div>
         </a>
+
+        <!-- CURRENT FRONTS -->
+        <div class="display-3 fw-bold">Current Fronts</div>
+        <div class="mb-5 mx-2">
+            <img class="rounded-4 w-100" src="https://uni.edu/storm/wximages/images/fronts.gif">
+        </div>
 
         <!-- AREA FORECAST DISCUSSION -->
         <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
@@ -1403,7 +1358,7 @@
             </div>
             <div class="col mx-4">
                 <div>Southside</div>
-                <a href="http://southcam.uhgpga.org/#view" target="_blank">
+                <a href="http://southcam.uhgpgapilot.org/#view" target="_blank">
                     <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="./images/slccamsouthside.png">
                 </a>
             </div>
@@ -1434,7 +1389,7 @@
 
     <!-- ABOUT DIV -->
     <div class="collapse mb-div-end mx-2" id="about">
-        <img class="rounded-4 mt-2" src="./images/mattolympus.jpg" width="100%">
+        <img class="rounded-4 mt-2 w-100" src="./images/mattolympus.jpg">
         <div class="fs-1">Over Mount Olympus, 2021 (Photo by Jeff Ambrose)</div>
         <div class="display-3 fw-bold mt-5">Questions? Feedback?</div>
         <div class="border-bottom border-2 display-1 pb-5 text-info">matthansonx@gmail.com</div>
