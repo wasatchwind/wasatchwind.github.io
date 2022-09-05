@@ -32,4 +32,5 @@ function nwsForecastProcess(data) {
         document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
         position += 2
     }
+    document.getElementById('forecast-icon').src = data.properties.periods[0].icon
 };
