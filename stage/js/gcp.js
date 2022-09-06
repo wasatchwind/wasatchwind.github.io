@@ -40,7 +40,7 @@ function windMapImage(data) {
     document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
 };
 
-function getLiftParams(data, temp, position = 0, raobSlope, params = {}) {
+function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {}) {
     const tempC = (temp - 32) * 5 / 9
     const surfaceAlt_m = 1289
     const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
