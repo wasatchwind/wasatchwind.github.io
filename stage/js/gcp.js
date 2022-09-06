@@ -68,7 +68,9 @@ function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {
     interpolateY2 = data[position - 1].Altitude_m
     if (interpolateX1 !== interpolateX2) {
         raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        console.log(raobYInt)
         raobYInt = interpolateY1 - (raobSlope * interpolateX1)
+        console.log(raobYInt)
         params.tol = ((dalrSlope * roabYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
     }
     else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
