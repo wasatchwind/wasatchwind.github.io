@@ -53,8 +53,8 @@ function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {
     let interpolateY2 = data[position - 1].Altitude_m
     if (interpolateX1 !== interpolateX2) {
         raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-        let roabYInt = interpolateY1 - (raobSlope * interpolateX1)
-        const interpolateX = (roabYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
+        let raobYInt = interpolateY1 - (raobSlope * interpolateX1)
+        const interpolateX = (raobYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
         params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
     }
     else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
@@ -68,10 +68,8 @@ function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {
     interpolateY2 = data[position - 1].Altitude_m
     if (interpolateX1 !== interpolateX2) {
         raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-        console.log(raobYInt)
         raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-        console.log(raobYInt)
-        params.tol = ((dalrSlope * roabYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+        params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
     }
     else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
     params.tolTemp = (params.tol - dalrYInt) / dalrSlope
