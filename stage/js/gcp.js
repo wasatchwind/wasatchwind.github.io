@@ -34,13 +34,7 @@ function windAloftSpeed(spds, colors = {}) {
     }
 };
 
-function windMapImage(data) {
-    const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
-    document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-    document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
-};
-
-function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {}) {
+function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {}) {
     const tempC = (temp - 32) * 5 / 9
     const surfaceAlt_m = 1289
     const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
