@@ -23,7 +23,8 @@ const svg = d3.select('#skew-t-d3').append('svg')
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
 
-function decodedSkewTChart(data, maxTemp, liftParams) {
+function decodedSkewTChart(maxTemp, data, liftParams) {
+    document.getElementById('max-temp').innerHTML = `${maxTemp}&deg;`
 
     // Set vertical x axis gridlines
     const xAxisGrid = d3.axisTop(x).tickSize(0 - y(4)).ticks(23)
@@ -172,7 +173,7 @@ function drawDALRParams (temp, params) {
 function d3Update() {
     const userTemp = parseInt(document.getElementById('user-temp').value)
     if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < 106) {
-        const userLiftParams = getLiftParams(soundingData, userTemp)
+        const userLiftParams = getLiftParams(userTemp, soundingData)
         dalrFlag = 1
         d3Clear()
         drawDALRParams(userTemp, userLiftParams)
