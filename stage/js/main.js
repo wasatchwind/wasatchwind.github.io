@@ -24,11 +24,11 @@ function toggleWindChart(div) {
     const element = document.getElementById(div)
     if (element.style.display==='' || element.style.display==='none') {
         element.style.display = 'block'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#10134;'
+        document.getElementById(`${div}-toggle`).innerHTML = '&#8722;'
     }
     else {
         element.style.display = 'none'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#10133;'
+        document.getElementById(`${div}-toggle`).innerHTML = '&#43;'
     }
 };
 
