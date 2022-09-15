@@ -10,6 +10,7 @@ function windAloftTime(start, end) {
 function windAloftDir(dirs) {
     for (const key in dirs) {
         const element = document.getElementById(`dir-${key}`)
+        if (dirs[key] === 'calm') element.className = 'align-self-center display-5 ms-5'
         element.innerHTML = dirs[key] === 'calm' ? 'Calm' : '&#10148;'
         element.style.transform = `rotate(${dirs[key] + 90}deg)`
     }
