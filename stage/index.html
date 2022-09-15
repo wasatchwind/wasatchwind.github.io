@@ -320,7 +320,7 @@
         </a>
 
         <!-- WIND CHART KSLC -->
-        <div class="mb-5 mx-2">
+<!--         <div class="mb-5 mx-2">
             <div class="collapse" id="KSLC-main" onclick="toggleWindChart('KSLC')">
                 <div class="border d-flex overflow-hidden rounded-4">
                     <div class="bg-warning col-1 d-flex justify-content-around">
@@ -446,6 +446,124 @@
                     </div>
                 </div>
             </a>
+        </div> -->
+        
+        <div class="mb-5 mx-2" id="KSLC-main" onclick="toggleWindChart('KSLC')">
+            <div class="align-items-end d-flex justify-content-between">
+                <div class="d-flex align-items-end">
+                    <div class="align-self-center display-6 text-warning" id="KSLC-toggle">&#10133;</div>
+                    <div class="display-3 text-info mx-2">KSLC</div>
+                    <div class="display-6 fw-semibold text-secondary" id="KSLC-time-12"></div>
+                </div>
+                <div class="display-6 fw-semibold text-secondary">(4,229' &#9652; 1,289 m)</div>
+                <div class="d-flex">
+                    <div class="display-4" id="KSLC-wdir-12"></div>
+                    <div class="display-4 fw-semibold mx-4" id="KSLC-wspd-12"></div>
+                    <div class="display-6 fw-semibold gust-color" id="KSLC-gust-12"></div>
+                </div>
+            </div>
+            <div class="bg-dark border border-warning border-4 rounded-4">
+                <div class="collapse" id="KSLC">
+                    <div class="align-items-end d-flex">
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-0">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-0"></div>
+                            <div id="KSLC-wbar-0"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-0"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-0"></div></div>
+                            <div class="fs-4" id="KSLC-time-0"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-1">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-1"></div>
+                            <div id="KSLC-wbar-1"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-1"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-1"></div></div>
+                            <div class="fs-4" id="KSLC-time-1"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-2">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-2"></div>
+                            <div id="KSLC-wbar-2"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-2"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-2"></div></div>
+                            <div class="fs-4" id="KSLC-time-2"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-3">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-3"></div>
+                            <div id="KSLC-wbar-3"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-3"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-3"></div></div>
+                            <div class="fs-4" id="KSLC-time-3"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-4">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-4"></div>
+                            <div id="KSLC-wbar-4"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-4"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-4"></div></div>
+                            <div class="fs-4" id="KSLC-time-4"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-5">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-5"></div>
+                            <div id="KSLC-wbar-5"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-5"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-5"></div></div>
+                            <div class="fs-4" id="KSLC-time-5"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-6">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-6"></div>
+                            <div id="KSLC-wbar-6"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-6"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-6"></div></div>
+                            <div class="fs-4" id="KSLC-time-6"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-7">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-7"></div>
+                            <div id="KSLC-wbar-7"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-7"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-7"></div></div>
+                            <div class="fs-4" id="KSLC-time-7"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-8">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-8"></div>
+                            <div id="KSLC-wbar-8"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-8"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-8"></div></div>
+                            <div class="fs-4" id="KSLC-time-8"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-9">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-9"></div>
+                            <div id="KSLC-wbar-9"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-9"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-9"></div></div>
+                            <div class="fs-4" id="KSLC-time-9"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-10">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-10"></div>
+                            <div id="KSLC-wbar-10"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-10"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-10"></div></div>
+                            <div class="fs-4" id="KSLC-time-10"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="gust-color h2" id="KSLC-gust-11">&nbsp;</div>
+                            <div class="bg-danger" id="KSLC-gbar-11"></div>
+                            <div id="KSLC-wbar-11"></div>
+                            <div class="bg-secondary fs-1 fw-bold"><span id="KSLC-wspd-11"></span></div>
+                            <div><div class="display-4" id="KSLC-wdir-11"></div></div>
+                            <div class="fs-4" id="KSLC-time-11"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- WIND CHART OLYMPUS (UTOLY) -->
