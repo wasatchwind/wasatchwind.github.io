@@ -45,7 +45,6 @@ a:active {
 /* COLORS */
 .gust-color { color: hotpink; }
 .bg-sticky { background-color: black; }
-.bg-tile { background-color: var(--bs-gray-800); }
 
 /* SCROLL TILES */
 #tile-container {
