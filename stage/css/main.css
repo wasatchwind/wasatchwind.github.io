@@ -4,7 +4,7 @@
     margin-right: 30%;
     zoom: 0.4;
   }
-  .tile-height { height: 30vh; }
+  .tile-height { height: 40vh; }
 }
 @media only screen and (max-width: 1440px) { .tile-height { height: 12vh; } }
 body {
