@@ -78,6 +78,30 @@
         if (nwsForecastData) nwsForecastProcess(nwsForecastData)
     } catch (error) { console.log(error) }
 
+    // SOARING FORECAST TEXT
+    try {
+        let soaringForecastText
+        const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'
+        try { soaringForecastText = await (await fetch(soaringForecastURL)).text() }
+        catch (error) {
+            console.log('Soaring Forecast fetch failed')
+            document.getElementById('soaring-forecast-div').innerText = 'Data error: Refresh or try again later'
+        }
+        processSoaringForecast(soaringForecastText)
+    } catch (error) { console.log(error) }
+
+    // AREA FORECAST DISCUSSION TEXT
+    try {
+        let areaForecastText
+        const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1&glossary=0'
+        try { areaForecastText = await (await fetch(areaForecastURL)).text() }
+        catch (error) {
+            console.log('Area Forecast fetch failed')
+            document.getElementById('area-forecast-div').innerText = 'Data error: Refresh or try again later'
+        }
+        processAreaForecast(areaForecastText)
+    } catch (error) { console.log(error) }
+
     if (now.getHours() > 6 && now.getHours() < 16) windSurfaceForecastGraphical()
     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
     document.getElementById('spinner').style.display = 'none'
