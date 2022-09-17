@@ -56,6 +56,28 @@ function windSurfaceForecastGraphical() {
     document.getElementById('graphical-wind-div').style.display = 'block'
 };
 
+function processSoaringForecast(text) {
+    const textStart = text.search(/[Dd][Aa][Tt][Ee]\.{3}.+/)
+    const textEnd = text.search(/[Ft][Tt]\/[Mm][Ii][Nn]/) + 6
+    const soaringForecast = text.slice(textStart, textEnd)
+    document.getElementById('soaring-forecast').innerText = soaringForecast
+};
+
+function processAreaForecast(text) {
+    const dateStart = text.search(/[Cc][Ii][Tt][Yy]\s[Uu][Tt]\n/) + 8
+    const dateEnd = text.search(/202\d\n/) + 4
+    const forecastDate = text.slice(dateStart, dateEnd)
+    const synopsisStart = text.search(/SYNOPSIS/) + 11
+    const synopsisEnd = text.search(/&&/) - 2
+    const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
+    const aviationStart = text.search(/KSLC\.{3}/) + 7
+    const aviationEnd = text.search(/REST/)
+    const aviation = text.slice(aviationStart, aviationEnd).replace(/\n/g, ' ')
+    document.getElementById('area-forecast-date').innerText = forecastDate
+    document.getElementById('area-forecast-synopsis').innerText = synopsis
+    document.getElementById('area-forecast-aviation').innerText = aviation
+};
+
 (function getAllGraphicalForecastImages() {
     const url = 'https://graphical.weather.gov/images/slc/'
     const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
@@ -67,7 +89,7 @@ function windSurfaceForecastGraphical() {
 })();
 
 (function getMorningSkewT() {
-    if (now.getHours() > 9 && now.getHours() < 20) {
+    if (now.getHours() > 6 && now.getHours() < 20) {
         const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
         const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
         document.getElementById('skew-t-img').src = url
