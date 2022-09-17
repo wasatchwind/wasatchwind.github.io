@@ -167,11 +167,11 @@
                     <div class="overflow-hidden tile-border" id="wx-border">
                         <div class="bg-dark d-flex tile-height justify-content-around">
                             <div class="col align-self-center">
-                                <img class="w-75 rounded-4" id="current-icon">
+                                <img class="border border-dark rounded-4 w-100" id="current-icon">
                                 <div class="fs-1">Current</div>
                             </div>
                             <div class="col align-self-center">
-                                <img class="w-75 rounded-4" id="forecast-icon">
+                                <img class="border border-dark rounded-4 w-100" id="forecast-icon">
                                 <div class="fs-1">Forecast</div>
                             </div>
                         </div>
@@ -180,7 +180,6 @@
                 </div>
 
                 <!-- CAMS TILE -->
-                <!-- MORE CAMS? https://www.weather.gov/slc/cameras -->
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
                     <div class="overflow-hidden tile-border" id="cams-border">
                         <div class="tile-height">
@@ -238,7 +237,7 @@
                 <div>Gust</div>
             </div>
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="border border-warning border-4 d-flex justify-content-between mx-2 overflow-hidden rounded-4">
+                <div class="d-flex justify-content-between mx-2 overflow-hidden rounded-4">
                     <img class="img-fluid w-100" id="graphical-wind-img">
                     <img class="img-fluid w-100" id="graphical-gust-img">
                 </div>
@@ -250,7 +249,7 @@
         <div class="display-6 mb-5" id="wind-aloft">
             <div class="d-flex display-6 fw-semibold justify-content-center text-secondary" id="aloft-range"></div>
             <a id="wind-aloft-link" target="_blank">
-                <div class="border border-warning border-4 bg-dark mx-2 rounded-4">
+                <div class="bg-dark mx-2 rounded-4">
                     <div class="border-bottom border-1 border-secondary d-flex">
                         <div class="col-2 ps-3 text-secondary text-start">
                             <div class="display-3 fw-semibold">18k'</div>
@@ -315,13 +314,13 @@
         <div class="display-3 text-info" id="wind-map-timestamp"></div>
         <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="border border-warning border-4 rounded-4 w-100" id="surface-wind-map">
+                <img class="rounded-4 w-100" id="surface-wind-map">
             </div>
         </a>
 
         <!-- WIND CHART KSLC -->
         <div class="mb-2 mx-2" id="KSLC-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="KSLC-toggle" onclick="toggleWindChart('KSLC')">&#43;</div>
                     <div class="display-3 text-info mx-4">KSLC</div>
@@ -333,7 +332,7 @@
                     <div class="display-6 fw-semibold gust-color" id="KSLC-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="KSLC">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -441,7 +440,7 @@
 
         <!-- WIND CHART OLYMPUS (UTOLY) -->
         <div class="mb-2 mx-2" id="UTOLY-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="UTOLY-toggle" onclick="toggleWindChart('UTOLY')">&#43;</div>
                     <div class="display-3 text-info mx-4">Olympus</div>
@@ -453,7 +452,7 @@
                     <div class="display-6 fw-semibold gust-color" id="UTOLY-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="UTOLY">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=UTOLY&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -561,7 +560,7 @@
         
         <!-- WIND CHART ALTA BALDY (AMB) -->
         <div class="mb-2 mx-2" id="AMB-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="AMB-toggle" onclick="toggleWindChart('AMB')">&#43;</div>
                     <div class="display-3 text-info mx-4">Alta Baldy</div>
@@ -573,7 +572,7 @@
                     <div class="display-6 fw-semibold gust-color" id="AMB-gust-6"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="AMB">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=AMB&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -633,7 +632,7 @@
 
         <!-- WIND CHART AIRPORT 2 (KU42) -->
         <div class="mb-2 mx-2" id="KU42-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="KU42-toggle" onclick="toggleWindChart('KU42')">&#43;</div>
                     <div class="display-3 text-info mx-4">Airport 2</div>
@@ -645,7 +644,7 @@
                     <div class="display-6 fw-semibold gust-color" id="KU42-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="KU42">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KU42&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -753,7 +752,7 @@
 
         <!-- WIND CHART NORTHSIDE (HF012) -->
         <div class="mb-2 mx-2" id="HF012-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="HF012-toggle" onclick="toggleWindChart('HF012')">&#43;</div>
                     <div class="display-3 text-info mx-4">Northside</div>
@@ -765,7 +764,7 @@
                     <div class="display-6 fw-semibold gust-color" id="HF012-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="HF012">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=HF012&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -873,7 +872,7 @@
         
         <!-- WIND CHART SOUTHSIDE (FPS) -->
         <div class="mb-2 mx-2" id="FPS-main">
-            <div class="align-items-end d-flex justify-content-between">
+            <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                     <div class="align-self-center display-1 text-warning" id="FPS-toggle" onclick="toggleWindChart('FPS')">&#43;</div>
                     <div class="display-3 text-info mx-4">Southside</div>
@@ -885,7 +884,7 @@
                     <div class="display-6 fw-semibold gust-color" id="FPS-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="FPS">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=FPS&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -1005,7 +1004,7 @@
                     <div class="display-6 fw-semibold gust-color" id="OGP-gust-12"></div>
                 </div>
             </div>
-            <div class="bg-dark border border-warning border-4 rounded-4">
+            <div class="bg-dark rounded-4">
                 <div class="collapse" id="OGP">
                     <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=OGP&table=1&banner=off" target="_blank">
                         <div class="align-items-end d-flex">
@@ -1127,39 +1126,48 @@
     <!-- LIFT DIV -->
     <div class="collapse mb-div-end" id="lift">
 
-        <!-- SOUNDING SKEW-T -->
-        <div class="display-3 texyt-info">Daily Skew-T</div>
-        <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
-            <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" id="skew-t-img">
-            </div>
-        </a>
-
         <!-- D3 CHART -->
         <div class="display-3 text-info">Decoded Skew-T</div>
         <div class="bg-dark border mb-5 mx-2 rounded-4">
             <div id="skew-t-d3"></div>
-            <div class="display-3 fw-bold">Change Max Temp:</div>
-            <div class="display-3 d-flex fw-bold justify-content-around my-3 py-3 text-warning border-top border-bottom">
+            <div class="display-4 fw-semibold text-secondary">Check Another Surface Temp:</div>
+            <div class="display-3 d-flex fw-semibold justify-content-around py-3 text-warning border-bottom">
                 <div onclick="d3Update()">Enter</div>
-                <input class="bg-dark border border-warning fw-bold text-center text-warning" type="number"  min="0" max="110" id="user-temp">
+                <input class="bg-dark border border-2 border-warning fw-bold text-center text-warning" type="number"  min="0" max="110" id="user-temp">
                 <div onclick="d3Clear()">Clear</div>
             </div>
             <div class="display-3 d-flex justify-content-around my-3">
                 <div class="col">
-                    <div class="fs-1">Top of Lift</div>
+                    <div class="fs-1 text-info">Top of Lift</div>
                     <div class="fw-bold" id="user-tol"></div>
                 </div>
                 <div class="col">
-                    <div class="fs-1">Height of -3 Index</div>
+                    <div class="fs-1 text-info">Height of -3 Index</div>
                     <div class="fw-bold" id="user-neg3"></div>
                 </div>
             </div>
         </div>
 
+        <!-- SOUNDING SKEW-T -->
+        <div id="skew-t-div">
+            <div class="display-3 text-info">Daily Skew-T</div>
+            <a href="https://climate.cod.edu/data/raob/KSLC/skewt" target="_blank">
+                <div class="mb-5 mx-2">
+                    <img class="rounded-4 w-100" id="skew-t-img">
+                </div>
+            </a>
+        </div>
+
         <!-- SOARING FORECAST SLC -->
-        <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=0" target="_blank">
-            <div class="display-3 fw-bold text-warning text-decoration-underline">Soaring Forecast - SLC</div>
+        <div class="display-3 text-info">NWS Soaring Forecast</div>
+        <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
+            <div class="display-6 fw-semibold text-secondary" id="soaring-forecast-div">
+                <div class="bg-dark border mt-2 mx-2 rounded-4">
+                    <div class="font-monospace fs-1 fw-normal ps-3 text-info text-start">
+                        <div class="font-monospace fs-1 ps-3 text-info text-start" id="soaring-forecast"></div>
+                    </div>
+                </div>
+            </div>
         </a>
 
     </div>
@@ -1168,7 +1176,7 @@
     <div class="collapse mb-div-end" id="wx">
 
         <!-- CLOUDS & PRECIP GIF -->
-        <div class="display-3 fw-bold">Clouds & Precip Last Hour</div>
+        <div class="display-3 text-info">Clouds & Precip Last Hour</div>
         <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
             <div class="mb-5 mx-2">
                 <img class="rounded-4 w-100" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif">
@@ -1176,7 +1184,7 @@
         </a>
         
         <!-- SATELLITE GIF -->
-        <div class="display-3 fw-bold">Satellite Last 4 Hours</div>
+        <div class="display-3 text-info">Satellite Last 4 Hours</div>
         <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
             <div class="mb-5 mx-2">
                 <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/psw/GEOCOLOR/GOES17-PSW-GEOCOLOR-600x600.gif">
@@ -1184,24 +1192,24 @@
         </a>
 
         <!-- HOURLY FORECAST CHART -->
-        <div class="display-3 fw-bold">Next 48 Hours</div>
+        <div class="display-3 text-info">Next 48 Hours</div>
         <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="border border-warning border-4 rounded-4 w-100" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6">
+                <img class="rounded-4 w-100" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6">
             </div>
         </a>
 
         <!-- GRAPHICAL SKY/WX COVER -->
-        <div class="display-3 fw-bold">Sky Cover Forecast</div>
-        <div class="fs-1 fw-bold text-info" id="sky-next-day"></div>
+        <div class="display-3 text-info">Sky Cover Forecast</div>
+        <div class="display-6 fw-semibold text-secondary" id="sky-next-day"></div>
         <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-            <div class="d-flex fs-1 fw-bold text-info justify-content-around">
+            <div class="d-flex display-6 fw-semibold text-secondary justify-content-around">
                 <div>Morning</div>
                 <div>Mid-day</div>
                 <div>Afternoon</div>
                 <div>Evening</div>
             </div>
-            <div class="border border-warning border-4 d-flex mb-5 mx-2 overflow-hidden rounded-4">
+            <div class="d-flex mb-5 mx-2 overflow-hidden rounded-4">
                 <div class="col">
                     <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-0">
                     <img class="img-fluid" id="graphical-wx-0">
@@ -1222,82 +1230,123 @@
         </a>
         
         <!-- NEXT 3 DAYS -->
-        <div class="display-3 fw-bold">Next 3 Days</div>
+        <div class="display-3 text-info">Next 3 Days</div>
         <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
-            <div class="bg-dark border border-warning border-4 mb-5 mx-2 overflow-hidden rounded-4">
+            <div class="bg-dark mb-5 mx-2 overflow-hidden rounded-4">
                 <div class="d-flex">
-                    <img class="align-self-center col-3" id="forecast-day0-img">
+                    <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day0-img">
                     <div class="col-9">
-                        <div class="display-4 fw-bold text-info" id="forecast-day0-day"></div>
-                        <div class="fs-1 mx-4 text-start" id="forecast-day0-txt"></div>
+                        <div class="display-4" id="forecast-day0-day"></div>
+                        <div class="fs-1 mx-4 text-info text-start" id="forecast-day0-txt"></div>
                     </div>
                 </div>
                 <div class="d-flex border-bottom border-top">
-                    <img class="align-self-center col-3" id="forecast-day1-img">
+                    <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day1-img">
                     <div class="col-9">
-                        <div class="display-4 fw-bold text-info" id="forecast-day1-day"></div>
-                        <div class="fs-1 mx-4 text-start" id="forecast-day1-txt"></div>
+                        <div class="display-4" id="forecast-day1-day"></div>
+                        <div class="fs-1 mx-4 text-info text-start" id="forecast-day1-txt"></div>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <img class="align-self-center col-3" id="forecast-day2-img">
+                    <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day2-img">
                     <div class="col-9">
-                        <div class="display-4 fw-bold text-info" id="forecast-day2-day"></div>
-                        <div class="fs-1 mx-4 text-start" id="forecast-day2-txt"></div>
+                        <div class="display-4" id="forecast-day2-day"></div>
+                        <div class="fs-1 mx-4 text-info text-start" id="forecast-day2-txt"></div>
                     </div>
                 </div>
             </div>
         </a>
 
         <!-- CURRENT FRONTS -->
-        <div class="display-3 fw-bold">Current Fronts</div>
+        <div class="display-3 text-info">Current Fronts</div>
         <div class="mb-5 mx-2">
             <img class="rounded-4 w-100" src="https://uni.edu/storm/wximages/images/fronts.gif">
         </div>
-        
+
         <!-- JETSTREAM -->
-        <div class="display-3 fw-bold">Jetstream: Last 18 Hours</div>
-        <div class="mx-2">
+        <div class="display-3 text-info">Jetstream: Last 18 Hours</div>
+        <div class="mb-5 mx-2">
             <img class="rounded-4 w-100" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png">
         </div>
 
         <!-- AREA FORECAST DISCUSSION -->
+        <div class="display-3 text-info">Area Forecast Discussion</div>
         <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
-            <div class="display-3 fw-bold text-warning text-decoration-underline">Area Forecast Discussion - SLC</div>
+            <div class="display-6 fw-semibold text-secondary" id="area-forecast-div">
+                <div class="bg-dark border mx-2 rounded-4">
+                    <div class="font-monospace fs-1 fw-normal ps-3 text-info text-start">
+                        <div id="area-forecast-date"></div>
+                        <div class="text-white"><br>SYNOPSIS:</div>
+                        <div id="area-forecast-synopsis"></div>
+                        <div class="text-white"><br>AVIATION (KSLC):</div>
+                        <div id="area-forecast-aviation"></div>
+                    </div>
+                </div>
+            </div>
         </a>
 
     </div>
 
     <!-- CAMS DIV -->
-    <div class="collapse display-3 fw-bold mb-div-end mx-2" id="cams">
-        <div class="d-flex mb-5">
-            <div class="col">U of U<br>👀<br>West
+    <!-- OTHER CAMS - https://www.weather.gov/slc/cameras -->
+    <div class="collapse mb-div-end mx-2" id="cams">
+        <div class="border-bottom d-flex pb-4">
+            <div class="col">
+                <div class="display-5 text-info">📌 U of U</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_hour.mp4" target="_blank">
-                    <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_current.jpg">
+                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_current.jpg">
                 </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; West</div>
             </div>
-            <div class="col mx-4">U of U<br>👀<br>South
+            <div class="col mx-4">
+                <div class="display-5 text-info">📌 U of U</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_hour.mp4" target="_blank">
-                    <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_current.jpg">
+                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_current.jpg">
                 </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; South</div>
             </div>
-            <div class="col">West Valley<br>👀<br>Southeast
+            <div class="col">
+                <div class="display-5 text-info">📌 West Valley</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_hour.mp4" target="_blank">
-                    <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg">
+                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg">
                 </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; East</div>
             </div>
         </div>
-        <div class="d-flex mt-5">
+        <div class="border-bottom d-flex py-4">
+            <div class="col">
+                <div class="display-5 text-info">📌 Daybreak</div>
+                <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=darren2&numFrames=30" target="_blank">
+                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg">
+                </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; East</div>
+            </div>
             <div class="col mx-4">
-                <div>Northside</div>
+                <div class="display-5 text-info">📌 Daybreak</div>
+                <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=darrenS&numFrames=30" target="_blank">
+                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darrenS.latest.jpg">
+                </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; Southwest</div>
+            </div>
+            <div class="col">
+                <div class="display-5 text-info">📌 Olympus</div>
+                <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=olympuscove&numFrames=30" target="_blank">
+                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/olympuscove.latest.jpg">
+                </a>
+                <div class="display-5 fw-semibold text-secondary">&#129517; West</div>
+            </div>
+        </div>
+        <div class="d-flex pt-4">
+            <div class="col mx-4">
+                <div class="display-5 text-info">📌 Northside</div>
                 <a href="http://northcam.uhgpga.org/view/view.shtml" target="_blank">
-                    <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="./images/slccamnorthside.png">
+                    <img class="border img-fluid my-2 rounded-4" src="https://bitsofco.de/content/images/2018/12/broken-1.png">
                 </a>
             </div>
             <div class="col mx-4">
-                <div>Southside</div>
+                <div class="display-5 text-info">📌 Southside</div>
                 <a href="http://southcam.uhgpgapilot.org/#view" target="_blank">
-                    <img class="border border-4 border-warning img-fluid mt-4 rounded-4" src="./images/slccamsouthside.png">
+                    <img class="border img-fluid my-2 rounded-4" src="https://bitsofco.de/content/images/2018/12/broken-1.png">
                 </a>
             </div>
         </div>
@@ -1305,21 +1354,35 @@
 
     <!-- GPS / TRACKERS DIV -->
     <div class="collapse mb-div-end" id="gps">
-        <div class="display-3 fw-bold">Pilot Trackers</div>
-        <div class="mx-2">
+        <div class="mt-5 mx-2">
             <div class="my-5">
                 <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-100" src="./images/livetrack24.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/livetrack24.png">
                 </a>
             </div>
             <div class="my-5">
                 <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-100" src="./images/xcfind.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/xcfind.png">
                 </a>
             </div>
             <div class="my-5">
-                <a href="https://www.xctrack.me/" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-100" src="./images/xctrack.png">
+                <a href="https://www.xctrack.me" target="_blank">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/xctrack.png">
+                </a>
+            </div>
+            <div class="my-5">
+                <a href="https://www.xcontest.org/usa/flights" target="_blank">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/XContest.png">
+                </a>
+            </div>
+            <div class="my-5">
+                <a href="http://freeflightcomp.appspot.com/comps/pointratseries2022" target="_blank">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/pointrat.jpg">
+                </a>
+            </div>
+            <div class="my-5">
+                <a href="https://www.sportstracklive.com/en" target="_blank">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="./images/SportsTrackLive.png">
                 </a>
             </div>
         </div>
@@ -1328,10 +1391,10 @@
     <!-- ABOUT DIV -->
     <div class="collapse mb-div-end mx-2" id="about">
         <img class="rounded-4 mt-2 w-100" src="./images/mattolympus.jpg">
-        <div class="fs-1">Over Mount Olympus, 2021 (Photo by Jeff Ambrose)</div>
-        <div class="display-3 fw-bold mt-5">Questions? Feedback?</div>
-        <div class="border-bottom border-2 display-1 pb-5 text-info">matthansonx@gmail.com</div>
-        <div class="display-3 fw-bold my-5">Enjoying Wasatch Wind?<br>Please donate via Venmo!</div>
+        <div class="display-6 fw-semibold text-secondary">Matt Over Mount Olympus, 2021 (Photo by Jeff Ambrose)</div>
+        <div class="display-3 mt-5 text-info">Questions or Feedback?</div>
+        <div class="border-bottom border-1 display-1 pb-5 text-info">matthansonx@gmail.com</div>
+        <div class="display-3 my-5 text-info">Enjoying Wasatch Wind?<br>Please donate via Venmo!</div>
         <a href="https://venmo.com/code?user_id=3206889491922944142&created=1660324693" target="_blank">
             <div class="border border-warning border-4 d-flex justify-content-around p-3 rounded-4">
                 <img src="./images/venmo.jpg" height="150px">
@@ -1343,7 +1406,7 @@
 
     <!-- SETTINGS DIV -->
     <div class="collapse mb-div-end mx-2" id="settings">
-        <div class="display-3 fw-bold">Settings</div>
+        <div class="display-3 text-info">Coming Soon!</div>
     </div>
 
 </div>
