@@ -75,81 +75,51 @@ a:active {
   border-color: rgba(var(--bs-info-rgb), var(--bs-border-opacity)) !important;
 }
 
-/* WIND ALOFT & STATIONS BACKGROUND IMAGES */
-.bg-aloft {
-  background-image: url('../images/aloft.png');
-  background-size: 100% 100%;
-}
-.bg-KSLC {
-  background-image: url('../images/kslc2500x420p10.png');
-  background-size: 100% 100%;
-}
-.bg-AMB {
-  background-image: url('../images/amb3kx5hp10.png');
-  background-size: 100% 100%;
-}
-.bg-UTOLY {
-  background-image: url('../images/utoly936wp20.png');
-  background-size: 100% 100%;
-}
-.bg-KU42 {
-  background-image: url('../images/ku423000x500p0.png');
-  background-size: 100% 100%;
-}
-.bg-HF012 {
-    background-image: url('../images/hf0123kx5hp0.png');
-    background-size: 100% 100%;
-}
-.bg-FPS {
-  background-image: url('../images/fps3000x500p30.png');
-  background-size: 100% 100%;
-}
-.bg-OGP {
-  background-image: url('../images/ogp3kx5hp0.png');
-  background-size: 100% 100%;
-}
-
 /* D3 */
 .gridticks {
   color: lightgray;
   opacity: 0.5;
 }
 .svgbg { fill: #212529; }
-.textlabel {
-  fill: white;
-  font-size: 150%;
-}
 .xAxis { font-size: 175%; }
-.xLabel {
-  fill: white;
-  font-size: 200%;
-  font-weight: bold;
-}
 .yAxis { font-size: 175%; }
-.yLabel {
-  fill: white;
-  text-anchor: middle;
-  font-size: 200%;
-  font-weight: bold;
-}
 .maxtemp {
   fill: #0dcaf0;
-  font-size: 350%;
-  font-weight: bold;
+  font-size: calc(1.475rem + 2.7vw);
+  font-weight: 500;
+  line-height: 1.2;
 }
-.temp {
-  fill: #dc3545;
-  font-size: 350%;
-  font-weight: bold;
+@media (min-width: 1200px) {
+  .maxtemp {
+    font-size: 3.5rem;
+  }
 }
 .dewpoint {
   fill: #20c997;
-  font-size: 350%;
-  font-weight: bold;
+  font-size: calc(1.475rem + 2.7vw);
+  font-weight: 500;
+  line-height: 1.2;
+}
+@media (min-width: 1200px) {
+  .dewpoint {
+    font-size: 3.5rem;
+  }
+}
+.temp {
+  fill: #dc3545;
+  font-size: calc(1.475rem + 2.7vw);
+  font-weight: 500;
+  line-height: 1.2;
+}
+@media (min-width: 1200px) {
+  .temp {
+    font-size: 3.5rem;
+  }
 }
 .dalrlabel {
-  fill: white;
-  font-size: 200%;
+  fill: #6c757d;
+  font-size: calc(1.325rem + 0.9vw);
+  font-weight: 500;
 }
 .neg3label {
   fill: white;
