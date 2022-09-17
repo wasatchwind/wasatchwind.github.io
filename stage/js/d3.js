@@ -99,34 +99,36 @@ function decodedSkewTChart(maxTemp, data, liftParams) {
     // DALR label
     svg.append('text')
         .attr('class', 'dalrlabel')
-        .attr('transform', `rotate(45, ${x(-8)}, ${y(3)})`)
+        .attr('transform', `rotate(45, ${x(-8)}, ${y(3.5)})`)
         .style('text-anchor', 'start')
         .text(`Dry Adiabatic Lapse Rate: -5.4° F / 1,000 ft`)
     
-    // Legend Labels
-    svg.append('text')
-        .attr('class', 'maxtemp')
-        .attr('text-anchor', 'end')
-        .attr('x', x(113))
-        .attr('y', y(18))
-        .text(`Max Temp: ${maxTemp}°`)
+    // Legend labels
     svg.append('text')
         .attr('class', 'dewpoint')
         .attr('text-anchor', 'end')
         .attr('x', x(113))
-        .attr('y', y(15.5))
+        .attr('y', y(16.5))
         .text('Dewpoint')
     svg.append('text')
         .attr('class', 'temp')
         .attr('text-anchor', 'end')
         .attr('x', x(113))
-        .attr('y', y(13))
+        .attr('y', y(14.5))
         .text('Temp')
     
     drawDALRParams(maxTemp, liftParams)
 };
 
 function drawDALRParams (temp, params) {
+    // Legend label max temp
+    svg.append('text')
+        .attr('class', 'maxtemp')
+        .attr('text-anchor', 'end')
+        .attr('x', x(113))
+        .attr('y', y(18.5))
+        .text(`Max Temp DALR: ${temp}°`)
+
     // Max temp DALR line
     svg.append('g').append('line')
         .attr('class', 'dalrline')
@@ -187,6 +189,7 @@ function d3Clear() {
     svg.select('line.neg3line').remove()
     svg.select('text.neg3label').remove()
     svg.select('text.tollabel').remove()
+    svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
     if (dalrFlag === 0) {
         document.getElementById('user-tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
