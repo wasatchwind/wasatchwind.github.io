@@ -20,7 +20,7 @@ function windAloftSpeed(spds, colors = {}) {
     colors.ylw = {'6k':9, '9k':12, '12k':15, '18k':21}
     colors.red = {'6k':14, '9k':18, '12k':24, '18k':30}
     const max = Math.max(...Object.values(spds))
-    const mulitplier = max > 99 ? 1.2 : max > 59 ? 1.5 : 3
+    const mulitplier = max > 99 ? 1.2 : max > 55 ? 1.5 : 3
     for (const key in spds) {
         const elementSpd = document.getElementById(`spd-${key}`)
         const elementBar = document.getElementById(`aloft-${key}`)
