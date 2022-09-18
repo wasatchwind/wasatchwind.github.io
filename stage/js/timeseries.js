@@ -94,7 +94,7 @@ function zone(temp, alti, time, count = 3, barHeight = [], start) {
             document.getElementById(`alti-${count}`).innerHTML = (alti[i]).toFixed(2)
             document.getElementById(`zone-${count}`).innerHTML = zone.num
             document.getElementById(`zone-${count}`).style.color = zone.col
-            if (zone.num === 'LoP') document.getElementById(`zone-${count}`).className = 'display-6 negative-vert-pad'
+            if (zone.num === 'LoP') document.getElementById(`zone-${count}`).className = 'fs-5 fw-semibold negative-vert-pad'
             count --
         }
         if (count < 0) break
