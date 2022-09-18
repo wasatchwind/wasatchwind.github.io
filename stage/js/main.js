@@ -49,10 +49,10 @@ function tempTrend(history, latest, forecast) {
 };
 
 function windSurfaceForecastGraphical() {
-    const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '3 pm' : '2 pm'
+    const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '5 pm' : '4 pm'
     document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
-    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/slc/WindSpd3_slc.png'
-    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/slc/WindGust3_slc.png'
+    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/utah/WindSpd4_utah.png'
+    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/utah/WindGust4_utah.png'
     document.getElementById('graphical-wind-div').style.display = 'block'
 };
 
@@ -78,7 +78,7 @@ function processAreaForecast(text) {
     document.getElementById('area-forecast-aviation').innerText = aviation
 };
 
-(function getAllGraphicalForecastImages() {
+(function getGraphicalForecastImages() {
     const url = 'https://graphical.weather.gov/images/slc/'
     const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
     document.getElementById('sky-next-day').innerHTML = nextDay
