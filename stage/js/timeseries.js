@@ -90,6 +90,7 @@ function zone(temp, alti, time, count = 3, barHeight = [], start) {
             barHeight.push(alti[i])
             if (count === 0) start = time[i].toLowerCase()
             const zone = calculateZone(alti[i], temp[i])
+            zone.num = 'LoP'
             document.getElementById(`alti-${count}`).innerHTML = (alti[i]).toFixed(2)
             document.getElementById(`zone-${count}`).innerHTML = zone.num
             document.getElementById(`zone-${count}`).style.color = zone.col
