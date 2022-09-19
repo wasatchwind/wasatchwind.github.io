@@ -1175,23 +1175,7 @@
     <!-- WX DIV -->
     <div class="collapse mb-div-end" id="wx">
 
-        <!-- CLOUDS & PRECIP GIF -->
-        <div class="display-3 text-info">Clouds & Precip Last Hour</div>
-        <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
-            <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif">
-            </div>
-        </a>
-        
-        <!-- SATELLITE GIF -->
-        <div class="display-3 text-info">Satellite Last 4 Hours</div>
-        <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
-            <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/psw/GEOCOLOR/GOES17-PSW-GEOCOLOR-600x600.gif">
-            </div>
-        </a>
-
-        <!-- HOURLY FORECAST CHART -->
+        <!-- FORECAST - NEXT 48 HOURS (HOURLY CHART) -->
         <div class="display-3 text-info">Next 48 Hours</div>
         <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
             <div class="mb-5 mx-2">
@@ -1199,7 +1183,7 @@
             </div>
         </a>
 
-        <!-- GRAPHICAL SKY/WX COVER -->
+        <!-- FORECAST - GRAPHICAL SKY/WX COVER -->
         <div class="display-3 text-info">Sky Cover Forecast</div>
         <div class="display-6 fw-semibold text-secondary" id="sky-next-day"></div>
         <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
@@ -1228,8 +1212,8 @@
                 </div>
             </div>
         </a>
-        
-        <!-- NEXT 3 DAYS -->
+
+        <!-- FORECAST - NEXT 3 DAYS -->
         <div class="display-3 text-info">Next 3 Days</div>
         <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
             <div class="bg-dark mb-5 mx-2 overflow-hidden rounded-4">
@@ -1257,19 +1241,7 @@
             </div>
         </a>
 
-        <!-- CURRENT FRONTS -->
-        <div class="display-3 text-info">Current Fronts</div>
-        <div class="mb-5 mx-2">
-            <img class="rounded-4 w-100" src="https://uni.edu/storm/wximages/images/fronts.gif">
-        </div>
-
-        <!-- JETSTREAM -->
-        <div class="display-3 text-info">Jetstream: Last 18 Hours</div>
-        <div class="mb-5 mx-2">
-            <img class="rounded-4 w-100" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png">
-        </div>
-
-        <!-- AREA FORECAST DISCUSSION -->
+        <!-- FORECAST - AREA FORECAST DISCUSSION -->
         <div class="display-3 text-info">Area Forecast Discussion</div>
         <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
             <div class="display-6 fw-semibold text-secondary" id="area-forecast-div">
@@ -1284,6 +1256,34 @@
                 </div>
             </div>
         </a>
+
+        <!-- FORECAST - NATIONAL FRONTS, ETC. -->
+        <div class="display-3 text-info">National Forecast</div>
+        <div class="mb-5 mx-2">
+            <img class="rounded-4 w-100" src="https://www.wpc.ncep.noaa.gov/noaa/noaa.gif">
+        </div>
+
+        <!-- CLOUDS & PRECIP GIF -->
+        <div class="display-3 text-info">Clouds & Precip Last Hour</div>
+        <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
+            <div class="mb-5 mx-2">
+                <img class="rounded-4 w-100" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif">
+            </div>
+        </a>
+        
+        <!-- SATELLITE GIF -->
+        <div class="display-3 text-info">Satellite Last 4 Hours</div>
+        <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
+            <div class="mb-5 mx-2">
+                <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/psw/GEOCOLOR/GOES17-PSW-GEOCOLOR-600x600.gif">
+            </div>
+        </a>
+
+        <!-- JETSTREAM -->
+        <div class="display-3 text-info">Jetstream: Last 18 Hours</div>
+        <div class="mb-5 mx-2">
+            <img class="rounded-4 w-100" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png">
+        </div>
 
     </div>
 
