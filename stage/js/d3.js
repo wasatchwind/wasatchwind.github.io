@@ -74,6 +74,14 @@ function decodedSkewTChart(maxTemp, data, liftParams) {
         .attr('x', 0 - margin.left)
         .attr('y', 0 - margin.top)
     
+    // Draw blank rectangle to cover temp & dewpoint lines left of chart
+    svg.append('g').append('rect')
+        .attr('class', 'svgbg')
+        .attr('height', height)
+        .attr('width', margin.left)
+        .attr('x', 0 - margin.left)
+        .attr('y', 0 - margin.top)
+    
     // Draw x axis
     svg.append('g')
         .attr('class', 'xAxis')
