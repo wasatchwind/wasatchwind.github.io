@@ -60,15 +60,15 @@ function windBarColor(stid, data) {
 
 function windSpeed(stid, wspd) {
     wspd.push(wspd[wspd.length - 1])
-    if (!wspd[wspd.length - 1]) document.getElementById(`${stid}-wspd-${wspd.length - 1}`).style.display = 'none'
-    if (stid === 'tile') document.getElementById(`tile-wspd-12`).innerHTML = Math.round(wspd[wspd.length - 1])
-    else {
-        wspd = wspd.map(d => d === null ? '&nbsp;' : d < 0.5 ? 'Calm' : Math.round(d))
+    wspd = wspd.map(d => d === null ? '&nbsp;' : d < 0.5 ? 'Calm' : Math.round(d))
+    if (stid !== 'tile') {
         for (let i=0; i<wspd.length; i++) {
-            if (wspd[i] === 'Calm') document.getElementById(`${stid}-wspd-${i}`).className = 'fs-3 fw-normal'
+            if (wspd[i] === 'Calm') document.getElementById(`${stid}-wspd-${i}`).className = 'align-self-center fs-3 fw-normal mx-3'
             document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i]
         }
     }
+    else if (wspd[wspd.length - 1] === '&nbsp;') document.getElementById(`${stid}-wspd-12`).style.display = 'none'
+    else document.getElementById(`${stid}-wspd-12`).innerHTML = wspd[wspd.length - 1]
 };
 
 function windGust(stid, gust) {
