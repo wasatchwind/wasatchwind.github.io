@@ -68,7 +68,7 @@ function processAreaForecast(text) {
     const dateEnd = text.search(/202\d\n/) + 4
     const forecastDate = text.slice(dateStart, dateEnd)
     const synopsisStart = text.search(/SYNOPSIS/) + 11
-    const synopsisEnd = text.search(/&&/) - 2
+    const synopsisEnd = text.search(/SHORT/) - 5
     const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
     const aviationStart = text.search(/KSLC\.{3}/) + 7
     const aviationEnd = text[text.search(/REST/) - 1] === '.' ? text.search(/REST/) - 1 : text.search(/REST/)
