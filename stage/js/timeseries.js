@@ -63,8 +63,10 @@ function windSpeed(stid, wspd) {
     wspd = wspd.map(d => d === null ? '&nbsp;' : d < 0.5 ? 'Calm' : Math.round(d))
     if (stid !== 'tile') {
         for (let i=0; i<wspd.length; i++) {
-            if (wspd[i] === 'Calm') document.getElementById(`${stid}-wspd-${i}`).className = 'align-self-center fs-3 fw-normal mx-3'
-            document.getElementById(`${stid}-wspd-${i}`).innerHTML = wspd[i]
+            const element = document.getElementById(`${stid}-wspd-${i}`)
+            if (wspd[i] === 'Calm' && i !== wspd.length - 1) element.className = 'fs-3 fw-normal'
+            if (wspd[i] === 'Calm' && i === wspd.length - 1) element.className = 'align-self-end fs-1'
+            element.innerHTML = wspd[i]
         }
     }
     else if (wspd[wspd.length - 1] === '&nbsp;') document.getElementById(`${stid}-wspd-12`).style.display = 'none'
