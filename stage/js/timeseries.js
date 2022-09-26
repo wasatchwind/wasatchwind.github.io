@@ -25,7 +25,6 @@ function windDirection(stid, wdir) {
     const wimg = wdir.map(d => !d ? '&nbsp;' : '&#10148;')
     const rotate = wdir.map(d => `rotate(${d + 90}deg)`)
     const finalElement = document.getElementById(`${stid}-wdir-${wdir.length - 1}`)
-    if (!wdir[wdir.length -1]) finalElement.style.display = 'none'
     for (let i=0; i<wdir.length; i++) {
         const element = document.getElementById(`${stid}-wdir-${i}`)
         element.innerHTML = wimg[i]
@@ -65,7 +64,7 @@ function windSpeed(stid, wspd) {
         for (let i=0; i<wspd.length; i++) {
             const element = document.getElementById(`${stid}-wspd-${i}`)
             if (wspd[i] === 'Calm' && i !== wspd.length - 1) element.className = 'fs-3 fw-normal'
-            if (wspd[i] === 'Calm' && i === wspd.length - 1) element.className = 'align-self-end fs-1'
+            if (wspd[i] === 'Calm' && i === wspd.length - 1) element.className = 'align-self-end fs-1 text-center'
             element.innerHTML = wspd[i]
         }
     }
@@ -75,7 +74,6 @@ function windSpeed(stid, wspd) {
 
 function windGust(stid, gust) {
     gust.push(gust[gust.length - 1])
-    if (!gust[gust.length - 1]) document.getElementById(`${stid}-gust-${gust.length - 1}`).style.display = 'none'
     if (stid === 'tile') document.getElementById(`tile-gust-12`).innerHTML = `g${Math.round(gust[gust.length - 1])}`
     else {
         gust = gust.map(d => !d ? '&nbsp;' : `g${Math.round(d)}`)
@@ -109,6 +107,22 @@ function zone(temp, alti, time, count = 3, barHeight = [], start) {
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
+    // case 0..<(-0.000714 * airTemp + 29.9214):
+    //   return("Zone 0")
+    // case (-0.000714 * airTemp + 29.9214)..<(-0.001714 * airTemp + 30.0514):
+    //   return("Zone 1")
+    // case (-0.001714 * airTemp + 30.0514)..<(-0.001714 * airTemp + 30.1114):
+    //   return("Zone 2L")
+    // case (-0.001714 * airTemp + 30.1114)..<(-0.003 * airTemp + 30.27):
+    //   return("Zone 3-")
+    // case (-0.003 * airTemp + 30.27)..<(-0.004286 * airTemp + 30.4286):
+    //   return("Zone 4+")
+    // case (-0.004286 * airTemp + 30.4286)..<(-0.004286 * airTemp + 30.4886):
+    //   return("Zone 5H")
+    // case (-0.004286 * airTemp + 30.4886)..<(-0.005429 * airTemp + 30.6228):
+    //   return("Zone 6")
+    // default:
+    //   return("Zone 7")
     const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
     const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
     for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i]/-110*temp+zoneIntercept[i])*100)/100)
