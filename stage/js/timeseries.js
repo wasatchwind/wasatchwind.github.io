@@ -75,6 +75,7 @@ function windSpeed(stid, wspd) {
 function windGust(stid, gust) {
     gust.push(gust[gust.length - 1])
     gust = gust.map(d => !d ? '&nbsp;' : `g${Math.round(d)}`)
+    if (stid === 'tile') console.log(gust[gust.length - 1])
     if (stid !== 'tile') {
         for (let i=0; i<gust.length; i++) document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i]
     }
