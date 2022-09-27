@@ -74,13 +74,12 @@ function windSpeed(stid, wspd) {
 
 function windGust(stid, gust) {
     gust.push(gust[gust.length - 1])
-    if (stid === 'tile') document.getElementById(`tile-gust-12`).innerHTML = `g${Math.round(gust[gust.length - 1])}`
-    else {
-        gust = gust.map(d => !d ? '&nbsp;' : `g${Math.round(d)}`)
-        for (let i=0; i<gust.length; i++) {
-            document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i]
-        }
+    gust = gust.map(d => !d ? '&nbsp;' : `g${Math.round(d)}`)
+    if (stid !== 'tile') {
+        for (let i=0; i<gust.length; i++) document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i]
     }
+    else if (gust[gust.length - 1] === '&nbsp;') document.getElementById(`${stid}-gust-12`).style.display = 'none'
+    else document.getElementById(`${stid}-gust-12`).innerHTML = gust[gust.length - 1]
 };
 
 function zone(temp, alti, time, count = 3, barHeight = [], start) {
