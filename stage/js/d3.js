@@ -15,7 +15,9 @@ const width = screenWidth - margin.left - margin.right
 const height = proportionalHeight - margin.top - margin.bottom
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right]).domain([-10, 110])
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt])
-const svg = d3.select('#skew-t-d3').append('svg')
+const svg = d3.select('#skew-t-d3')
+    .append('div')
+    .append('svg')
     .attr('class', 'svgbg')
     .attr('width', width)
     .attr('height', proportionalHeight)
