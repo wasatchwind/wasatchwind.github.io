@@ -76,6 +76,19 @@ a:active {
 }
 
 /* D3 */
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
 .gridticks {
   color: lightgray;
   opacity: 0.5;
@@ -128,20 +141,4 @@ a:active {
 .tollabel {
   fill: white;
   font-size: 200%;
-}
-
-
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-/*   padding-bottom: 100%; /* aspect ratio */ */
-  vertical-align: top;
-  overflow: hidden;
-}
-.svg-content-responsive {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 0;
 }
