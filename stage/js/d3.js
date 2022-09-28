@@ -4,6 +4,7 @@ let dalrFlag = 0
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
+const screenWidth = document.documentElement.clientWidth
 const proportionalHeight = screenWidth * 0.67
 const margin = {
     top: proportionalHeight * 0.04,
