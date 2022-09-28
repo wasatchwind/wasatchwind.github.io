@@ -109,7 +109,7 @@ function decodedSkewTChart(maxTemp, data, liftParams) {
     // DALR label
     svg.append('text')
         .attr('class', 'dalrlabel')
-        .attr('transform', `rotate(45, ${x(-8)}, ${y(3.5)})`)
+        .attr('transform', `rotate(45, ${x(-3)}, ${y(6)})`)
         .style('text-anchor', 'start')
         .text(`Dry Adiabatic Lapse Rate: -5.4° F / 1,000 ft`)
     
