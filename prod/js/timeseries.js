@@ -106,25 +106,12 @@ function zone(temp, alti, time, count = 3, barHeight = [], start) {
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
-    // case 0..<(-0.000714 * airTemp + 29.9214):
-    //   return("Zone 0")
-    // case (-0.000714 * airTemp + 29.9214)..<(-0.001714 * airTemp + 30.0514):
-    //   return("Zone 1")
-    // case (-0.001714 * airTemp + 30.0514)..<(-0.001714 * airTemp + 30.1114):
-    //   return("Zone 2L")
-    // case (-0.001714 * airTemp + 30.1114)..<(-0.003 * airTemp + 30.27):
-    //   return("Zone 3-")
-    // case (-0.003 * airTemp + 30.27)..<(-0.004286 * airTemp + 30.4286):
-    //   return("Zone 4+")
-    // case (-0.004286 * airTemp + 30.4286)..<(-0.004286 * airTemp + 30.4886):
-    //   return("Zone 5H")
-    // case (-0.004286 * airTemp + 30.4886)..<(-0.005429 * airTemp + 30.6228):
-    //   return("Zone 6")
-    // default:
-    //   return("Zone 7")
-    const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
-    const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
-    for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i]/-110*temp+zoneIntercept[i])*100)/100)
+//     const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
+//     const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
+    // Alt data
+    const zoneSlope = [0.0714, 0.0714, 0.0714, 0.3, 0.4286, 0.4286, 0.5429, -1]
+    const zoneIntercept = [29.9214, 30.0514, 30.1114, 30.27, 30.4286, 30.4486, 30.6228, 100]
+    for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i] / -110 * temp + zoneIntercept[i]) * 100) / 100)
     zone.num = currentZones.findIndex(d => d >= alti)
     if (zone.num === 0 || zone.num === 7) zone.col = 'var(--bs-red)'
     else if (zone.num===1 || zone.num===6) zone.col = 'var(--bs-orange)'
