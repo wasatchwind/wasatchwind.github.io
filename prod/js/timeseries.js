@@ -27,6 +27,7 @@ function windDirection(stid, wdir) {
     const finalElement = document.getElementById(`${stid}-wdir-${wdir.length - 1}`)
     for (let i=0; i<wdir.length; i++) {
         const element = document.getElementById(`${stid}-wdir-${i}`)
+        if (stid === 'tile' && wdir[wdir.length - 1] === null) element.style.display = 'none'
         element.innerHTML = wimg[i]
         element.style.transform = rotate[i]
     }
