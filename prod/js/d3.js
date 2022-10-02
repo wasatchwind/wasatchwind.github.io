@@ -148,9 +148,14 @@ function drawDALRParams (temp, params) {
         .attr('class', 'dalrline')
         .attr('stroke', 'var(--bs-info)')
         .attr('stroke-width', 3)
-        .attr('x1', x(temp - (maxAlt - surfaceAlt) * dalr))
+        .attr('x1', function() {
+            if (x(temp - (maxAlt - surfaceAlt) * dalr) > x(-10)) return x(temp - (maxAlt - surfaceAlt) * dalr)
+            else return x(-10)
+        })
         .attr('x2', x(temp))
-        .attr('y1', y(maxAlt))
+        .attr('y1', function() {
+            if (x(temp - (maxAlt - surfaceAlt) * dalr) < x(-10)) return y(-1/dalr * (-10 - temp) + surfaceAlt)
+        })
         .attr('y2', y(surfaceAlt))
 
     // -3 index line
