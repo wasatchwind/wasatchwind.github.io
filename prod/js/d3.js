@@ -192,6 +192,10 @@ function d3Update() {
     const userTemp = parseInt(document.getElementById('user-temp').value)
     if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < 106) {
         const userLiftParams = getLiftParams(userTemp, soundingData)
+        if (userLiftParams === null) {
+            d3Clear()
+            return
+        }
         dalrFlag = 1
         d3Clear()
         drawDALRParams(userTemp, userLiftParams)
