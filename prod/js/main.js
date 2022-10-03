@@ -65,7 +65,7 @@ function processSoaringForecast(text) {
 
 function processAreaForecast(text) {
     const dateStart = text.search(/[Cc][Ii][Tt][Yy]\s[Uu][Tt]\n/) + 8
-    const dateEnd = text.search(/202\d\n/) + 4
+    const dateEnd = text.search(/\s202\d{1}\n/) + 5
     const forecastDate = text.slice(dateStart, dateEnd)
     const synopsisStart = text.search(/SYNOPSIS/) + 11
     const synopsisEnd = text.search(/SHORT/) - 5
