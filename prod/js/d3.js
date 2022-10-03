@@ -5,6 +5,8 @@ const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
 const screenWidth = document.documentElement.clientWidth
+// screen width test:
+document.getElementById('width-test').innerHTML = `Screen Width Test: ${screenWidth} px`
 const proportionalHeight = screenWidth * 0.67
 const margin = {
     top: proportionalHeight * 0.04,
@@ -17,12 +19,7 @@ const height = proportionalHeight - margin.top - margin.bottom
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right]).domain([-10, 110])
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt])
 const svg = d3.select('#skew-t-d3')
-    .append('div')
-    .classed('svg-container', true)
     .append('svg')
-    .attr('preserveAspectRatio', 'xMinYMin meet')
-    .attr('viewBox', `0 0 ${width} ${proportionalHeight}`)
-    .classed('svg-content-responsive', true)
     .attr('class', 'svgbg')
     .attr('width', width)
     .attr('height', proportionalHeight)
