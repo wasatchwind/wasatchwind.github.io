@@ -205,6 +205,8 @@ function d3Update() {
 
 function d3Clear() {
     document.getElementById('user-temp').value = null
+    document.getElementById('user-neg3').innerHTML = ''
+    document.getElementById('user-tol').innerHTML = ''
     svg.select('line.dalrline').remove()
     svg.select('line.neg3line').remove()
     svg.select('text.neg3label').remove()
