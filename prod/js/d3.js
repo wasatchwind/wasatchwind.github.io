@@ -214,8 +214,10 @@ function d3Clear() {
     svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
     if (dalrFlag === 0) {
-        document.getElementById('user-tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-        document.getElementById('user-neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
+        if (liftParams !== null) {
+            document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
+            document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+        }
         drawDALRParams(maxTempF, liftParams)
     }
 };
