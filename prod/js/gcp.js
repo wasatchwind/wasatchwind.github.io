@@ -77,6 +77,7 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
         params.neg3Temp = null
         params.tol = null
         params.tolTemp = null
+        console.log(params)
     }
     return params
 };
