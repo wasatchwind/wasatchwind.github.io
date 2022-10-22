@@ -1,11 +1,4 @@
 'use strict'; // https://www.weather.gov/documentation/services-web-api
-function maxTemp(data) {
-    const latest = data.properties.periods[0]
-    const maxTempF = !latest.isDaytime ? `${latest.temperature}&deg;` : '--'
-    document.getElementById('max-temp').innerHTML = maxTempF
-    return parseInt(maxTempF)
-};
-
 function hourlyForecast(data, object = {}) {
     object.icon = [], object.temp = [], object.time = [], object.wdir = [], object.wspd =[]
     for (let i=1; i<4; i++) {
