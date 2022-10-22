@@ -155,37 +155,39 @@ function drawDALRParams (temp, params) {
         })
         .attr('y2', y(surfaceAlt))
 
-    // -3 index line
-    svg.append('g').append('line')
-        .attr('class', 'neg3line')
-        .attr('stroke', 'white')
-        .attr('stroke-width', 2)
-        .attr('x1', x((params.neg3Temp * 9 / 5) + 32))
-        .attr('y1', y(params.neg3 * 3.28084 / 1000))
-        .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
-        .attr('y2', y(params.neg3 * 3.28084 / 1000))
+    if (params !== null) {
+        // -3 index line
+        svg.append('g').append('line')
+            .attr('class', 'neg3line')
+            .attr('stroke', 'white')
+            .attr('stroke-width', 2)
+            .attr('x1', x((params.neg3Temp * 9 / 5) + 32))
+            .attr('y1', y(params.neg3 * 3.28084 / 1000))
+            .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
+            .attr('y2', y(params.neg3 * 3.28084 / 1000))
 
-    // -3 label
-    svg.append('g').append('text')
-        .attr('class', 'neg3label')
-        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 1))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
-        .text('-3')
+        // -3 label
+        svg.append('g').append('text')
+            .attr('class', 'neg3label')
+            .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 1))
+            .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
+            .text('-3')
 
-    // Top of lift point
-    svg.append('g').append('circle')
-        .attr('class', 'tolcircle')
-        .attr('fill', 'white')
-        .attr('cx', x((params.tolTemp * 9 / 5) + 32))
-        .attr('cy', y(params.tol * 3.284084 / 1000))
-        .attr('r', 6)
+        // Top of lift point
+        svg.append('g').append('circle')
+            .attr('class', 'tolcircle')
+            .attr('fill', 'white')
+            .attr('cx', x((params.tolTemp * 9 / 5) + 32))
+            .attr('cy', y(params.tol * 3.284084 / 1000))
+            .attr('r', 6)
 
-    // Top of lift label
-    svg.append('g').append('text')
-        .attr('class', 'tollabel')
-        .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-        .attr('y', y(params.tol * 3.284084 / 1000 - 0.2))
-        .text('ToL')
+        // Top of lift label
+        svg.append('g').append('text')
+            .attr('class', 'tollabel')
+            .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
+            .attr('y', y(params.tol * 3.284084 / 1000 - 0.2))
+            .text('ToL')
+    }
 };
 
 function d3Update() {
