@@ -36,11 +36,11 @@
         const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
         try { maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp }
         catch (error) { console.log('Max temp fetch failed') }
+        document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
         const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
         try { soundingData = await (await fetch(soundingURL)).json() }
         catch (error) { console.log('Sounding data fetch failed') }
         if (maxTempF && soundingData) {
-            document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
             liftParams = getLiftParams(maxTempF, soundingData)
             document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
             document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
