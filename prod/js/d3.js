@@ -132,6 +132,7 @@ function decodedSkewTChart(maxTemp, data, liftParams) {
 };
 
 function drawDALRParams (temp, params) {
+    console.log(params)
     // Legend label max temp
     svg.append('text')
         .attr('class', 'maxtemp')
