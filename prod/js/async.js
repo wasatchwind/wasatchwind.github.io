@@ -42,8 +42,6 @@
         if (maxTempF && soundingData) {
             document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
             liftParams = getLiftParams(maxTempF, soundingData)
-            console.log('test')
-            console.log(liftParams)
             if (liftParams !== null) {
                 document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
                 document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
@@ -71,7 +69,6 @@
         catch (error) { console.log('Wind map fetch failed') }
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-//         document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png' // Unauthenticated
         document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
     } catch (error) { console.log(error) }
 
