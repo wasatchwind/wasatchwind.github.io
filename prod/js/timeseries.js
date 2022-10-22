@@ -36,7 +36,7 @@ function windDirection(stid, wdir) {
 };
 
 function windBarHeight(stid, wspd, gust, multiplier) {
-    if (Math.max(...gust) > 30) multiplier = 1.5
+    if (Math.max(...gust) > 30) multiplier = 1.3
     else multiplier = stid === 'tile' ? 2.5 : 4
     for (let i=0; i<wspd.length; i++) {
         document.getElementById(`${stid}-wbar-${i}`).className = wspd[i] ? 'border-1 border' : ''
