@@ -41,10 +41,11 @@
         catch (error) { console.log('Sounding data fetch failed') }
         if (maxTempF && soundingData) {
             document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
-            console.log('test')
             liftParams = getLiftParams(maxTempF, soundingData)
-            document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
-            document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+            if (liftParams !== null) {
+                document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
+                document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+            }
             decodedSkewTChart(maxTempF, soundingData, liftParams)
         }
     } catch (error) { console.log(error) }
