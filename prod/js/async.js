@@ -42,11 +42,12 @@
         if (maxTempF && soundingData) {
             document.getElementById('max-temp').innerHTML = `${maxTempF}&deg;`
             liftParams = getLiftParams(maxTempF, soundingData)
+            console.log('test')
+            console.log(liftParams)
             if (liftParams !== null) {
                 document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
                 document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
             }
-            console.log(liftParams)
             decodedSkewTChart(maxTempF, soundingData, liftParams)
         }
     } catch (error) { console.log(error) }
