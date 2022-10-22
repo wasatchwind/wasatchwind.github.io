@@ -29,7 +29,6 @@ const svg = d3.select('#skew-t-d3')
     .attr('transform', `translate(${margin.left},${margin.top})`)
 
 function decodedSkewTChart(maxTemp, data, liftParams) {
-    console.log(liftParams)
     // Set vertical x axis gridlines
     const xAxisGrid = d3.axisTop(x).tickSize(0 - y(4)).ticks(23)
     svg.append('g')
