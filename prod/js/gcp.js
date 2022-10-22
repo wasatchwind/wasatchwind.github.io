@@ -73,6 +73,8 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
         document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
     } catch (error) {
         console.log('Temp out of data range')
+        document.getElementById('user-neg3').innerHTML = '--'
+        document.getElementById('user-tol').innerHTML = '--'
         params.neg3 = null
         params.neg3Temp = null
         params.tol = null
