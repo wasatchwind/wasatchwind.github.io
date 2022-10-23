@@ -10,6 +10,7 @@
         const timeSeriesData = await (await fetch(timeSeriesURL)).json()
         if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
             ensureGustData(timeSeriesData)
+            ensureDirData(timeSeriesData)
             if (timeSeriesData.STATION[0].STID === 'KSLC') kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
             for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
         }
