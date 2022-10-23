@@ -1,6 +1,5 @@
 'use strict';
 // D3 Globals
-let dalrFlag = 0
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
@@ -188,18 +187,20 @@ function d3Update() {
     const userTemp = parseInt(document.getElementById('user-temp').value)
     if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < 106) {
         const userLiftParams = getLiftParams(userTemp, soundingData)
-        if (userLiftParams === null) {
-            d3Clear()
-            return
-        }
-        dalrFlag = 1
-        d3Clear()
+        clearChart()
         drawDALRParams(userTemp, userLiftParams)
-        dalrFlag = 0
-    } else d3Clear()
+    }
+    else d3Clear()
 };
 
 function d3Clear() {
+    clearChart()
+    document.getElementById('user-neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
+    document.getElementById('user-tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+    drawDALRParams(maxTempF, liftParams)
+};
+
+function clearChart() {
     document.getElementById('user-temp').value = null
     svg.select('line.dalrline').remove()
     svg.select('line.neg3line').remove()
@@ -207,11 +208,4 @@ function d3Clear() {
     svg.select('text.tollabel').remove()
     svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
-    document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
-    document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-    if (dalrFlag === 0) {
-//         document.getElementById('neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
-//         document.getElementById('tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-        drawDALRParams(maxTempF, liftParams)
-    }
 };
