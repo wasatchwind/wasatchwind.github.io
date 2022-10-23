@@ -4,11 +4,7 @@ let dalrFlag = 0
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
-// const screenWidth = document.documentElement.clientWidth
 const screenWidth = window.innerWidth
-// screen width test:
-document.getElementById('width-test').innerHTML = `Screen Width Test: ${screenWidth} px`
-document.getElementById('window-innerwidth').innerHTML = `Window.innerWidth: ${window.innerWidth} px`
 const proportionalHeight = screenWidth * 0.67
 const margin = {
     top: proportionalHeight * 0.04,
