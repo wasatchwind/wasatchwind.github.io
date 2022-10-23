@@ -4,7 +4,7 @@ function ensureGustData(data) {
 };
 
 function ensureDirData(data) {
-    for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_direction_set_1 = data.STATION[i].OBSERVATIONS.wind_gust_set_1 ? data.STATION[i].OBSERVATIONS.wind_gust_set_1 : data.STATION[i].OBSERVATIONS.wind_gust_set_1 = new Array(12).fill(null)
+    for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_direction_set_1 = data.STATION[i].OBSERVATIONS.wind_direction_set_1 ? data.STATION[i].OBSERVATIONS.wind_direction_set_1 : data.STATION[i].OBSERVATIONS.wind_direction_set_1 = new Array(12).fill(null)
 };
 
 function kslcTiles(data) {
