@@ -37,28 +37,20 @@ function windAloftSpeed(spds, colors = {}) {
 };
 
 function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {}) {
+    let interpolateX1, interpolateX2, interpolateY1, interpolateY2
     const tempC = (temp - 32) * 5 / 9
     const surfaceAlt_m = 1289
     const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
     const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
-    try {
-        // Find height of -3 index first (thermal index is -3)
-        while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
-        let interpolateX1 = data[position].Temp_c
-        let interpolateY1 = data[position].Altitude_m
-        let interpolateX2 = data[position - 1].Temp_c
-        let interpolateY2 = data[position - 1].Altitude_m
-        if (interpolateX1 !== interpolateX2) {
-            raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-            let raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-            const interpolateX = (raobYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
-            params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
-        }
-        else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
-        params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
-        document.getElementById('user-neg3').innerHTML = Math.round(params.neg3 * 3.28084).toLocaleString()
-        // Now find top of lift (thermal index is 0)
-        while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
+
+    // Find height of -3 index first (thermal index is -3)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
+    if (position === 0) {
+        params.neg3 = null
+        params.neg3Temp = null
+        document.getElementById('user-neg3').innerHTML = '--'
+    }
+    else {
         interpolateX1 = data[position].Temp_c
         interpolateY1 = data[position].Altitude_m
         interpolateX2 = data[position - 1].Temp_c
@@ -66,19 +58,27 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
         if (interpolateX1 !== interpolateX2) {
             raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
             raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-            params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+            const interpolateX = (raobYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
+            params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
         }
-        else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
-        params.tolTemp = (params.tol - dalrYInt) / dalrSlope
-        document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
-    } catch (error) {
-        console.log('Temp out of data range')
-        document.getElementById('user-neg3').innerHTML = '--'
-        document.getElementById('user-tol').innerHTML = '--'
-        params.neg3 = null
-        params.neg3Temp = null
-        params.tol = null
-        params.tolTemp = null
+        else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
+        params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
+        document.getElementById('user-neg3').innerHTML = Math.round(params.neg3 * 3.28084).toLocaleString()
     }
+
+    // Now find top of lift (thermal index is 0)
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
+    interpolateX1 = data[position].Temp_c
+    interpolateY1 = data[position].Altitude_m
+    interpolateX2 = data[position - 1].Temp_c
+    interpolateY2 = data[position - 1].Altitude_m
+    if (interpolateX1 !== interpolateX2) {
+        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+        raobYInt = interpolateY1 - (raobSlope * interpolateX1)
+        params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+    }
+    else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
+    params.tolTemp = (params.tol - dalrYInt) / dalrSlope
+    document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
     return params
 };
