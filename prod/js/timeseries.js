@@ -3,6 +3,10 @@ function ensureGustData(data) {
     for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_gust_set_1 = data.STATION[i].OBSERVATIONS.wind_gust_set_1 ? data.STATION[i].OBSERVATIONS.wind_gust_set_1 : data.STATION[i].OBSERVATIONS.wind_gust_set_1 = new Array(12).fill(null)
 };
 
+function ensureDirData(data) {
+    for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_direction_set_1 = data.STATION[i].OBSERVATIONS.wind_gust_set_1 ? data.STATION[i].OBSERVATIONS.wind_gust_set_1 : data.STATION[i].OBSERVATIONS.wind_gust_set_1 = new Array(12).fill(null)
+};
+
 function kslcTiles(data) {
     windTileTimeRange(data.date_time.slice(-12))
     windDirection('tile', data.wind_direction_set_1.slice(-12))
