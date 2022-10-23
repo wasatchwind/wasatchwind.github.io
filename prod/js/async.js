@@ -36,7 +36,6 @@
         const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
         try { maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp }
         catch (error) { console.log('Max temp fetch failed') }
-        maxTempF = 70
         document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
         const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
         try { soundingData = await (await fetch(soundingURL)).json() }
