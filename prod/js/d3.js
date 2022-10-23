@@ -185,7 +185,7 @@ function drawDALRParams (temp, params) {
 
 function d3Update() {
     const userTemp = parseInt(document.getElementById('user-temp').value)
-    if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < 106) {
+        if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < (soundingData[1].Temp_c * 9 / 5) + 32 + 22 && userTemp < 106) {
         const userLiftParams = getLiftParams(userTemp, soundingData)
         clearChart()
         drawDALRParams(userTemp, userLiftParams)
