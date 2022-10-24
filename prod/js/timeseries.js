@@ -124,7 +124,7 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
     else if (zone.num===1 || zone.num===6) zone.col = 'var(--bs-orange)'
     else if (zone.num===2 || zone.num===5) zone.col = 'var(--bs-yellow)'
     else zone.col = 'var(--bs-teal)'
-    zone.num = alti == currentZones[3] ? 'LoP' : zone.num
+    zone.num = alti === currentZones[3] ? 'LoP' : zone.num
     zone.num = zone.num === 0 ? '&#9471;' : (zone.num === 'LoP') ? 'LoP' : `&#1010${zone.num + 1};`
     return zone
 };
