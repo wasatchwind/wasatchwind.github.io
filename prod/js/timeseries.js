@@ -1,4 +1,8 @@
 'use strict';
+function ensureWindData(data) {
+    for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_speed_set_1 = data.STATION[i].OBSERVATIONS.wind_speed_set_1 ? data.STATION[i].OBSERVATIONS.wind_speed_set_1 : data.STATION[i].OBSERVATIONS.wind_speed_set_1 = new Array(12).fill(null)
+};
+
 function ensureGustData(data) {
     for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_gust_set_1 = data.STATION[i].OBSERVATIONS.wind_gust_set_1 ? data.STATION[i].OBSERVATIONS.wind_gust_set_1 : data.STATION[i].OBSERVATIONS.wind_gust_set_1 = new Array(12).fill(null)
 };
