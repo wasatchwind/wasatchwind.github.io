@@ -67,18 +67,24 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
     }
 
     // Now find top of lift (thermal index is 0)
-    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
-    interpolateX1 = data[position].Temp_c
-    interpolateY1 = data[position].Altitude_m
-    interpolateX2 = data[position - 1].Temp_c
-    interpolateY2 = data[position - 1].Altitude_m
-    if (interpolateX1 !== interpolateX2) {
-        raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-        raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-        params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+    try {
+        while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
+        interpolateX1 = data[position].Temp_c
+        interpolateY1 = data[position].Altitude_m
+        interpolateX2 = data[position - 1].Temp_c
+        interpolateY2 = data[position - 1].Altitude_m
+        if (interpolateX1 !== interpolateX2) {
+            raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
+            raobYInt = interpolateY1 - (raobSlope * interpolateX1)
+            params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+        }
+        else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
+        params.tolTemp = (params.tol - dalrYInt) / dalrSlope
+        document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
+    } catch (error) {
+        params.tol = null
+        params.tolTemp = null
+        document.getElementById('user-tol').innerHTML = '--'
     }
-    else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
-    params.tolTemp = (params.tol - dalrYInt) / dalrSlope
-    document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
     return params
 };
