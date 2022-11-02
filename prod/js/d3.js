@@ -196,7 +196,7 @@ function d3Update() {
 function d3Clear() {
     clearChart()
     document.getElementById('user-neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-    document.getElementById('user-tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
+    document.getElementById('user-tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
     drawDALRParams(maxTempF, liftParams)
 };
 
