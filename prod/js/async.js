@@ -5,9 +5,9 @@
         let nwsToken
 //         const nwsTokenURL = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
         const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-1'
-        console.log(nwsTokenURL)
         try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         catch (error) { console.log('NWS token fetch failed') }
+        console.log(nwsToken)
         const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
         const timeSeriesData = await (await fetch(timeSeriesURL)).json()
         if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
