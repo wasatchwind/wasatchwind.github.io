@@ -163,7 +163,7 @@ function drawDALRParams (temp, params) {
     // -3 label
     svg.append('g').append('text')
         .attr('class', 'neg3label')
-        .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3.5))
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
         .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
         .text('-3')
     
