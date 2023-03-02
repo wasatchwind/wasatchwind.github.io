@@ -171,7 +171,7 @@ function drawDALRParams (temp, params) {
     svg.append('g').append('text')
         .attr('class', 'liftlabels')
         .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 3))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
+        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
         .text(Math.round(params.neg3 * 3.28084).toLocaleString())
 
     // Top of lift point
@@ -186,7 +186,7 @@ function drawDALRParams (temp, params) {
     svg.append('g').append('text')
         .attr('class', 'liftlabels')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-        .attr('y', y(params.tol * 3.284084 / 1000 - 0.2))
+        .attr('y', y(params.tol * 3.284084 / 1000))
         .text(`ToL: ${Math.round(params.tol * 3.28084).toLocaleString()}`)
 };
 
