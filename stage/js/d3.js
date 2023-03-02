@@ -162,9 +162,16 @@ function drawDALRParams (temp, params) {
     // -3 label
     svg.append('g').append('text')
         .attr('class', 'neg3label')
-        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 1))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 4))
+        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.6))
         .text('-3')
+    
+    // -3 height
+    svg.append('g').append('text')
+        .attr('class', 'liftlabels')
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 3))
+        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
+        .text(Math.round(params.neg3 * 3.28084).toLocaleString())
 
     // Top of lift point
     svg.append('g').append('circle')
@@ -176,10 +183,10 @@ function drawDALRParams (temp, params) {
 
     // Top of lift label
     svg.append('g').append('text')
-        .attr('class', 'tollabel')
+        .attr('class', 'liftlabels')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
         .attr('y', y(params.tol * 3.284084 / 1000 - 0.2))
-        .text('ToL')
+        .text(`ToL: ${Math.round(params.tol * 3.28084).toLocaleString()}`)
 };
 
 function d3Update() {
