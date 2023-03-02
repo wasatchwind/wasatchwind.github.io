@@ -1,10 +1,9 @@
 'use strict';
 // D3 Globals
-let dalrFlag = 0
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
-const screenWidth = document.documentElement.clientWidth
+const screenWidth = window.innerWidth
 const proportionalHeight = screenWidth * 0.67
 const margin = {
     top: proportionalHeight * 0.04,
@@ -17,7 +16,6 @@ const height = proportionalHeight - margin.top - margin.bottom
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right]).domain([-10, 110])
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt])
 const svg = d3.select('#skew-t-d3')
-    .append('div')
     .append('svg')
     .attr('class', 'svgbg')
     .attr('width', width)
@@ -26,8 +24,6 @@ const svg = d3.select('#skew-t-d3')
     .attr('transform', `translate(${margin.left},${margin.top})`)
 
 function decodedSkewTChart(maxTemp, data, liftParams) {
-    document.getElementById('max-temp').innerHTML = `${maxTemp}&deg;`
-
     // Set vertical x axis gridlines
     const xAxisGrid = d3.axisTop(x).tickSize(0 - y(4)).ticks(23)
     svg.append('g')
@@ -144,9 +140,14 @@ function drawDALRParams (temp, params) {
         .attr('class', 'dalrline')
         .attr('stroke', 'var(--bs-info)')
         .attr('stroke-width', 3)
-        .attr('x1', x(temp - (maxAlt - surfaceAlt) * dalr))
+        .attr('x1', function() {
+            if (x(temp - (maxAlt - surfaceAlt) * dalr) > x(-10)) return x(temp - (maxAlt - surfaceAlt) * dalr)
+            else return x(-10)
+        })
         .attr('x2', x(temp))
-        .attr('y1', y(maxAlt))
+        .attr('y1', function() {
+            if (x(temp - (maxAlt - surfaceAlt) * dalr) < x(-10)) return y(-1/dalr * (-10 - temp) + surfaceAlt)
+        })
         .attr('y2', y(surfaceAlt))
 
     // -3 index line
@@ -158,7 +159,7 @@ function drawDALRParams (temp, params) {
         .attr('y1', y(params.neg3 * 3.28084 / 1000))
         .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
         .attr('y2', y(params.neg3 * 3.28084 / 1000))
-
+    
     // -3 label
     svg.append('g').append('text')
         .attr('class', 'neg3label')
@@ -191,26 +192,28 @@ function drawDALRParams (temp, params) {
 
 function d3Update() {
     const userTemp = parseInt(document.getElementById('user-temp').value)
-    if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < 106) {
+        if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < (soundingData[1].Temp_c * 9 / 5) + 32 + 25 && userTemp < 106) {
         const userLiftParams = getLiftParams(userTemp, soundingData)
-        dalrFlag = 1
-        d3Clear()
+        clearChart()
         drawDALRParams(userTemp, userLiftParams)
-        dalrFlag = 0
-    } else d3Clear()
+    }
+    else d3Clear()
 };
 
 function d3Clear() {
+    clearChart()
+    // document.getElementById('user-neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
+    // document.getElementById('user-tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
+    drawDALRParams(maxTempF, liftParams)
+};
+
+function clearChart() {
     document.getElementById('user-temp').value = null
     svg.select('line.dalrline').remove()
     svg.select('line.neg3line').remove()
     svg.select('text.neg3label').remove()
-    svg.select('text.tollabel').remove()
+    svg.select('text.liftlabels').remove()
+    svg.select('text.liftlabels').remove()
     svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
-    if (dalrFlag === 0) {
-        document.getElementById('user-tol').innerHTML = Math.round(liftParams.tol * 3.28084).toLocaleString()
-        document.getElementById('user-neg3').innerHTML = Math.round(liftParams.neg3 * 3.28084).toLocaleString()
-        drawDALRParams(maxTempF, liftParams)
-    }
 };
