@@ -163,14 +163,14 @@ function drawDALRParams (temp, params) {
     // -3 label
     svg.append('g').append('text')
         .attr('class', 'neg3label')
-        .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 4))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.6))
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3.5))
+        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
         .text('-3')
     
     // -3 height
     svg.append('g').append('text')
         .attr('class', 'liftlabels')
-        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 3))
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
         .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
         .text(Math.round(params.neg3 * 3.28084).toLocaleString())
 
