@@ -134,11 +134,11 @@ a:active {
   font-size: calc(1.325rem + 0.9vw);
   font-weight: 500;
 }
+.liftlabels {
+  fill: white;
+  font-size: 210%;
+}
 .neg3label {
   fill: white;
-  font-size: 200%;
-}
-.tollabel {
-  fill: white;
-  font-size: 200%;
+  font-size: 160%;
 }
