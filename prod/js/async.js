@@ -35,14 +35,16 @@
     }
 
     // SOUNDING/RAOB (GCP)
+    const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
+    const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
     try {
-        const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
-        try { maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp }
-        catch (error) { console.log('Max temp fetch failed') }
+        maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp
         document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
-        const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-        try { soundingData = await (await fetch(soundingURL)).json() }
-        catch (error) { console.log('Sounding data fetch failed') }
+    } catch (error) { console.log('Max temp fetch failed') }
+    try {
+        soundingData = await (await fetch(soundingURL)).json()
+    } catch (error) { console.log('Sounding data fetch failed') }
+    try {
         if (maxTempF && soundingData) {
             liftParams = getLiftParams(maxTempF, soundingData)
             document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
