@@ -167,6 +167,13 @@ function drawDALRParams (temp, params) {
         .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.2))
         .text('-3')
 
+    // -3 height
+    svg.append('g').append('text')
+        .attr('class', 'liftlabels')
+        .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
+        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
+        .text(Math.round(params.neg3 * 3.28084).toLocaleString())
+
     // Top of lift point
     svg.append('g').append('circle')
         .attr('class', 'tolcircle')
@@ -177,10 +184,10 @@ function drawDALRParams (temp, params) {
 
     // Top of lift label
     svg.append('g').append('text')
-        .attr('class', 'tollabel')
+        .attr('class', 'liftlabels')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-        .attr('y', y(params.tol * 3.284084 / 1000 - 0.2))
-        .text('ToL')
+        .attr('y', y(params.tol * 3.284084 / 1000))
+        .text(`ToL: ${Math.round(params.tol * 3.28084).toLocaleString()}`)
 };
 
 function d3Update() {
@@ -195,8 +202,6 @@ function d3Update() {
 
 function d3Clear() {
     clearChart()
-    document.getElementById('user-neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-    document.getElementById('user-tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
     drawDALRParams(maxTempF, liftParams)
 };
 
@@ -205,7 +210,8 @@ function clearChart() {
     svg.select('line.dalrline').remove()
     svg.select('line.neg3line').remove()
     svg.select('text.neg3label').remove()
-    svg.select('text.tollabel').remove()
+    svg.select('text.liftlabels').remove()
+    svg.select('text.liftlabels').remove()
     svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
 };
