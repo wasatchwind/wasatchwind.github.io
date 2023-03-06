@@ -216,9 +216,10 @@ function clearChart() {
     document.getElementById('user-temp').value = null
     svg.select('line.dalrline').remove()
     svg.select('line.neg3line').remove()
-    svg.select('text.neg3label').remove()
     svg.select('text.liftlabels').remove()
     svg.select('text.liftlabels').remove()
+    svg.select('text.liftheights').remove()
+    svg.select('text.liftheights').remove()
     svg.select('text.maxtemp').remove()
     svg.select('circle.tolcircle').remove()
 };
