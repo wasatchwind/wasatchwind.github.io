@@ -162,14 +162,14 @@ function drawDALRParams (temp, params) {
 
     // -3 label
     svg.append('g').append('text')
-        .attr('class', 'neg3label')
+        .attr('class', 'liftlabels')
         .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
         .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.6))
         .text('-3')
-
+    
     // -3 height
     svg.append('g').append('text')
-        .attr('class', 'liftlabels')
+        .attr('class', 'liftheights')
         .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
         .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
         .text(Math.round(params.neg3 * 3.28084).toLocaleString())
@@ -187,7 +187,14 @@ function drawDALRParams (temp, params) {
         .attr('class', 'liftlabels')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
         .attr('y', y(params.tol * 3.284084 / 1000))
-        .text(`ToL: ${Math.round(params.tol * 3.28084).toLocaleString()}`)
+        .text('ToL')
+    
+    // Top of lift height
+        svg.append('g').append('text')
+        .attr('class', 'liftheights')
+        .attr('x', x((params.tolTemp * 9 / 5) + 32 + 10))
+        .attr('y', y(params.tol * 3.284084 / 1000))
+        .text(`${Math.round(params.tol * 3.28084).toLocaleString()}`)
 };
 
 function d3Update() {
