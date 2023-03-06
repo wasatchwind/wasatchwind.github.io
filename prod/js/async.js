@@ -44,16 +44,12 @@
     try {
         soundingData = await (await fetch(soundingURL)).json()
     } catch (error) { console.log('Sounding data fetch failed') }
-    console.log(maxTempF)
-    console.log(soundingData)
-    try {
-        if (maxTempF && soundingData) {
-            liftParams = getLiftParams(maxTempF, soundingData)
-            document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-            document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
-            decodedSkewTChart(maxTempF, soundingData, liftParams)
-        }
-    } catch (error) { console.log(error) }
+    if (maxTempF && soundingData) {
+        liftParams = getLiftParams(maxTempF, soundingData)
+        document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
+        document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
+        decodedSkewTChart(maxTempF, soundingData, liftParams)
+    }
 
     // LATEST WEATHER OBSERVATIONS (NWS PUBLIC API)
     try {
