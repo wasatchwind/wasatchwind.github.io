@@ -136,9 +136,10 @@ a:active {
 }
 .liftlabels {
   fill: white;
-  font-size: 210%;
-}
-.neg3label {
-  fill: white;
   font-size: 160%;
+}
+.liftheights {
+  fill: white;
+  font-size: 210%;
+  font-weight: bold;
 }
