@@ -44,6 +44,8 @@
     try {
         soundingData = await (await fetch(soundingURL)).json()
     } catch (error) { console.log('Sounding data fetch failed') }
+    console.log(maxTempF)
+    console.log(soundingData)
     try {
         if (maxTempF && soundingData) {
             liftParams = getLiftParams(maxTempF, soundingData)
