@@ -159,19 +159,19 @@ function drawDALRParams (temp, params) {
         .attr('y1', y(params.neg3 * 3.28084 / 1000))
         .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
         .attr('y2', y(params.neg3 * 3.28084 / 1000))
-
+    
     // -3 label
     svg.append('g').append('text')
         .attr('class', 'liftlabels')
         .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.6))
+        .attr('y', y(params.neg3 * 3.28084 / 1000 - 0.6))
         .text('-3')
     
     // -3 height
     svg.append('g').append('text')
         .attr('class', 'liftheights')
         .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
-        .attr('y', y(params.neg3 * 3.284084 / 1000 - 0.5))
+        .attr('y', y(params.neg3 * 3.28084 / 1000 - 0.5))
         .text(Math.round(params.neg3 * 3.28084).toLocaleString())
 
     // Top of lift point
@@ -179,35 +179,49 @@ function drawDALRParams (temp, params) {
         .attr('class', 'tolcircle')
         .attr('fill', 'white')
         .attr('cx', x((params.tolTemp * 9 / 5) + 32))
-        .attr('cy', y(params.tol * 3.284084 / 1000))
+        .attr('cy', y(params.tol * 3.28084 / 1000))
         .attr('r', 6)
 
     // Top of lift label
     svg.append('g').append('text')
         .attr('class', 'liftlabels')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-        .attr('y', y(params.tol * 3.284084 / 1000))
+        .attr('y', y(params.tol * 3.28084 / 1000))
         .text('ToL')
     
     // Top of lift height
         svg.append('g').append('text')
         .attr('class', 'liftheights')
         .attr('x', x((params.tolTemp * 9 / 5) + 32 + 10))
-        .attr('y', y(params.tol * 3.284084 / 1000))
+        .attr('y', y(params.tol * 3.28084 / 1000))
         .text(`${Math.round(params.tol * 3.28084).toLocaleString()}`)
 };
 
-function d3Update() {
+function d3Update(userLiftParams) {
+    document.getElementById('out-of-range').style.display = 'none'
     const userTemp = parseInt(document.getElementById('user-temp').value)
-        if (userTemp > (soundingData[1].Temp_c * 9 / 5) + 32 + 5.4 && userTemp < (soundingData[1].Temp_c * 9 / 5) + 32 + 25 && userTemp < 106) {
-        const userLiftParams = getLiftParams(userTemp, soundingData)
+    if (!userTemp) return
+    try { userLiftParams = getLiftParams(userTemp, soundingData) }
+    catch {
+        outOfRange(userTemp)
+        return
+    }
+    if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) outOfRange(userTemp)
+    else {
         clearChart()
         drawDALRParams(userTemp, userLiftParams)
     }
-    else d3Clear()
 };
 
+function outOfRange(userTemp) {
+    document.getElementById('out-of-range').innerHTML = `Error: parameters out of range for ${userTemp}&deg;`
+    document.getElementById('out-of-range').style.display = 'block'
+    document.getElementById('user-temp').value = null
+    return
+}
+
 function d3Clear() {
+    document.getElementById('out-of-range').style.display = 'none'
     clearChart()
     drawDALRParams(maxTempF, liftParams)
 };
