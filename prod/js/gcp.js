@@ -48,7 +48,6 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
     if (position === 0) {
         params.neg3 = null
         params.neg3Temp = null
-//         document.getElementById('user-neg3').innerHTML = '--'
     }
     else {
         interpolateX1 = data[position].Temp_c
@@ -63,7 +62,6 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
         }
         else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
         params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
-//         document.getElementById('user-neg3').innerHTML = Math.round(params.neg3 * 3.28084).toLocaleString()
     }
 
     // Now find top of lift (thermal index is 0)
@@ -80,11 +78,9 @@ function getLiftParams(temp, data, position = 0, raobSlope, raobYInt, params = {
         }
         else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
         params.tolTemp = (params.tol - dalrYInt) / dalrSlope
-//         document.getElementById('user-tol').innerHTML = Math.round(params.tol * 3.28084).toLocaleString()
     } catch (error) {
         params.tol = null
         params.tolTemp = null
-//         document.getElementById('user-tol').innerHTML = '--'
     }
     return params
 };
