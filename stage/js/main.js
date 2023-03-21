@@ -3,7 +3,8 @@ const now = new Date();
 const titleDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
 document.getElementById('title-date').innerHTML = titleDate
 const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
-let currentDiv = 'wind', liftParams = {}, maxTempF, soundingData = {}
+let currentDiv = 'wind', liftParams = {}
+let maxTempF, soundingData = {}
 
 function reload() {
     history.scrollRestoration = 'manual'
@@ -51,8 +52,6 @@ function tempTrend(history, latest, forecast) {
 function windSurfaceForecastGraphical() {
     const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '5 pm' : '4 pm'
     document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
-    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/utah/WindSpd4_utah.png'
-    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/utah/WindGust4_utah.png'
     document.getElementById('graphical-wind-div').style.display = 'block'
 };
 
@@ -89,10 +88,10 @@ function processAreaForecast(text) {
 })();
 
 (function getMorningSkewT() {
-    if (now.getHours() > 6 && now.getHours() < 19) {
+    // if (now.getHours() > 6 && now.getHours() < 19) {
         const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
         const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
-        document.getElementById('skew-t-img').src = url
-    }
-    else document.getElementById('skew-t-div').style.display = 'none'
+        document.getElementById('skew-t-img').src = 'stage/images/local/KSLC.skewt.20230309.00.gif'//url
+    // }
+    // else document.getElementById('skew-t-div').style.display = 'none'
 })();

@@ -1,14 +1,16 @@
 'use strict';
 (async () => {
-    // TIMESERIES (GCP & NWS TOKEN API)
+    // TIMESERIES ALL STATIONS (GCP & NWS TOKEN API)
     try {
         let nwsToken
-//         const nwsTokenURL = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
-        const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-1'
+        const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-2'
         try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         catch (error) { console.log('NWS token fetch failed') }
         const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
+        const kslcZoneDataURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&recent=800&vars=air_temp,altimeter&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
         const timeSeriesData = await (await fetch(timeSeriesURL)).json()
+        const kslcZoneData = await (await fetch(kslcZoneDataURL)).json()
+        zoneHistoryChart(kslcZoneData.STATION[0].OBSERVATIONS)
         if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
             ensureWindData(timeSeriesData)
             ensureGustData(timeSeriesData)
@@ -70,12 +72,11 @@
         catch (error) { console.log('Wind map fetch failed') }
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-        document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
     } catch (error) { console.log(error) }
 
     // NEXT 3 DAYS (NWS PUBLIC API)
     try {
-        let nwsForecastData
+        let nwsForecastData 
         const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
         try { nwsForecastData = await (await fetch(nwsForecastURL)).json() }
         catch (error) { console.log('NWS forecast fetch failed') }
@@ -106,9 +107,9 @@
         processAreaForecast(areaForecastText)
     } catch (error) { console.log(error) }
 
-    if (now.getHours() > 5 && now.getHours() < 17) windSurfaceForecastGraphical()
-//     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
-    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    if (now.getHours() > 5 && now.getHours() < 17) {
+        windSurfaceForecastGraphical()
+    }
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
 })();
