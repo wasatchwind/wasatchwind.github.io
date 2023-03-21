@@ -13,10 +13,10 @@ body {
   text-align: center;
 }
 .border-10 { --bs-border-width: 10px; }
-.negative-vert-pad {
+/* .negative-vert-pad {
   margin-top: -10px;
   margin-bottom: -10px;
-}
+} */
 .mh-60 { max-height: 60% !important; }
 .mb-div-end { margin-bottom: 8rem; }
 .spinner-top {
