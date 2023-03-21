@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Wasatch Wind</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="stage/css/main.css"> <!-- LOCAL/STAGE/PROD -->
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -18,12 +20,12 @@
 
         <!-- ROW 1: TOP/TITLE -->
         <div class="align-items-center d-flex justify-content-around mb-2">
-            <img src="images/pg.gif" height="125px">
+            <img src="stage/images/pg.gif" height="125px"> <!-- LOCAL/STAGE/PROD -->
             <div>
                 <div class="display-1 text-info">Wasatch Wind</div>
                 <div class="display-6 fw-semibold text-secondary" id="title-date"></div>
             </div>
-            <img src="images/refresh.png" onclick="reload()" height="125px">
+            <img src="stage/images/refresh.png" onclick="reload()" height="125px"> <!-- LOCAL/STAGE/PROD -->
         </div>
 
         <!-- ROW 2: SCROLL TILES -->
@@ -35,7 +37,7 @@
                     <div class="overflow-hidden tile-border-selected" id="wind-border">
                         <div class="bg-dark d-flex flex-column justify-content-end tile-height">
                             <div class="d-flex flex-column h-100 justify-content-center">
-                                <div class="align-items-center display-1 d-flex justify-content-around">
+                                <div class="align-items-center d-flex display-1 justify-content-around">
                                     <div id="tile-wdir-12"></div>
                                     <div class="fw-bold" id="tile-wspd-12"></div>
                                     <div class="display-4 fw-bold gust-color" id="tile-gust-12"></div>
@@ -114,35 +116,17 @@
                     <div class="overflow-hidden tile-border" id="zone-border">
                         <div class="bg-dark d-flex flex-column justify-content-end tile-height">
                             <div class="d-flex flex-column h-100 justify-content-center">
-                                <div class="align-items-center collapse display-3 d-flex justify-content-around" id="temp-main">
+                                <div class="align-items-center collapse d-flex display-1 justify-content-around" id="temp-main">
                                     <div class="fw-semibold" id="latest-temp"></div>
                                     <div class="display-4">/</div>
                                     <div class="fw-semibold" id="max-temp"></div>
                                 </div>
                             </div>
-                            <div class="align-items-end collapse d-flex mh-60" id="tile-main">
-                                <div class="col mx-1">
-                                    <div class="bg-primary border border-1" id="altibar-0"></div>
-                                    <div class="fs-2" id="alti-0"></div>
-                                    <div class="display-5 negative-vert-pad" id="zone-0"></div>
-                                </div>
-                                <div class="col mx-1">
-                                    <div class="bg-primary border border-1" id="altibar-1"></div>
-                                    <div class="fs-2" id="alti-1"></div>
-                                    <div class="display-5 negative-vert-pad" id="zone-1"></div>
-                                </div>
-                                <div class="col mx-1">
-                                    <div class="bg-primary border border-1" id="altibar-2"></div>
-                                    <div class="fs-2" id="alti-2"></div>
-                                    <div class="display-5 negative-vert-pad" id="zone-2"></div>
-                                </div>
-                                <div class="col mx-1">
-                                    <div class="bg-primary border border-1" id="altibar-3"></div>
-                                    <div class="fs-2" id="alti-3"></div>
-                                    <div class="display-5 negative-vert-pad" id="zone-3"></div>
-                                </div>
+                            <div class="align-items-center d-flex justify-content-around">
+                                <div class="display-3" id="latest-zone"></div>
+                                <div class="display-3 fw-semibold" id="latest-alti"></div>
                             </div>
-                            <div class="fs-3" id="zone-time-range"></div>
+                            <div class="fs-3" id="zone-time"></div>
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="zone-title">Zone</div>
@@ -182,7 +166,8 @@
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
                     <div class="overflow-hidden tile-border" id="cams-border">
                         <div class="tile-height">
-                            <img class="h-100 w-100" id="latest-cam">
+                            <!-- <img class="h-100 w-100" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                            <img class="h-100 w-100" src="stage/images/local/armstrong_cam_current.jpg"> <!-- LOCAL/STAGE/PROD -->
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="cams-title">Cams</div>
@@ -192,7 +177,7 @@
                 <div class="col mx-2 tile" onclick="toggleDiv('gps')">
                     <div class="overflow-hidden tile-border" id="gps-border">
                         <div class="tile-height">
-                            <img class="h-100 w-100" src="images/gpstile.png">
+                            <img class="h-100 w-100" src="stage/images/gpstile.png"> <!-- LOCAL/STAGE/PROD -->
                         </div>
                     </div>
                     <div class="display-3 fw-semibold text-warning" id="gps-title">GPS</div>
@@ -237,8 +222,10 @@
             </div>
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
                 <div class="d-flex justify-content-between mx-2 overflow-hidden rounded-4">
-                    <img class="border-4 border-dark border-end img-fluid w-100" id="graphical-wind-img">
-                    <img class="border-4 border-dark border-start img-fluid w-100" id="graphical-gust-img">
+                    <!-- <img class="border-4 border-dark border-end img-fluid w-100" src="https://graphical.weather.gov/images/utah/WindSpd4_utah.png"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border-4 border-dark border-end img-fluid w-100" src="stage/images/local/WindSpd4_utah.png"> <!-- LOCAL/STAGE/PROD -->
+                    <!-- <img class="border-4 border-dark border-start img-fluid w-100" src="https://graphical.weather.gov/images/utah/WindGust4_utah.png"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border-4 border-dark border-start img-fluid w-100" src="stage/images/local/WindGust4_utah.png"> <!-- LOCAL/STAGE/PROD -->
                 </div>
             </a>
         </div>
@@ -313,7 +300,8 @@
         <div class="display-3 text-info" id="wind-map-timestamp"></div>
         <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" id="surface-wind-map">
+                <!-- <img class="rounded-4 w-100" src="https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png"> --> <!-- LOCAL/STAGE/PROD -->
+                <img class="rounded-4 w-100" src="stage/images/local/wind-map-save.png"> <!-- LOCAL/STAGE/PROD -->
             </div>
         </a>
 
@@ -1114,10 +1102,142 @@
     <!-- ZONE DIV -->
     <div class="collapse mb-div-end" id="zone">
 
+        <!-- 12 HOUR HISTORY ZONE, TEMP, AND PRESSURE -->
+        <div class="display-3 text-info">Last 12 Hours</div>
+            <div class="border bg-dark mb-5 mx-2 overflow-hidden rounded-4">
+                <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
+                    <div class="align-items-end d-flex">
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-0"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-0"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-1"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-1"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-2"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-2"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-3"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-3"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-4"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-4"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-5"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-5"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-6"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-6"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-7"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-7"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-8"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-8"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-9"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-9"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-10"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-10"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-warning border mt-2" id="zhist-tempbar-11"></div>
+                            <div class="display-6 fw-semibold" id="zhist-temp-11"></div>
+                        </div>
+                    </div>
+                    <div class="align-items-end d-flex">
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-0"></div>
+                            <div class="fs-3" id="zhist-alti-0"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-0"></div>
+                            <div class="fs-4" id="zhist-time-0"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-1"></div>
+                            <div class="fs-3" id="zhist-alti-1"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-1"></div>
+                            <div class="fs-4" id="zhist-time-1"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-2"></div>
+                            <div class="fs-3" id="zhist-alti-2"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-2"></div>
+                            <div class="fs-4" id="zhist-time-2"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-3"></div>
+                            <div class="fs-3" id="zhist-alti-3"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-3"></div>
+                            <div class="fs-4" id="zhist-time-3"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-4"></div>
+                            <div class="fs-3" id="zhist-alti-4"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-4"></div>
+                            <div class="fs-4" id="zhist-time-4"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-5"></div>
+                            <div class="fs-3" id="zhist-alti-5"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-5"></div>
+                            <div class="fs-4" id="zhist-time-5"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-6"></div>
+                            <div class="fs-3" id="zhist-alti-6"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-6"></div>
+                            <div class="fs-4" id="zhist-time-6"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-7"></div>
+                            <div class="fs-3" id="zhist-alti-7"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-7"></div>
+                            <div class="fs-4" id="zhist-time-7"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-8"></div>
+                            <div class="fs-3" id="zhist-alti-8"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-8"></div>
+                            <div class="fs-4" id="zhist-time-8"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-9"></div>
+                            <div class="fs-3" id="zhist-alti-9"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-9"></div>
+                            <div class="fs-4" id="zhist-time-9"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-10"></div>
+                            <div class="fs-3" id="zhist-alti-10"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-10"></div>
+                            <div class="fs-4" id="zhist-time-10"></div>
+                        </div>
+                        <div class="col px-1">
+                            <div class="bg-primary border mt-2" id="zhist-altibar-11"></div>
+                            <div class="fs-3" id="zhist-alti-11"></div>
+                            <div class="display-5 mt-2" id="zhist-zone-11"></div>
+                            <div class="fs-4" id="zhist-time-11"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         <!-- WHAT IS ZONE? -->
+        <div class="display-3 text-info">Ambrose Pressure Zone</div>
         <div class="mx-2">
-            <img class="my-2 rounded-4 w-100" src="images/zonechart1.jpg">
-            <div class="display-4 mt-2 text-info">Created by Jeff Ambrose based on many years of accumlated empirical pressure and temperature data to estimate relative air quality.</div>
+            <img class="my-2 rounded-4 w-100" src="stage/images/zonechart1.jpg"> <!-- LOCAL/STAGE/PROD -->
+            <div class="display-6 fw-semibold text-secondary">Estimate of relative air quality and potential turbulence.</div>
         </div>
 
     </div>
@@ -1131,7 +1251,7 @@
             <div class="w-100" id="skew-t-d3"></div>
             <div class="display-4 fw-semibold text-secondary">Check Alternate Surface Temp:</div>
             <div class="collapse display-6 text-info" id="out-of-range"></div>
-            <div class="display-3 d-flex fw-semibold justify-content-around py-3 text-warning border-bottom">
+            <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
                 <div onclick="d3Update()">Enter</div>
                 <input class="bg-dark border border-2 border-warning fw-bold rounded-4 text-center text-warning" type="number"  min="0" max="110" id="user-temp">
                 <div onclick="d3Clear()">Clear</div>
@@ -1169,7 +1289,8 @@
         <div class="display-3 text-info">Next 48 Hours</div>
         <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6">
+                <!-- <img class="rounded-4 w-100" src="https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6"> --> <!-- LOCAL/STAGE/PROD -->
+                <img class="rounded-4 w-100" src="stage/images/local/Plotter.png"> <!-- LOCAL/STAGE/PROD -->
             </div>
         </a>
 
@@ -1250,14 +1371,16 @@
         <!-- FORECAST - NATIONAL FRONTS, ETC. -->
         <div class="display-3 text-info">National Forecast & Fronts</div>
         <div class="mb-5 mx-2">
-            <img class="rounded-4 w-100" src="https://www.wpc.ncep.noaa.gov/noaa/noaa.gif">
+            <!-- <img class="rounded-4 w-100" src="https://www.wpc.ncep.noaa.gov/noaa/noaa.gif"> --> <!-- LOCAL/STAGE/PROD -->
+            <img class="rounded-4 w-100" src="stage/images/local/noaa.gif"> <!-- LOCAL/STAGE/PROD -->
         </div>
 
         <!-- CLOUDS & PRECIP GIF -->
         <div class="display-3 text-info">Clouds & Precip Last Hour</div>
         <a href="https://www.accuweather.com/en/us/utah/weather-radar-rs?play=1" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif">
+                <!-- <img class="rounded-4 w-100" src="https://sirocco.accuweather.com/sat_mosaic_640x480_public/rs/isarUT_.gif"> --> <!-- LOCAL/STAGE/PROD -->
+                <img class="rounded-4 w-100" src="stage/images/local/isarUT_.gif"> <!-- LOCAL/STAGE/PROD -->
             </div>
         </a>
         
@@ -1265,14 +1388,16 @@
         <div class="display-3 text-info">Satellite Last 4 Hours</div>
         <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/psw/GEOCOLOR/GOES17-PSW-GEOCOLOR-600x600.gif">
+                <!-- <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/psw/GEOCOLOR/GOES17-PSW-GEOCOLOR-600x600.gif"> --> <!-- LOCAL/STAGE/PROD -->
+                <img class="rounded-4 w-100" src="stage/images/local/GOES18-PSW-GEOCOLOR-600x600.gif"> <!-- LOCAL/STAGE/PROD -->
             </div>
         </a>
 
         <!-- JETSTREAM -->
         <div class="display-3 text-info">Jetstream: Last 18 Hours</div>
         <div class="mb-5 mx-2">
-            <img class="rounded-4 w-100" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png">
+            <!-- <img class="rounded-4 w-100" src="https://s.w-x.co/staticmaps/wu/wu/jetstream1200_cur/conus/animate.png"> --> <!-- LOCAL/STAGE/PROD -->
+            <img class="rounded-4 w-100" src="stage/images/local/animate.gif"> <!-- LOCAL/STAGE/PROD -->
         </div>
 
     </div>
@@ -1283,21 +1408,24 @@
             <div class="col">
                 <div class="display-5 text-info">📌 Daybreak</div>
                 <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=darren2&numFrames=30" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/darren2.latest.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; East</div>
             </div>
             <div class="col mx-4">
                 <div class="display-5 text-info">📌 Daybreak</div>
                 <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=darrenS&numFrames=30" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darrenS.latest.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/darrenS.latest.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/darrenS.latest.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; Southwest</div>
             </div>
             <div class="col">
                 <div class="display-5 text-info">📌 Olympus</div>
                 <a href="https://www.wrh.noaa.gov/images/slc/camera/loopCams.php?camName=olympuscove&numFrames=30" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/olympuscove.latest.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://www.wrh.noaa.gov/images/slc/camera/latest/olympuscove.latest.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/olympuscove.latest.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; West</div>
             </div>
@@ -1306,21 +1434,24 @@
             <div class="col">
                 <div class="display-5 text-info">📌 West Valley</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_hour.mp4" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/armstrong_cam_current.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; East</div>
             </div>
             <div class="col mx-4">
                 <div class="display-5 text-info">📌 U of U</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_hour.mp4" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_current.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_current.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/wbbs_cam_current.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; South</div>
             </div>
             <div class="col">
                 <div class="display-5 text-info">📌 U of U</div>
                 <a href="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_hour.mp4" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_current.jpg">
+                    <!-- <img class="border img-fluid my-2 rounded-4" src="https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_current.jpg"> --> <!-- LOCAL/STAGE/PROD -->
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/local/wbbw_cam_current.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
                 <div class="display-5 fw-semibold text-secondary">&#129517; West</div>
             </div>
@@ -1329,13 +1460,13 @@
             <div class="col mx-4">
                 <div class="display-5 text-info">📌 Northside</div>
                 <a href="http://74.122.78.35/aca/index.html#view" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="images/ns-img.png">
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/ns-img.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="col mx-4">
                 <div class="display-5 text-info">📌 Southside</div>
                 <a href="https://www.uhgpga.org/webcams" target="_blank">
-                    <img class="border img-fluid my-2 rounded-4" src="images/ss-img.png">
+                    <img class="border img-fluid my-2 rounded-4" src="stage/images/ss-img.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
         </div>
@@ -1346,32 +1477,32 @@
         <div class="mt-5 mx-2">
             <div class="my-5">
                 <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/livetrack24.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/livetrack24.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="my-5">
                 <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/xcfind.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/xcfind.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="my-5">
                 <a href="https://www.xctrack.me" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/xctrack.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/xctrack.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="my-5">
                 <a href="https://www.xcontest.org/usa/flights" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/XContest.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/XContest.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="my-5">
                 <a href="http://freeflightcomp.appspot.com/comps/pointratseries2022" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/pointrat.jpg">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/pointrat.jpg"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
             <div class="my-5">
                 <a href="https://www.sportstracklive.com/en" target="_blank">
-                    <img class="border border-warning border-4 rounded-4 w-75" src="images/SportsTrackLive.png">
+                    <img class="border border-warning border-4 rounded-4 w-75" src="stage/images/SportsTrackLive.png"> <!-- LOCAL/STAGE/PROD -->
                 </a>
             </div>
         </div>
@@ -1379,16 +1510,16 @@
 
     <!-- ABOUT DIV -->
     <div class="collapse mb-div-end mx-2" id="about">
-        <img class="rounded-4 mt-2 w-100" src="images/mattolympus.jpg">
+        <img class="rounded-4 mt-2 w-100" src="stage/images/mattolympus.jpg"> <!-- LOCAL/STAGE/PROD -->
         <div class="display-6 fw-semibold text-secondary">Matt Over Mount Olympus, 2021 (Photo by Jeff Ambrose)</div>
         <div class="display-3 mt-5 text-info">Questions or Feedback?</div>
         <div class="border-bottom border-1 display-1 pb-5 text-info">matthansonx@gmail.com</div>
         <div class="display-3 my-5 text-info">Enjoying Wasatch Wind?<br>Please donate via Venmo!</div>
         <a href="https://venmo.com/code?user_id=3206889491922944142&created=1660324693" target="_blank">
             <div class="border border-warning border-4 d-flex justify-content-around p-3 rounded-4">
-                <img src="images/venmo.jpg" height="150px">
+                <img src="stage/images/venmo.jpg" height="150px"> <!-- LOCAL/STAGE/PROD -->
                 <div class="align-self-center display-1 text-warning">@Matt-Hansonx</div>
-                <img src="images/me.png" height="150px">
+                <img src="stage/images/me.png" height="150px"> <!-- LOCAL/STAGE/PROD -->
             </div>
         </a>
     </div>
@@ -1401,13 +1532,14 @@
 </div>
 
 <!-- LOCAL SCRIPTS -->
-<script type="text/javascript" src="js/main.js"></script>
-<script type="text/javascript" src="js/timeseries.js"></script>
-<script type="text/javascript" src="js/nwsapi.js"></script>
-<script type="text/javascript" src="js/gcp.js"></script>
+<!-- <script type="text/javascript" src="stage/js/vars (local only).js"></script> --> <!-- LOCAL/STAGE/PROD -->
+<script type="text/javascript" src="stage/js/main.js"></script> <!-- LOCAL/STAGE/PROD -->
+<script type="text/javascript" src="stage/js/timeseries.js"></script> <!-- LOCAL/STAGE/PROD -->
+<script type="text/javascript" src="stage/js/nwsapi.js"></script> <!-- LOCAL/STAGE/PROD -->
+<script type="text/javascript" src="stage/js/gcp.js"></script> <!-- LOCAL/STAGE/PROD -->
 <script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
-<script type="text/javascript" src="js/d3.js"></script>
-<script type="text/javascript" src="js/async.js"></script>
+<script type="text/javascript" src="stage/js/d3.js"></script> <!-- LOCAL/STAGE/PROD -->
+<script type="text/javascript" src="stage/js/async.js"></script> <!-- LOCAL/STAGE/PROD -->
     
 </body>
 </html>
