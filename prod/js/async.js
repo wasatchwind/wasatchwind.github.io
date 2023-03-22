@@ -3,7 +3,6 @@
     // TIMESERIES (GCP & NWS TOKEN API)
     try {
         let nwsToken
-//         const nwsTokenURL = 'https://storage.googleapis.com/wasatch-wind-static/nwstoken.json'
         const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token'
         try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         catch (error) { console.log('NWS token fetch failed') }
