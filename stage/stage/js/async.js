@@ -42,7 +42,8 @@
     try {
         maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp
         document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
-    } catch (error) { console.log('Max temp fetch failed') }
+//     } catch (error) { console.log('Max temp fetch failed') }
+    } catch (error) { console.log(error) }
     try {
         soundingData = await (await fetch(soundingURL)).json()
     } catch (error) { console.log('Sounding data fetch failed') }
