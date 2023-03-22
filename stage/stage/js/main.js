@@ -88,10 +88,10 @@ function processAreaForecast(text) {
 })();
 
 (function getMorningSkewT() {
-    // if (now.getHours() > 6 && now.getHours() < 19) {
+    if (now.getHours() > 6 && now.getHours() < 19) {
         const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
         const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
-        document.getElementById('skew-t-img').src = 'stage/images/local/KSLC.skewt.20230309.00.gif'//url
-    // }
-    // else document.getElementById('skew-t-div').style.display = 'none'
+        document.getElementById('skew-t-img').src = url
+    }
+    else document.getElementById('skew-t-div').style.display = 'none'
 })();
