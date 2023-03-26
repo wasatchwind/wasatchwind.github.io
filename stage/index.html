@@ -166,7 +166,7 @@
                 <div class="col mx-2 tile" onclick="toggleDiv('cams')">
                     <div class="overflow-hidden tile-border" id="cams-border">
                         <div class="tile-height">
-                            <img class="h-100 w-100" src="https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg"> <!-- LOCAL/STAGE/PROD -->
+                            <img class="h-100 w-100" id="latest-cam"> <!-- LOCAL/STAGE/PROD -->
 <!--                             <img class="h-100 w-100" src="stage/images/local/armstrong_cam_current.jpg"> <!-- LOCAL/STAGE/PROD --> -->
                         </div>
                     </div>
@@ -300,7 +300,7 @@
         <div class="display-3 text-info" id="wind-map-timestamp"></div>
         <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
             <div class="mb-5 mx-2">
-                <img class="rounded-4 w-100" src="https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png"> <!-- LOCAL/STAGE/PROD -->
+                <img class="rounded-4 w-100" id="surface-wind-map"> <!-- LOCAL/STAGE/PROD -->
 <!--                 <img class="rounded-4 w-100" src="stage/images/local/wind-map-save.png"> <!-- LOCAL/STAGE/PROD --> -->
             </div>
         </a>
