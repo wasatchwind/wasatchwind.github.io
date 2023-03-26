@@ -72,7 +72,7 @@
         catch (error) { console.log('Wind map fetch failed') }
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-//         document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
+        document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
     } catch (error) { console.log(error) }
 
     // NEXT 3 DAYS (NWS PUBLIC API)
