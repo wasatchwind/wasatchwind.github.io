@@ -34,13 +34,13 @@
     }
 
     // SOUNDING/RAOB (GCP)
-//     const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
-    const maxTempURL = 'https://api.open-meteo.com/v1/forecast?latitude=40.77069&longitude=-111.96503&timezone=US/Mountain&temperature_unit=fahrenheit&daily=temperature_2m_max'
+    const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
+//     const maxTempURL = 'https://api.open-meteo.com/v1/forecast?latitude=40.77069&longitude=-111.96503&timezone=US/Mountain&temperature_unit=fahrenheit&daily=temperature_2m_max'
     const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
     try {
-//         maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp
-        maxTempF = (await (await fetch(maxTempURL)).json()).daily.temperature_2m_max[0]
-        console.log(maxTempF)
+        maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp
+//         maxTempF = (await (await fetch(maxTempURL)).json()).daily.temperature_2m_max[0]
+//         console.log(maxTempF)
         document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
     } catch (error) { console.log('Max temp fetch failed') }
     try {
