@@ -108,10 +108,10 @@
         processAreaForecast(areaForecastText)
     } catch (error) { console.log(error) }
 
-    if (now.getHours() > 5 && now.getHours() < 17) {
+//     if (now.getHours() > 5 && now.getHours() < 17) { //STAGE
         windSurfaceForecastGraphical()
-    }
-//     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+//     } //STAGE
+//     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg' // Revert when cam back online
     document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
