@@ -5,14 +5,17 @@
 //     try {
 //         const nwsToken = await (await fetch(nwsTokenURL)).json()
         // TIMESERIES ALL STATIONS
-        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
+        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=800&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
         try {
             const timeSeriesData = await (await fetch(timeSeriesURL)).json()
             if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
                 ensureWindData(timeSeriesData)
                 ensureGustData(timeSeriesData)
                 ensureDirData(timeSeriesData)
-                if (timeSeriesData.STATION[0].STID === 'KSLC') kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
+                if (timeSeriesData.STATION[0].STID === 'KSLC') {
+                    kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
+                    zoneHistoryChart(timeSeriesData.STATION[0].OBSERVATIONS)
+                }
                 for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
             }
             else throw(console.log('Timeseries fetch failed'))
@@ -21,11 +24,11 @@
             document.getElementById('tile-wspd-12').className = 'fs-2'
         }
         // TIMESERIES KSLC ONLY FOR ZONE CHART
-        const kslcZoneDataURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&recent=800&vars=air_temp,altimeter&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
-        try {
-            const kslcZoneData = await (await fetch(kslcZoneDataURL)).json()
-            zoneHistoryChart(kslcZoneData.STATION[0].OBSERVATIONS)
-        } catch (error) { console.log('KSLC Timeseries fetch failed') }
+//         const kslcZoneDataURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&recent=800&vars=air_temp,altimeter&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=6243aadc536049fc9329c17ff2f88db3`
+//         try {
+//             const kslcZoneData = await (await fetch(kslcZoneDataURL)).json()
+//             zoneHistoryChart(kslcZoneData.STATION[0].OBSERVATIONS)
+//         } catch (error) { console.log('KSLC Timeseries fetch failed') }
 //     } catch (error) { console.log('NWS token fetch failed') }
     
     // WIND ALOFT (GCP)
