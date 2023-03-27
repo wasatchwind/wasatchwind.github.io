@@ -24,7 +24,8 @@
         const kslcZoneDataURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&recent=800&vars=air_temp,altimeter&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
         try {
             const kslcZoneData = await (await fetch(kslcZoneDataURL)).json()
-            zoneHistoryChart(kslcZoneData.STATION[0].OBSERVATIONS)
+            console.log(kslcZoneData)
+//             zoneHistoryChart(kslcZoneData.STATION[0].OBSERVATIONS)
         } catch (error) { console.log('KSLC Timeseries fetch failed') }
     }
     catch (error) { console.log('NWS token fetch failed') }
