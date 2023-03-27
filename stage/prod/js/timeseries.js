@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // https://developers.synopticdata.com/mesonet/v2/stations/timeseries/
 function ensureWindData(data) {
     for (let i=0; i<data.STATION.length; i++) data.STATION[i].OBSERVATIONS.wind_speed_set_1 = data.STATION[i].OBSERVATIONS.wind_speed_set_1 ? data.STATION[i].OBSERVATIONS.wind_speed_set_1 : data.STATION[i].OBSERVATIONS.wind_speed_set_1 = new Array(12).fill(null)
 };
@@ -18,8 +18,6 @@ function kslcTiles(data) {
     windBarColor('tile', data.wind_speed_set_1.slice(-12))
     windSpeed('tile', data.wind_speed_set_1.slice(-12))
     windGust('tile', data.wind_gust_set_1.slice(-12))
-    zone(data.air_temp_set_1, data.altimeter_set_1, data.date_time)
-    document.getElementById('latest-temp').innerHTML = data.air_temp_set_1[data.air_temp_set_1.length - 1] ? `${Math.round(data.air_temp_set_1[data.air_temp_set_1.length - 1])}&deg;` : '--'
 };
 
 function windTileTimeRange(data) {
@@ -32,7 +30,7 @@ function windDirection(stid, wdir) {
     wdir.push(wdir[wdir.length - 1])
     const wimg = wdir.map(d => !d ? '&nbsp;' : '&#10148;')
     const rotate = wdir.map(d => `rotate(${d + 90}deg)`)
-    const finalElement = document.getElementById(`${stid}-wdir-${wdir.length - 1}`)
+    // const finalElement = document.getElementById(`${stid}-wdir-${wdir.length - 1}`)
     for (let i=0; i<wdir.length; i++) {
         const element = document.getElementById(`${stid}-wdir-${i}`)
         if (stid === 'tile') {
@@ -93,33 +91,7 @@ function windGust(stid, gust) {
     else document.getElementById(`${stid}-gust-12`).innerHTML = gust[gust.length - 1]
 };
 
-function zone(temp, alti, time, count = 3, barHeight = [], start) {
-    const timeMarker = time[time.length - 1].slice(-5,-3)
-    for (let i=time.length - 1; i>0; i--) {
-        if (time[i].slice(-5,-3) === timeMarker) {
-            barHeight.push(alti[i])
-            if (count === 0) start = time[i].toLowerCase()
-            const zone = calculateZone(alti[i], temp[i])
-            document.getElementById(`alti-${count}`).innerHTML = (alti[i]).toFixed(2)
-            document.getElementById(`zone-${count}`).innerHTML = zone.num
-            document.getElementById(`zone-${count}`).style.color = zone.col
-//             if (zone.num === 'LoP') document.getElementById(`zone-${count}`).className = 'fs-2 fw-semibold negative-vert-pad'
-            count --
-        }
-        if (count < 0) break
-    }
-    barHeight = barHeightRange(barHeight, 0, 20).reverse()
-    for (let i=0; i<barHeight.length; i++) {
-        document.getElementById('temp-main').style.display = 'block'
-        document.getElementById(`altibar-${i}`).style.height = `${barHeight[i]}px`
-    }
-    document.getElementById('zone-time-range').innerHTML = `${start} - ${time[time.length - 1].toLowerCase()} @KSLC`
-};
-
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
-//     const zoneSlope = [0.05, 0.12, 0.19, 0.33, 0.47, 0.54, 0.62, -1]
-//     const zoneIntercept = [29.91, 30.01, 30.11, 30.27, 30.43, 30.53, 30.65, 100]
-    // Alt data
     const zoneSlope = [0.0714, 0.0714, 0.0714, 0.3, 0.4286, 0.4286, 0.5429, -1]
     const zoneIntercept = [29.9214, 30.0514, 30.1114, 30.27, 30.4286, 30.4486, 30.6228, 100]
     for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i] / -110 * temp + zoneIntercept[i]) * 100) / 100)
@@ -145,11 +117,12 @@ function windChart(stid, data) {
 };
 
 function time(stid, time) {
-    time.push(time[time.length - 1])
+    if (stid !== 'zhist') time.push(time[time.length - 1])
+    else (time[time.length-1] = time[time.length-1].replace(':00',''))
     for (let i=0; i<time.length; i++) {
         const element = document.getElementById(`${stid}-time-${i}`)
         if (i === time.length - 1) element.innerHTML = time[i].toLowerCase()
-        else element.innerHTML = stid === 'AMB' ? time[i].replace(':00','').toLowerCase() : time[i].slice(0,-3)
+        else element.innerHTML = stid === 'AMB' || stid === 'zhist' ? time[i].replace(':00','').toLowerCase() : time[i].slice(0,-3)
     }
 };
 
@@ -161,9 +134,9 @@ function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChar
             zoneChartTemp.push(Math.round(data.air_temp_set_1[i]))
         }
     }
-    zoneChartTime = zoneChartTime.slice(-12)
-    zoneChartAlti = zoneChartAlti.slice(-12)
-    zoneChartTemp = zoneChartTemp.slice(-12)
+    zoneChartTime = zoneChartTime.slice(-8)
+    zoneChartAlti = zoneChartAlti.slice(-8)
+    zoneChartTemp = zoneChartTemp.slice(-8)
     altibarHeight = barHeightRange(zoneChartAlti, 0, 100)
     tempbarHeight = barHeightRange(zoneChartTemp, 0, 100)
     time('zhist', zoneChartTime)
