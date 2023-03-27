@@ -152,3 +152,34 @@ function time(stid, time) {
         else element.innerHTML = stid === 'AMB' ? time[i].replace(':00','').toLowerCase() : time[i].slice(0,-3)
     }
 };
+
+function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChartTemp = [], altibarHeight = [], tempbarHeight = [], zone) {
+    for (let i=0; i<data.date_time.length; i++) {
+        if (data.date_time[i].slice(-5,-3) === '00') {
+            zoneChartTime.push(data.date_time[i])
+            zoneChartAlti.push(data.altimeter_set_1[i].toFixed(2))
+            zoneChartTemp.push(Math.round(data.air_temp_set_1[i]))
+        }
+    }
+    zoneChartTime = zoneChartTime.slice(-12)
+    zoneChartAlti = zoneChartAlti.slice(-12)
+    zoneChartTemp = zoneChartTemp.slice(-12)
+    altibarHeight = barHeightRange(zoneChartAlti, 0, 100)
+    tempbarHeight = barHeightRange(zoneChartTemp, 0, 100)
+    time('zhist', zoneChartTime)
+    for (let i=0; i<zoneChartAlti.length; i++) {
+        const zone = calculateZone(zoneChartAlti[i], zoneChartTemp[i])
+        document.getElementById(`zhist-alti-${i}`).innerHTML = zoneChartAlti[i]
+        document.getElementById(`zhist-temp-${i}`).innerHTML = `${zoneChartTemp[i]}&deg;`
+        document.getElementById(`zhist-zone-${i}`).innerHTML = zone.num
+        document.getElementById(`zhist-zone-${i}`).style.color = zone.col
+        document.getElementById(`zhist-altibar-${i}`).style.height = `${altibarHeight[i]}px`
+        document.getElementById(`zhist-tempbar-${i}`).style.height = `${tempbarHeight[i]}px`
+    }
+    zone = calculateZone(data.altimeter_set_1[data.altimeter_set_1.length - 1], data.air_temp_set_1[data.air_temp_set_1.length - 1])
+    document.getElementById('latest-temp').innerHTML = data.air_temp_set_1[data.air_temp_set_1.length - 1] ? `${Math.round(data.air_temp_set_1[data.air_temp_set_1.length - 1])}&deg;` : '--'
+    document.getElementById('zone-time').innerHTML = data.date_time[data.date_time.length-1] ? data.date_time[data.date_time.length-1].toLowerCase() : '--'
+    document.getElementById('latest-alti').innerHTML = data.altimeter_set_1[data.altimeter_set_1.length-1] ? data.altimeter_set_1[data.altimeter_set_1.length-1].toFixed(2) : '--'
+    document.getElementById('latest-zone').innerHTML = zone.num
+    document.getElementById('latest-zone').style.color = zone.col
+};
