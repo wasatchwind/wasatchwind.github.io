@@ -12,6 +12,9 @@ function ensureDirData(data) {
 };
 
 function kslcTiles(data) {
+    const kslcLatestTime = data.date_time[data.date_time.length - 1].toLowerCase()
+    const titleDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
+    document.getElementById('title-date').innerHTML = `${kslcLatestTime} &bull; ${titleDate} &bull; KSLC`
     windTileTimeRange(data.date_time.slice(-12))
     windDirection('tile', data.wind_direction_set_1.slice(-12))
     windBarHeight('tile', data.wind_speed_set_1.slice(-12), data.wind_gust_set_1.slice(-12))
@@ -23,14 +26,13 @@ function kslcTiles(data) {
 function windTileTimeRange(data) {
     const start = data[0].toLowerCase()
     const end = data[11].toLowerCase()
-    document.getElementById('wind-time-range').innerHTML = `${start} - ${end} @ KSLC`
+    document.getElementById('wind-time-range').innerHTML = `${start} - ${end}`
 };
 
 function windDirection(stid, wdir) {
     wdir.push(wdir[wdir.length - 1])
     const wimg = wdir.map(d => !d ? '&nbsp;' : '&#10148;')
     const rotate = wdir.map(d => `rotate(${d + 90}deg)`)
-    // const finalElement = document.getElementById(`${stid}-wdir-${wdir.length - 1}`)
     for (let i=0; i<wdir.length; i++) {
         const element = document.getElementById(`${stid}-wdir-${i}`)
         if (stid === 'tile') {
@@ -151,8 +153,18 @@ function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChar
     }
     zone = calculateZone(data.altimeter_set_1[data.altimeter_set_1.length - 1], data.air_temp_set_1[data.air_temp_set_1.length - 1])
     document.getElementById('latest-temp').innerHTML = data.air_temp_set_1[data.air_temp_set_1.length - 1] ? `${Math.round(data.air_temp_set_1[data.air_temp_set_1.length - 1])}&deg;` : '--'
-    document.getElementById('zone-time').innerHTML = data.date_time[data.date_time.length-1] ? data.date_time[data.date_time.length-1].toLowerCase() : '--'
+    // document.getElementById('zone-time').innerHTML = data.date_time[data.date_time.length-1] ? data.date_time[data.date_time.length-1].toLowerCase() : '--'
     document.getElementById('latest-alti').innerHTML = data.altimeter_set_1[data.altimeter_set_1.length-1] ? data.altimeter_set_1[data.altimeter_set_1.length-1].toFixed(2) : '--'
     document.getElementById('latest-zone').innerHTML = zone.num
     document.getElementById('latest-zone').style.color = zone.col
+    calculateAltiTrend(zoneChartAlti)
+};
+
+function calculateAltiTrend(data, xSum = 28, xSquaredSum = 140, ySum, xy = [], xySum, m, trend) {
+    ySum = data.reduce((a, b) => parseFloat(a) + parseFloat(b))
+    for (let i=0; i<data.length; i++) xy.push(i * data[i])
+    xySum = xy.reduce((a, b) => a + b, 0)
+    m = (8 * xySum - xSum * ySum) / (8 * xSquaredSum - xSquaredSum)
+    trend = m < 0 ? '&#11087;' : '&#11086;'
+    document.getElementById('alti-trend').innerHTML = trend
 };
