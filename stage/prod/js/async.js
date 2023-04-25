@@ -72,8 +72,9 @@
         try { windMapData = await (await fetch(windMapDataURL)).json() }
         catch (error) { console.log('Wind map fetch failed') }
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+        const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-        document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
+        document.getElementById('surface-wind-map').src = windMapImageURL
     } catch (error) { console.log(error) }
 
     // NEXT 3 DAYS (NWS PUBLIC API)
@@ -112,8 +113,9 @@
     if (now.getHours() > 5 && now.getHours() < 17) {
         windSurfaceForecastGraphical()
     }
-//     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
-    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    const latestCamImageURL = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+    document.getElementById('latest-cam').src = latestCamImageURL
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
 })();
