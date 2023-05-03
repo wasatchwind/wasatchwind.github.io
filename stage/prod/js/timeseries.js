@@ -128,7 +128,8 @@ function time(stid, time) {
     }
 };
 
-function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChartTemp = [], altibarHeight = [], tempbarHeight = [], zone) {
+function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChartTemp = [], altibarHeight = [], tempbarHeight = [], zone, trend, lastAlti) {
+    lastAlti = data.altimeter_set_1[data.altimeter_set_1.length - 1]
     for (let i=0; i<data.date_time.length; i++) {
         if (data.date_time[i].slice(-5,-3) === '00') {
             zoneChartTime.push(data.date_time[i])
@@ -153,18 +154,13 @@ function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChar
     }
     zone = calculateZone(data.altimeter_set_1[data.altimeter_set_1.length - 1], data.air_temp_set_1[data.air_temp_set_1.length - 1])
     document.getElementById('latest-temp').innerHTML = data.air_temp_set_1[data.air_temp_set_1.length - 1] ? `${Math.round(data.air_temp_set_1[data.air_temp_set_1.length - 1])}&deg;` : '--'
-    // document.getElementById('zone-time').innerHTML = data.date_time[data.date_time.length-1] ? data.date_time[data.date_time.length-1].toLowerCase() : '--'
     document.getElementById('latest-alti').innerHTML = data.altimeter_set_1[data.altimeter_set_1.length-1] ? data.altimeter_set_1[data.altimeter_set_1.length-1].toFixed(2) : '--'
     document.getElementById('latest-zone').innerHTML = zone.num
     document.getElementById('latest-zone').style.color = zone.col
-    calculateAltiTrend(zoneChartAlti)
-};
-
-function calculateAltiTrend(data, xSum = 28, xSquaredSum = 140, ySum, xy = [], xySum, m, trend) {
-    ySum = data.reduce((a, b) => parseFloat(a) + parseFloat(b))
-    for (let i=0; i<data.length; i++) xy.push(i * data[i])
-    xySum = xy.reduce((a, b) => a + b, 0)
-    m = (8 * xySum - xSum * ySum) / (8 * xSquaredSum - xSquaredSum)
-    trend = m < 0 ? '&#11087;' : '&#11086;'
+    if (lastAlti < zoneChartAlti[zoneChartAlti.length - 1]) trend = '&#11087;'
+    else if (lastAlti > zoneChartAlti[zoneChartAlti.length - 1]) trend = '&#11086;'
+    else if (zoneChartAlti[zoneChartAlti.length - 1] < zoneChartAlti[zoneChartAlti.length - 2]) trend = '&#11087;'
+    else if (zoneChartAlti[zoneChartAlti.length - 1] > zoneChartAlti[zoneChartAlti.length - 2]) trend = '&#11086;'
+    else trend = null
     document.getElementById('alti-trend').innerHTML = trend
 };
