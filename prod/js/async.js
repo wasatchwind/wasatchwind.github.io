@@ -3,20 +3,24 @@
     // TIMESERIES (GCP & NWS TOKEN API)
     try {
         let nwsToken
-        const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token'
+        const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-local-open-cors' //STAGE/LOCAL
         try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         catch (error) { console.log('NWS token fetch failed') }
-        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=420&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
+        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=520&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=${nwsToken.token}`
         const timeSeriesData = await (await fetch(timeSeriesURL)).json()
         if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
             ensureWindData(timeSeriesData)
             ensureGustData(timeSeriesData)
             ensureDirData(timeSeriesData)
-            if (timeSeriesData.STATION[0].STID === 'KSLC') kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
+            if (timeSeriesData.STATION[0].STID === 'KSLC') {
+                kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
+                zoneHistoryChart(timeSeriesData.STATION[0].OBSERVATIONS)
+            }
             for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
         }
         else throw(console.log('Timeseries fetch failed'))
     } catch (error) {
+        console.log(error)
         document.getElementById('tile-wspd-12').innerHTML = 'Timeseries data error<br>Refresh or try again later'
         document.getElementById('tile-wspd-12').className = 'fs-2'
     }
@@ -68,8 +72,9 @@
         try { windMapData = await (await fetch(windMapDataURL)).json() }
         catch (error) { console.log('Wind map fetch failed') }
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+        const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-        document.getElementById('surface-wind-map').src = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
+        document.getElementById('surface-wind-map').src = windMapImageURL
     } catch (error) { console.log(error) }
 
     // NEXT 3 DAYS (NWS PUBLIC API)
@@ -108,8 +113,9 @@
     if (now.getHours() > 5 && now.getHours() < 17) {
         windSurfaceForecastGraphical()
     }
-//     document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
-    document.getElementById('latest-cam').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    const latestCamImageURL = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+    document.getElementById('latest-cam').src = latestCamImageURL
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
 })();

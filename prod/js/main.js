@@ -1,9 +1,8 @@
 'use strict';
 const now = new Date();
-const titleDate = now.toLocaleString('en-us', {weekday: 'short', month: 'short', day: 'numeric'})
-document.getElementById('title-date').innerHTML = titleDate
 const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
-let currentDiv = 'wind', liftParams = {}, maxTempF, soundingData = {}
+let currentDiv = 'wind', liftParams = {}
+let maxTempF, soundingData = {}
 
 function reload() {
     history.scrollRestoration = 'manual'
@@ -50,9 +49,11 @@ function tempTrend(history, latest, forecast) {
 
 function windSurfaceForecastGraphical() {
     const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '5 pm' : '4 pm'
+    const windImageURL = 'https://graphical.weather.gov/images/utah/WindSpd4_utah.png'
+    const gustImageURL = 'https://graphical.weather.gov/images/utah/WindGust4_utah.png'
     document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
-    document.getElementById('graphical-wind-img').src = 'https://graphical.weather.gov/images/utah/WindSpd4_utah.png'
-    document.getElementById('graphical-gust-img').src = 'https://graphical.weather.gov/images/utah/WindGust4_utah.png'
+    document.getElementById('graphical-wind-img').src = windImageURL
+    document.getElementById('graphical-gust-img').src = gustImageURL
     document.getElementById('graphical-wind-div').style.display = 'block'
 };
 
@@ -64,14 +65,17 @@ function processSoaringForecast(text) {
 };
 
 function processAreaForecast(text) {
-    const dateStart = text.search(/[Cc][Ii][Tt][Yy]\s[Uu][Tt]\n/) + 8
-    const dateEnd = text.search(/\s202\d{1}\n/) + 5
+    const preStart = text.search(/<pre/)
+    const preEnd = text.search(/<\/pre>/)
+    text = text.slice(preStart, preEnd)
+    const dateStart = text.search(/\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]\s/)
+    const dateEnd = text.search(/\s\d{1,2}\s202\d{1}\n/) + 7
     const forecastDate = text.slice(dateStart, dateEnd)
-    const synopsisStart = text.search(/SYNOPSIS/) + 11
-    const synopsisEnd = text.search(/SHORT/) - 5
+    const synopsisStart = text.search(/[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/) + 11
+    const synopsisEnd = text.search(/&&\n\n\./)
     const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
-    const aviationStart = text.search(/KSLC\.{3}/) + 7
-    const aviationEnd = text[text.search(/R[Ee][Ss][Tt]\s/) - 1] === '.' ? text.search(/R[Ee][Ss][Tt]\s/) - 1 : text.search(/R[Ee][Ss][Tt]\s/)
+    const aviationStart = text.search(/[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]\.{3}KSLC\.{3}/) + 18
+    const aviationEnd = text.search(/\n\n\.[Rr][Ee][Ss][Tt]|\n\n[Rr][Ee][Ss][Tt]/)
     const aviation = text.slice(aviationStart, aviationEnd).replace(/\n/g, ' ')
     document.getElementById('area-forecast-date').innerText = forecastDate
     document.getElementById('area-forecast-synopsis').innerText = synopsis
@@ -91,8 +95,8 @@ function processAreaForecast(text) {
 (function getMorningSkewT() {
     if (now.getHours() > 6 && now.getHours() < 19) {
         const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
-        const url = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
-        document.getElementById('skew-t-img').src = url
+        const skewTURL = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
+        document.getElementById('skew-t-img').src = skewTURL
     }
     else document.getElementById('skew-t-div').style.display = 'none'
 })();
