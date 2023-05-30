@@ -118,4 +118,28 @@
     document.getElementById('latest-cam').src = latestCamImageURL
     document.getElementById('spinner').style.display = 'none'
     document.getElementById('wind').style.display = 'block'
+
+    const openMeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.79&longitude=-111.98&hourly=windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,windspeed_500hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,winddirection_500hPa&windspeed_unit=mph&timezone=America%2FDenver'
+    const openMeteoData = await (await fetch(openMeteoURL)).json()
+    const timeMod = now.getHours() + 1
+    for (let i=0; i<10; i++) {
+        document.getElementById(`wspd-19k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_500hPa[i + timeMod])
+        document.getElementById(`wdir-19k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_500hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-16k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_550hPa[i + timeMod])
+        document.getElementById(`wdir-16k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_550hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-14k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_600hPa[i + timeMod])
+        document.getElementById(`wdir-14k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_600hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-12k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_650hPa[i + timeMod])
+        document.getElementById(`wdir-12k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_650hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-10k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_700hPa[i + timeMod])
+        document.getElementById(`wdir-10k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_700hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-8k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_750hPa[i + timeMod])
+        document.getElementById(`wdir-8k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_750hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-6k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_800hPa[i + timeMod])
+        document.getElementById(`wdir-6k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_800hPa[i + timeMod] + 90}deg)`
+        document.getElementById(`wspd-5k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_850hPa[i + timeMod])
+        document.getElementById(`wdir-5k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_850hPa[i + timeMod] + 90}deg)`
+        let test = new Date(openMeteoData.hourly.time[i + timeMod]).toLocaleTimeString('en-us', {hour: 'numeric'}).toLowerCase()
+        document.getElementById(`wlft-time-${i}`).innerHTML = test
+    }
 })();

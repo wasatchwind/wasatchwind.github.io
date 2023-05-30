@@ -164,3 +164,13 @@ function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChar
     else trend = null
     document.getElementById('alti-trend').innerHTML = trend
 };
+
+// FOR LONG TERM 8 HR TREND:
+// function calculateAltiTrend(data, xSum = 28, xSquaredSum = 140, ySum, xy = [], xySum, m, trend) {
+//     ySum = data.reduce((a, b) => parseFloat(a) + parseFloat(b))
+//     for (let i=0; i<data.length; i++) xy.push(i * data[i])
+//     xySum = xy.reduce((a, b) => a + b, 0)
+//     m = (8 * xySum - xSum * ySum) / (8 * xSquaredSum - xSquaredSum)
+//     trend = m < 0 ? '&#11087;' : '&#11086;'
+//     document.getElementById('alti-trend').innerHTML = trend
+// };
