@@ -122,7 +122,7 @@
     const openMeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.79&longitude=-111.98&hourly=windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,windspeed_500hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,winddirection_500hPa&windspeed_unit=mph&timezone=America%2FDenver'
     const openMeteoData = await (await fetch(openMeteoURL)).json()
     const timeMod = now.getHours() + 1
-    for (let i=0; i<10; i++) {
+    for (let i=0; i<8; i++) {
         document.getElementById(`wspd-19k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_500hPa[i + timeMod])
         document.getElementById(`wdir-19k-${i}`).style.transform = `rotate(${openMeteoData.hourly.winddirection_500hPa[i + timeMod] + 90}deg)`
         document.getElementById(`wspd-16k-${i}`).innerHTML = Math.round(openMeteoData.hourly.windspeed_550hPa[i + timeMod])
