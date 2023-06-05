@@ -1,4 +1,5 @@
 'use strict';
+document.getElementById('ALOFT').style.display = 'none'
 const now = new Date();
 const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let currentDiv = 'wind', liftParams = {}
@@ -29,6 +30,11 @@ function toggleWindChart(div) {
         element.style.display = 'none'
         document.getElementById(`${div}-toggle`).innerHTML = '&#43;'
     }
+};
+
+function toggleWindAloftHiRes() {
+    const element = document.getElementById('ALOFT')
+    element.style.display = element.style.display === 'none' ? 'block' : 'none'
 };
 
 function tempTrend(history, latest, forecast) {
