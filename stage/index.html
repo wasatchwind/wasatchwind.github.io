@@ -224,8 +224,8 @@
             </a>
         </div>
 
-        <!-- NOAA AWC WIND ALOFT FORECAST -->
-        <div class="display-3 text-info">NOAA AWC Wind Aloft Forecast</div>
+        <!-- NOAA AWC WIND ALOFT FORECAST SLC -->
+        <div class="display-3 text-info">Wind Aloft Forecast</div>
         <div class="display-6 mb-5" id="wind-aloft">
             <div class="d-flex display-6 fw-semibold justify-content-center text-secondary" id="aloft-range"></div>
             <a id="wind-aloft-link" target="_blank">
@@ -288,357 +288,290 @@
                     </div>
                 </div>
             </a>
-            <div class="align-items-end d-flex">
-                <div class="align-self-center display-1 text-warning" id="ALOFT-toggle" onclick="toggleWindChart('ALOFT')">&#43;</div>
-                <div class="display-4 text-info ms-4">Wind Aloft Hi-Res Hourly Forecast</div>
-            </div>
-            <div class="collapse" id="ALOFT">
+            <div class="align-self-center display-4 mb-2 text-decoration-underline text-warning" onclick="toggleWindAloftHiRes()">Hi-Res Hourly</div>
+            <div id="ALOFT">
                 <div class="bg-dark mb-5 mx-2 rounded-4">
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">19k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-19k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-19k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-19k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-19k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-19k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-19k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">16k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-16k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-16k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-16k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-16k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-16k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-16k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">14k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-14k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-14k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-14k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-14k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-14k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-14k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">12k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-12k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-12k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-12k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-12k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-12k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-12k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">10k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-10k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-10k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-10k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-10k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-10k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-10k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">8k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-8k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-8k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-8k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-8k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-8k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-8k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">6k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-6k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-6k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-6k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-6k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-6k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-6k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center border-bottom border-secondary d-flex">
+                    <div class="border-bottom border-secondary d-flex display-5">
                         <div class="col-1 ps-2 text-info text-start">5k</div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-0">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-0"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-1">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-1"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-2">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-2"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-3">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-3"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-4">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-4"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-5">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-5"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-6">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-6"></div>
                         </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
+                        <div class="border-1 border-secondary border-start col d-flex justify-content-center py-2">
                             <div class="col-6" id="wdir-5k-7">&#10148;</div>
                             <div class="col-6 text-start" id="wspd-5k-7"></div>
                         </div>
-<!--                         <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-5k-8">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-5k-8"></div>
-                        </div>
-                        <div class="border-1 border-secondary border-start col d-flex fs-2 justify-content-center py-2">
-                            <div class="col-6" id="wdir-5k-9">&#10148;</div>
-                            <div class="col-6 text-start" id="wspd-5k-9"></div>
-                        </div> -->
                     </div>
-                    <div class="align-items-center d-flex fs-3 text-info">
+                    <div class="align-items-center d-flex fs-1 fw-semibold text-secondary">
                         <div class="col-1">&nbsp;</div>
                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-0"></div>
                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-1"></div>
@@ -648,8 +581,6 @@
                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-5"></div>
                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-6"></div>
                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-7"></div>
-<!--                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-8"></div> -->
-<!--                         <div class="border-1 border-secondary border-start col py-2" id="wlft-time-9"></div> -->
                     </div>
                 </div>
             </div>
