@@ -108,6 +108,10 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
 };
 
 function windChart(stid, data) {
+    if (data.wind_speed_set_1.every(d => d === 0)) {
+        document.getElementById(`${stid}-main`).style.display = 'none'
+        return
+    }
     const sliceLength = data.date_time.length < 12 ? 6 : 12
     windDirection(stid, data.wind_direction_set_1.slice(-sliceLength))
     windBarHeight(stid, data.wind_speed_set_1.slice(-sliceLength), data.wind_gust_set_1.slice(-sliceLength))
