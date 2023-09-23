@@ -1,17 +1,36 @@
-@media only screen and (min-width: 1441px) {
-  body {
-    margin-left: 30%;
-    margin-right: 30%;
-    zoom: 0.4;
-  }
-  .tile-height { height: 42vh; }
+:root { /* 1 / slide count * 100 */
+  --translate-percent-positive: 33.3%; 
+  --translate-percent-negative: -33.3%;
 }
+@media (min-width: 1441px) { /* For full size/desktop screens */
+  body {
+    margin-left: 25%;
+    margin-right: 25%;
+    zoom: 0.5;
+  }
+}
+@media (min-width: 768px) {
+  .carousel-inner .carousel-item-end.active,
+  .carousel-inner .carousel-item-next {
+    transform: translateX(var(--translate-percent-positive));
+  }
+  .carousel-inner .carousel-item-start.active, 
+  .carousel-inner .carousel-item-prev {
+    transform: translateX(var(--translate-percent-negative));
+  }
+}
+.carousel-inner .carousel-item-end,
+.carousel-inner .carousel-item-start { 
+  transform: translateX(0);
+}
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+  display: flex;
+}
+.bg-sticky { background-color: black; }
 body {
   background-color: black;
   color: white;
   text-align: center;
-}
-.bg-sticky { background-color: black; }
-.ww-container {
-  width: 100%;
 }
