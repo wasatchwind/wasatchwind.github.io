@@ -74,7 +74,9 @@
         const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
         const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-        document.getElementById('surface-wind-map').src = windMapImageURL
+        // document.getElementById('surface-wind-map').src = windMapImageURL
+        document.getElementById('surface-wind-map').innerHTML = 'TEST'
+        
     } catch (error) { console.log(error) }
 
     // NEXT 3 DAYS (NWS PUBLIC API)
