@@ -75,7 +75,7 @@
         const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
         document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
         // document.getElementById('surface-wind-map').src = windMapImageURL
-        document.getElementById('surface-wind-map').src = './prod/images/pg.gif'
+        document.getElementById('surface-wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
         
     } catch (error) { console.log(error) }
 
