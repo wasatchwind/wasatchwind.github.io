@@ -161,10 +161,10 @@ function zoneHistoryChart(data, zoneChartTime = [], zoneChartAlti = [], zoneChar
     document.getElementById('latest-alti').innerHTML = data.altimeter_set_1[data.altimeter_set_1.length-1] ? data.altimeter_set_1[data.altimeter_set_1.length-1].toFixed(2) : '--'
     document.getElementById('latest-zone').innerHTML = zone.num
     document.getElementById('latest-zone').style.color = zone.col
-    if (lastAlti < zoneChartAlti[zoneChartAlti.length - 1]) trend = '&#11087;'
-    else if (lastAlti > zoneChartAlti[zoneChartAlti.length - 1]) trend = '&#11086;'
-    else if (zoneChartAlti[zoneChartAlti.length - 1] < zoneChartAlti[zoneChartAlti.length - 2]) trend = '&#11087;'
-    else if (zoneChartAlti[zoneChartAlti.length - 1] > zoneChartAlti[zoneChartAlti.length - 2]) trend = '&#11086;'
+    if (lastAlti < zoneChartAlti[zoneChartAlti.length - 1]) trend = '&searr;'
+    else if (lastAlti > zoneChartAlti[zoneChartAlti.length - 1]) trend = '&nearr;'
+    else if (zoneChartAlti[zoneChartAlti.length - 1] < zoneChartAlti[zoneChartAlti.length - 2]) trend = '&searr;'
+    else if (zoneChartAlti[zoneChartAlti.length - 1] > zoneChartAlti[zoneChartAlti.length - 2]) trend = '&nearr;'
     else trend = null
     document.getElementById('alti-trend').innerHTML = trend
 };
