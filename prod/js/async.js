@@ -6,7 +6,7 @@
         const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-local-open-cors' //STAGE/LOCAL
         try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         catch (error) { console.log('NWS token fetch failed') }
-        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=520&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=ef3b9f4584b64e6da12d8688f19d9f4a`
+        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=520&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=f8258474e4a348ceb3192e4d205f71da`
         const timeSeriesData = await (await fetch(timeSeriesURL)).json()
         if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
             ensureWindData(timeSeriesData)
