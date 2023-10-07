@@ -2,7 +2,7 @@
 (async () => {
     // TIMESERIES (GCP & NWS TOKEN API)
     try {
-        let nwsToken
+        // let nwsToken
         // const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-local-open-cors' //STAGE/LOCAL
         // try { nwsToken = await (await fetch(nwsTokenURL)).json() }
         // catch (error) { console.log('NWS token fetch failed') }
