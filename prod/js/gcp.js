@@ -1,7 +1,8 @@
 'use strict';
 function windAloftTime(start, end) {
     const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
-    const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${selector}&region=slc&layout=on&date=`
+    // const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${selector}&region=slc&layout=on&date=`
+    const link = `https://www.aviationweather.gov/data/windtemp/?region=slc&fcst=${selector}`
     const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
     document.getElementById('wind-aloft-link').setAttribute('href', link)
     document.getElementById('aloft-range').innerHTML = range
