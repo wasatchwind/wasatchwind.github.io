@@ -1,28 +1,44 @@
-@media only screen and (min-width: 1441px) {
-  body {
-    margin-left: 30%;
-    margin-right: 30%;
-    zoom: 0.4;
-  }
-}
-
 body {
-  background-color: black;
-  color: white;
   text-align: center;
-}
-
-/* LINKS */
-a:link, a.visited, a.active {
   color: white;
-  background-color: transparent;
-  text-decoration: none;
+  background: black;
 }
 
-/* SCROLL TILES */
-#tile-container {
-  overflow-x: scroll;
+.wrapper .carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% / 3) - 2%);
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
+  gap: 1%;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
-.tile { scroll-snap-align: start; }
+
+/* Hides visible scroll bar slider */
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevents automatic reset scroll when end is reached */
+.carousel.no-transition {
+  scroll-behavior: auto;
+}
+
+/* Prevents click-drag text selection */
+.carousel.dragging .tile {
+  cursor: grab;
+  user-select: none;
+}
+
+.carousel .tile {
+  scroll-snap-align: start;
+  height: 10vh;
+  list-style: none;
+  cursor: pointer;
+  border: solid 1px white;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
