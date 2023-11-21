@@ -1,23 +1,17 @@
 'use strict';
 console.log('test')
 
-$(document).ready(function(){
-  $("#carousel-nav").owlCarousel({
-    items: 3, // Number of cards shown in each slide
-    loop: true, // Continuously loop the carousel
-    margin: 20, // Space between cards
-    nav: true, // Show navigation buttons
-    navText: ["<i class='fas fa-chevron-left'></i>", "<i class='fas fa-chevron-right'></i>"], // Custom navigation icons
-    responsive: {
-      0: {
-        items: 1 // Number of cards shown in the carousel for smaller screens
+// https://spider149.github.io/own-carousel/
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector(".own-carousel__container").ownCarousel({
+      itemPerRow:3, 
+      itemWidth:30,
+      responsive: {
+          1000: [4, 24],
+          800: [3, 33],
+          600: [2, 49],
+          400: [1, 100]
       },
-      768: {
-        items: 2 // Number of cards shown in the carousel for medium screens
-      },
-      992: {
-        items: 3 // Number of cards shown in the carousel for large screens
-      }
-    }
   });
+  responsive();
 });
