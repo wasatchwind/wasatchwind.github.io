@@ -1,22 +1,17 @@
-:root {
-  --width: 0;
-  --margin: 0;
-}
-
 body {
   text-align: center;
   color: white;
   background: black;
 }
 
-.own-carousel__outer {
+.carousel-outer {
   position: relative;
   overflow: hidden;
   user-select: none;
   overflow-x: scroll;
 }
 
-.own-carousel{
+.carousel {
   display: flex;
 }
 
