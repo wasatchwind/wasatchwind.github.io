@@ -24,3 +24,13 @@ body {
 .tile:not(:first-child) {
   margin-left: var(--margin);
 }
+
+/* #nav {
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.tile {
+  scroll-snap-align: start;
+} */
