@@ -2969,7 +2969,7 @@
 		navSpeed: false,
 		navElement: 'button type="button" role="presentation"',
 		navContainer: false,
-		navContainerClass: 'nav',
+		navContainerClass: 'owl-nav',
 		navClass: [
 			'owl-prev',
 			'owl-next'
@@ -2996,20 +2996,20 @@
 		this._controls.$relative = (settings.navContainer ? $(settings.navContainer)
 			: $('<div>').addClass(settings.navContainerClass).appendTo(this.$element)).addClass('disabled');
 
-		this._controls.$previous = $('<' + settings.navElement + '>')
-			.addClass(settings.navClass[0])
-			.html(settings.navText[0])
-			.prependTo(this._controls.$relative)
-			.on('click', $.proxy(function(e) {
-				this.prev(settings.navSpeed);
-			}, this));
-		this._controls.$next = $('<' + settings.navElement + '>')
-			.addClass(settings.navClass[1])
-			.html(settings.navText[1])
-			.appendTo(this._controls.$relative)
-			.on('click', $.proxy(function(e) {
-				this.next(settings.navSpeed);
-			}, this));
+		// this._controls.$previous = $('<' + settings.navElement + '>')
+		// 	.addClass(settings.navClass[0])
+		// 	.html(settings.navText[0])
+		// 	.prependTo(this._controls.$relative)
+		// 	.on('click', $.proxy(function(e) {
+		// 		this.prev(settings.navSpeed);
+		// 	}, this));
+		// this._controls.$next = $('<' + settings.navElement + '>')
+		// 	.addClass(settings.navClass[1])
+		// 	.html(settings.navText[1])
+		// 	.appendTo(this._controls.$relative)
+		// 	.on('click', $.proxy(function(e) {
+		// 		this.next(settings.navSpeed);
+		// 	}, this));
 
 		// create DOM structure for absolute navigation
 		if (!settings.dotsData) {
