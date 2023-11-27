@@ -1,0 +1,37 @@
+body {
+  text-align: center;
+  color: white;
+  background: black;
+}
+
+/* CAROUSEL */
+.carousel {
+  display: none;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.carousel .owl-item {
+  position: relative;
+  min-height: 1px;
+  float: left;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+.carousel.owl-loaded {
+  display: block;
+}
+.carousel.owl-loading {
+  opacity: 0;
+  display: block;
+}
+.carousel.owl-drag .owl-item {
+  -ms-touch-action: pan-y;
+      touch-action: pan-y;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
