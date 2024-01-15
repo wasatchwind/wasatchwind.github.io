@@ -10,23 +10,31 @@
 
   <div class="container-fluid">
 
-    <div class="display-1 text-info">Wasatch Wind</div>
-
-    <div class="keen-slider display-1" id="my-keen-slider">
-      <div class="border keen-slider__slide number-slide1" id="6"></div>
-      <div class="border keen-slider__slide number-slide2" id="0"></div>
-      <div class="border keen-slider__slide number-slide3" id="1"></div>
-      <div class="border keen-slider__slide number-slide4" id="2"></div>
-      <div class="border keen-slider__slide number-slide5" id="3"></div>
-      <div class="border keen-slider__slide number-slide6" id="4"></div>
-      <div class="border keen-slider__slide number-slide6" id="5"></div>
+    <div class="align-items-center bg-dark d-flex justify-content-between">
+      <img src="images/pg.gif" height="125px">
+      <div class="display-1 text-info title-font">Wasatch Wind</div>
+      <img src="images/refresh.png" onclick="reload()" height="125px">
     </div>
 
-    <div class="display-1" id="content"></div>
+    <div class="align-items-center d-flex display-1">
+      <div class="text-warning">&#9001;</div>
+      <div class="keen-slider" id="slider">
+        <div class="pb-2 keen-slider__slide number-slide1" id="nav-6"></div>
+        <div class="pb-2 keen-slider__slide number-slide2" id="nav-0"></div>
+        <div class="pb-2 keen-slider__slide number-slide3" id="nav-1"></div>
+        <div class="pb-2 keen-slider__slide number-slide4" id="nav-2"></div>
+        <div class="pb-2 keen-slider__slide number-slide5" id="nav-3"></div>
+        <div class="pb-2 keen-slider__slide number-slide6" id="nav-4"></div>
+        <div class="pb-2 keen-slider__slide number-slide7" id="nav-5"></div>
+      </div>
+      <div class="text-warning">&#9002;</div>
+    </div>
+
+    <div class="display-3 text-info" id="content"></div>
 
   </div>
 
-  <script src="carousel.min.js"></script>
+  <script src="keen-slider.min.js"></script>
   <script src="main.js"></script>
 
 </body>

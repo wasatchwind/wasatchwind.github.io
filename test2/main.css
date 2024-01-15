@@ -4,6 +4,11 @@ body {
   background: black;
 }
 
+.title-font {
+  font-size: 600%;
+}
+
+/* KEEN SLIDER */
 .keen-slider:not([data-keen-slider-disabled]) {
   align-content: flex-start;
   display: flex;

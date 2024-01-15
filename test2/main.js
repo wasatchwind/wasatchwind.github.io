@@ -1,6 +1,19 @@
 'use strict';
+const now = new Date()
+const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})
+const navItems = ['Now', 'Today', tomorrow, 'Longterm', 'Cams', 'GPS', 'Settings']
+for (let i=0; i<navItems.length; i++) {
+  document.getElementById(`nav-${i}`).innerHTML = navItems[i]
+}
+document.getElementById('content').innerHTML = navItems[0]
 
-const slider = new KeenSlider('#my-keen-slider', { //https://keen-slider.io/docs
+function reload() {
+  history.scrollRestoration = 'manual'
+  location.reload()
+}
+
+// Menu navigation carousel/slider (https://keen-slider.io/docs)
+const slider = new KeenSlider('#slider', {
   loop: true,
   mode: 'free-snap',
   slides: {
@@ -12,11 +25,3 @@ const slider = new KeenSlider('#my-keen-slider', { //https://keen-slider.io/docs
   },
   dragSpeed: 0.6,
 })
-
-const now = new Date()
-const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})
-const navItems = ['2:45 pm', 'Today', tomorrow, 'Longterm', 'Cams', 'GPS', 'Settings']
-for (let i=0; i<navItems.length; i++) {
-  document.getElementById(i).innerHTML = navItems[i]
-}
-document.getElementById('content').innerHTML = navItems[1]
