@@ -10,7 +10,7 @@ const slider = new KeenSlider('#my-keen-slider', { //https://keen-slider.io/docs
     console.log(navItems[slider.track.details.rel])
     document.getElementById('content').innerHTML = navItems[slider.track.details.rel]
   },
-  dragSpeed: 0.25,
+  dragSpeed: 0.6,
 })
 
 const now = new Date()
