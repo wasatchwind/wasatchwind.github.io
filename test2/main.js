@@ -1,7 +1,7 @@
 'use strict';
 const now = new Date()
 const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})
-const navItems = ['Now', 'Today', tomorrow, 'Longterm', 'Cams', 'GPS', 'Settings']
+const navItems = ['Now', 'Today', tomorrow, 'Longterm', 'Cams', 'GPS']
 for (let i=0; i<navItems.length; i++) {
   document.getElementById(`nav-${i}`).innerHTML = navItems[i]
 }
