@@ -24,9 +24,8 @@ function kslcTiles(data) {
 };
 
 function windTileTimeRange(data) {
-    console.log(data)
-    const start = data[0]//.toLowerCase()
-    const end = data[11]//.toLowerCase()
+    const start = data[0].toLowerCase()
+    const end = data[11].toLowerCase()
     document.getElementById('wind-time-range').innerHTML = `${start} - ${end}`
 };
 
