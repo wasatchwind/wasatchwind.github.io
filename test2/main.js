@@ -6,7 +6,7 @@ for (let i=0; i<navItems.length; i++) {
   document.getElementById(`nav-${i}`).innerHTML = navItems[i]
 }
 document.getElementById('content').innerHTML = navItems[0]
-document.getElementById('nav-0').style.color = 'yellow'
+document.getElementById('nav-0').style.color = 'white'
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -15,7 +15,7 @@ function reload() {
 
 function resetNavColors () {
   for (let i=0; i<navItems.length; i++) {
-    document.getElementById(`nav-${i}`).style.color = 'white'
+    document.getElementById(`nav-${i}`).style.color = 'var(--bs-secondary)'
   }
 }
 
@@ -30,7 +30,7 @@ const slider = new KeenSlider('#slider', {
     console.log(navItems[slider.track.details.rel])
     document.getElementById('content').innerHTML = navItems[slider.track.details.rel]
     resetNavColors()
-    document.getElementById(`nav-${slider.track.details.rel}`).style.color = 'yellow'
+    document.getElementById(`nav-${slider.track.details.rel}`).style.color = 'white'
   },
   dragSpeed: 0.6,
 })
