@@ -7,7 +7,7 @@ for (let i=0; i<navItems.length; i++) {
 }
 document.getElementById('content').innerHTML = navItems[0]
 document.getElementById('nav-0').style.color = 'white'
-document.getElementById('nav-0').style.fontWeight = 'bold'
+// document.getElementById('nav-0').style.fontWeight = 'bold'
 
 
 function reload() {
@@ -18,7 +18,7 @@ function reload() {
 function resetNavColors () {
   for (let i=0; i<navItems.length; i++) {
     document.getElementById(`nav-${i}`).style.color = 'var(--bs-secondary)'
-    document.getElementById(`nav-${i}`).style.fontWeight = 'normal'
+    // document.getElementById(`nav-${i}`).style.fontWeight = 'normal'
   }
 }
 
@@ -34,7 +34,7 @@ const slider = new KeenSlider('#slider', {
     document.getElementById('content').innerHTML = navItems[slider.track.details.rel]
     resetNavColors()
     document.getElementById(`nav-${slider.track.details.rel}`).style.color = 'white'
-    document.getElementById(`nav-${slider.track.details.rel}`).style.fontWeight = 'bold'
+    // document.getElementById(`nav-${slider.track.details.rel}`).style.fontWeight = 'bold'
   },
   dragSpeed: 0.6,
 })
