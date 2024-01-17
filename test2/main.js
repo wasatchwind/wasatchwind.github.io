@@ -25,7 +25,6 @@ function resetNavColors () {
 // Menu navigation carousel/slider (https://keen-slider.io/docs)
 const slider = new KeenSlider('#slider', {
   loop: true,
-  mode: 'free-snap',
   slides: {
     perView: 3,
   },
