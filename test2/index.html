@@ -30,13 +30,21 @@
     </div>
 
     <div class="collapse display-3 text-info" id="Today">
-      Content for Today
+      Surface forecast graphic<br>
+      Wind aloft forecast<br>
+      Hi Res Sounding<br>
+      Skew T<br>
+      NWS Soaring Forecast<br>
+      Sky cover forecast graphic<br>
+      Area forecast discussion<br>
+      Fronts graphic
     </div>
     <div class="collapse display-3 text-info" id="Tomorrow">
-      Content for Tomorrow
+      Next 48 hours graph<br>
+      NWS tomorrow
     </div>
     <div class="collapse display-3 text-info" id="Long">
-      Content for Longterm
+      NWS 2+ days
     </div>
     <div class="collapse display-3 text-info" id="Cams">
       Content for Cams
@@ -45,12 +53,141 @@
       Content for GPS
     </div>
     <div class="collapse display-3 text-info" id="Now">
-      Content for Now
+
+      <!-- WIND CHART 1 -->
+      <div class="collapse mb-2 mx-2" id="chart1-main">
+        <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
+          <div class="d-flex align-items-end">
+            <div class="align-self-center display-1 text-warning" id="chart1-toggle" onclick="toggleWindChart('chart1')">&#43;</div>
+            <div class="display-3 text-info mx-4" id="chart1-stid"></div>
+          </div>
+          <div class="col-5 d-flex justify-content-between">
+            <div class="align-self-end display-6 fw-semibold text-secondary" id="chart1-time-12"></div>
+            <div class="col-2 display-4" id="chart1-wdir-12"></div>
+            <div class="col-2 display-4 fw-semibold" id="chart1-wspd-12"></div>
+            <div class="col-2 display-6 fw-semibold gust-color" id="chart1-gust-12"></div>
+          </div>
+        </div>
+        <div class="bg-dark rounded-4">
+          <div class="collapse" id="chart1">
+            <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=chart1&table=1&banner=off" target="_blank">
+              <div class="align-items-end d-flex">
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-0">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-0"></div>
+                  <div id="chart1-wbar-0"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-0"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-0"></div></div>
+                  <div class="fs-4" id="chart1-time-0"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-1">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-1"></div>
+                  <div id="chart1-wbar-1"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-1"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-1"></div></div>
+                  <div class="fs-4" id="chart1-time-1"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-2">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-2"></div>
+                  <div id="chart1-wbar-2"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-2"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-2"></div></div>
+                  <div class="fs-4" id="chart1-time-2"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-3">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-3"></div>
+                  <div id="chart1-wbar-3"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-3"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-3"></div></div>
+                  <div class="fs-4" id="chart1-time-3"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-4">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-4"></div>
+                  <div id="chart1-wbar-4"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-4"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-4"></div></div>
+                  <div class="fs-4" id="chart1-time-4"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-5">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-5"></div>
+                  <div id="chart1-wbar-5"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-5"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-5"></div></div>
+                  <div class="fs-4" id="chart1-time-5"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-6">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-6"></div>
+                  <div id="chart1-wbar-6"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-6"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-6"></div></div>
+                  <div class="fs-4" id="chart1-time-6"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-7">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-7"></div>
+                  <div id="chart1-wbar-7"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-7"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-7"></div></div>
+                  <div class="fs-4" id="chart1-time-7"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-8">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-8"></div>
+                  <div id="chart1-wbar-8"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-8"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-8"></div></div>
+                  <div class="fs-4" id="chart1-time-8"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-9">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-9"></div>
+                  <div id="chart1-wbar-9"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-9"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-9"></div></div>
+                  <div class="fs-4" id="chart1-time-9"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-10">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-10"></div>
+                  <div id="chart1-wbar-10"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-10"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-10"></div></div>
+                  <div class="fs-4" id="chart1-time-10"></div>
+                </div>
+                <div class="col px-1">
+                  <div class="gust-color h2" id="chart1-gust-11">&nbsp;</div>
+                  <div class="bg-danger" id="chart1-gbar-11"></div>
+                  <div id="chart1-wbar-11"></div>
+                  <div class="bg-secondary fs-1 fw-bold"><span id="chart1-wspd-11"></span></div>
+                  <div><div class="display-4" id="chart1-wdir-11"></div></div>
+                  <div class="fs-4" id="chart1-time-11"></div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      
+
+      Stations<br>
+      Wind map<br>
+      Precip last hour<br>
+      Satellite last 4 hours<br>
+      Jetstream last 18 hours<br>
+      Wind forecast next 2-4 hours* (data available?)
     </div>
 
   </div>
 
   <script src="keen-slider.min.js"></script>
+  <!-- <script src="tests.js"></script> -->
   <script src="main.js"></script>
 
 </body>
