@@ -1,6 +1,8 @@
 'use strict';
 const now = new Date()
 const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
+let currentTime = now.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).toLowerCase()
+document.getElementById('last-loaded').innerHTML = `Refreshed ${currentTime}`
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -8,16 +10,16 @@ function reload() {
 };
 
 // Set nav item order according to time of day 2pm switchover
-let navItems = ['Now', 'Today', tomorrow, 'Long', 'Cams', 'GPS']
-if (now.getHours() < 14) {
-  navItems.push(navItems[0])
-  navItems.shift()
-};
+let navItems = []
+if (now.getHours() >= 7 && now.getHours() < 15) navItems = ['Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now']
+else if (now.getHours() > 20) navItems = [tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
+else navItems = ['Now', 'Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings']
 
 // Set nav item labels & active label
 let activeNav = 0
+let element = navItems[activeNav] === tomorrow ? 'Tomorrow' : navItems[activeNav]
+document.getElementById(`${element}`).style.display = 'block'
 document.getElementById(`nav-${activeNav}`).style.color = 'white'
-document.getElementById(`${navItems[activeNav]}`).style.display = 'block'
 for (let i=0; i<navItems.length; i++) {
   document.getElementById(`nav-${i}`).innerHTML = navItems[i]
 };
@@ -42,6 +44,25 @@ const slider = new KeenSlider('#slider', {
   },
 });
 
+// Marquee
+const animation = { duration: 3000, easing: (t) => t }
+const marquee = new KeenSlider("#marquee", {
+  loop: true,
+  slides: {
+    perView: 4,
+  },
+  created(m) {
+    m.moveToIdx(1, true, animation)
+  },
+  updated(m) {
+    m.moveToIdx(m.track.details.abs + 1, true, animation)
+  },
+  animationEnded(m) {
+    m.moveToIdx(m.track.details.abs + 1, true, animation)
+  },
+});
+
+
 // Reveal or collapse wind charts
 function toggleWindChart(div) {
   const element = document.getElementById(div)
@@ -59,35 +80,35 @@ function toggleWindChart(div) {
 (async () => {
   const timeSeriesURL = 'https://api.synopticdata.com/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=720&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=f8258474e4a348ceb3192e4d205f71da'
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
-  // console.log(timeSeriesData)
-  // if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
-  //   for (let i=0; i<timeSeriesData.STATION.length; i++) {
-  //     windChart(i, timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
-  //   }
-  // } else { console.log('Timeseries fetch failed') }
-  windChart(timeSeriesData.STATION[0].STID, timeSeriesData.STATION[0].OBSERVATIONS, 0)
+  console.log(timeSeriesData)
+  if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
+    for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
+  }
+  else console.log('Timeseries fetch failed')
 })();
 
 // Timeseries
-function windChart(stid, data, i) { // Only possible if some data exists but may be partial
-  const element = `chart${i+1}` // Set chart number to be populated
-  document.getElementById(`${element}-main`).style.display = 'block' // Show chart
-  document.getElementById(`${element}-stid`).innerHTML = stid // Set html chart name by station id
-  const sliceLength = stid === 'AMB' || stid === 'OGP' ? 6 : 12 // Set chart data length, shorter for low frequency data
+function windChart(stid, data) { // Only called if some data exists but may be partial
+  if (data.wind_speed_set_1.every(d => d === 0)) {
+    document.getElementById(`${stid}-main`).style.display = 'none'
+    return
+  }
+  const sliceLength = stid === 'AMB' ? 6 : 12 // Set chart data length, shorter for low frequency data
   if (data.date_time.length < sliceLength) { // If data is less than chart length
     const emptyArray = new Array(sliceLength - data.date_time.length).fill(null) // Create empty array for missing data
     for (let value of Object.keys(data)) data[value] = emptyArray.concat(data[value]) // Iterate data object and join arrays to make complete
   }
   else for (let value of Object.keys(data)) data[value] = data[value].slice(-sliceLength) // If data more than needed, slice to make complete
-  time(element, data.date_time) // date_time always included in data
+  time(stid, data.date_time) // date_time always included in data
   if (!data.wind_direction_set_1) data.wind_direction_set_1 = new Array(12).fill(null) // If wind direction key missing, create it with blank value array
-  windDirection(element, data.wind_direction_set_1) // With data guaranteed, even if empty, call function
+  windDirection(stid, data.wind_direction_set_1) // With data guaranteed, even if empty, call function
   if (!data.wind_speed_set_1) data.wind_speed_set_1 = new Array(12).fill(null) // If wind speed key missing, create it with blank value array
-  windSpeed(element, data.wind_speed_set_1) // With data guaranteed, even if empty, call function
+  windSpeed(stid, data.wind_speed_set_1) // With data guaranteed, even if empty, call function
   if (!data.wind_gust_set_1) data.wind_gust_set_1 = new Array(12).fill(null) // If wind gust key missing, create it with blank value array
-  windGust(element, data.wind_gust_set_1) // With data guaranteed, even if empty, call function
-  windBarHeight(element, data.wind_speed_set_1, data.wind_gust_set_1)
-  windBarColor(element, data.wind_speed_set_1)
+  windGust(stid, data.wind_gust_set_1) // With data guaranteed, even if empty, call function
+  windBarHeight(stid, data.wind_speed_set_1, data.wind_gust_set_1)
+  windBarColor(stid, data.wind_speed_set_1)
+  document.getElementById(`${stid}-main`).style.display = 'block' // Show chart
 };
 
 function time(stid, time) {
