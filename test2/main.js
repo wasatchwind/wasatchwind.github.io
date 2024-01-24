@@ -1,8 +1,6 @@
 'use strict';
 const now = new Date()
 const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
-let currentTime = now.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).toLowerCase()
-document.getElementById('last-loaded').innerHTML = `Refreshed ${currentTime}`
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -82,6 +80,7 @@ function toggleWindChart(div) {
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
   console.log(timeSeriesData)
   if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
+    document.getElementById('last-loaded').innerHTML = `Data as of ${timeSeriesData.STATION[0].OBSERVATIONS.date_time[timeSeriesData.STATION[0].OBSERVATIONS.date_time.length-1].toLowerCase()}`
     for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
   }
   else console.log('Timeseries fetch failed')
