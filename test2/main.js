@@ -80,7 +80,7 @@ function toggleWindChart(div) {
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
   console.log(timeSeriesData)
   if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
-    document.getElementById('last-loaded').innerHTML = `Data as of ${timeSeriesData.STATION[0].OBSERVATIONS.date_time[timeSeriesData.STATION[0].OBSERVATIONS.date_time.length-1].toLowerCase()}`
+    document.getElementById('last-loaded').innerHTML = `Data @ ${timeSeriesData.STATION[0].OBSERVATIONS.date_time[timeSeriesData.STATION[0].OBSERVATIONS.date_time.length-1].toLowerCase()}`
     for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
   }
   else console.log('Timeseries fetch failed')
