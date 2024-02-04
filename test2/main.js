@@ -92,10 +92,6 @@ function windChart(stid, data) { // Only called if some data exists but may be p
     document.getElementById(`${stid}-main`).style.display = 'none'
     return
   }
-    if (stid === 'KSLC') {
-    const kslcLast = parseInt(data.date_time[data.date_time.length-1].slice(2,4))
-    if (Math.abs(kslcLast - now.getMinutes() > 9)) reload()
-  }
   const sliceLength = stid === 'AMB' ? 6 : 12 // Set chart data length, shorter for low frequency data
   if (data.date_time.length < sliceLength) { // If data is less than chart length
     const emptyArray = new Array(sliceLength - data.date_time.length).fill(null) // Create empty array for missing data
