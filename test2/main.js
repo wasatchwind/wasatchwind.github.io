@@ -43,7 +43,7 @@ const slider = new KeenSlider('#slider', {
 });
 
 // Marquee
-const animation = { duration: 3000, easing: (t) => t }
+const animation = { duration: 2000, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
   loop: true,
   slides: {
