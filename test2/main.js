@@ -74,6 +74,6 @@ function toggleWindChart(div) {
 };
 
 function sunset(data) {
-    const sunset = new Date(openweathermapData.sys.sunset*1000).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
+    const sunset = new Date(data.sys.sunset*1000).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
     document.getElementById('sunset').innerHTML = sunset
 }
