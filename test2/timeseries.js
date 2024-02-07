@@ -112,7 +112,7 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
   return zone
 };
 
-function zone(alti, temp, zone, slope, trend, altiDiff) {
+function zone(alti, temp, zone, slope, trend, trendChar, altiDiff) {
   zone = calculateZone(alti[alti.length-1], temp[temp.length-1])
   slope = trendLine(alti)
   altiDiff = Math.abs(Math.round((alti[alti.length-1] - alti[0]) * 100) / 100)
@@ -121,8 +121,10 @@ function zone(alti, temp, zone, slope, trend, altiDiff) {
   else if (altiDiff > 0.03) trend = 90
   else trend = 0
   trend = slope > 0 ? trend * -1 : trend
+  trendChar = trend === 0 ? '' : '&rarr;'
   document.getElementById('temp').innerHTML = Math.round(temp[temp.length-1])
   document.getElementById('alti').innerHTML = alti[alti.length-1].toFixed(2)
+  document.getElementById('trend').innerHTML = trendChar
   document.getElementById('trend').style.transform = `rotate(${trend}deg)`
   document.getElementById('zone').innerHTML = zone.num
   document.getElementById('zone').style.color = zone.col
