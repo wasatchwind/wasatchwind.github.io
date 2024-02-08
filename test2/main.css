@@ -14,10 +14,10 @@ body {
 .mb-div-end { margin-bottom: 8rem; }
 .title-font { font-size: 500%; }
 .gust-color { color: hotpink; }
-.zone-margin {
+/* .zone-margin {
   padding-top: -20px;
   padding-bottom: -20px;
-}
+} */
 
 /* LINKS */
 a:link {
