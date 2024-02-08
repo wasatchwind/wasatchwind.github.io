@@ -15,8 +15,8 @@ body {
 .title-font { font-size: 500%; }
 .gust-color { color: hotpink; }
 .zone-margin {
-  margin-top: -10px;
-  margin-bottom: -10px;
+  margin-top: -5px;
+  margin-bottom: -5px;
 }
 
 /* LINKS */
