@@ -24,10 +24,27 @@ const svg = d3.select('#skew-t-d3')
   .attr('transform', `translate(${margin.left},${margin.top})`)
 
 function sounding(data, maxTempF, liftParams) {
-  liftParams = getLiftParams(data, maxTempF)
-  document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-  document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
-  decodedSkewTChart(data, maxTempF, liftParams)
+  (async () => {
+    const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'  
+    // const soaringForcastText = await (await fetch(soaringForecastURL)).text()
+    if (soaringForcastText) maxTempF = processSoaringForecast(soaringForcastText)
+    else console.log('Soaring Forecast text fetch failed')
+    liftParams = getLiftParams(data, maxTempF)
+    document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
+    document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
+    decodedSkewTChart(data, maxTempF, liftParams)
+  })();
+};
+
+function processSoaringForecast(text) {
+  const textStart = text.search(/[Dd][Aa][Tt][Ee]\.{3}.+/)
+  const textEnd = text.search(/[Ft][Tt]\/[Mm][Ii][Nn]/) + 6
+  const soaringForecast = text.slice(textStart, textEnd)
+  const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
+  const hiTemp = parseInt(soaringForecast.slice(hiTempRow+22,hiTempRow+27))
+  document.getElementById('soaring-forecast').innerText = soaringForecast
+  document.getElementById('hi-temp').innerHTML = hiTemp
+  return hiTemp
 };
 
 function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {}) {
