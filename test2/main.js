@@ -1,6 +1,7 @@
 'use strict';
 const now = new Date()
 const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
+let hiTemp
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -73,7 +74,9 @@ function toggleWindChart(div) {
   }
 };
 
-function sunset(data) {
+function openWeatherMap(data) {
     const sunset = new Date(data.sys.sunset*1000).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
+    hiTemp = Math.round(data.main.temp_max)
     document.getElementById('sunset').innerHTML = sunset
-}
+    document.getElementById('hi-temp').innerHTML = hiTemp
+};
