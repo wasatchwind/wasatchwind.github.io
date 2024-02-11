@@ -90,10 +90,6 @@ function reload() {
   history.scrollRestoration = 'manual'
   location.reload()
 };
-//RESET
-
-
-
 
 // Marquee slider (https://keen-slider.io/docs)
 const animation = { duration: 1000, easing: (t) => t }
@@ -126,48 +122,40 @@ function toggleWindChart(div) {
   }
 };
 
-function sunset(data) {
+function sunset(data, navItems = []) {
+  // Set nav item order according to time of day
+  const sunset = new Date(data.sys.sunset*1000).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'})
+  document.getElementById('sunset').innerHTML = sunset.slice(0,-3)
+  if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now']
+  else if (now.toLocaleTimeString() > sunset) navItems = [tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
+  else navItems = ['Now', 'Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings']
 
+  // Set nav item labels & active label
+  let activeNav = 0
+  let element = navItems[activeNav] === tomorrow ? 'Tomorrow' : navItems[activeNav]
+  document.getElementById(`${element}`).style.display = 'block'
+  document.getElementById(`nav-${activeNav}`).style.color = 'white'
+  for (let i=0; i<navItems.length; i++) {
+    document.getElementById(`nav-${i}`).innerHTML = navItems[i]
+  };
 
-// Set nav item order according to time of day 2pm switchover
-let navItems = []
-if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now']
-else if (now.getTime() > data.sys.sunset*1000) navItems = [tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
-else navItems = ['Now', 'Today', tomorrow, 'Long', 'Cams', 'GPS', 'About', 'Settings']
+  // Update nav colors and visible page
+  function navUpdate (navElement, color, pageId, status) {
+    document.getElementById(navElement).style.color = color
+    if (pageId === tomorrow) pageId = 'Tomorrow'
+    document.getElementById(pageId).style.display = status
+  };
 
-// Set nav item labels & active label
-let activeNav = 0
-let element = navItems[activeNav] === tomorrow ? 'Tomorrow' : navItems[activeNav]
-document.getElementById(`${element}`).style.display = 'block'
-document.getElementById(`nav-${activeNav}`).style.color = 'white'
-for (let i=0; i<navItems.length; i++) {
-  document.getElementById(`nav-${i}`).innerHTML = navItems[i]
-};
-
-// Update nav colors and visible page
-function navUpdate (navElement, color, pageId, status) {
-  document.getElementById(navElement).style.color = color
-  if (pageId === tomorrow) pageId = 'Tomorrow'
-  document.getElementById(pageId).style.display = status
-};
-
-// Menu navigation carousel/slider (https://keen-slider.io/docs)
-const slider = new KeenSlider('#slider', {
-  loop: true,
-  slides: {
-    perView: 3,
-  },
-  animationEnded: () => {
-    navUpdate(`nav-${activeNav}`, 'var(--bs-secondary)', navItems[activeNav], 'none')
-    activeNav = slider.track.details.rel
-    navUpdate(`nav-${activeNav}`, 'white', navItems[activeNav], 'block')
-  },
-});
-
-
-
-  const sunset = new Date(data.sys.sunset*1000).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
-  console.log('sun', data.sys.sunset*1000)
-  console.log('now', now.getTime())
-  document.getElementById('sunset').innerHTML = sunset
+  // Menu navigation carousel/slider (https://keen-slider.io/docs)
+  const slider = new KeenSlider('#slider', {
+    loop: true,
+    slides: {
+      perView: 3,
+    },
+    animationEnded: () => {
+      navUpdate(`nav-${activeNav}`, 'var(--bs-secondary)', navItems[activeNav], 'none')
+      activeNav = slider.track.details.rel
+      navUpdate(`nav-${activeNav}`, 'white', navItems[activeNav], 'block')
+    },
+  });
 };
