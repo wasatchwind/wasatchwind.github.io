@@ -43,7 +43,7 @@
 // });
 
 // // Marquee slider (https://keen-slider.io/docs)
-// const animation = { duration: 800, easing: (t) => t }
+// const animation = { duration: 600, easing: (t) => t }
 // const marquee = new KeenSlider("#marquee", {
 //   loop: true,
 //   slides: {
