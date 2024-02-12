@@ -22,11 +22,11 @@
 
       <div class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide2 text-info">
-          <div class="text-secondary">-3 Idx</div>
+          <div class="text-secondary">-3 Index</div>
           <div id="neg3"></div>
         </div>
         <div class="keen-slider__slide number-slide1 text-info">
-          <div class="text-secondary">ToL</div>
+          <div class="text-secondary">Top of Lift</div>
           <div id="tol"></div>
         </div>
         <div class="keen-slider__slide number-slide3 text-info">
@@ -892,11 +892,20 @@
         </div>
       </div>
 
-      Wind map<br>
-      Precip last hour<br>
+      <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
+      <div class="display-3 mt-5 text-info" id="wind-map-timestamp"></div>
+      <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
+          <div class="mb-5 mx-2">
+              <img class="rounded-4 w-100" src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png">
+              <!-- <img class="rounded-4 w-100" src="images/wind-map-save.png"> -->
+          </div>
+      </a>
+
+
+      <!-- Precip last hour<br>
       Satellite last 4 hours<br>
       Jetstream last 18 hours<br>
-      Wind forecast next 2-4 hours* (data available?)
+      Wind forecast next 2-4 hours* (data available?) -->
     </div>
 
   </div>
