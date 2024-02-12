@@ -37,7 +37,7 @@ function time(stid, time) {
   time = time.map(d => d ? d.toLowerCase() : d) // Make all lowercase or leave null
   for (let i=0; i<time.length; i++) {
     time[i] = time[i] ? time[i].slice(0,-3) : time[i] // If time !null remove am/pm
-    if (stid === 'KSLC' && i === time.length-1) time[i] = `KSLC ${time[i]}`
+    if (stid === 'KSLC' && i === time.length-1) time[i] = `${time[i]} KSLC`
     document.getElementById(`${stid}-time-${i}`).innerHTML = time[i] // Set html element
   }
 };
