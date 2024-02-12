@@ -22,3 +22,18 @@
   if (soundingData) sounding(soundingData)
   else console.log('Sounding data fetch failed')
 })();
+
+// GCP WIND MAP SCREEN SHOT (main.js)
+(async () => {
+  console.log('add wind map next')
+})();
+
+// try {
+//   let windMapData
+//   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
+//   try { windMapData = await (await fetch(windMapDataURL)).json() }
+//   catch (error) { console.log('Wind map fetch failed') }
+//   const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+//   const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
+//   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
+// } catch (error) { console.log(error) }
