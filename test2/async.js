@@ -25,9 +25,9 @@
     const soundingData = await (await fetch(soundingURL)).json()
     try {
       const soaringForcastText = await (await fetch(soaringForecastURL)).text()
+      sounding(soundingData, soaringForcastText)
     } catch { console.log('Soaring Forecast text fetch failed') }
   } catch { console.log('Sounding data fetch failed') }
-  sounding(soundingData, soaringForcastText)
 })();
 
 // GCP WIND MAP (main.js)
