@@ -20,10 +20,14 @@
 // SOUNDING (sounding.js)
 (async () => {
   const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+  const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'
   try {
     const soundingData = await (await fetch(soundingURL)).json()
-    sounding(soundingData)
+    try {
+      const soaringForcastText = await (await fetch(soaringForecastURL)).text()
+    } catch { console.log('Soaring Forecast text fetch failed') }
   } catch { console.log('Sounding data fetch failed') }
+  sounding(soundingData, soaringForcastText)
 })();
 
 // GCP WIND MAP (main.js)
@@ -34,14 +38,3 @@
     windMap(windMapData)
   } catch { console.log('Wind Map timestamp fetch failed') }
 })();
-
-
-// try {
-//   let windMapData
-//   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
-//   try { windMapData = await (await fetch(windMapDataURL)).json() }
-//   catch (error) { console.log('Wind map fetch failed') }
-//   const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
-//   const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
-//   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-// } catch (error) { console.log(error) }

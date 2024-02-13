@@ -84,8 +84,8 @@ a:active {
   opacity: 0.5;
 }
 .svgbg { fill: #212529; }
-.xAxis { font-size: 175%; }
-.yAxis { font-size: 175%; }
+.xAxis { font-size: 40%; }
+.yAxis { font-size: 40%; }
 .maxtemp {
   fill: #0dcaf0;
   font-size: calc(1.475rem + 2.7vw);
@@ -126,10 +126,10 @@ a:active {
 }
 .liftlabels {
   fill: white;
-  font-size: 160%;
+  font-size: 40%;
 }
 .liftheights {
   fill: white;
-  font-size: 210%;
+  font-size: 60%;
   font-weight: bold;
 }

@@ -23,17 +23,12 @@ const svg = d3.select('#skew-t-d3')
   .append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`)
 
-function sounding(data, maxTempF, liftParams) {
-  (async () => {
-    const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'  
-    const soaringForcastText = await (await fetch(soaringForecastURL)).text()
-    if (soaringForcastText) maxTempF = processSoaringForecast(soaringForcastText)
-    else console.log('Soaring Forecast text fetch failed')
-    liftParams = getLiftParams(data, maxTempF)
-    document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-    document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
-    decodedSkewTChart(data, maxTempF, liftParams)
-  })();
+function sounding(data, text) {
+  maxTempF = processSoaringForecast(text)
+  liftParams = getLiftParams(data, maxTempF)
+  document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
+  document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
+  decodedSkewTChart(data, maxTempF, liftParams)
 };
 
 function processSoaringForecast(text) {
