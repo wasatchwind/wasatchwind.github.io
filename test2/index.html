@@ -894,15 +894,81 @@
           <div>Gust</div>
         </div>
         <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-          <div class="d-flex justify-content-between mx-2 overflow-hidden rounded-4">
+          <div class="d-flex justify-content-between overflow-hidden rounded-4">
             <img class="border-4 border-dark border-end img-fluid w-100" id="graphical-wind-img">
             <img class="border-4 border-dark border-start img-fluid w-100" id="graphical-gust-img">
           </div>
         </a>
       </div>
 
+      <!-- WIND ALOFT -->
+      <div class="display-3 mt-5 text-info">Wind Aloft</div>
+      <div class="display-6 mb-5" id="wind-aloft">
+        <div class="d-flex display-6 fw-semibold justify-content-center text-secondary" id="aloft-range"></div>
+        <a id="wind-aloft-link" target="_blank">
+          <div class="bg-dark mx-2 rounded-4">
+            <div class="border-bottom border-1 border-secondary d-flex">
+              <div class="col-2 ps-3 text-secondary text-start">
+                <div class="display-3 text-info">18k'</div>
+                <div class="fs-2">5,486 m</div>
+              </div>
+              <div class="d-flex">
+                <div class="align-self-center display-1 me-4" id="dir-18k"></div>
+                <div class="align-self-center border border-1 col-auto display-3 mx-4" id="aloft-18k">&nbsp;</div>
+                <div class="align-self-center d-flex">
+                  <div class="display-1 fw-semibold" id="spd-18k"></div>
+                  <div class="align-self-end fs-2 m-2 text-secondary" id="mph-18k">mph</div>
+                </div>
+              </div>
+            </div>
+            <div class="border-bottom border-1 border-secondary d-flex">
+              <div class="col-2 ps-3 text-secondary text-start">
+                <div class="display-3 text-info">12k'</div>
+                <div class="fs-2">3,658 m</div>
+              </div>
+              <div class="d-flex">
+                <div class="align-self-center display-1 me-4" id="dir-12k"></div>
+                <div class="align-self-center border border-1 col-auto display-3 mx-4" id="aloft-12k">&nbsp;</div>
+                <div class="align-self-center d-flex">
+                  <div class="display-1 fw-semibold" id="spd-12k"></div>
+                  <div class="align-self-end fs-2 m-2 text-secondary" id="mph-12k">mph</div>
+                </div>
+              </div>
+            </div>
+            <div class="border-bottom border-1 border-secondary d-flex">
+              <div class="col-2 ps-3 text-secondary text-start">
+                <div class="display-3 text-info">9k'</div>
+                <div class="fs-2">2,743 m</div>
+              </div>
+              <div class="d-flex">
+                <div class="align-self-center display-1 me-4" id="dir-9k"></div>
+                <div class="align-self-center border border-1 col-auto display-3 mx-4" id="aloft-9k">&nbsp;</div>
+                <div class="align-self-center d-flex">
+                  <div class="display-1 fw-semibold" id="spd-9k"></div>
+                  <div class="align-self-end fs-2 m-2 text-secondary" id="mph-9k">mph</div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex">
+              <div class="col-2 ps-3 text-secondary text-start">
+                <div class="display-3 text-info">6k'</div>
+                <div class="fs-2">1,829 m</div>
+              </div>
+              <div class="d-flex">
+                <div class="align-self-center display-1 me-4" id="dir-6k"></div>
+                <div class="align-self-center border border-1 col-auto display-3 mx-4" id="aloft-6k">&nbsp;</div>
+                <div class="align-self-center d-flex">
+                  <div class="display-1 fw-semibold" id="spd-6k"></div>
+                  <div class="align-self-end fs-2 m-2 text-secondary" id="mph-6k">mph</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
       <!-- D3 CHART -->
-      <div class="display-3 text-info">Hi-Res Sounding</div>
+      <div class="display-3 mt-5 text-info">Hi-Res Sounding</div>
       <div class="bg-dark border rounded-4">
         <div class="w-100" id="skew-t-d3"></div>
         <div class="display-4 fw-semibold text-secondary">Check Alternate Surface Temp:</div>
@@ -914,12 +980,21 @@
         </div>
       </div>
 
-      <!-- <div>Wind aloft forecast</div>
-      <div>Skew T</div> -->
+      <!-- SOARING FORECAST SLC -->
+      <div class="display-3 mt-5 text-info">NWS Soaring Forecast</div>
+      <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
+        <div class="bg-dark border mt-2 rounded-4">
+          <div class="font-monospace fs-1 fw-normal ps-3 text-info text-start">
+            <div class="font-monospace fs-1 ps-3 text-info text-start" id="soaring-forecast"></div>
+          </div>
+        </div>
+      </a>
+
       <div class="collapse fs-6 text-start" id="soaring-forecast"></div>
-      <!-- <div>Sky cover forecast graphic</div>
-      <div>Area forecast discussion</div>
-      <div>Fronts graphic</div> -->
+      <!-- <div>Sky cover forecast graphic</div> -->
+      <!-- <div>Area forecast discussion</div> -->
+      <!-- <div>Fronts graphic</div> -->
+      <!-- <div>Skew T</div> -->
 
     </div>
     <!-- END: TODAY MENU PAGE -->

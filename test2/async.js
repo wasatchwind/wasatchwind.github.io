@@ -38,3 +38,12 @@
     windMap(windMapData)
   } catch { console.log('Wind Map timestamp fetch failed') }
 })();
+
+// GCP WIND ALOFT (main.js)
+(async () => {
+  const windAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
+  try {
+    const windAloftData = await (await fetch(windAloftURL)).json()
+    windAloft(windAloftData)
+  } catch { console.log('Wind Aloft data fetch failed') }
+})();

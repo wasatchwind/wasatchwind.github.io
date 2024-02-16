@@ -1,6 +1,6 @@
 'use strict';
 const now = new Date()
-const tomorrow = new Date(now.setDate(now.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
+const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
 let maxTempF, liftParams = {}
 
 function reload() {
@@ -9,7 +9,7 @@ function reload() {
 };
 
 // Marquee slider (https://keen-slider.io/docs)
-const animation = { duration: 700, easing: (t) => t }
+const animation = { duration: 800, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
   loop: true,
   slides: {
@@ -39,11 +39,12 @@ function toggleWindChart(div) {
   }
 };
 
-function sunset(data, navItems = []) {
+function sunset(data, navItems = [], tomorrow, sunset) {
   // Set nav item order according to time of day
-  const sunset = new Date(data.sys.sunset*1000)
-  const sunsetFormatted = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
-  document.getElementById('sunset').innerHTML = sunsetFormatted
+  tomorrow = new Date()
+  tomorrow = new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
+  sunset = new Date(data.sys.sunset*1000)
+  document.getElementById('sunset').innerHTML = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now']
   else if (now > sunset) navItems = [tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
   else navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
@@ -95,47 +96,45 @@ function windMap(data) {
   }
 })();
 
+function windAloft(data) {
+  windAloftDir(data.Dirs)
+  windAloftSpeed(data.Spds)
+  windAloftTime(data["Start time"], data["End time"])
+};
 
+function windAloftTime(start, end) {
+  const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
+  const link = `https://www.aviationweather.gov/data/windtemp/?region=slc&fcst=${selector}`
+  const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
+  document.getElementById('wind-aloft-link').setAttribute('href', link)
+  document.getElementById('aloft-range').innerHTML = range
+};
 
+function windAloftDir(dirs) {
+  for (const key in dirs) {
+      const element = document.getElementById(`dir-${key}`)
+      if (dirs[key] === 'calm') element.className = 'align-self-center display-5'
+      element.innerHTML = dirs[key] === 'calm' ? 'Calm' : '&#10148;'
+      element.style.transform = `rotate(${dirs[key] + 90}deg)`
+  }
+};
 
-
-
-
-//GCP
-// function windAloftTime(start, end) {
-//     const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
-//     // const link = `https://www.aviationweather.gov/windtemp/data?level=low&fcst=${selector}&region=slc&layout=on&date=`
-//     const link = `https://www.aviationweather.gov/data/windtemp/?region=slc&fcst=${selector}`
-//     const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
-//     document.getElementById('wind-aloft-link').setAttribute('href', link)
-//     document.getElementById('aloft-range').innerHTML = range
-// };
-
-// function windAloftDir(dirs) {
-//     for (const key in dirs) {
-//         const element = document.getElementById(`dir-${key}`)
-//         if (dirs[key] === 'calm') element.className = 'align-self-center display-5'
-//         element.innerHTML = dirs[key] === 'calm' ? 'Calm' : '&#10148;'
-//         element.style.transform = `rotate(${dirs[key] + 90}deg)`
-//     }
-// };
-
-// function windAloftSpeed(spds, colors = {}) {
-//     colors.ylw = {'6k':9, '9k':12, '12k':15, '18k':21}
-//     colors.red = {'6k':14, '9k':18, '12k':24, '18k':30}
-//     const max = Math.max(...Object.values(spds))
-//     const mulitplier = max > 99 ? 1.2 : max > 55 ? 1.5 : 3
-//     for (const key in spds) {
-//         const elementSpd = document.getElementById(`spd-${key}`)
-//         const elementBar = document.getElementById(`aloft-${key}`)
-//         if (spds[key] === 0) {
-//             document.getElementById(`mph-${key}`).style.display = 'none'
-//             elementSpd.style.display = 'none'
-//             elementBar.style.display = 'none'
-//         }
-//         elementSpd.innerHTML = spds[key]
-//         elementBar.style.width = `${spds[key] * mulitplier}%`
-//         if (spds[key] > colors.ylw[key] && spds[key] < colors.red[key]) elementBar.style.backgroundColor =  'var(--bs-yellow)'
-//         else elementBar.style.backgroundColor = spds[key] >= colors.red[key] ? 'var(--bs-red)' : 'var(--bs-teal)'
-//     }
-// };
+function windAloftSpeed(spds, colors = {}) {
+  colors.ylw = {'6k':9, '9k':12, '12k':15, '18k':21}
+  colors.red = {'6k':14, '9k':18, '12k':24, '18k':30}
+  const max = Math.max(...Object.values(spds))
+  const mulitplier = max > 99 ? 1.2 : max > 55 ? 1.5 : 3
+  for (const key in spds) {
+      const elementSpd = document.getElementById(`spd-${key}`)
+      const elementBar = document.getElementById(`aloft-${key}`)
+      if (spds[key] === 0) {
+          document.getElementById(`mph-${key}`).style.display = 'none'
+          elementSpd.style.display = 'none'
+          elementBar.style.display = 'none'
+      }
+      elementSpd.innerHTML = spds[key]
+      elementBar.style.width = `${spds[key] * mulitplier}%`
+      if (spds[key] > colors.ylw[key] && spds[key] < colors.red[key]) elementBar.style.backgroundColor =  'var(--bs-yellow)'
+      else elementBar.style.backgroundColor = spds[key] >= colors.red[key] ? 'var(--bs-red)' : 'var(--bs-teal)'
+  }
+};
