@@ -10,8 +10,7 @@
 
   <div class="container-fluid">
 
-    <!-- STICKY TOP -->
-    <div class="bg-black border-10 border-bottom border-secondary sticky-top">
+    <div class="bg-black border-10 border-bottom border-secondary sticky-top"> <!-- STICKY TOP -->
 
       <!-- TOP LINE -->
       <div class="align-items-center d-flex justify-content-between">
@@ -83,10 +82,9 @@
         <div class="text-warning">&#9002;</div>
       </div>
 
-    </div>
+    </div> <!-- END: STICKY TOP -->
 
-    <!-- NOW MENU PAGE -->
-    <div class="collapse display-3" id="Now">
+    <div class="collapse display-3" id="Now"> <!-- NOW MENU PAGE -->
 
       <!-- WIND CHART KSLC -->
       <div class="display-3 text-info">KSLC</div>
@@ -868,26 +866,22 @@
       <!-- SURFACE WIND MAP PNG FROM GCP STORAGE -->
       <div class="display-3 mt-5 text-info" id="wind-map-timestamp"></div>
       <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL" target="_blank">
-        <img class="rounded-4 w-100" src="https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png">
-        <!-- <img class="rounded-4 w-100" src="images/wind-map-save.png"> -->
+        <img class="rounded-4 w-100" id="wind-map">
       </a>
 
       <!-- SATELLITE GIF -->
       <div class="display-3 mt-5 text-info">IR Last 4 Hours</div>
       <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
-        <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/AirMass/GOES18-PSW-AirMass-600x600.gif">
+        <img class="rounded-4 w-100" src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif">
       </a>
 
       <div class="mb-div-end"></div>
+    </div> <!-- END: NOW MENU PAGE -->
 
-    </div>
-    <!-- END: NOW MENU PAGE -->
-
-    <!-- TODAY MENU PAGE -->
-    <div class="collapse display-3" id="Today">
+    <div class="collapse display-3" id="Today"> <!-- TODAY MENU PAGE -->
 
       <!-- GRAPHICAL SURFACE WIND FORECAST (SHOWN ONLY BEFORE AFTERNOON EXPIRATION) -->
-      <div class="collapse" id="graphical-wind-div">
+      <div class="collapse mb-5" id="graphical-wind-div">
         <div class="display-3 text-info" id="graphical-wind-time"></div>
         <div class="d-flex display-6 fw-semibold justify-content-around text-secondary">
           <div>Wind</div>
@@ -902,7 +896,7 @@
       </div>
 
       <!-- WIND ALOFT -->
-      <div class="display-3 mt-5 text-info">Wind Aloft</div>
+      <div class="display-3 text-info">Wind Aloft</div>
       <div class="display-6 mb-5" id="wind-aloft">
         <div class="d-flex display-6 fw-semibold justify-content-center text-secondary" id="aloft-range"></div>
         <a id="wind-aloft-link" target="_blank">
@@ -990,56 +984,105 @@
         </div>
       </a>
 
-      <div class="collapse fs-6 text-start" id="soaring-forecast"></div>
-      <!-- <div>Sky cover forecast graphic</div> -->
-      <!-- <div>Area forecast discussion</div> -->
-      <!-- <div>Fronts graphic</div> -->
-      <!-- <div>Skew T</div> -->
+      <!-- FORECAST - GRAPHICAL SKY/WX COVER -->
+      <div class="display-3 mt-5 text-info">Sky Cover Forecast</div>
+      <div class="display-6 fw-semibold text-secondary" id="sky-next-day"></div>
+      <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="d-flex display-6 fw-semibold text-secondary justify-content-around">
+          <div>Morning</div>
+          <div>Mid-day</div>
+          <div>Afternoon</div>
+          <div>Evening</div>
+        </div>
+        <div class="d-flex mb-5 mx-2 overflow-hidden rounded-4">
+          <div class="col">
+            <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-0">
+            <img class="img-fluid" id="graphical-wx-0">
+          </div>
+          <div class="col border-start border-end border-2 border-dark">
+            <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-1">
+            <img class="img-fluid" id="graphical-wx-1">
+          </div>
+          <div class="col border-end border-2 border-dark">
+            <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-2">
+            <img class="img-fluid" id="graphical-wx-2">
+          </div>
+          <div class="col">
+            <img class="border-bottom border-dark border-2 img-fluid" id="graphical-sky-3">
+            <img class="img-fluid" id="graphical-wx-3">
+          </div>
+        </div>
+      </a>
 
-    </div>
-    <!-- END: TODAY MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: TODAY MENU PAGE -->
 
-    <!-- TOMORROW MENU PAGE -->
-    <div class="collapse display-3" id="Tomorrow">
+    <div class="collapse display-3" id="Tomorrow"> <!-- TOMORROW MENU PAGE -->
 
-      <div>Next 48 hours graph</div>
-      <div>NWS tomorrow</div>
-      <div>NWS 2+ days</div>
+      <!-- FORECAST NEXT 48 HOURS (HOURLY CHART) -->
+      <div class="display-3 text-info">Next 48 Hours</div>
+      <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+        <img class="rounded-4 w-100" id="hourly-chart">
+      </a>
+    
+      <!-- FORECAST NEXT 3 DAYS (NWS) -->
+      <div class="display-3 mt-5 text-info">Next 3 Days</div>
+      <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
+        <div class="bg-dark overflow-hidden rounded-4">
+          <div class="d-flex">
+            <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day0-img">
+            <div class="col-9">
+              <div class="display-4" id="forecast-day0-day"></div>
+              <div class="fs-1 mx-4 text-info text-start" id="forecast-day0-txt"></div>
+            </div>
+          </div>
+          <div class="d-flex border-bottom border-top">
+            <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day1-img">
+            <div class="col-9">
+              <div class="display-4" id="forecast-day1-day"></div>
+              <div class="fs-1 mx-4 text-info text-start" id="forecast-day1-txt"></div>
+            </div>
+          </div>
+          <div class="d-flex">
+            <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day2-img">
+            <div class="col-9">
+              <div class="display-4" id="forecast-day2-day"></div>
+              <div class="fs-1 mx-4 text-info text-start" id="forecast-day2-txt"></div>
+            </div>
+          </div>
+        </div>
+      </a>
 
-    </div>
-    <!-- END: TOMORROW MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: TOMORROW MENU PAGE -->
 
-    <!-- CAMS MENU PAGE -->
-    <div class="collapse display-3" id="Cams">
+    <div class="collapse display-3" id="Cams"> <!-- CAMS MENU PAGE -->
 
       <div>Content for Cams</div>
 
-    </div>
-    <!-- END: CAMS MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: CAMS MENU PAGE -->
 
-    <!-- GPS MENU PAGE -->
-    <div class="collapse display-3" id="GPS">
+    <div class="collapse display-3" id="GPS"> <!-- GPS MENU PAGE -->
 
       <div>Content for GPS</div>
 
-    </div>
-    <!-- END: GPS MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: GPS MENU PAGE -->
 
-    <!-- ABOUT MENU PAGE -->
-    <div class="collapse display-3" id="About">
+    <div class="collapse display-3" id="About"> <!-- ABOUT MENU PAGE -->
 
       <div>Content for About</div>
 
-    </div>
-    <!-- END: ABOUT MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: ABOUT MENU PAGE -->
 
-    <!-- SETTINGS MENU PAGE -->
-    <div class="collapse display-3" id="Settings">
+    <div class="collapse display-3" id="Settings"> <!-- SETTINGS MENU PAGE -->
 
       <div>Content for Settings</div>
 
-    </div>
-    <!-- END: SETTINGS MENU PAGE -->
+      <div class="mb-div-end"></div>
+    </div> <!-- END: SETTINGS MENU PAGE -->
 
   </div>
 

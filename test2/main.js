@@ -42,7 +42,7 @@ function toggleWindChart(div) {
 function sunset(data, navItems = [], tomorrow, sunset) {
   // Set nav item order according to time of day
   tomorrow = new Date()
-  tomorrow = new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})
+  tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})}+`
   sunset = new Date(data.sys.sunset*1000)
   document.getElementById('sunset').innerHTML = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now']
@@ -96,6 +96,16 @@ function windMap(data) {
   }
 })();
 
+(function getGraphicalForecastImages() {
+  const url = 'https://graphical.weather.gov/images/slc/'
+  const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
+  document.getElementById('sky-next-day').innerHTML = nextDay
+  for (let i=0; i<4; i++) {
+      document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
+      document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
+  }
+})();
+
 function windAloft(data) {
   windAloftDir(data.Dirs)
   windAloftSpeed(data.Spds)
@@ -138,3 +148,31 @@ function windAloftSpeed(spds, colors = {}) {
       else elementBar.style.backgroundColor = spds[key] >= colors.red[key] ? 'var(--bs-red)' : 'var(--bs-teal)'
   }
 };
+
+function nwsForecast(data, position) {
+  position = data.properties.periods[0].isDaytime ? 0 : 1
+  for (let i=0; i<3; i++) {
+    document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
+    document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
+    document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
+    position += 2
+  }
+};
+
+// function hourlyForecast(data, object = {}) {
+//   object.icon = [], object.temp = [], object.time = [], object.wdir = [], object.wspd =[]
+//   for (let i=1; i<4; i++) {
+//       object.icon.push(data.properties.periods[i].icon)
+//       object.temp.push(`${data.properties.periods[i].temperature}&deg;`)
+//       object.time.push(new Date(data.properties.periods[i].startTime).toLocaleString('en-us', {timeStyle: 'short'}).replace(':00','').toLowerCase())
+//       object.wdir.push(cardinalToDeg(data.properties.periods[i].windDirection))
+//       object.wspd.push(parseInt(data.properties.periods[i].windSpeed))
+//   }
+//   return object
+// };
+
+// function cardinalToDeg(data) {
+//   const cardDegs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+//   const index = cardDegs.findIndex(d => d === data)
+//   return index * 22.5
+// };

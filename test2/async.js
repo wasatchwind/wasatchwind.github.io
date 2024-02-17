@@ -47,3 +47,18 @@
     windAloft(windAloftData)
   } catch { console.log('Wind Aloft data fetch failed') }
 })();
+
+// NEXT 3 DAYS NWS (main.js) https://www.weather.gov/documentation/services-web-api
+(async () => {
+  const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
+  try {
+    const nwsForecastData = await (await fetch(nwsForecastURL)).json()
+    nwsForecast(nwsForecastData)
+  } catch { console.log('NWS Forecast data fetch failed') }
+})();
+
+document.getElementById('hourly-chart').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+
+// document.getElementById('hourly-chart').src = 'images/Plotter.png'
+// document.getElementById('wind-map').src = 'images/wind-map-save.png'
