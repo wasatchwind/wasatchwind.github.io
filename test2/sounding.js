@@ -1,5 +1,6 @@
 'use strict';
 // D3 Globals
+let maxTempF, liftParams = {}
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4

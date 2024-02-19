@@ -1,7 +1,5 @@
 'use strict';
-const now = new Date()
-const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
-let maxTempF, liftParams = {}
+const now = new Date(), duration = 800
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -9,21 +7,13 @@ function reload() {
 };
 
 // Marquee slider (https://keen-slider.io/docs)
-const animation = { duration: 800, easing: (t) => t }
+const animation = { duration: duration, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
   loop: true,
-  slides: {
-    perView: 4,
-  },
-  created(m) {
-    m.moveToIdx(1, true, animation)
-  },
-  updated(m) {
-    m.moveToIdx(m.track.details.abs + 1, true, animation)
-  },
-  animationEnded(m) {
-    m.moveToIdx(m.track.details.abs + 1, true, animation)
-  },
+  slides: { perView: 4 },
+  created(m) { m.moveToIdx(1, true, animation) },
+  updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
+  animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
 });
 
 // Reveal/collapse toggle for wind charts
@@ -39,15 +29,16 @@ function toggleWindChart(div) {
   }
 };
 
-function sunset(data, navItems = [], tomorrow, sunset) {
-  // Set nav item order according to time of day
-  tomorrow = new Date()
+function openWeather(data, tomorrow = new Date(), sunset, navItems = []) {
   tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})}+`
-  sunset = new Date(data.sys.sunset*1000)
-  document.getElementById('sunset').innerHTML = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
-  if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now']
-  else if (now > sunset) navItems = [tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
-  else navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
+  if (!data) navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
+  else {
+    sunset = new Date(data.sys.sunset*1000)
+    document.getElementById('sunset').innerHTML = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
+    if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now']
+    else if (now > sunset) navItems = [tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
+    else navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
+  }
 
   // Set nav item labels & active label
   let activeNav = 0
@@ -68,14 +59,12 @@ function sunset(data, navItems = [], tomorrow, sunset) {
   // Menu navigation carousel/slider (https://keen-slider.io/docs)
   const slider = new KeenSlider('#slider', {
     loop: true,
-    slides: {
-      perView: 3,
-    },
+    slides: { perView: 3 },
     animationEnded: () => {
       navUpdate(`nav-${activeNav}`, 'var(--bs-secondary)', navItems[activeNav], 'none')
       activeNav = slider.track.details.rel
       navUpdate(`nav-${activeNav}`, 'white', navItems[activeNav], 'block')
-    },
+    }
   });
 };
 
@@ -97,6 +86,7 @@ function windMap(data) {
 })();
 
 (function getGraphicalForecastImages() {
+  const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
   const url = 'https://graphical.weather.gov/images/slc/'
   const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
   document.getElementById('sky-next-day').innerHTML = nextDay
@@ -113,6 +103,7 @@ function windAloft(data) {
 };
 
 function windAloftTime(start, end) {
+  const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
   const selector = (now.getHours() > 3 && now.getHours() < 13) ? '12' : (now.getHours() > 18 || now.getHours() < 4) ? '24' : '06'
   const link = `https://www.aviationweather.gov/data/windtemp/?region=slc&fcst=${selector}`
   const range = `${start} &nbsp;&#187;&nbsp; ${end}${nextDay}`
