@@ -31,13 +31,13 @@ function toggleWindChart(div) {
 
 function openWeather(data, tomorrow = new Date(), sunset, navItems = []) {
   tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})}+`
-  if (!data) navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
+  if (!data) navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'Settings']
   else {
     sunset = new Date(data.sys.sunset*1000)
     document.getElementById('sunset').innerHTML = sunset.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
-    if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now']
-    else if (now > sunset) navItems = [tomorrow, 'Cams', 'GPS', 'About', 'Settings', 'Now', 'Today']
-    else navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'About', 'Settings']
+    if (now.getHours() < 15) navItems = ['Today', tomorrow, 'Cams', 'GPS', 'Settings', 'Now']
+    else if (now > sunset) navItems = [tomorrow, 'Cams', 'GPS', 'Settings', 'Now', 'Today']
+    else navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'Settings']
   }
 
   // Set nav item labels & active label

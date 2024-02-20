@@ -78,7 +78,19 @@ async function soaringForecast() {
 // FETCHED IMAGES
 document.getElementById('hourly-chart').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ003&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110101000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
 document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+document.getElementById('daybreak-east').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+document.getElementById('daybreak-southwest').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darrenS.latest.jpg'
+document.getElementById('olympus-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/olympuscove.latest.jpg'
+document.getElementById('westvalley-east').src = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
+document.getElementById('uofu-south').src = 'https://meso1.chpc.utah.edu/station_cameras/wbbs_cam/wbbs_cam_current.jpg'
+document.getElementById('uofu-west').src = 'https://meso1.chpc.utah.edu/station_cameras/wbbw_cam/wbbw_cam_current.jpg'
 
 // LOCAL TESTING IMAGES
 // document.getElementById('hourly-chart').src = 'images/Plotter.png'
 // document.getElementById('wind-map').src = 'images/wind-map-save.png'
+// document.getElementById('daybreak-east').src = 'images/cam.png'
+// document.getElementById('daybreak-southwest').src = 'images/cam.png'
+// document.getElementById('olympus-west').src = 'images/cam.png'
+// document.getElementById('westvalley-east').src = 'images/cam.png'
+// document.getElementById('uofu-south').src = 'images/cam.png'
+// document.getElementById('uofu-west').src = 'images/cam.png'
