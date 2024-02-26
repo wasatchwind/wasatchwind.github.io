@@ -270,7 +270,7 @@ function d3Update(userLiftParams) {
   document.getElementById('out-of-range').style.display = 'none'
   const userTemp = parseInt(document.getElementById('user-temp').value)
   if (!userTemp) return
-  try { userLiftParams = getLiftParams(userTemp, soundingData) }
+  try { userLiftParams = getLiftParams(soundingData, userTemp) }
   catch {
     outOfRange(userTemp)
     return

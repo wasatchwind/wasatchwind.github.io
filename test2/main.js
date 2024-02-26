@@ -1,5 +1,5 @@
 'use strict';
-const now = new Date(), duration = 800
+const now = new Date()
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -7,7 +7,7 @@ function reload() {
 };
 
 // Marquee slider (https://keen-slider.io/docs)
-const animation = { duration: duration, easing: (t) => t }
+const animation = { duration: 800, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
   loop: true,
   slides: { perView: 4 },
@@ -16,7 +16,7 @@ const marquee = new KeenSlider("#marquee", {
   animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
 });
 
-// Reveal/collapse toggle for wind charts
+// Reveal & collapse toggle for wind charts
 function toggleWindChart(div) {
   const element = document.getElementById(div)
   if (element.style.display==='' || element.style.display==='none') {
@@ -30,7 +30,7 @@ function toggleWindChart(div) {
 };
 
 function openWeather(data, tomorrow = new Date(), sunset, navItems = []) {
-  tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'long'})}+`
+  tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate() + 1)).toLocaleString('en-us', {weekday: 'short'})}+`
   if (!data) navItems = ['Now', 'Today', tomorrow, 'Cams', 'GPS', 'Settings']
   else {
     sunset = new Date(data.sys.sunset*1000)

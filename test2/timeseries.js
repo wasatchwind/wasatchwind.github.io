@@ -56,26 +56,19 @@ function windDirection(stid, wdir) {
 function windSpeed(stid, wspd) {
   wspd.push(wspd[wspd.length - 1])
   wspd = wspd.map(d => d === null ? '&nbsp;' : d < 0.5 ? 'Calm' : Math.round(d))
-  if (stid !== 'tile') {
-    for (let i=0; i<wspd.length; i++) {
-      const element = document.getElementById(`${stid}-wspd-${i}`)
-      if (wspd[i] === 'Calm' && i !== wspd.length - 1) element.className = 'fs-3 fw-normal'
-      if (wspd[i] === 'Calm' && i === wspd.length - 1) element.className = 'align-self-end fs-1 text-center'
-      element.innerHTML = wspd[i]
-    }
+  for (let i=0; i<wspd.length; i++) {
+    const element = document.getElementById(`${stid}-wspd-${i}`)
+    if (wspd[i] === 'Calm' && i !== wspd.length - 1) element.className = 'fs-3 fw-normal'
+    if (wspd[i] === 'Calm' && i === wspd.length - 1) element.className = 'align-self-end fs-1 text-center'
+    if (wspd[i] === 'Calm' && i === wspd.length - 1 && stid === 'KSLC') element.className = ''
+    element.innerHTML = wspd[i]
   }
-  else if (wspd[wspd.length - 1] === '&nbsp;') document.getElementById(`${stid}-wspd-12`).style.display = 'none'
-  else document.getElementById(`${stid}-wspd-12`).innerHTML = wspd[wspd.length - 1]
 };
 
 function windGust(stid, gust) {
   gust.push(gust[gust.length - 1])
   gust = gust.map(d => !d ? '&nbsp;' : `g${Math.round(d)}`)
-  if (stid !== 'tile') {
-    for (let i=0; i<gust.length; i++) document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i]
-  }
-  else if (gust[gust.length - 1] === '&nbsp;') document.getElementById(`${stid}-gust-12`).style.display = 'none'
-  else document.getElementById(`${stid}-gust-12`).innerHTML = gust[gust.length - 1]
+  for (let i=0; i<gust.length; i++) document.getElementById(`${stid}-gust-${i}`).innerHTML = gust[i]
 };
 
 function windBarHeight(stid, wspd, gust, multiplier) {
