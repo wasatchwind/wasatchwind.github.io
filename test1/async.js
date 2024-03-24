@@ -54,7 +54,7 @@
 // OPEN METEO WIND ALOFT FORECAST
 (async () => {
   const openMeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.79&longitude=-111.98&hourly=windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,windspeed_500hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,winddirection_500hPa&windspeed_unit=mph&timezone=America%2FDenver'
-  // const openMeteoData = await (await fetch(openMeteoURL)).json()
+  const openMeteoData = await (await fetch(openMeteoURL)).json()
   if (openMeteoData) openMeteo(openMeteoData)
   else openMeteo(null)
 })();
