@@ -46,7 +46,7 @@
 // Get with text fetch instead???
 (async () => {
   const windAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
-  // const windAloftData = await (await fetch(windAloftURL)).json()
+  const windAloftData = await (await fetch(windAloftURL)).json()
   if (windAloftData) windAloft(windAloftData)
   else windAloft(null)
 })();
