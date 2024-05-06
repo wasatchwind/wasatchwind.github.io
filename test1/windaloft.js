@@ -1,16 +1,16 @@
 'use strict';
 const now = new Date()
-const openmeteoData = {"latitude":40.764416,"longitude":-111.98126,"generationtime_ms":4.245996475219727,"utc_offset_seconds":-21600,"timezone":"America/Denver","timezone_abbreviation":"MDT","elevation":1288.0,"hourly_units":{"time":"iso8601","temperature_2m":"°F","wind_speed_10m":"mp/h","wind_speed_80m":"mp/h","wind_direction_10m":"°","wind_direction_80m":"°","wind_gusts_10m":"mp/h","cape":"J/kg","lifted_index":"","pressure_msl":"hPa","windspeed_850hPa":"mp/h","windspeed_800hPa":"mp/h","windspeed_750hPa":"mp/h","windspeed_700hPa":"mp/h","windspeed_650hPa":"mp/h","windspeed_600hPa":"mp/h","windspeed_550hPa":"mp/h","winddirection_850hPa":"°","winddirection_800hPa":"°","winddirection_750hPa":"°","winddirection_700hPa":"°","winddirection_650hPa":"°","winddirection_600hPa":"°","winddirection_550hPa":"°","geopotential_height_850hPa":"m","geopotential_height_800hPa":"m","geopotential_height_750hPa":"m","geopotential_height_700hPa":"m","geopotential_height_650hPa":"m","geopotential_height_600hPa":"m","geopotential_height_550hPa":"m"},"hourly":{"time":["2024-05-05T09:00","2024-05-05T10:00","2024-05-05T11:00","2024-05-05T12:00","2024-05-05T13:00","2024-05-05T14:00","2024-05-05T15:00","2024-05-05T16:00"],"temperature_2m":[49.9,48.4,44.7,40.2,40.8,40.3,40.8,40.9],"wind_speed_10m":[15.7,14.7,15.6,16.5,14.6,13.9,13.8,12.1],"wind_speed_80m":[23.0,22.1,21.8,20.9,20.3,17.7,16.2,14.0],"wind_direction_10m":[281,296,304,312,313,314,313,335],"wind_direction_80m":[283,300,302,305,313,308,301,328],"wind_gusts_10m":[23.5,21.7,22.8,24.2,21.3,19.9,19.9,17.2],"cape":[0.0,0.0,0.0,10.0,40.0,30.0,40.0,40.0],"lifted_index":[2.00,1.60,2.70,4.50,4.00,5.40,4.30,4.10],"pressure_msl":[998.1,999.5,1001.2,1002.8,1004.5,1005.2,1006.5,1007.0],"windspeed_850hPa":[14.7,15.6,17.9,19.2,17.8,16.4,15.8,14.1],"windspeed_800hPa":[22.8,17.1,12.8,26.1,22.6,18.2,18.3,17.0],"windspeed_750hPa":[35.2,21.6,13.6,12.8,15.6,15.8,17.1,16.9],"windspeed_700hPa":[49.7,40.3,36.8,24.7,10.4,4.3,9.1,9.9],"windspeed_650hPa":[55.3,49.3,51.4,39.3,37.3,29.8,16.9,26.6],"windspeed_600hPa":[60.0,60.8,58.7,58.7,55.1,52.5,51.9,52.8],"windspeed_550hPa":[60.6,63.7,64.7,64.1,66.1,66.7,68.2,65.2],"winddirection_850hPa":[268,286,297,314,314,316,316,326],"winddirection_800hPa":[246,267,304,305,313,323,318,329],"winddirection_750hPa":[216,214,236,278,315,328,318,327],"winddirection_700hPa":[206,200,208,203,219,275,306,321],"winddirection_650hPa":[202,201,204,200,198,197,197,211],"winddirection_600hPa":[200,204,203,199,203,206,208,201],"winddirection_550hPa":[200,203,201,201,203,202,201,199],"geopotential_height_850hPa":[1349.00,1356.00,1367.00,1377.00,1386.00,1386.00,1393.00,1395.00],"geopotential_height_800hPa":[1853.00,1857.00,1855.00,1871.00,1880.00,1878.00,1884.00,1884.00],"geopotential_height_750hPa":[2378.00,2378.00,2380.00,2382.00,2387.00,2386.00,2394.00,2396.00],"geopotential_height_700hPa":[2935.00,2933.00,2930.00,2929.00,2930.00,2928.00,2936.00,2937.00],"geopotential_height_650hPa":[3523.00,3518.00,3514.00,3512.00,3511.00,3507.00,3512.00,3513.00],"geopotential_height_600hPa":[4147.00,4140.00,4135.00,4132.00,4130.00,4126.00,4129.00,4130.00],"geopotential_height_550hPa":[4813.00,4805.00,4798.00,4794.00,4793.00,4788.00,4791.00,4791.00]},"daily_units":{"time":"iso8601","sunset":"iso8601","temperature_2m_max":"°F"},"daily":{"time":["2024-05-05"],"sunset":["2024-05-05T20:28"],"temperature_2m_max":[68.0]}}
-const gcpWindAloftData = {"forecast_06h":{"end_time":21,"start_time":14,"temperature":{"altitude_06k":null,"altitude_09k":23,"altitude_12k":15,"altitude_18k":-2},"wind_direction":{"altitude_06k":270,"altitude_09k":220,"altitude_12k":190,"altitude_18k":190},"wind_speed":{"altitude_06k":12,"altitude_09k":13,"altitude_12k":52,"altitude_18k":71}},"forecast_12h":{"end_time":6,"start_time":21,"temperature":{"altitude_06k":null,"altitude_09k":17,"altitude_12k":14,"altitude_18k":-9},"wind_direction":{"altitude_06k":null,"altitude_09k":270,"altitude_12k":200,"altitude_18k":190},"wind_speed":{"altitude_06k":0,"altitude_09k":13,"altitude_12k":30,"altitude_18k":55}},"forecast_24h":{"end_time":18,"start_time":6,"temperature":{"altitude_06k":null,"altitude_09k":19,"altitude_12k":8,"altitude_18k":-11},"wind_direction":{"altitude_06k":240,"altitude_09k":260,"altitude_12k":290,"altitude_18k":310},"wind_speed":{"altitude_06k":13,"altitude_09k":24,"altitude_12k":32,"altitude_18k":52}}}
+// const openmeteoData = {"latitude":40.764416,"longitude":-111.98126,"generationtime_ms":0.38301944732666016,"utc_offset_seconds":-21600,"timezone":"America/Denver","timezone_abbreviation":"MDT","elevation":1288.0,"hourly_units":{"time":"iso8601","temperature_2m":"°F","wind_speed_10m":"mp/h","wind_speed_80m":"mp/h","wind_direction_10m":"°","wind_direction_80m":"°","wind_gusts_10m":"mp/h","cape":"J/kg","lifted_index":"","pressure_msl":"hPa","windspeed_850hPa":"mp/h","windspeed_800hPa":"mp/h","windspeed_750hPa":"mp/h","windspeed_700hPa":"mp/h","windspeed_650hPa":"mp/h","windspeed_600hPa":"mp/h","windspeed_550hPa":"mp/h","winddirection_850hPa":"°","winddirection_800hPa":"°","winddirection_750hPa":"°","winddirection_700hPa":"°","winddirection_650hPa":"°","winddirection_600hPa":"°","winddirection_550hPa":"°","geopotential_height_850hPa":"m","geopotential_height_800hPa":"m","geopotential_height_750hPa":"m","geopotential_height_700hPa":"m","geopotential_height_650hPa":"m","geopotential_height_600hPa":"m","geopotential_height_550hPa":"m"},"hourly":{"time":["2024-05-05T18:00","2024-05-05T19:00","2024-05-05T20:00","2024-05-05T21:00","2024-05-05T22:00","2024-05-05T23:00"],"temperature_2m":[37.1,38.8,39.0,37.8,37.1,38.3],"wind_speed_10m":[4.2,4.2,4.1,4.0,2.0,5.6],"wind_speed_80m":[4.5,4.7,4.4,6.1,5.4,8.5],"wind_direction_10m":[74,148,158,177,180,233],"wind_direction_80m":[72,149,156,172,222,247],"wind_gusts_10m":[4.5,4.7,4.3,6.3,5.8,16.3],"cape":[0.0,0.0,0.0,0.0,30.0,40.0],"lifted_index":[5.50,3.60,2.60,1.80,1.10,0.60],"pressure_msl":[1009.6,1009.6,1009.2,1009.1,1010.4,1010.3],"windspeed_850hPa":[3.2,2.8,3.2,5.4,5.0,7.2],"windspeed_800hPa":[5.6,4.0,1.6,2.6,9.1,14.9],"windspeed_750hPa":[12.9,13.0,10.7,10.5,16.5,17.0],"windspeed_700hPa":[11.6,19.5,18.6,17.3,19.7,17.5],"windspeed_650hPa":[15.7,20.4,21.9,20.6,17.9,14.5],"windspeed_600hPa":[40.6,24.6,23.6,22.0,13.7,16.4],"windspeed_550hPa":[56.6,41.5,34.9,29.2,19.7,20.8],"winddirection_850hPa":[75,143,153,171,227,252],"winddirection_800hPa":[326,309,323,194,264,272],"winddirection_750hPa":[312,310,318,311,281,276],"winddirection_700hPa":[291,297,310,309,293,278],"winddirection_650hPa":[240,289,290,297,306,295],"winddirection_600hPa":[223,248,263,283,312,300],"winddirection_550hPa":[209,222,233,246,281,300],"geopotential_height_850hPa":[1410.00,1411.00,1409.00,1409.00,1414.00,1412.00],"geopotential_height_800hPa":[1896.00,1898.00,1896.00,1896.00,1903.00,1899.00],"geopotential_height_750hPa":[2407.00,2410.00,2409.00,2410.00,2416.00,2410.00],"geopotential_height_700hPa":[2946.00,2951.00,2950.00,2952.00,2956.00,2950.00],"geopotential_height_650hPa":[3519.00,3523.00,3523.00,3525.00,3526.00,3520.00],"geopotential_height_600hPa":[4129.00,4132.00,4132.00,4133.00,4131.00,4126.00],"geopotential_height_550hPa":[4785.00,4785.00,4782.00,4781.00,4778.00,4773.00]},"daily_units":{"time":"iso8601","sunset":"iso8601","temperature_2m_max":"°F"},"daily":{"time":["2024-05-05"],"sunset":["2024-05-05T20:28"],"temperature_2m_max":[68.0]}}
+// const gcpWindAloftData = {"forecast_06h":{"end_time":3,"start_time":20,"temperature":{"altitude_06k":null,"altitude_09k":23,"altitude_12k":12,"altitude_18k":-5},"wind_direction":{"altitude_06k":null,"altitude_09k":290,"altitude_12k":240,"altitude_18k":180},"wind_speed":{"altitude_06k":0,"altitude_09k":16,"altitude_12k":17,"altitude_18k":66}},"forecast_12h":{"end_time":12,"start_time":3,"temperature":{"altitude_06k":null,"altitude_09k":21,"altitude_12k":8,"altitude_18k":-16},"wind_direction":{"altitude_06k":250,"altitude_09k":260,"altitude_12k":260,"altitude_18k":280},"wind_speed":{"altitude_06k":12,"altitude_09k":24,"altitude_12k":18,"altitude_18k":17}},"forecast_24h":{"end_time":0,"start_time":12,"temperature":{"altitude_06k":null,"altitude_09k":21,"altitude_12k":10,"altitude_18k":-9},"wind_direction":{"altitude_06k":260,"altitude_09k":280,"altitude_12k":280,"altitude_18k":300},"wind_speed":{"altitude_06k":9,"altitude_09k":30,"altitude_12k":37,"altitude_18k":44}}}
 
 console.log('Run');
 
 // WIND ALOFT WITH OPEN METEO API & GCP FTP
 (async () => {
-  const openmeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.77069&longitude=-111.96503&daily=sunset,temperature_2m_max&hourly=temperature_2m,wind_speed_10m,wind_speed_80m,wind_direction_10m,wind_direction_80m,wind_gusts_10m,cape,lifted_index,pressure_msl,windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,geopotential_height_850hPa,geopotential_height_800hPa,geopotential_height_750hPa,geopotential_height_700hPa,geopotential_height_650hPa,geopotential_height_600hPa,geopotential_height_550hPa&windspeed_unit=mph&temperature_unit=fahrenheit&forecast_hours=8&forecast_days=1&timezone=America%2FDenver'
+  const openmeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.77069&longitude=-111.96503&daily=sunset,temperature_2m_max&hourly=temperature_2m,wind_speed_10m,wind_speed_80m,wind_direction_10m,wind_direction_80m,wind_gusts_10m,cape,lifted_index,pressure_msl,windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,geopotential_height_850hPa,geopotential_height_800hPa,geopotential_height_750hPa,geopotential_height_700hPa,geopotential_height_650hPa,geopotential_height_600hPa,geopotential_height_550hPa&windspeed_unit=mph&temperature_unit=fahrenheit&forecast_hours=6&forecast_days=1&timezone=America%2FDenver'
   const gcpWindAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-forecast'
-  // const openmeteoData = await (await fetch(openmeteoURL)).json()
-  // const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
+  const openmeteoData = await (await fetch(openmeteoURL)).json()
+  const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
   windAloft(openmeteoData.hourly, gcpWindAloftData)
 })();
 
@@ -20,8 +20,7 @@ function windAloft(openmeteoData, gcpWindAloftData) {
   document.getElementById('ALOFT').style.display = 'block'
 }
 
-function openmeteoWindAloft(data) {
-  console.log(data)
+function openmeteoWindAloft(data, redlimit = 22) {
   for (const [key, value] of Object.entries(data)) {
     if (key.slice(0,12) === 'geopotential') {
       document.getElementById(key).innerHTML = Math.round(value[0]*3.28084).toLocaleString()
@@ -37,60 +36,50 @@ function openmeteoWindAloft(data) {
         document.getElementById(`windaloft-time-${i}`).innerHTML = time
       }
     }
-    if (key.slice(0,9) === 'windspeed') { // Clean up, refactor, figure out max speeds for each alt
-      let barb
+    if (key.slice(0,9) === 'windspeed') {
       for (let i=0; i<6; i++) {
         const windspeed = Math.round(value[i])
-        const elementCore = key.slice(10,16)
-        const elementNumeric = document.getElementById(`${key}-${i}`)
-        const elementBarb = document.getElementById(`winddirection_${elementCore}-${i}`)
-        const elementColor = document.getElementById(`${elementCore}-${i}`)
-        if (windspeed > 40) barb = 45
-        else barb = Math.ceil(windspeed / 5) * 5
-        elementNumeric.innerHTML = windspeed
-        elementBarb.src = `images/barbs/barb${barb}.png`
-        switch(elementCore) {
-          case '550hPa':
-            elementColor.style.backgroundColor = windAloftColor(windspeed, 30)
-            break;
-          case '600hPa':
-            elementColor.style.backgroundColor = windAloftColor(windspeed, 28)
-            break;
-          case '650hPa':
-            elementColor.style.backgroundColor = windAloftColor(windspeed, 26)
-            break;
-          case '700hPa':
-            elementColor.style.backgroundColor = windAloftColor(windspeed, 24)
-            break;
-          default:
-            elementColor.style.backgroundColor = windAloftColor(windspeed, 22)
-            break;
-          }
+        const barb = windspeed > 40 ? 45 : Math.ceil(windspeed / 5) * 5
+        const barbImage = `images/barbs/barb${barb}.png`
+        const colorElement = document.getElementById(`${key.slice(10,16)}-${i}`)
+        colorElement.style.backgroundColor = windAloftColor(windspeed, redlimit)
+        document.getElementById(`${key}-${i}`).innerHTML = windspeed
+        document.getElementById(`winddirection_${key.slice(10,16)}-${i}`).src = barbImage
+        if (key.slice(10,12) <= 75 && i === 5) redlimit += 2 // 22 + 2 each step after 700, end @ 30
       }
     }
   }
 }
 
 function gcpWindAloft(data) {
+  console.log(data)
   const timezoneOffset = now.getTimezoneOffset() / 60
-  const breakpoint = 6//data.forecast_06h.end_time - timezoneOffset - now.getHours()
+  const endgrid = now.getHours() - 7 // -12h, +5 for cells past first
+  const endtime = data.forecast_06h.end_time + 11 - timezoneOffset // +12h, -1 for grid hour offset
+  const breakpoint = 6 - (endgrid - endtime)
+  const check06k = data.forecast_06h.wind_speed.altitude_06k
+  const check12k = data.forecast_12h.wind_speed.altitude_06k
   for (let i=0; i<6; i++) {
     if (i < breakpoint || breakpoint < 0) {
       gcpWindAloftRows(i, data.forecast_06h.wind_speed, data.forecast_06h.wind_direction)
     }
-    else gcpWindAloftRows(data.forecast_12h.wind_speed, data.forecast_12h.wind_direction)
+    else gcpWindAloftRows(i, data.forecast_12h.wind_speed, data.forecast_12h.wind_direction)
+  }
+  if (breakpoint < 0 && !check06k || !check06k && !check12k) {
+    document.getElementById('6k').style.display = 'none'
   }
 }
 
-function gcpWindAloftRows (i, windspeed, winddirection, max) {
-  max = 20 // figure out max speeds for individual altitudes
+function gcpWindAloftRows (i, windspeed, winddirection, redlimit = 22, accelerator = 1) {
   for (const [key, value] of Object.entries(windspeed)) {
-    let barb
-    if (value > 40) barb = 45
-    else barb = Math.ceil(value / 5) * 5
+    const barb = value > 40 ? 45 : Math.ceil(value / 5) * 5
+    const barbImage = `images/barbs/barb${barb}.png`
+    const colorElement = document.getElementById(`${key.slice(-3)}-${i}`)
+    colorElement.style.backgroundColor = windAloftColor(value, redlimit)
     document.getElementById(`windspeed_${key}-${i}`).innerHTML = value
-    document.getElementById(`winddirection_${key}-${i}`).src = `images/barbs/barb${barb}.png`
-    document.getElementById(`${key.slice(-3)}-${i}`).style.backgroundColor = windAloftColor(value, max)
+    document.getElementById(`winddirection_${key}-${i}`).src = barbImage
+    accelerator ++
+    redlimit += accelerator // 6k = 22, 9k = 24, 12k = 27, 18k = 31
   }
   for (const [key, value] of Object.entries(winddirection)) {
     document.getElementById(`winddirection_${key}-${i}`).style.transform = `rotate(${value}deg)`
