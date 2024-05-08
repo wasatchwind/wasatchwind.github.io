@@ -9,8 +9,8 @@ console.log('Run');
 (async () => {
   const openmeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.77069&longitude=-111.96503&daily=sunset,temperature_2m_max&hourly=temperature_2m,wind_speed_10m,wind_speed_80m,wind_direction_10m,wind_direction_80m,wind_gusts_10m,cape,lifted_index,pressure_msl,windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,geopotential_height_850hPa,geopotential_height_800hPa,geopotential_height_750hPa,geopotential_height_700hPa,geopotential_height_650hPa,geopotential_height_600hPa,geopotential_height_550hPa&windspeed_unit=mph&temperature_unit=fahrenheit&forecast_hours=6&forecast_days=1&timezone=America%2FDenver'
   const gcpWindAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-forecast'
-  // const openmeteoData = await (await fetch(openmeteoURL)).json()
-  // const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
+  const openmeteoData = await (await fetch(openmeteoURL)).json()
+  const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
   windAloft(openmeteoData.hourly, gcpWindAloftData)
 })();
 
@@ -53,7 +53,7 @@ function openmeteoWindAloft(data, redlimit = 22) {
 
 function gcpWindAloft(data) {
   const timezoneOffset = now.getTimezoneOffset() / 60
-  const gridEndTime = 20 + 6//now.getHours() + 6 // 6 cells/6 hr forecast
+  const gridEndTime = now.getHours() + 6 // 6 cells/6 hr forecast
   const fcstEndRaw = data.forecast_06h.end_time
   const fcstEnd = fcstEndRaw < 6 ? fcstEndRaw + timezoneOffset + 12 : fcstEndRaw - timezoneOffset
   const breakpoint = 6 - (gridEndTime - fcstEnd)
@@ -82,8 +82,7 @@ function gcpWindAloftRows (i, windspeed, winddirection, redlimit = 22, accelerat
 }
 
 function windAloftColor(windspeed, maxspeed) {
-  // const green = '#0a3622', yellow = '#664d03', orange = '#653208', red = '#58151c' //60%
-  const green = '#10654c', yellow = '#806104', orange = '#7f3f0a', red = '#6e1b23' //50%
+  const green = '#10654c', yellow = '#806104', orange = '#7f3f0a', red = '#6e1b23'
   if (windspeed < maxspeed - 12) return green
   else if (windspeed < maxspeed - 6) return yellow
   else if (windspeed < maxspeed) return orange
