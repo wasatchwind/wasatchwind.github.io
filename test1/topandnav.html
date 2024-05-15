@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+  <div class="container-fluid">
+
+    <!-- COMPONENT: STICKY TOP -->
+    <div class="bg-black border-10 border-bottom border-secondary sticky-top">
+
+      <!-- TOP LINE -->
+      <div class="align-items-center d-flex justify-content-between">
+        <img src="images/pg.gif" height="125px">
+        <div>
+          <div class="display-1 text-info title-font">Wasatch Wind</div>
+        </div>
+        <img src="images/refresh.png" onclick="reload()" height="125px">
+      </div>
+
+      <!-- MARQUEE -->
+      <div class="display-5 keen-slider" id="marquee">
+        <div class="keen-slider__slide number-slide2 text-info">
+          <div class="text-secondary">-3 Index</div>
+          <div id="neg3"></div>
+        </div>
+        <div class="keen-slider__slide number-slide1 text-info">
+          <div class="text-secondary">Top of Lift</div>
+          <div id="tol"></div>
+        </div>
+        <div class="keen-slider__slide number-slide3 text-info">
+          <div class="text-secondary">Temp &deg;F</div>
+          <div class="d-flex justify-content-center">
+            <div id="temp"></div>
+            <div class="text-secondary fw-semibold">&nbsp;/&nbsp;</div>
+            <div id="hi-temp"></div>
+          </div>
+        </div>
+        <div class="keen-slider__slide number-slide4 text-info">
+          <div class="text-secondary">Pressure</div>
+          <div class="d-flex justify-content-center">
+            <div id="alti"></div>
+            <div>&nbsp;</div>
+            <div id="trend"></div>
+          </div>
+        </div>
+        <div class="keen-slider__slide number-slide5 text-info">
+          <div class="text-secondary">Zone</div>
+          <div class="display-3 zone-margin" id="zone"></div>
+        </div>
+        <div class="keen-slider__slide number-slide6 text-info">
+          <div class="text-secondary">Sunset</div>
+          <div id="sunset"></div>
+        </div>
+        <div class="keen-slider__slide number-slide7 text-info">
+          <div class="text-secondary" id="KSLC-time-12"></div>
+          <div class="d-flex justify-content-center">
+            <div id="KSLC-wdir-12"></div>
+            <div>&nbsp;&nbsp;</div>
+            <div id="KSLC-wspd-12"></div>
+            <div>&nbsp;</div>
+            <div id="KSLC-gust-12"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU SLIDER -->
+      <div class="align-items-center d-flex display-1 justify-content-between py-3 text-secondary">
+        <div class="text-warning">&#9001;</div>
+        <div class="keen-slider" id="slider">
+          <div class="keen-slider__slide number-slide1 pb-2" id="nav-5"></div>
+          <div class="keen-slider__slide number-slide2 pb-2" id="nav-0"></div>
+          <div class="keen-slider__slide number-slide3 pb-2" id="nav-1"></div>
+          <div class="keen-slider__slide number-slide4 pb-2" id="nav-2"></div>
+          <div class="keen-slider__slide number-slide5 pb-2" id="nav-3"></div>
+          <div class="keen-slider__slide number-slide6 pb-2" id="nav-4"></div>
+        </div>
+        <div class="text-warning">&#9002;</div>
+      </div>
+    </div> <!-- END STICKY TOP -->
+
+    <div class="keen-slider" id="main-body">
+      <div class="keen-slider__slide number-slide1">
+        <div class="display-3" id="Today">
+          Today<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+      <div class="keen-slider__slide number-slide2">
+        <div class="display-3" id="Tomorrow">
+          Tomorrow<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+      <div class="keen-slider__slide number-slide3">
+        <div class="display-3" id="Cams">
+          Cams<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+      <div class="keen-slider__slide number-slide4">
+        <div class="display-3" id="GPS">
+          GPS<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+      <div class="keen-slider__slide number-slide5">
+        <div class="display-3" id="Settings">
+          Settings<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+      <div class="keen-slider__slide number-slide6">
+        <div class="display-3" id="Now">
+          Now<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+          Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>Content<br>
+        </div>
+      </div>
+    </div>
+
+    <script src="keen-slider.min.js"></script>
+    <script src="topandnav.js"></script>
+
+  </div>
+
+</body>
+
+</html>
