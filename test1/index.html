@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+  <div class="container-fluid">
+
+    <!-- COMPONENT: STICKY TOP -->
+    <div class="bg-black sticky-top">
+
+      <!-- TOP ROW -->
+      <div class="align-items-center d-flex justify-content-between">
+        <img src="images/pg.gif" height="125px">
+        <div class="display-1 text-info title-font">Wasatch Wind</div>
+        <img src="images/refresh.png" onclick="reload()" height="125px">
+      </div>
+
+      <!-- MARQUEE -->
+      <div class="display-5 keen-slider" id="marquee">
+        <div class="keen-slider__slide number-slide2 text-info">
+          <div class="text-secondary">-3 Index</div>
+          <div id="neg3"></div>
+        </div>
+        <div class="keen-slider__slide number-slide1 text-info">
+          <div class="text-secondary">Top of Lift</div>
+          <div id="tol"></div>
+        </div>
+        <div class="keen-slider__slide number-slide3 text-info">
+          <div class="text-secondary">Temp &deg;F</div>
+          <div class="d-flex justify-content-center">
+            <div id="temp"></div>
+            <div class="text-secondary fw-semibold">&nbsp;/&nbsp;</div>
+            <div id="hi-temp"></div>
+          </div>
+        </div>
+        <div class="keen-slider__slide number-slide4 text-info">
+          <div class="text-secondary">Pressure</div>
+          <div class="d-flex justify-content-center">
+            <div id="alti"></div>
+            <div>&nbsp;</div>
+            <div id="trend"></div>
+          </div>
+        </div>
+        <div class="keen-slider__slide number-slide5 text-info">
+          <div class="text-secondary">Zone</div>
+          <div class="display-3 zone-margin" id="zone"></div>
+        </div>
+        <div class="keen-slider__slide number-slide6 text-info">
+          <div class="text-secondary">Sunset</div>
+          <div id="sunset"></div>
+        </div>
+        <div class="keen-slider__slide number-slide7 text-info">
+          <div class="text-secondary" id="KSLC-time-12"></div>
+          <div class="d-flex justify-content-center">
+            <div id="KSLC-wdir-12"></div>
+            <div>&nbsp;&nbsp;</div>
+            <div id="KSLC-wspd-12"></div>
+            <div>&nbsp;</div>
+            <div id="KSLC-gust-12"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="align-items-center d-flex display-1 justify-content-between text-secondary">
+        <div class="text-warning">&#9001;</div>
+        <div class="col" id="topnav-left"></div>
+        <div class="col fw-semibold text-white" id="topnav-active"></div>
+        <div class="col" id="topnav-right"></div>
+        <div class="text-warning">&#9002;</div>
+      </div>
+    </div>
+    <!-- END STICKY TOP -->
+
+    <!-- SLIDER BODY -->
+    <div class="align-items-center d-flex display-1 justify-content-between text-secondary">
+      <div class="keen-slider" id="slider">
+        <div class="keen-slider__slide">
+          <div>Today Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+        <div class="keen-slider__slide">
+          <div>Tomorrow Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+        <div class="keen-slider__slide">
+          <div>Settings Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+        <div class="keen-slider__slide">
+          <div>GPS Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+        <div class="keen-slider__slide">
+          <div>Cams Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+        <div class="keen-slider__slide">
+          <div>Now Stuff<br><br>rr<br>tt<br>yy<br>uu<br>ii<br>hh<br>ff<br>ee<br>ww<br>ww<br>rr<br>ff<br>
+            <br>mid<br><br><br><br><br><br><br><br><br><br><br><br><br><br>end</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="keen-slider.min.js"></script>
+    <script src="async.js"></script>
+    <script src="main.js"></script>
+
+  </div>
+
+</body>
+
+</html>
