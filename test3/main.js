@@ -54,7 +54,7 @@ function navSet(data) {
 };
 
 (function surfaceWind() {
-  if (now.getHours() > 7 && now.getHours() < 18) {
+  if (now.getHours() > 6 && now.getHours() < 18) {
     const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
     const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
     document.getElementById('surface-wind-img').src = windImageURL
