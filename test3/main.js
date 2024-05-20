@@ -7,6 +7,18 @@ function reload() {
   location.reload()
 };
 
+function toggleWindChart(div) {
+  const element = document.getElementById(div)
+  if (element.style.display==='' || element.style.display==='none') {
+    element.style.display = 'block'
+    document.getElementById(`${div}-toggle`).innerHTML = '&#8722;'
+  }
+  else {
+    element.style.display = 'none'
+    document.getElementById(`${div}-toggle`).innerHTML = '&#43;'
+  }
+};
+
 // Marquee slider (https://keen-slider.io/docs)
 const animation = { duration: 800, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
@@ -53,18 +65,10 @@ function navSet(data) {
   navUpdate(activeNav)
 };
 
-(function surfaceWind() {
-  if (now.getHours() > 6 && now.getHours() < 18) {
-    const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
-    const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
-    document.getElementById('surface-wind-img').src = windImageURL
-    document.getElementById('surface-gust-img').src = gustImageURL
-  }
-})();
-
 function windAloft(openmeteoData, gcpWindAloftData) {
   openmeteoWindAloft(openmeteoData)
   gcpWindAloft(gcpWindAloftData)
+  document.getElementById('wind-aloft-div').style.display = 'block'
 };
 
 function openmeteoWindAloft(data, redlimit = 22) {
@@ -134,3 +138,27 @@ function windAloftColor(windspeed, maxspeed) {
   else if (windspeed < maxspeed) return orange
   else return red
 };
+
+function windMap(data) {
+  const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+  document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
+};
+
+function nwsForecast(data) {
+  console.log(data)
+  console.log('add NWS multi day to tomorrow page')
+};
+
+if (now.getHours() >= 7 && now.getHours() < 18) {
+  const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
+  const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
+  document.getElementById('surface-wind-img').src = windImageURL
+  document.getElementById('surface-gust-img').src = gustImageURL
+  document.getElementById('surface-wind-div').style.display = 'block'
+}
+if (now.getHours() >= 7 && now.getHours() < 21) {
+  document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+}
+document.getElementById('hourly-chart').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+document.getElementById('hourly-chart-div').style.display = 'block'
+document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
