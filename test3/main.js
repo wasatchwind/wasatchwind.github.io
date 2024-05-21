@@ -1,6 +1,6 @@
 'use strict';
 const now = new Date()
-let activeNav = 0, navItems = []
+let activeNav = 0, navItems = [], sunset
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -39,15 +39,15 @@ const slider = new KeenSlider('#slider', {
   }
 });
 
-function navOrder(sunsetRaw, sunsetFormatted, tomorrow = new Date()) {
-  sunsetFormatted = new Date(sunsetRaw).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
+function navOrder(sunsetFormatted, tomorrow = new Date()) {
+  sunsetFormatted = new Date(sunset).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   document.getElementById('sunset').innerHTML = sunsetFormatted
   tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate()+1)).toLocaleString('en-us',{weekday:'short'})}+`
   navItems = ['Today', tomorrow, 'Settings', 'GPS', 'Cams', 'Now']
-  if (now.getHours() >= 14 && now.getHours() <= sunsetRaw.slice(11,13)) {
+  if (now.getHours() >= 14 && now.getHours() <= sunset.slice(11,13)) {
     slider.moveToIdx(5, true, { duration: 0 })
   }
-  else if (now.getHours() > sunsetRaw.slice(11,13)) {
+  else if (now.getHours() > sunset.slice(11,13)) {
     slider.moveToIdx(1, true, { duration: 0 })
   }
 };
@@ -60,8 +60,8 @@ function navUpdate (left, right) {
   document.getElementById('topnav-right').innerHTML = navItems[right]
 };
 
-function navSet(data) {
-  navOrder(data)
+function navSet() {
+  navOrder()
   navUpdate(activeNav)
 };
 
@@ -144,21 +144,36 @@ function windMap(data) {
   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
 };
 
-function nwsForecast(data) {
-  console.log(data)
-  console.log('add NWS multi day to tomorrow page')
+function nwsForecast(data, position) {
+  position = data.properties.periods[0].isDaytime ? 0 : 1
+  for (let i=0; i<5; i++) {
+    document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
+    document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
+    document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
+    position += 2
+  }
+  document.getElementById('nws-multiday').style.display = 'block'
 };
 
-if (now.getHours() >= 7 && now.getHours() < 18) {
-  const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
-  const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
-  document.getElementById('surface-wind-img').src = windImageURL
-  document.getElementById('surface-gust-img').src = gustImageURL
-  document.getElementById('surface-wind-div').style.display = 'block'
-}
-if (now.getHours() >= 7 && now.getHours() < 21) {
-  document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
-}
-document.getElementById('hourly-chart').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
-document.getElementById('hourly-chart-div').style.display = 'block'
-document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
+function displayImages() {
+  if (now.getHours() >= 7 && now.getHours() < 18) {
+    const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
+    const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
+    document.getElementById('surface-wind-img').src = windImageURL
+    document.getElementById('surface-gust-img').src = gustImageURL
+    document.getElementById('surface-wind-div').style.display = 'block'
+  }
+  if (now.getHours() >= 7 && now.getHours() < 21) {
+    document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+    document.getElementById('wind-map-div').style.display = 'block'
+  }
+  if (now.getHours() >= sunset.slice(11,13) && now.getHours() <24) {
+    document.getElementById('hourly-chart-tomorrow').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+    document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
+  }
+  else {
+    document.getElementById('hourly-chart-today').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+    document.getElementById('hourly-chart-today-div').style.display = 'block'
+  }
+  document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
+};

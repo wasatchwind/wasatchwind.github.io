@@ -79,7 +79,7 @@
     <!-- END STICKY TOP -->
 
     <!-- MAIN COMPONENT: BODY SLIDER -->
-    <div class="align-items-center d-flex justify-content-between">
+    <div class="align-items-center d-flex justify-content-between mb-div-end">
       <div class="keen-slider" id="slider">
 
         <!-- PAGE 1: TODAY -->
@@ -448,12 +448,12 @@
             </a>
           </div>
 
-          <!-- (3) 48 Hour Chart -->
-          <div class="collapse" id="hourly-chart-div">
+          <!-- (3) 48 Hour Chart (Today) -->
+          <div class="collapse" id="hourly-chart-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
             target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
-              <img class="rounded-4 w-100" id="hourly-chart">
+              <img class="rounded-4 w-100" id="hourly-chart-today">
             </a>
           </div>
 
@@ -481,28 +481,81 @@
             target="_blank">
               <div class="display-3 text-info">NWS Soaring Forecast</div>
               <div class="bg-dark border rounded-4">
-                <div class="font-monospace fs-2 ps-2 text-info text-start" id="soaring-forecast"></div>
+                <div class="font-monospace fs-1 ps-2 text-info text-start" id="soaring-forecast"></div>
               </div>
             </a>
           </div>
 
-          <div class="mb-div-end"></div>
+          <!-- NWS Today Forecast -->
+          <div class="" id="nws-today-div">
+            <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
+              <div class="display-3 text-info" id="forecast-day0-day"></div>
+              <div class="bg-dark overflow-hidden rounded-4">
+                <div class="d-flex">
+                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day0-img">
+                  <div class="col-9">
+                    <div class="fs-1 mx-4 text-info text-start" id="forecast-day0-txt"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
         </div>
         <!-- END PAGE 1: TODAY -->
 
         <!-- PAGE 2: TOMORROW -->
         <div class="keen-slider__slide number-slide2">
 
-          <!-- (1) 48 Hour Chart -->
-          <div class="display-3 text-info">48 Hour Chart</div>
+          <!-- (1) 48 Hour Chart (Tomorrow) -->
+          <div class="collapse" id="hourly-chart-tomorrow-div">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
+            target="_blank">
+              <div class="display-3 text-info">Hourly Forecast Chart</div>
+              <img class="rounded-4 w-100" id="hourly-chart-tomorrow">
+            </a>
+          </div>
 
           <!-- (2) NWS Multiday -->
-          <div class="display-3 text-info">NWS Multiday</div>
+          <div class="collapse" id="nws-multiday">
+            <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
+              <div class="display-3 text-info">Next 3 Days</div>
+              <div class="bg-dark overflow-hidden rounded-4">
+                <div class="d-flex border-bottom border-top">
+                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day1-img">
+                  <div class="col-9">
+                    <div class="display-4" id="forecast-day1-day"></div>
+                    <div class="fs-1 mx-4 text-info text-start" id="forecast-day1-txt"></div>
+                  </div>
+                </div>
+                <div class="d-flex border-bottom border-top">
+                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day2-img">
+                  <div class="col-9">
+                    <div class="display-4" id="forecast-day2-day"></div>
+                    <div class="fs-1 mx-4 text-info text-start" id="forecast-day2-txt"></div>
+                  </div>
+                </div>
+                <div class="d-flex border-bottom border-top">
+                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day3-img">
+                  <div class="col-9">
+                    <div class="display-4" id="forecast-day3-day"></div>
+                    <div class="fs-1 mx-4 text-info text-start" id="forecast-day3-txt"></div>
+                  </div>
+                </div>
+                <div class="d-flex">
+                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day4-img">
+                  <div class="col-9">
+                    <div class="display-4" id="forecast-day4-day"></div>
+                    <div class="fs-1 mx-4 text-info text-start" id="forecast-day4-txt"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
 
           <!-- (3) 24 Hour Wind Aloft -->
           <div class="display-3 text-info">24 Hour Wind Aloft</div>
 
-          <div class="mb-div-end"></div>
         </div>
         <!-- END PAGE 2: TOMORROW -->
 
@@ -512,7 +565,6 @@
           <!-- (1) First Settings Section -->
           <div class="display-3 text-info">First Settings Section</div>
 
-          <div class="mb-div-end"></div>
         </div>
         <!-- END PAGE 3: SETTINGS -->
 
@@ -522,7 +574,6 @@
           <!-- (1) First GPS Section -->
           <div class="display-3 text-info">First GPS Section</div>
 
-          <div class="mb-div-end"></div>
         </div>
         <!-- END PAGE 4: GPS -->
 
@@ -532,7 +583,6 @@
           <!-- (1) First Cams Section -->
           <div class="display-3 text-info">First Cams Section</div>
 
-          <div class="mb-div-end"></div>
         </div>
         <!-- END PAGE 5: CAMS -->
 
@@ -669,11 +719,13 @@
           </div>
 
           <!-- (2) Wind Map -->
-          <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL"
-            target="_blank">
-            <div class="display-3 text-info" id="wind-map-timestamp"></div>
-            <img class="rounded-4 w-100" id="wind-map">
-          </a>
+          <div class="collapse" id="wind-map-div">
+            <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL"
+              target="_blank">
+              <div class="display-3 text-info" id="wind-map-timestamp"></div>
+              <img class="rounded-4 w-100" id="wind-map">
+            </a>
+          </div>
 
           <!-- (3) Wind Station Charts -->
           <!-- Wind Chart Olympus (UTOLY) -->
@@ -1492,9 +1544,6 @@
             <img class="rounded-4 w-100" id="satellite-gif">
           </a>
 
-      <div class="mb-div-end"></div>
-
-          <div class="mb-div-end"></div>
         </div>
         <!-- END PAGE 6: NOW -->
 

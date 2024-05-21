@@ -9,7 +9,9 @@
   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
   const openmeteoData = await (await fetch(openmeteoURL)).json() //LOCAL TESTING
-  navSet(openmeteoData.daily.sunset[0])
+  sunset = openmeteoData.daily.sunset[0]
+  navSet()
+  displayImages()
   const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
   windAloft(openmeteoData.hourly, gcpWindAloftData)
   const soundingData = await (await fetch(soundingURL)).json()
@@ -22,3 +24,6 @@
   const nwsForecastData = await (await fetch(nwsForecastURL)).json()
   nwsForecast(nwsForecastData)
 })();
+
+console.log('remove vertical scroll bar')
+console.log('auto scroll to top when sliding')
