@@ -26,4 +26,3 @@
 })();
 
 console.log('remove vertical scroll bar')
-console.log('auto scroll to top when sliding')
