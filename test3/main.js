@@ -36,6 +36,7 @@ const slider = new KeenSlider('#slider', {
   slideChanged: () => {
     activeNav = slider.track.details.rel
     navUpdate()
+    window.scrollTo(0,0)
   }
 });
 
