@@ -19,6 +19,10 @@ body {
   margin-bottom: -10px;
 }
 
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* LINKS */
 a:link {
   color: white;
