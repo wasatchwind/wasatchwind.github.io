@@ -11,6 +11,7 @@
   const openmeteoData = await (await fetch(openmeteoURL)).json() //LOCAL TESTING
   sunset = openmeteoData.daily.sunset[0]
   navSet()
+  // displayImagesLocal() // LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   displayImages()
   const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
   windAloft(openmeteoData.hourly, gcpWindAloftData)
@@ -26,3 +27,6 @@
 })();
 
 console.log('remove vertical scroll bar')
+console.log('make new zone chart to reflect actual data')
+console.log('tomorrow+ add area forecast discussion?')
+console.log('use fronts graphic? Jetstream graphic')

@@ -153,6 +153,7 @@ function nwsForecast(data, position) {
     document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
     position += 2
   }
+  document.getElementById('nws-today-div').style.display = 'block'
   document.getElementById('nws-multiday').style.display = 'block'
 };
 
@@ -177,4 +178,28 @@ function displayImages() {
     document.getElementById('hourly-chart-today-div').style.display = 'block'
   }
   document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
+};
+
+// LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+function displayImagesLocal() {
+  if (now.getHours() >= 7 && now.getHours() < 18) {
+    const windImageURL = 'images/wind-graphic.png'
+    const gustImageURL = 'images/gust-graphic.png'
+    document.getElementById('surface-wind-img').src = windImageURL
+    document.getElementById('surface-gust-img').src = gustImageURL
+    document.getElementById('surface-wind-div').style.display = 'block'
+  }
+  if (now.getHours() >= 7 && now.getHours() < 21) {
+    document.getElementById('wind-map').src = 'images/wind-map-save.png'
+    document.getElementById('wind-map-div').style.display = 'block'
+  }
+  if (now.getHours() >= sunset.slice(11,13) && now.getHours() <24) {
+    document.getElementById('hourly-chart-tomorrow').src = 'images/Plotter.png'
+    document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
+  }
+  else {
+    document.getElementById('hourly-chart-today').src = 'images/Plotter.png'
+    document.getElementById('hourly-chart-today-div').style.display = 'block'
+  }
+  document.getElementById('satellite-gif').src = 'images/sat.gif'
 };

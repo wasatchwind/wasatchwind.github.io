@@ -86,7 +86,7 @@
         <div class="keen-slider__slide number-slide1">
 
           <!-- (1) Graphical Surface Wind Forecast -->
-          <div class="collapse" id="surface-wind-div">
+          <div class="collapse mb-4" id="surface-wind-div">
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
               <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
               <div class="d-flex fs-1 justify-content-center text-info">
@@ -101,7 +101,7 @@
           </div>
 
           <!-- (2) Wind Aloft Forecast -->
-          <div class="collapse" id="wind-aloft-div">
+          <div class="collapse mb-4" id="wind-aloft-div">
             <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
               <div class="display-3 text-info">Wind Aloft Forecast</div>
               <div class="bg-dark border rounded-4">
@@ -449,7 +449,7 @@
           </div>
 
           <!-- (3) 48 Hour Chart (Today) -->
-          <div class="collapse" id="hourly-chart-today-div">
+          <div class="collapse mb-4" id="hourly-chart-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
             target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
@@ -458,7 +458,7 @@
           </div>
 
           <!-- (4) Hi-Res Sounding D3 Chart -->
-          <div class="collapse" id="hi-res-sounding-div">
+          <div class="collapse mb-4" id="hi-res-sounding-div">
             <div class="display-3 text-info">Hi-Res Sounding</div>
             <div class="bg-dark border rounded-4">
               <a href="https://climate.cod.edu/data/raob/KSLC/skewt/" target="_blank">
@@ -476,7 +476,7 @@
           </div>
 
           <!-- (5) NWS Soaring Forecast -->
-          <div class="collapse" id="nws-soaring-forecast-div">
+          <div class="collapse mb-4" id="nws-soaring-forecast-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1"
             target="_blank">
               <div class="display-3 text-info">NWS Soaring Forecast</div>
@@ -487,16 +487,12 @@
           </div>
 
           <!-- NWS Today Forecast -->
-          <div class="" id="nws-today-div">
+          <div class="collapse" id="nws-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info" id="forecast-day0-day"></div>
-              <div class="bg-dark overflow-hidden rounded-4">
-                <div class="d-flex">
-                  <img class="align-self-center border border-dark col-3 rounded-4" id="forecast-day0-img">
-                  <div class="col-9">
-                    <div class="display-5 mx-4 text-info text-start" id="forecast-day0-txt"></div>
-                  </div>
-                </div>
+              <div class="bg-dark border d-flex rounded-4">
+                <img class="align-self-center col-3 rounded-4" id="forecast-day0-img">
+                <div class="col font-monospace fs-1 ms-2 text-info text-start" id="forecast-day0-txt"></div>
               </div>
             </a>
           </div>
