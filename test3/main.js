@@ -106,7 +106,7 @@ function openmeteoWindAloft(data, redlimit = 22) {
 
 function gcpWindAloft(data) {
   const forecastEndRaw = data.forecast_06h.end_time < data.forecast_06h.start_time ? data.forecast_06h.end_time + 24 : data.forecast_06h.end_time
-  const gridEndTime = 18//now.getHours() + 6 //LOCAL TESTING
+  const gridEndTime = now.getHours() + 6
   const timezoneOffset = now.getTimezoneOffset() / 60
   const forecastEndTime = forecastEndRaw < 6 ? forecastEndRaw + timezoneOffset + 12 : forecastEndRaw - timezoneOffset
   const breakpoint = 6 - (gridEndTime - forecastEndTime)
