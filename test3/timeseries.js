@@ -7,6 +7,7 @@ function timeSeries(data) { // Loop through all stations with data to build wind
     const kslcData = data.STATION[0].OBSERVATIONS
     zone(kslcData.altimeter_set_1, kslcData.air_temp_set_1)
   }
+  document.getElementById('wind-charts-div').style.display = 'block'
 }
 
 function windChart(stid, data) {

@@ -153,8 +153,10 @@ function nwsForecast(data, position) {
     document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
     position += 2
   }
-  document.getElementById('nws-today-div').style.display = 'block'
-  document.getElementById('nws-multiday').style.display = 'block'
+  if (now.getHours() >= 7 && now.getHours() < 20) {
+    document.getElementById('nws-today-div').style.display = 'block'
+  }
+  document.getElementById('nws-multiday-div').style.display = 'block'
 };
 
 function displayImages() {
@@ -178,6 +180,9 @@ function displayImages() {
     document.getElementById('hourly-chart-today-div').style.display = 'block'
   }
   document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
+  document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg'
+  document.getElementById('cam-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg'
+  document.getElementById('cam-east').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
 };
 
 // LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -202,4 +207,7 @@ function displayImagesLocal() {
     document.getElementById('hourly-chart-today-div').style.display = 'block'
   }
   document.getElementById('satellite-gif').src = 'images/sat.gif'
+  document.getElementById('cam-south').src = 'images/cam.png'
+  document.getElementById('cam-west').src = 'images/cam.png'
+  document.getElementById('cam-east').src = 'images/cam.png'
 };
