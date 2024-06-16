@@ -1,6 +1,7 @@
 'use strict';
 const now = new Date()
-let activeNav = 0, navItems = [], sunset
+const timezoneOffset = now.getTimezoneOffset() / 60
+let activeNav = 0, navItems = [], sunset, marqueeSpeed = 800
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -20,7 +21,7 @@ function toggleWindChart(div) {
 };
 
 // Marquee slider (https://keen-slider.io/docs)
-const animation = { duration: 800, easing: (t) => t }
+const animation = { duration: marqueeSpeed, easing: (t) => t }
 const marquee = new KeenSlider("#marquee", {
   loop: true,
   slides: { perView: 4 },
@@ -77,7 +78,7 @@ function openmeteoWindAloft(data, redlimit = 22) {
   delete (data['winddirection_surfac'] = data['wind_direction_10m'], data)['wind_direction_10m']
   for (const [key, value] of Object.entries(data)) {
     if (key.slice(0,12) === 'geopotential') {
-      document.getElementById(key).innerHTML = Math.round(value[0]*3.28084).toLocaleString()
+      document.getElementById(key).innerHTML = Math.round(value[0] * 3.28084).toLocaleString()
     }
     if (key.slice(0,13) === 'winddirection') {
       for (let i=0; i<6; i++) {
@@ -107,7 +108,6 @@ function openmeteoWindAloft(data, redlimit = 22) {
 function gcpWindAloft(data) {
   const forecastEndRaw = data.forecast_06h.end_time < data.forecast_06h.start_time ? data.forecast_06h.end_time + 24 : data.forecast_06h.end_time
   const gridEndTime = now.getHours() + 6
-  const timezoneOffset = now.getTimezoneOffset() / 60
   const forecastEndTime = forecastEndRaw < 6 ? forecastEndRaw + timezoneOffset + 12 : forecastEndRaw - timezoneOffset
   const breakpoint = 6 - (gridEndTime - forecastEndTime)
   for (let i=0; i<6; i++) {
@@ -116,6 +116,10 @@ function gcpWindAloft(data) {
     }
     else gcpWindAloftRows(i, data.forecast_12h.wind_speed, data.forecast_12h.wind_direction)
   }
+  const longtermStartTime = data.forecast_24h.start_time - 6
+  const longtermEndTime = Math.abs(data.forecast_24h.end_time - 6)
+  document.getElementById('wind-aloft-time-longterm').innerHTML = `Wind Aloft ${longtermStartTime}am - ${longtermEndTime}pm`
+  gcpWindAloftRows('longterm', data.forecast_24h.wind_speed, data.forecast_24h.wind_direction)
 };
 
 function gcpWindAloftRows (i, windspeed, winddirection, redlimit = 22, accelerator = 0) {
@@ -159,19 +163,33 @@ function nwsForecast(data, position) {
   document.getElementById('nws-multiday-div').style.display = 'block'
 };
 
+function areaForecast(text) {
+  const dateStart = text.search(/\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]\s/)
+  const dateEnd = text.search(/\s\d{1,2}\s202\d{1}\n/) + 7
+  const forecastDate = text.slice(dateStart, dateEnd)
+  const synopsisStart = text.search(/[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/) + 11
+  const synopsisEnd = text.search(/&&\n\n\./)
+  const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
+  const aviationStart = text.search(/[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]\.{3}KSLC\.{3}/) + 18
+  const aviationEnd = text.search(/\n\n\.[Rr][Ee][Ss][Tt]|\n\n[Rr][Ee][Ss][Tt]/)
+  const aviation = text.slice(aviationStart, aviationEnd).replace(/\n/g, ' ')
+  document.getElementById('area-forecast-time').innerText = forecastDate
+  document.getElementById('area-forecast-synopsis').innerText = synopsis
+  document.getElementById('area-forecast-aviation').innerText = aviation
+  document.getElementById('area-forecast-div').style.display = 'block'
+  document.getElementById('area-forecast-aviation-div').style.display = 'block'
+}
+
 function displayImages() {
-  if (now.getHours() >= 7 && now.getHours() < 18) {
+  // displayImagesLocal() // LOCAL TESTING TOGGLE FLAG
+  if (now.getHours() >= 6 && now.getHours() < 18) {
     const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
     const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
     document.getElementById('surface-wind-img').src = windImageURL
     document.getElementById('surface-gust-img').src = gustImageURL
     document.getElementById('surface-wind-div').style.display = 'block'
   }
-  if (now.getHours() >= 7 && now.getHours() < 21) {
-    document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
-    document.getElementById('wind-map-div').style.display = 'block'
-  }
-  if (now.getHours() >= sunset.slice(11,13) && now.getHours() <24) {
+  if (now.getHours() >= sunset.slice(11,13) && now.getHours() < 24) {
     document.getElementById('hourly-chart-tomorrow').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
     document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
   }
@@ -179,6 +197,7 @@ function displayImages() {
     document.getElementById('hourly-chart-today').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
     document.getElementById('hourly-chart-today-div').style.display = 'block'
   }
+  document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
   document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
   document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg'
   document.getElementById('cam-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg'
@@ -187,18 +206,14 @@ function displayImages() {
 
 // LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function displayImagesLocal() {
-  if (now.getHours() >= 7 && now.getHours() < 18) {
+  if (now.getHours() >= 6 && now.getHours() < 18) {
     const windImageURL = 'images/wind-graphic.png'
     const gustImageURL = 'images/gust-graphic.png'
     document.getElementById('surface-wind-img').src = windImageURL
     document.getElementById('surface-gust-img').src = gustImageURL
     document.getElementById('surface-wind-div').style.display = 'block'
   }
-  if (now.getHours() >= 7 && now.getHours() < 21) {
-    document.getElementById('wind-map').src = 'images/wind-map-save.png'
-    document.getElementById('wind-map-div').style.display = 'block'
-  }
-  if (now.getHours() >= sunset.slice(11,13) && now.getHours() <24) {
+  if (now.getHours() >= sunset.slice(11,13) && now.getHours() < 24) {
     document.getElementById('hourly-chart-tomorrow').src = 'images/Plotter.png'
     document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
   }
@@ -206,6 +221,7 @@ function displayImagesLocal() {
     document.getElementById('hourly-chart-today').src = 'images/Plotter.png'
     document.getElementById('hourly-chart-today-div').style.display = 'block'
   }
+  document.getElementById('wind-map').src = 'images/wind-map-save.png'
   document.getElementById('satellite-gif').src = 'images/sat.gif'
   document.getElementById('cam-south').src = 'images/cam.png'
   document.getElementById('cam-west').src = 'images/cam.png'

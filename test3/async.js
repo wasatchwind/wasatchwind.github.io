@@ -8,10 +8,10 @@
   const timeSeriesURL = 'https://api.synopticdata.com/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=720&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=f8258474e4a348ceb3192e4d205f71da'
   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
+  const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1&glossary=0'
   const openmeteoData = await (await fetch(openmeteoURL)).json() //LOCAL TESTING
   sunset = openmeteoData.daily.sunset[0]
   navSet()
-  // displayImagesLocal() // LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   displayImages()
   const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
   windAloft(openmeteoData.hourly, gcpWindAloftData)
@@ -24,13 +24,15 @@
   windMap(windMapData)
   const nwsForecastData = await (await fetch(nwsForecastURL)).json()
   nwsForecast(nwsForecastData)
+  const areaForecastText = await (await fetch(areaForecastURL)).text()
+  areaForecast(areaForecastText)
 })();
 
-console.log('remove vertical scroll bar')
-console.log('make new zone chart to reflect actual data')
-console.log('tomorrow+ add area forecast discussion?')
-console.log('use fronts graphic? Jetstream graphic')
-console.log('unused data? gcp wind aloft temps, etc.')
-console.log('See when NWS daily forecast changes on Today, currently set to display until 8pm')
-console.log('change when wind map screenshot shows or not (nice to be able to click on it even if not current')
-console.log('show wind stations that are down but with an error')
+// console.log('make new zone chart to reflect actual data')
+// console.log('use fronts graphic? Jetstream graphic')
+// console.log('unused data? gcp wind aloft temps, etc.')
+// console.log('See when NWS daily forecast changes on Today, currently set to display until 8pm')
+// console.log('change when wind map screenshot shows or not (nice to be able to click on it even if not current')
+// console.log('show wind stations that are down but with an error')
+// Pressure forecast? History?
+// Today/Tomorrow NWS missing a day when late in the day

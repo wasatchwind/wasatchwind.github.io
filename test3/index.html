@@ -477,22 +477,31 @@
 
           <!-- (5) NWS Soaring Forecast -->
           <div class="collapse mb-4" id="nws-soaring-forecast-div">
-            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1"
-            target="_blank">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
               <div class="display-3 text-info">NWS Soaring Forecast</div>
               <div class="bg-dark border rounded-4">
-                <div class="font-monospace fs-1 ps-2 text-info text-start" id="soaring-forecast"></div>
+                <div class="display-6 font-monospace ps-2 text-start" id="soaring-forecast"></div>
               </div>
             </a>
           </div>
 
-          <!-- NWS Today Forecast -->
+          <!-- (6) Area Forecast Discussion: Aviation -->
+          <div class="collapse mb-4" id="area-forecast-aviation-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">Aviation Forecast</div>
+              <div class="bg-dark border fs-1 ps-2 rounded-4 text-start">
+                <div id="area-forecast-aviation"></div>
+              </div>
+            </a>
+          </div>
+
+          <!-- (7) NWS Today Forecast -->
           <div class="collapse mb-4" id="nws-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info" id="forecast-day0-day"></div>
-              <div class="bg-dark border d-flex rounded-4">
+              <div class="bg-dark border d-flex rounded-4 text-start">
                 <img class="align-self-start col-3 rounded-4" id="forecast-day0-img">
-                <div class="col font-monospace fs-1 ms-2 text-info text-start" id="forecast-day0-txt"></div>
+                <div class="col fs-1 ms-2" id="forecast-day0-txt"></div>
               </div>
             </a>
           </div>
@@ -519,38 +528,71 @@
               <div class="bg-dark border rounded-4">
                 <div class="d-flex border-bottom">
                   <img class="align-self-start col-3 rounded-4" id="forecast-day1-img">
-                  <div class="col ms-2">
-                    <div class="display-4" id="forecast-day1-day"></div>
-                    <div class="font-monospace fs-1 text-info text-start" id="forecast-day1-txt"></div>
+                  <div class="col fs-1 ms-2">
+                    <div class="text-decoration-underline" id="forecast-day1-day"></div>
+                    <div class="text-start" id="forecast-day1-txt"></div>
                   </div>
                 </div>
                 <div class="d-flex border-bottom">
                   <img class="align-self-start col-3 rounded-4" id="forecast-day2-img">
-                  <div class="col ms-2">
-                    <div class="display-4" id="forecast-day2-day"></div>
-                    <div class="font-monospace fs-1 text-info text-start" id="forecast-day2-txt"></div>
+                  <div class="col fs-1 ms-2">
+                    <div class="text-decoration-underline" id="forecast-day2-day"></div>
+                    <div class="text-start" id="forecast-day2-txt"></div>
                   </div>
                 </div>
                 <div class="d-flex border-bottom">
                   <img class="align-self-start col-3 rounded-4" id="forecast-day3-img">
-                  <div class="col ms-2">
-                    <div class="display-4" id="forecast-day3-day"></div>
-                    <div class="font-monospace fs-1 text-info text-start" id="forecast-day3-txt"></div>
+                  <div class="col fs-1 ms-2">
+                    <div class="text-decoration-underline" id="forecast-day3-day"></div>
+                    <div class="text-start" id="forecast-day3-txt"></div>
                   </div>
                 </div>
                 <div class="d-flex">
                   <img class="align-self-start col-3 rounded-4" id="forecast-day4-img">
-                  <div class="col ms-2">
-                    <div class="display-4" id="forecast-day4-day"></div>
-                    <div class="font-monospace fs-1 text-info text-start" id="forecast-day4-txt"></div>
+                  <div class="col fs-1 ms-2">
+                    <div class="text-decoration-underline" id="forecast-day4-day"></div>
+                    <div class="text-start" id="forecast-day4-txt"></div>
                   </div>
                 </div>
               </div>
             </a>
           </div>
 
-          <!-- (3) 24 Hour Wind Aloft -->
-          <div class="display-3 text-info">24 Hour Wind Aloft</div>
+          <!-- (3) Area Forecast Discussion -->
+          <div class="collapse mb-4" id="area-forecast-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">Area Forecast Discusson</div>
+              <div class="bg-dark border fs-1 ps-2 rounded-4 text-start">
+                <div id="area-forecast-time"></div>
+                <br>
+                <div id="area-forecast-synopsis"></div>
+              </div>
+            </a>
+          </div>
+
+          <!-- (4) 24 Long Term Hour Wind Aloft -->
+          <div class="mb-4" id="wind-aloft-longterm-div">
+            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
+              <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
+              <div class="bg-dark border rounded-4">
+                <div class="align-items-center d-flex display-3 justify-content-center" id="18k-longterm">
+                  <div class="col-3">18000</div>
+                  <img class="col-1" id="winddirection_altitude_18k-longterm">
+                  <div class="col-2 fw-semibold" id="windspeed_altitude_18k-longterm"></div>
+                </div>
+                <div class="align-items-center d-flex display-3 justify-content-center" id="12k-longterm">
+                  <div class="col-3">12000</div>
+                  <img class="col-1" id="winddirection_altitude_12k-longterm">
+                  <div class="col-2 fw-semibold" id="windspeed_altitude_12k-longterm"></div>
+                </div>
+                <div class="align-items-center d-flex display-3 justify-content-center" id="09k-longterm">
+                  <div class="col-3">9000</div>
+                  <img class="col-1" id="winddirection_altitude_09k-longterm">
+                  <div class="col-2 fw-semibold" id="windspeed_altitude_09k-longterm"></div>
+                </div>
+              </div>
+            </a>
+          </div>
 
         </div>
         <!-- END PAGE 2: TOMORROW -->
@@ -749,13 +791,11 @@
           </div>
 
           <!-- (2) Wind Map -->
-          <div class="collapse mb-4" id="wind-map-div">
-            <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL"
-              target="_blank">
-              <div class="display-3 text-info" id="wind-map-timestamp"></div>
-              <img class="rounded-4 w-100" id="wind-map">
-            </a>
-          </div>
+          <a href="https://www.wrh.noaa.gov/map/?&zoom=10&center=40.65,-111.90&obs=true&obs_type=weather&elements=wind,gust&obs_density=10&&obs_popup=false&obs_provider=ALL"
+            target="_blank">
+            <div class="display-3 text-info" id="wind-map-timestamp"></div>
+            <img class="rounded-4 w-100" id="wind-map">
+          </a>
 
           <!-- (3) Wind Station Charts -->
           <div class="collapse mb-4" id="wind-charts-div">
@@ -1584,7 +1624,7 @@
     </div>
     <!-- END MAIN BODY SLIDER -->
 
-    <script src="tests.js"></script>
+    <!-- <script src="tests.js"></script> -->
     <script src="keen-slider.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="main.js"></script>
