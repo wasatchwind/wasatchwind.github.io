@@ -12,6 +12,7 @@
   const openmeteoData = await (await fetch(openmeteoURL)).json() //LOCAL TESTING
   sunset = openmeteoData.daily.sunset[0]
   navSet()
+  // displayImagesLocal() // !!!!!!!!!!!!! ONLY FOR LOCAL TESTING
   displayImages()
   const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
   windAloft(openmeteoData.hourly, gcpWindAloftData)
@@ -36,3 +37,4 @@
 // console.log('show wind stations that are down but with an error')
 // Pressure forecast? History?
 // Today/Tomorrow NWS missing a day when late in the day
+// Alternate temps on hi res sounding don't work

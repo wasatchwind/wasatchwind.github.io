@@ -181,7 +181,6 @@ function areaForecast(text) {
 }
 
 function displayImages() {
-  // displayImagesLocal() // LOCAL TESTING TOGGLE FLAG
   if (now.getHours() >= 6 && now.getHours() < 18) {
     const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
     const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'

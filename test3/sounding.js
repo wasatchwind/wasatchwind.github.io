@@ -75,7 +75,7 @@ function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {
     params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
   }
 
-  // Now find top of lift (thermal index is 0)
+  // Now find top of lift (where thermal index is 0)
   try {
     while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
     interpolateX1 = data[position].Temp_c
@@ -279,11 +279,14 @@ function d3Update(userLiftParams) {
     outOfRange(userTemp)
     return
   }
-  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) outOfRange(userTemp)
-  else {
+  // if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) {
+  //   console.log(userLiftParams)
+  //   outOfRange(userTemp)
+  // }
+  // else {
     clearChart()
     drawDALRParams(userTemp, userLiftParams)
-  }
+  // }
 };
 
 function outOfRange(userTemp) {
