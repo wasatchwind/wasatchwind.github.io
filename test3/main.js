@@ -105,7 +105,7 @@ function openmeteoWindAloft(data, redlimit = 22) {
   }
 };
 
-function gcpWindAloft(data) {
+function gcpWindAloft(data, longtermStartTime, longtermEndTime) {
   const forecastEndRaw = data.forecast_06h.end_time < data.forecast_06h.start_time ? data.forecast_06h.end_time + 24 : data.forecast_06h.end_time
   const gridEndTime = now.getHours() + 6
   const forecastEndTime = forecastEndRaw < 6 ? forecastEndRaw + timezoneOffset + 12 : forecastEndRaw - timezoneOffset
@@ -116,9 +116,13 @@ function gcpWindAloft(data) {
     }
     else gcpWindAloftRows(i, data.forecast_12h.wind_speed, data.forecast_12h.wind_direction)
   }
-  const longtermStartTime = data.forecast_24h.start_time - 6
-  const longtermEndTime = Math.abs(data.forecast_24h.end_time - 6)
-  document.getElementById('wind-aloft-time-longterm').innerHTML = `Wind Aloft ${longtermStartTime}am - ${longtermEndTime}pm`
+  if (data.forecast_24h.start_time - 6 === 0) longtermStartTime = 'Midnight'
+  else if (data.forecast_24h.start_time - 6 === 12) longtermStartTime = 'Noon'
+  else longtermStartTime = `${data.forecast_24h.start_time-6}am`
+  if (data.forecast_24h.end_time - 6 === 0) longtermEndTime = 'Midnight'
+  else if (data.forecast_24h.end_time - 6 === 12) longtermEndTime = 'Noon'
+  else longtermEndTime = `${data.forecast_24h.end_time-6}pm`
+  document.getElementById('wind-aloft-time-longterm').innerHTML = `Wind Aloft ${longtermStartTime} - ${longtermEndTime}`
   gcpWindAloftRows('longterm', data.forecast_24h.wind_speed, data.forecast_24h.wind_direction)
 };
 
