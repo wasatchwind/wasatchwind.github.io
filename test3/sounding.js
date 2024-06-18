@@ -279,14 +279,13 @@ function d3Update(userLiftParams) {
     outOfRange(userTemp)
     return
   }
-  // if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) {
-  //   console.log(userLiftParams)
-  //   outOfRange(userTemp)
-  // }
-  // else {
+  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) {
+    outOfRange(userTemp)
+  }
+  else {
     clearChart()
     drawDALRParams(userTemp, userLiftParams)
-  // }
+  }
 };
 
 function outOfRange(userTemp) {

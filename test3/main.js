@@ -1,7 +1,7 @@
 'use strict';
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
-let activeNav = 0, navItems = [], sunset, marqueeSpeed = 800
+let activeNav = 0, navItems = [], sunset, marqueeSpeed = 800, soundingData
 
 function reload() {
   history.scrollRestoration = 'manual'

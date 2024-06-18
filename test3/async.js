@@ -16,7 +16,7 @@
   displayImages()
   const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
   windAloft(openmeteoData.hourly, gcpWindAloftData)
-  const soundingData = await (await fetch(soundingURL)).json()
+  soundingData = await (await fetch(soundingURL)).json()
   const soaringForecastText = await (await fetch(soaringForecastURL)).text()
   sounding(soundingData, soaringForecastText)  
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
