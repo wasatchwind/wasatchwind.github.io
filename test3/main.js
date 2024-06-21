@@ -121,7 +121,7 @@ function gcpWindAloft(data, longtermStartTime, longtermEndTime) {
   else longtermStartTime = `${data.forecast_24h.start_time-6}am`
   if (data.forecast_24h.end_time - 6 === 0) longtermEndTime = 'Midnight'
   else if (data.forecast_24h.end_time - 6 === 12) longtermEndTime = 'Noon'
-  else longtermEndTime = `${data.forecast_24h.end_time-6}pm`
+  else longtermEndTime = `${Math.abs(data.forecast_24h.end_time - 6)}pm`
   document.getElementById('wind-aloft-time-longterm').innerHTML = `Wind Aloft ${longtermStartTime} - ${longtermEndTime}`
   gcpWindAloftRows('longterm', data.forecast_24h.wind_speed, data.forecast_24h.wind_direction)
 };
