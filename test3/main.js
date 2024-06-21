@@ -183,7 +183,7 @@ function areaForecast(text) {
   const dateEnd = text.search(/\s\d{1,2}\s202\d{1}\n/) + 7
   const forecastDate = text.slice(dateStart, dateEnd)
   const synopsisStart = text.search(/[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/) + 11
-  const synopsisEnd = text.search(/&&\n\n\./)
+  const synopsisEnd = text.search(/&&/)
   const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
   const aviationStart = text.search(/[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]\.{3}KSLC\.{3}/) + 18
   const aviationEnd = text.search(/\n\n\.[Rr][Ee][Ss][Tt]|\n\n[Rr][Ee][Ss][Tt]/)
