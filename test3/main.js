@@ -116,9 +116,10 @@ function gcpWindAloft(data, longtermStartTime, longtermEndTime) {
     }
     else gcpWindAloftRows(i, data.forecast_12h.wind_speed, data.forecast_12h.wind_direction)
   }
+  // Refactor this avoid DRY
   if (data.forecast_24h.start_time - 6 === 0) longtermStartTime = 'Midnight'
   else if (data.forecast_24h.start_time - 6 === 12) longtermStartTime = 'Noon'
-  else longtermStartTime = `${data.forecast_24h.start_time-6}am`
+  else longtermStartTime = `${data.forecast_24h.start_time - 6}am`
   if (data.forecast_24h.end_time - 6 === 0) longtermEndTime = 'Midnight'
   else if (data.forecast_24h.end_time - 6 === 12) longtermEndTime = 'Noon'
   else longtermEndTime = `${Math.abs(data.forecast_24h.end_time - 6)}pm`
@@ -156,14 +157,24 @@ function windMap(data) {
 function nwsForecast(data, position) {
   position = data.properties.periods[0].isDaytime ? 0 : 1
   for (let i=0; i<5; i++) {
-    document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
-    document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
-    document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
+    if (i === 0) {
+      for (let j=0; j<2; j++) {
+        document.getElementsByClassName(`forecast-day${i}-day`)[j].innerHTML = data.properties.periods[position].name
+        document.getElementsByClassName(`forecast-day${i}-txt`)[j].innerHTML = data.properties.periods[position].detailedForecast
+        document.getElementsByClassName(`forecast-day${i}-img`)[j].src = `https://api.weather.gov${data.properties.periods[position].icon}`
+      }
+    }
+    else {
+      document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
+      document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
+      document.getElementById(`forecast-day${i}-img`).src = `https://api.weather.gov${data.properties.periods[position].icon}`
+    }
     position += 2
   }
-  if (now.getHours() >= 7 && now.getHours() < 20) {
+  if (now.getHours() >= 5 && now.getHours() < 19) {
     document.getElementById('nws-today-div').style.display = 'block'
   }
+  if (now.getHours() >= 19) document.getElementById('nws-today-multiday-div').style.display = 'block'
   document.getElementById('nws-multiday-div').style.display = 'block'
 };
 
