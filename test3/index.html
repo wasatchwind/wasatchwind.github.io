@@ -468,8 +468,7 @@
               <div class="collapse display-6 text-info" id="out-of-range"></div>
               <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
                 <div onclick="d3Update()">Enter</div>
-                <input class="bg-dark border border-2 border-warning fw-bold rounded-4 text-center text-warning" type="number"
-                  min="0" max="110" id="user-temp">
+                <input class="bg-dark border border-2 border-warning fw-bold rounded-4 text-center text-warning" type="number" min="0" max="110" id="user-temp">
                 <div onclick="d3Clear()">Clear</div>
               </div>
             </div>
@@ -611,7 +610,14 @@
         <div class="keen-slider__slide number-slide3 pe-2">
 
           <!-- (1) First Settings Section -->
-          <div class="display-3 text-info">Marquee Speed</div>
+          <div class="border-bottom d-flex justify-content-between">
+            <div class="display-3 text-info">Marquee Speed</div>
+            <div class="col-6 display-6 d-flex justify-content-around my-2">
+              <div id="marquee-1100" onclick="marqueeSetSpeed(1100)">Slow</div>
+              <div id="marquee-800" onclick="marqueeSetSpeed(800)">Medium</div>
+              <div id="marquee-500" onclick="marqueeSetSpeed(500)">Fast</div>
+            </div>
+          </div>
 
         </div>
         <!-- END PAGE 3: SETTINGS -->
@@ -809,7 +815,7 @@
           <div class="collapse mb-4" id="wind-charts-div">
 
             <!-- Wind Chart Olympus (UTOLY) -->
-            <div class="collapse" id="UTOLY-main">
+            <div id="UTOLY-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="UTOLY-toggle" onclick="toggleWindChart('UTOLY')">
@@ -817,7 +823,7 @@
                   <div class="display-3 text-info mx-4">Olympus Cove</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="UTOLY-time-12"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="UTOLY-time-12">No Data</div>
                   <div class="col-2 display-4" id="UTOLY-wdir-12"></div>
                   <div class="col-2 display-4 fw-semibold" id="UTOLY-wspd-12"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="UTOLY-gust-12"></div>
@@ -954,7 +960,7 @@
             </div>
 
             <!-- Wind Chart Alta Baldy (AMB) -->
-            <div class="collapse" id="AMB-main">
+            <div id="AMB-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="AMB-toggle" onclick="toggleWindChart('AMB')">&#43;
@@ -962,7 +968,7 @@
                   <div class="display-3 text-info mx-4">Alta Baldy</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="AMB-time-6"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="AMB-time-6">No Data</div>
                   <div class="col-2 display-4" id="AMB-wdir-6"></div>
                   <div class="col-2 display-4 fw-semibold" id="AMB-wspd-6"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="AMB-gust-6"></div>
@@ -1039,7 +1045,7 @@
             </div>
 
             <!-- Wind Chart Airport 2 (KU42) -->
-            <div class="collapse" id="KU42-main">
+            <div id="KU42-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="KU42-toggle" onclick="toggleWindChart('KU42')">
@@ -1047,7 +1053,7 @@
                   <div class="display-3 text-info mx-4">Airport 2</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="KU42-time-12"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="KU42-time-12">No Data</div>
                   <div class="col-2 display-4" id="KU42-wdir-12"></div>
                   <div class="col-2 display-4 fw-semibold" id="KU42-wspd-12"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="KU42-gust-12"></div>
@@ -1184,7 +1190,7 @@
             </div>
 
             <!-- Wind Chart Northside (HF012) -->
-            <div class="collapse" id="HF012-main">
+            <div id="HF012-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="HF012-toggle" onclick="toggleWindChart('HF012')">
@@ -1192,7 +1198,7 @@
                   <div class="display-3 text-info mx-4">Northside</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="HF012-time-12"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="HF012-time-12">No Data</div>
                   <div class="col-2 display-4" id="HF012-wdir-12"></div>
                   <div class="col-2 display-4 fw-semibold" id="HF012-wspd-12"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="HF012-gust-12"></div>
@@ -1329,7 +1335,7 @@
             </div>
 
             <!-- Wind Chart Southside (FPS) -->
-            <div class="collapse" id="FPS-main">
+            <div id="FPS-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="FPS-toggle" onclick="toggleWindChart('FPS')">&#43;
@@ -1337,7 +1343,7 @@
                   <div class="display-3 text-info mx-4">Southside</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="FPS-time-12"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="FPS-time-12">No Data</div>
                   <div class="col-2 display-4" id="FPS-wdir-12"></div>
                   <div class="col-2 display-4 fw-semibold" id="FPS-wspd-12"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="FPS-gust-12"></div>
@@ -1474,7 +1480,7 @@
             </div>
 
             <!-- Wind Chart Ogden Peak (OGP) -->
-            <div class="collapse" id="OGP-main">
+            <div id="OGP-main">
               <div class="align-items-end d-flex justify-content-between">
                 <div class="d-flex align-items-end">
                   <div class="align-self-center display-1 text-warning" id="OGP-toggle" onclick="toggleWindChart('OGP')">&#43;
@@ -1482,7 +1488,7 @@
                   <div class="display-3 text-info mx-4">Ogden Peak</div>
                 </div>
                 <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="OGP-time-12"></div>
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="OGP-time-12">No Data</div>
                   <div class="col-2 display-4" id="OGP-wdir-12"></div>
                   <div class="col-2 display-4 fw-semibold" id="OGP-wspd-12"></div>
                   <div class="col-2 display-6 fw-semibold gust-color" id="OGP-gust-12"></div>

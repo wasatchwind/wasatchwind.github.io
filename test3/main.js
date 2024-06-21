@@ -1,7 +1,24 @@
 'use strict';
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
-let activeNav = 0, navItems = [], sunset, marqueeSpeed = 800, soundingData
+let activeNav = 0, navItems = [], sunset, marqueeSpeed, soundingData
+
+//refactor this!!!!!!!!!!?
+function getCookie(marqueeSpeed) {
+ let name = marqueeSpeed + '='
+ let decodedCookie = decodeURIComponent(document.cookie)
+ let cookieArray = decodedCookie.split(';')
+ for (let i=0; i<cookieArray.length; i++) {
+  let cookie = cookieArray[i]
+  while (cookie.charAt(0) == ' ') {
+    cookie = cookie.substring(1)
+  }
+  if (cookie.indexOf(name) == 0) {
+    return cookie.substring(name.length, cookie.length)
+  }
+ }
+ return 800
+}
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -21,14 +38,28 @@ function toggleWindChart(div) {
 };
 
 // Marquee slider (https://keen-slider.io/docs)
-const animation = { duration: marqueeSpeed, easing: (t) => t }
-const marquee = new KeenSlider("#marquee", {
-  loop: true,
-  slides: { perView: 4 },
-  created(m) { m.moveToIdx(1, true, animation) },
-  updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
-  animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
-});
+function buildMarquee() {
+  marqueeSpeed = getCookie('marqueeSpeed')
+  const animation = { duration: marqueeSpeed, easing: (t) => t }
+  const marquee = new KeenSlider("#marquee", {
+    loop: true,
+    slides: { perView: 4 },
+    created(m) { m.moveToIdx(1, true, animation) },
+    updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
+    animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
+  })
+};
+
+function marqueeSetSpeed(speed) {
+  document.getElementById('marquee-1100').className = 'bg-dark border fw-normal px-4 rounded-5'
+  document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5'
+  document.getElementById('marquee-500').className = 'bg-dark border fw-normal px-4 rounded-5'
+  document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5'
+  if (speed === 1100) document.cookie = 'marqueeSpeed=1100'
+  if (speed === 800) document.cookie = 'marqueeSpeed=800'
+  if (speed === 500) document.cookie = 'marqueeSpeed=500'
+  buildMarquee()
+};
 
 // Menu navigation carousel/slider (https://keen-slider.io/docs)
 const slider = new KeenSlider('#slider', {
@@ -193,7 +224,10 @@ function areaForecast(text) {
   document.getElementById('area-forecast-aviation').innerText = aviation
   document.getElementById('area-forecast-div').style.display = 'block'
   document.getElementById('area-forecast-aviation-div').style.display = 'block'
-}
+};
+
+buildMarquee()
+marqueeSetSpeed(marqueeSpeed)
 
 function displayImages() {
   if (now.getHours() >= 6 && now.getHours() < 18) {
