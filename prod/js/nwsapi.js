@@ -22,7 +22,7 @@ function nwsForecastProcess(data) {
     for (let i=0; i<3; i++) {
         document.getElementById(`forecast-day${i}-day`).innerHTML = data.properties.periods[position].name
         document.getElementById(`forecast-day${i}-txt`).innerHTML = data.properties.periods[position].detailedForecast
-        document.getElementById(`forecast-day${i}-img`).src = data.properties.periods[position].icon
+        document.getElementById(`forecast-day${i}-img`).src = `https://api.weather.gov${data.properties.periods[position].icon}`
         position += 2
     }
     document.getElementById('forecast-icon').src = data.properties.periods[0].icon
