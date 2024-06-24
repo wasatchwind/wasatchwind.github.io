@@ -52,14 +52,14 @@ function buildMarquee() {
 };
 
 function marqueeSetSpeed(speed) {
-  document.getElementById('marquee-1100').className = 'bg-dark border fw-normal px-4 rounded-5'
+  document.getElementById('marquee-1200').className = 'bg-dark border fw-normal px-4 rounded-5'
   document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5'
-  document.getElementById('marquee-500').className = 'bg-dark border fw-normal px-4 rounded-5'
+  document.getElementById('marquee-400').className = 'bg-dark border fw-normal px-4 rounded-5'
   document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5'
   const cookieExpiry = 'max-age=31536000; path=/'
-  if (speed === 1100) document.cookie = 'marqueeSpeed=1100; ' + cookieExpiry
+  if (speed === 1200) document.cookie = 'marqueeSpeed=1200; ' + cookieExpiry
   if (speed === 800) document.cookie = 'marqueeSpeed=800; ' + cookieExpiry
-  if (speed === 500) document.cookie = 'marqueeSpeed=500; ' + cookieExpiry
+  if (speed === 400) document.cookie = 'marqueeSpeed=400; ' + cookieExpiry
   buildMarquee()
 };
 
