@@ -1,7 +1,7 @@
 'use strict';
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
-let activeNav = 0, navItems = [], sunset, marqueeSpeed//, soundingData
+let activeNav = 0, navItems = [], sunset, marqueeSpeed, soundingData
 console.log('marquee speed cookie: ', getCookie('marqueeSpeed'))
 
 //refactor this!!!!!!!!!!?
