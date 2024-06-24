@@ -1,7 +1,8 @@
 'use strict';
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
-let activeNav = 0, navItems = [], sunset, marqueeSpeed, soundingData
+let activeNav = 0, navItems = [], sunset, marqueeSpeed//, soundingData
+console.log('marquee speed cookie: ', getCookie('marqueeSpeed'))
 
 //refactor this!!!!!!!!!!?
 function getCookie(marqueeSpeed) {
@@ -55,9 +56,10 @@ function marqueeSetSpeed(speed) {
   document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5'
   document.getElementById('marquee-500').className = 'bg-dark border fw-normal px-4 rounded-5'
   document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5'
-  if (speed === 1100) document.cookie = 'marqueeSpeed=1100'
-  if (speed === 800) document.cookie = 'marqueeSpeed=800'
-  if (speed === 500) document.cookie = 'marqueeSpeed=500'
+  const cookieExpiry = 'max-age=31536000; path=/'
+  if (speed === 1100) document.cookie = 'marqueeSpeed=1100; ' + cookieExpiry
+  if (speed === 800) document.cookie = 'marqueeSpeed=800; ' + cookieExpiry
+  if (speed === 500) document.cookie = 'marqueeSpeed=500; ' + cookieExpiry
   buildMarquee()
 };
 
