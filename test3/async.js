@@ -29,12 +29,15 @@
   areaForecast(areaForecastText)
 })();
 
-// console.log('make new zone chart to reflect actual data')
-// console.log('use fronts graphic? Jetstream graphic')
-// console.log('unused data? gcp wind aloft temps, etc.')
-// console.log('See when NWS daily forecast changes on Today, currently set to display until 8pm')
-// console.log('change when wind map screenshot shows or not (nice to be able to click on it even if not current')
-// console.log('show wind stations that are down but with an error')
+// make new zone chart to reflect actual data
+// use fronts graphic? Jetstream graphic
+// unused data? gcp wind aloft temps, etc.
 // Pressure forecast? History?
-// Today/Tomorrow NWS missing a day when late in the day
-// Alternate temps on hi res sounding don't work
+// LoP shows as yellow on marquee
+// add cookies for wind station toggle off/on
+// add About? Resources?
+
+// MOVING TO GITHUB TESTS
+// HTML: TURN OFF TESTS.JS
+// ASYNC.JS: SWITCH ALL COMMENTED/GREEN
+// MAIN.JS: UNCOMMENT SOUNDINGDATA VARIABLE

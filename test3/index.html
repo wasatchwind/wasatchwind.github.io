@@ -42,8 +42,8 @@
           <div class="text-secondary">Pressure</div>
           <div class="d-flex justify-content-center">
             <div id="alti"></div>
-            <div>&nbsp;</div>
-            <div id="trend"></div>
+            <div>&nbsp;&nbsp;</div>
+            <div class="display-4" id="trend"></div>
           </div>
         </div>
         <div class="keen-slider__slide number-slide5 text-info">
@@ -609,14 +609,72 @@
         <!-- PAGE 3: SETTINGS -->
         <div class="keen-slider__slide number-slide3 pe-2">
 
-          <!-- (1) First Settings Section -->
-          <div class="border-bottom d-flex justify-content-between">
+          <!-- (1) Marquee Speed -->
+          <div class="border-bottom d-flex justify-content-between py-4">
             <div class="display-3 text-info">Marquee Speed</div>
-            <div class="col-6 display-6 d-flex justify-content-around my-2">
+            <div class="align-items-center col-7 display-5 d-flex justify-content-around">
               <div id="marquee-1200" onclick="marqueeSetSpeed(1200)">Slow</div>
               <div id="marquee-800" onclick="marqueeSetSpeed(800)">Medium</div>
               <div id="marquee-400" onclick="marqueeSetSpeed(400)">Fast</div>
             </div>
+          </div>
+
+          <div class="display-3 py-4 text-info text-start">Stations Displayed</div>
+
+          <!-- (2) Station Toggle UTOLY -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Olympus Cove</div>
+            <div id="UTOLY-on" onclick="stationToggle('UTOLY-on')">On</div>
+            <div id="UTOLY-off" onclick="stationToggle('UTOLY-off')">Off</div>
+          </div>
+
+          <!-- (3) Station Toggle REY -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Reynolds Peak</div>
+            <div id="REY-on" onclick="stationToggle('REY-on')">On</div>
+            <div id="REY-off" onclick="stationToggle('REY-off')">Off</div>
+          </div>
+
+          <!-- (4) Station Toggle AMB -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Alta Baldy</div>
+            <div id="AMB-on" onclick="stationToggle('AMB-on')">On</div>
+            <div id="AMB-off" onclick="stationToggle('AMB-off')">Off</div>
+          </div>
+
+          <!-- (5) Station Toggle HDP -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Hidden Peak</div>
+            <div id="HDP-on" onclick="stationToggle('HDP-on')">On</div>
+            <div id="HDP-off" onclick="stationToggle('HDP-off')">Off</div>
+          </div>
+
+          <!-- (6) Station Toggle KU42 -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Airport 2</div>
+            <div id="KU42-on" onclick="stationToggle('KU42-on')">On</div>
+            <div id="KU42-off" onclick="stationToggle('KU42-off')">Off</div>
+          </div>
+
+          <!-- (7) Station Toggle HF012 -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Northside</div>
+            <div id="HF012-on" onclick="stationToggle('HF012-on')">On</div>
+            <div id="HF012-off" onclick="stationToggle('HF012-off')">Off</div>
+          </div>
+
+          <!-- (8) Station Toggle FPS -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Southside</div>
+            <div id="FPS-on" onclick="stationToggle('FPS-on')">On</div>
+            <div id="FPS-off" onclick="stationToggle('FPS-off')">Off</div>
+          </div>
+
+          <!-- (9) Station Toggle OGP -->
+          <div class="align-items-center display-5 d-flex justify-content-around py-4">
+            <div class="col-5 display-3 text-info text-start">Ogden Peak</div>
+            <div id="OGP-on" onclick="stationToggle('OGP-on')">On</div>
+            <div id="OGP-off" onclick="stationToggle('OGP-off')">Off</div>
           </div>
 
         </div>
@@ -676,7 +734,7 @@
         <div class="keen-slider__slide number-slide6 pe-2">
 
           <!-- (1) KSLC -->
-          <div class="collapse mb-4" id="KSLC-main">
+          <div class="mb-4" id="KSLC-main">
             <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KSLC&table=1&banner=off" target="_blank">
               <div class="display-3 text-info">KSLC</div>
               <div class="align-items-end bg-dark d-flex rounded-4">

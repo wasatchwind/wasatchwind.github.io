@@ -30,7 +30,6 @@ function windChart(stid, data) {
   windGust(stid, data.wind_gust_set_1) // With data guaranteed, even if empty, call function
   windBarHeight(stid, data.wind_speed_set_1, data.wind_gust_set_1)
   windBarColor(stid, data.wind_speed_set_1)
-  document.getElementById(`${stid}-main`).style.display = 'block' // Show chart
 };
 
 function time(stid, time) {
@@ -111,12 +110,8 @@ function zone(alti, temp, zone, slope, trend, trendChar, altiDiff) {
   zone = calculateZone(alti[alti.length-1], temp[temp.length-1])
   slope = trendLine(alti)
   altiDiff = Math.abs(Math.round((alti[alti.length-1] - alti[0]) * 100) / 100)
-  if (altiDiff > 0 && altiDiff <= 0.01) trend = 30
-  else if (altiDiff > 0.01 && altiDiff <= 0.03) trend = 60
-  else if (altiDiff > 0.03) trend = 90
-  else trend = 0
-  trend = slope > 0 ? trend * -1 : trend
-  trendChar = trend === 0 ? '' : '&rarr;'
+  trendChar = altiDiff > 0 && altiDiff <= 0.01 ? '&#xfe3f;' : altiDiff === 0 ? '' : '&#xfe3d;'
+  trend = slope > 0 ? 0 : 180
   document.getElementById('temp').innerHTML = Math.round(temp[temp.length-1])
   document.getElementById('alti').innerHTML = alti[alti.length-1].toFixed(2)
   document.getElementById('trend').innerHTML = trendChar

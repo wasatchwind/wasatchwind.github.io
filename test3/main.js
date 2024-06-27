@@ -2,7 +2,6 @@
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
 let activeNav = 0, navItems = [], sunset, marqueeSpeed, soundingData
-console.log('marquee speed cookie: ', getCookie('marqueeSpeed'))
 
 //refactor this!!!!!!!!!!?
 function getCookie(marqueeSpeed) {
@@ -52,10 +51,10 @@ function buildMarquee() {
 };
 
 function marqueeSetSpeed(speed) {
-  document.getElementById('marquee-1200').className = 'bg-dark border fw-normal px-4 rounded-5'
-  document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5'
-  document.getElementById('marquee-400').className = 'bg-dark border fw-normal px-4 rounded-5'
-  document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5'
+  document.getElementById('marquee-1200').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById('marquee-400').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
   const cookieExpiry = 'max-age=31536000; path=/'
   if (speed === 1200) document.cookie = 'marqueeSpeed=1200; ' + cookieExpiry
   if (speed === 800) document.cookie = 'marqueeSpeed=800; ' + cookieExpiry
@@ -99,6 +98,11 @@ function navSet() {
   navOrder()
   navUpdate(activeNav)
 };
+
+function stationToggle(data) {
+  console.log(data)
+
+}
 
 function windAloft(openmeteoData, gcpWindAloftData) {
   openmeteoWindAloft(openmeteoData)
