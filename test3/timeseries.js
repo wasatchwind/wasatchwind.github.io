@@ -11,10 +11,6 @@ function timeSeries(data) { // Loop through all stations with data to build wind
 }
 
 function windChart(stid, data) {
-  if (data.wind_speed_set_1.every(d => d === 0)) {
-    document.getElementById(`${stid}-main`).style.display = 'none'
-    return
-  }
   const sliceLength = stid === 'AMB' ? 6 : 12 // Set chart data length, shorter for low frequency data
   if (data.date_time.length < sliceLength) { // If data is less than chart length
     const emptyArray = new Array(sliceLength - data.date_time.length).fill(null) // Create empty array for missing data
@@ -101,7 +97,10 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
   else if (zone.num===1 || zone.num===6) zone.col = 'var(--bs-orange)'
   else if (zone.num===2 || zone.num===5) zone.col = 'var(--bs-yellow)'
   else zone.col = 'var(--bs-teal)'
-  zone.num = alti === currentZones[3] ? 'LoP' : zone.num
+  if (alti === currentZones[3]) {
+    zone.num = 'LoP'
+    zone.col = 'var(--bs-teal)'
+  }
   zone.num = zone.num === 0 ? '&#9471;' : (zone.num === 'LoP') ? 'LoP' : `&#1010${zone.num + 1};`
   return zone
 };

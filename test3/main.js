@@ -1,24 +1,18 @@
 'use strict';
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
-let activeNav = 0, navItems = [], sunset, marqueeSpeed, soundingData
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
+let activeNav = 0, navItems = [], sunset, soundingData
 
-//refactor this!!!!!!!!!!?
-function getCookie(marqueeSpeed) {
- let name = marqueeSpeed + '='
- let decodedCookie = decodeURIComponent(document.cookie)
- let cookieArray = decodedCookie.split(';')
- for (let i=0; i<cookieArray.length; i++) {
-  let cookie = cookieArray[i]
-  while (cookie.charAt(0) == ' ') {
-    cookie = cookie.substring(1)
+function getCookie(input) {
+  let decodedCookie = decodeURIComponent(document.cookie)
+  let cookieArray = decodedCookie.split('; ')
+  for (let i=0; i<cookieArray.length; i++) {
+    if (cookieArray[i].split('=')[0] === input) {
+      return cookieArray[i].split('=')[1]
+    }
   }
-  if (cookie.indexOf(name) == 0) {
-    return cookie.substring(name.length, cookie.length)
-  }
- }
- return 800
-}
+};
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -39,7 +33,8 @@ function toggleWindChart(div) {
 
 // Marquee slider (https://keen-slider.io/docs)
 function buildMarquee() {
-  marqueeSpeed = getCookie('marqueeSpeed')
+  let marqueeSpeed = getCookie('marqueeSpeed')
+  if (!marqueeSpeed) marqueeSpeed = 800
   const animation = { duration: marqueeSpeed, easing: (t) => t }
   const marquee = new KeenSlider("#marquee", {
     loop: true,
@@ -51,16 +46,51 @@ function buildMarquee() {
 };
 
 function marqueeSetSpeed(speed) {
+  document.cookie = `marqueeSpeed=${speed}; max-age=31536000; path=/`
   document.getElementById('marquee-1200').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
   document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
   document.getElementById('marquee-400').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
   document.getElementById(`marquee-${speed}`).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
-  const cookieExpiry = 'max-age=31536000; path=/'
-  if (speed === 1200) document.cookie = 'marqueeSpeed=1200; ' + cookieExpiry
-  if (speed === 800) document.cookie = 'marqueeSpeed=800; ' + cookieExpiry
-  if (speed === 400) document.cookie = 'marqueeSpeed=400; ' + cookieExpiry
   buildMarquee()
+  reload()
 };
+
+function buildStationSettings() {
+  for (let i=0; i<stations.length; i++) {
+    if (stations[i] !== 'KSLC') {
+      let status = getCookie(`${stations[i]}`)
+      if (!status || status === 'on') {
+        document.getElementById(`${stations[i]}=on`).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+        document.getElementById(`${stations[i]}=off`).className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+        document.getElementById(`${stations[i]}-main`).style.display = 'block'
+      }
+      else {
+        document.getElementById(`${stations[i]}=on`).className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+        document.getElementById(`${stations[i]}=off`).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+        document.getElementById(`${stations[i]}-main`).style.display = 'none'
+      }
+    }
+  }
+  let marqueeSpeed = getCookie('marqueeSpeed')
+  if (!marqueeSpeed) marqueeSpeed = 800
+  document.getElementById('marquee-1200').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById('marquee-800').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById('marquee-400').className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  document.getElementById(`marquee-${marqueeSpeed}`).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+};
+
+function stationSetToggle(data) {
+  document.cookie = `${data}; max-age=31536000; path=/`
+  document.getElementById(data).className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+  if (data.slice(-3) === 'off') {
+    document.getElementById(data.replace('off', 'on')).className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+    document.getElementById(`${data.split('=')[0]}-main`).style.display = 'none'
+  }
+  else {
+    document.getElementById(data.replace('on', 'off')).className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+    document.getElementById(`${data.split('=')[0]}-main`).style.display = 'block'
+  }
+}
 
 // Menu navigation carousel/slider (https://keen-slider.io/docs)
 const slider = new KeenSlider('#slider', {
@@ -99,10 +129,12 @@ function navSet() {
   navUpdate(activeNav)
 };
 
-function stationToggle(data) {
-  console.log(data)
-
-}
+function buildStationURL(stationString = '') {
+  for (let i=0; i<stations.length; i++) {
+    stationString = `${stationString}&stid=${stations[i]}`
+  }
+  return stationString
+};
 
 function windAloft(openmeteoData, gcpWindAloftData) {
   openmeteoWindAloft(openmeteoData)
@@ -208,10 +240,10 @@ function nwsForecast(data, position) {
     }
     position += 2
   }
-  if (now.getHours() >= 5 && now.getHours() < 19) {
+  if (now.getHours() >= 5 && data.properties.periods[0].isDaytime) {
     document.getElementById('nws-today-div').style.display = 'block'
   }
-  if (now.getHours() >= 19) document.getElementById('nws-today-multiday-div').style.display = 'block'
+  if (now.getHours() >= 12 && !data.properties.periods[0].isDaytime) document.getElementById('nws-today-multiday-div').style.display = 'block'
   document.getElementById('nws-multiday-div').style.display = 'block'
 };
 
@@ -233,7 +265,7 @@ function areaForecast(text) {
 };
 
 buildMarquee()
-marqueeSetSpeed(marqueeSpeed)
+buildStationSettings()
 
 function displayImages() {
   if (now.getHours() >= 6 && now.getHours() < 18) {
