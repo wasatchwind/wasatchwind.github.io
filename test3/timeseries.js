@@ -110,11 +110,12 @@ function zone(alti, temp, zone, slope, trend, trendChar, altiDiff) {
   zone = calculateZone(alti[alti.length-1], temp[temp.length-1])
   slope = trendLine(alti)
   altiDiff = Math.round((alti[alti.length-1] - alti[0]) * 100) / 100
-  if (altiDiff > 0 && altiDiff <= 0.01) trendChar = '&uarr;'
-  else if (altiDiff > 0.01) trendChar = '&#8648;'
-  else if (altiDiff < 0 && altiDiff >= -0.01) trendChar = '&darr;'
-  else if (altiDiff < -0.01) trendChar = '&#8650;'
-  else trendChar = ''
+  // if (altiDiff > 0 && altiDiff <= 0.01) trendChar = '&uarr;'
+  // else if (altiDiff > 0.01) trendChar = '&#8648;'
+  // else if (altiDiff < 0 && altiDiff >= -0.01) trendChar = '&darr;'
+  // else if (altiDiff < -0.01) trendChar = '&#8650;'
+  // else trendChar = ''
+  trendChar = '&#8648;'
   document.getElementById('temp').innerHTML = Math.round(temp[temp.length-1])
   document.getElementById('alti').innerHTML = alti[alti.length-1].toFixed(2)
   document.getElementById('trend').innerHTML = trendChar
