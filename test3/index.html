@@ -43,7 +43,7 @@
           <div class="d-flex justify-content-center">
             <div id="alti"></div>
             <div>&nbsp;&nbsp;</div>
-            <div class="display-4" id="trend"></div>
+            <div id="trend"></div>
           </div>
         </div>
         <div class="keen-slider__slide number-slide5 text-info">
@@ -624,57 +624,57 @@
           <!-- (2) Station Toggle UTOLY -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Olympus Cove</div>
-            <div id="UTOLY-on" onclick="stationToggle('UTOLY-on')">On</div>
-            <div id="UTOLY-off" onclick="stationToggle('UTOLY-off')">Off</div>
+            <div id="UTOLY-on" onclick="stationSetToggle('UTOLY-on')">On</div>
+            <div id="UTOLY-off" onclick="stationSetToggle('UTOLY-off')">Off</div>
           </div>
 
           <!-- (3) Station Toggle REY -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Reynolds Peak</div>
-            <div id="REY-on" onclick="stationToggle('REY-on')">On</div>
-            <div id="REY-off" onclick="stationToggle('REY-off')">Off</div>
+            <div id="REY-on" onclick="stationSetToggle('REY-on')">On</div>
+            <div id="REY-off" onclick="stationSetToggle('REY-off')">Off</div>
           </div>
 
           <!-- (4) Station Toggle AMB -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Alta Baldy</div>
-            <div id="AMB-on" onclick="stationToggle('AMB-on')">On</div>
-            <div id="AMB-off" onclick="stationToggle('AMB-off')">Off</div>
+            <div id="AMB-on" onclick="stationSetToggle('AMB-on')">On</div>
+            <div id="AMB-off" onclick="stationSetToggle('AMB-off')">Off</div>
           </div>
 
           <!-- (5) Station Toggle HDP -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Hidden Peak</div>
-            <div id="HDP-on" onclick="stationToggle('HDP-on')">On</div>
-            <div id="HDP-off" onclick="stationToggle('HDP-off')">Off</div>
+            <div id="HDP-on" onclick="stationSetToggle('HDP-on')">On</div>
+            <div id="HDP-off" onclick="stationSetToggle('HDP-off')">Off</div>
           </div>
 
           <!-- (6) Station Toggle KU42 -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Airport 2</div>
-            <div id="KU42-on" onclick="stationToggle('KU42-on')">On</div>
-            <div id="KU42-off" onclick="stationToggle('KU42-off')">Off</div>
+            <div id="KU42-on" onclick="stationSetToggle('KU42-on')">On</div>
+            <div id="KU42-off" onclick="stationSetToggle('KU42-off')">Off</div>
           </div>
 
           <!-- (7) Station Toggle HF012 -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Northside</div>
-            <div id="HF012-on" onclick="stationToggle('HF012-on')">On</div>
-            <div id="HF012-off" onclick="stationToggle('HF012-off')">Off</div>
+            <div id="HF012-on" onclick="stationSetToggle('HF012-on')">On</div>
+            <div id="HF012-off" onclick="stationSetToggle('HF012-off')">Off</div>
           </div>
 
           <!-- (8) Station Toggle FPS -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Southside</div>
-            <div id="FPS-on" onclick="stationToggle('FPS-on')">On</div>
-            <div id="FPS-off" onclick="stationToggle('FPS-off')">Off</div>
+            <div id="FPS-on" onclick="stationSetToggle('FPS-on')">On</div>
+            <div id="FPS-off" onclick="stationSetToggle('FPS-off')">Off</div>
           </div>
 
           <!-- (9) Station Toggle OGP -->
           <div class="align-items-center display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Ogden Peak</div>
-            <div id="OGP-on" onclick="stationToggle('OGP-on')">On</div>
-            <div id="OGP-off" onclick="stationToggle('OGP-off')">Off</div>
+            <div id="OGP-on" onclick="stationSetToggle('OGP-on')">On</div>
+            <div id="OGP-off" onclick="stationSetToggle('OGP-off')">Off</div>
           </div>
 
         </div>
@@ -1017,6 +1017,151 @@
               </div>
             </div>
 
+            <!-- Reynolds Peak (REY) -->
+            <div id="REY-main">
+              <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
+                <div class="d-flex align-items-end">
+                  <div class="align-self-center display-1 text-warning" id="REY-toggle" onclick="toggleWindChart('REY')">
+                    &#43;</div>
+                  <div class="display-3 text-info mx-4">Reynolds Peak</div>
+                </div>
+                <div class="col-5 d-flex justify-content-between me-2">
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="REY-time-12">No Data</div>
+                  <div class="col-2 display-4" id="REY-wdir-12"></div>
+                  <div class="col-2 display-4 fw-semibold" id="REY-wspd-12"></div>
+                  <div class="col-2 display-6 fw-semibold gust-color" id="REY-gust-12"></div>
+                </div>
+              </div>
+              <div class="bg-dark rounded-4">
+                <div class="collapse" id="REY">
+                  <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=REY&table=1&banner=off" target="_blank">
+                    <div class="align-items-end d-flex">
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-0">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-0"></div>
+                        <div id="REY-wbar-0"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-0"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-0"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-0"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-1">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-1"></div>
+                        <div id="REY-wbar-1"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-1"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-1"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-1"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-2">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-2"></div>
+                        <div id="REY-wbar-2"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-2"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-2"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-2"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-3">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-3"></div>
+                        <div id="REY-wbar-3"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-3"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-3"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-3"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-4">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-4"></div>
+                        <div id="REY-wbar-4"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-4"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-4"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-4"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-5">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-5"></div>
+                        <div id="REY-wbar-5"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-5"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-5"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-5"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-6">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-6"></div>
+                        <div id="REY-wbar-6"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-6"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-6"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-6"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-7">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-7"></div>
+                        <div id="REY-wbar-7"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-7"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-7"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-7"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-8">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-8"></div>
+                        <div id="REY-wbar-8"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-8"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-8"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-8"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-9">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-9"></div>
+                        <div id="REY-wbar-9"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-9"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-9"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-9"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-10">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-10"></div>
+                        <div id="REY-wbar-10"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-10"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-10"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-10"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="REY-gust-11">&nbsp;</div>
+                        <div class="bg-danger" id="REY-gbar-11"></div>
+                        <div id="REY-wbar-11"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="REY-wspd-11"></span></div>
+                        <div>
+                          <div class="display-4" id="REY-wdir-11"></div>
+                        </div>
+                        <div class="fs-4" id="REY-time-11"></div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <!-- Wind Chart Alta Baldy (AMB) -->
             <div id="AMB-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
@@ -1095,6 +1240,151 @@
                           <div class="display-4" id="AMB-wdir-5"></div>
                         </div>
                         <div class="fs-4" id="AMB-time-5"></div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hidden Peak (HDP) -->
+            <div id="HDP-main">
+              <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
+                <div class="d-flex align-items-end">
+                  <div class="align-self-center display-1 text-warning" id="HDP-toggle" onclick="toggleWindChart('HDP')">
+                    &#43;</div>
+                  <div class="display-3 text-info mx-4">Hidden Peak</div>
+                </div>
+                <div class="col-5 d-flex justify-content-between me-2">
+                  <div class="align-self-end display-6 fw-semibold text-secondary" id="HDP-time-12">No Data</div>
+                  <div class="col-2 display-4" id="HDP-wdir-12"></div>
+                  <div class="col-2 display-4 fw-semibold" id="HDP-wspd-12"></div>
+                  <div class="col-2 display-6 fw-semibold gust-color" id="HDP-gust-12"></div>
+                </div>
+              </div>
+              <div class="bg-dark rounded-4">
+                <div class="collapse" id="HDP">
+                  <a href="https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=HDP&table=1&banner=off" target="_blank">
+                    <div class="align-items-end d-flex">
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-0">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-0"></div>
+                        <div id="HDP-wbar-0"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-0"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-0"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-0"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-1">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-1"></div>
+                        <div id="HDP-wbar-1"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-1"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-1"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-1"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-2">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-2"></div>
+                        <div id="HDP-wbar-2"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-2"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-2"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-2"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-3">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-3"></div>
+                        <div id="HDP-wbar-3"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-3"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-3"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-3"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-4">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-4"></div>
+                        <div id="HDP-wbar-4"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-4"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-4"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-4"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-5">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-5"></div>
+                        <div id="HDP-wbar-5"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-5"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-5"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-5"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-6">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-6"></div>
+                        <div id="HDP-wbar-6"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-6"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-6"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-6"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-7">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-7"></div>
+                        <div id="HDP-wbar-7"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-7"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-7"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-7"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-8">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-8"></div>
+                        <div id="HDP-wbar-8"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-8"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-8"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-8"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-9">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-9"></div>
+                        <div id="HDP-wbar-9"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-9"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-9"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-9"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-10">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-10"></div>
+                        <div id="HDP-wbar-10"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-10"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-10"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-10"></div>
+                      </div>
+                      <div class="col px-1">
+                        <div class="gust-color h2" id="HDP-gust-11">&nbsp;</div>
+                        <div class="bg-danger" id="HDP-gbar-11"></div>
+                        <div id="HDP-wbar-11"></div>
+                        <div class="bg-secondary fs-1 fw-bold"><span id="HDP-wspd-11"></span></div>
+                        <div>
+                          <div class="display-4" id="HDP-wdir-11"></div>
+                        </div>
+                        <div class="fs-4" id="HDP-time-11"></div>
                       </div>
                     </div>
                   </a>
