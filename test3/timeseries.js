@@ -115,9 +115,9 @@ function zone(alti, temp, zone, slope, trend, trendChar, altiDiff) {
   // else if (altiDiff < 0 && altiDiff >= -0.01) trendChar = '&darr;'
   // else if (altiDiff < -0.01) trendChar = '&#8650;'
   // else trendChar = ''
-  trendChar = '&#129049;&nbsp;&#129093;nbsp;&#129051;nbsp;&#129095;'
+  trendChar = '&#129049;&nbsp;&#129093;&nbsp;&#129051;&nbsp;&#129095;'
   document.getElementById('temp').innerHTML = Math.round(temp[temp.length-1])
-  document.getElementById('alti').innerHTML = alti[alti.length-1].toFixed(2)
+  // document.getElementById('alti').innerHTML = alti[alti.length-1].toFixed(2)
   document.getElementById('trend').innerHTML = trendChar
   document.getElementById('zone').innerHTML = zone.num
   document.getElementById('zone').style.color = zone.col
