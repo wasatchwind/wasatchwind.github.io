@@ -107,9 +107,9 @@ function navOrder(sunsetFormatted, tomorrow = new Date()) {
   sunsetFormatted = new Date(sunset).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   document.getElementById('sunset').innerHTML = sunsetFormatted
   tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate()+1)).toLocaleString('en-us',{weekday:'short'})}+`
-  navItems = ['Today', tomorrow, 'Settings', 'GPS', 'Cams', 'Now']
+  navItems = ['Today', tomorrow, 'Settings', 'Misc.', 'GPS', 'Cams', 'Now']
   if (now.getHours() >= 14 && now.getHours() <= sunset.slice(11,13)) {
-    slider.moveToIdx(5, true, { duration: 0 })
+    slider.moveToIdx(navItems.length-1, true, { duration: 0 })
   }
   else if (now.getHours() >= sunset.slice(11,13)) {
     slider.moveToIdx(1, true, { duration: 0 })
@@ -117,8 +117,8 @@ function navOrder(sunsetFormatted, tomorrow = new Date()) {
 };
 
 function navUpdate (left, right) {
-  left = activeNav === 0 ? 5 : activeNav - 1
-  right = activeNav === 5 ? 0 : activeNav + 1
+  left = activeNav === 0 ? navItems.length-1 : activeNav - 1
+  right = activeNav === navItems.length-1 ? 0 : activeNav + 1
   document.getElementById('topnav-left').innerHTML = navItems[left]
   document.getElementById('topnav-active').innerHTML = navItems[activeNav]
   document.getElementById('topnav-right').innerHTML = navItems[right]

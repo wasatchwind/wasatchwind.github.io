@@ -89,9 +89,11 @@ function windBarColor(stid, data) {
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
-  const zoneSlope = [0.0714, 0.0714, 0.0714, 0.3, 0.4286, 0.4286, 0.5429, -1]
-  const zoneIntercept = [29.9214, 30.0514, 30.1114, 30.27, 30.4286, 30.4486, 30.6228, 100]
-  for (let i=0; i<zoneSlope.length; i++) currentZones.push(Math.round((zoneSlope[i] / -110 * temp + zoneIntercept[i]) * 100) / 100)
+  const zoneSlope = [-0.000555, -0.001111, -0.001666, -0.003, -0.004286, -0.004933, -0.0055, -1]
+  const zoneIntercept = [29.9167, 30.0111, 30.1083, 30.27, 30.4286, 30.5327, 30.6425, 100]
+  for (let i=0; i<zoneSlope.length; i++) {
+    currentZones.push(Math.round((zoneSlope[i] * temp + zoneIntercept[i]) * 100) / 100)
+  }
   zone.num = currentZones.findIndex(d => d >= alti)
   if (zone.num === 0 || zone.num === 7) zone.col = 'var(--bs-red)'
   else if (zone.num===1 || zone.num===6) zone.col = 'var(--bs-orange)'
