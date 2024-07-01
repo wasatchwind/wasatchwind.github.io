@@ -111,7 +111,7 @@ function navOrder(sunsetFormatted, tomorrow = new Date()) {
   if (now.getHours() >= 14 && now.getHours() <= sunset.slice(11,13)) {
     slider.moveToIdx(5, true, { duration: 0 })
   }
-  else if (now.getHours() > sunset.slice(11,13)) {
+  else if (now.getHours() >= sunset.slice(11,13)) {
     slider.moveToIdx(1, true, { duration: 0 })
   }
 };
