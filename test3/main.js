@@ -2,7 +2,7 @@
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
 const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
-let activeNav = 0, navItems = [], sunset//, soundingData
+let activeNav = 0, navItems = [], sunset, soundingData
 
 function getCookie(input) {
   let decodedCookie = decodeURIComponent(document.cookie)
