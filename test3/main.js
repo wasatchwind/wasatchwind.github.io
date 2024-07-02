@@ -108,10 +108,10 @@ function navOrder(sunsetFormatted, tomorrow = new Date()) {
   document.getElementById('sunset').innerHTML = sunsetFormatted
   tomorrow = `${new Date(tomorrow.setDate(tomorrow.getDate()+1)).toLocaleString('en-us',{weekday:'short'})}+`
   navItems = ['Today', tomorrow, 'Settings', 'Misc.', 'GPS', 'Cams', 'Now']
-  if (now.getHours() >= 14 && now.getHours() <= sunset.slice(11,13)) {
+  if (now.getHours() >= 14 && now.getHours() <= sunset.slice(11,13)-1) {
     slider.moveToIdx(navItems.length-1, true, { duration: 0 })
   }
-  else if (now.getHours() >= sunset.slice(11,13)) {
+  else if (now.getHours() >= sunset.slice(11,13)-1) {
     slider.moveToIdx(1, true, { duration: 0 })
   }
 };
@@ -275,7 +275,7 @@ function displayImages() {
     document.getElementById('surface-gust-img').src = gustImageURL
     document.getElementById('surface-wind-div').style.display = 'block'
   }
-  if (now.getHours() + 1 >= sunset.slice(11,13) && now.getHours() < 24) {
+  if (now.getHours() >= sunset.slice(11,13) && now.getHours() < 24) {
     document.getElementById('hourly-chart-tomorrow').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
     document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
   }
