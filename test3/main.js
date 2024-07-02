@@ -2,7 +2,7 @@
 const now = new Date()
 const timezoneOffset = now.getTimezoneOffset() / 60
 const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
-let activeNav = 0, navItems = [], sunset, soundingData
+let activeNav = 0, navItems = [], sunset//, soundingData
 
 function getCookie(input) {
   let decodedCookie = decodeURIComponent(document.cookie)
@@ -275,7 +275,7 @@ function displayImages() {
     document.getElementById('surface-gust-img').src = gustImageURL
     document.getElementById('surface-wind-div').style.display = 'block'
   }
-  if (now.getHours() >= sunset.slice(11,13) && now.getHours() < 24) {
+  if (now.getHours() >= sunset.slice(11,13)-1 && now.getHours() < 24) {
     document.getElementById('hourly-chart-tomorrow').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
     document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
   }
@@ -299,7 +299,7 @@ function displayImagesLocal() {
     document.getElementById('surface-gust-img').src = gustImageURL
     document.getElementById('surface-wind-div').style.display = 'block'
   }
-  if (now.getHours() >= sunset.slice(11,13) && now.getHours() < 24) {
+  if (now.getHours() >= sunset.slice(11,13)-1 && now.getHours() < 24) {
     document.getElementById('hourly-chart-tomorrow').src = 'images/Plotter.png'
     document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
   }
