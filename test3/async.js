@@ -10,31 +10,44 @@
   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
   const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1&glossary=0'
-  const openmeteoData = await (await fetch(openmeteoURL)).json() //LOCAL TESTING
+  
+  // Open Meteo
+  const openmeteoData = await (await fetch(openmeteoURL)).json()
   sunset = openmeteoData.daily.sunset[0]
   navSet()
-  // displayImagesLocal() // !!!!!!!!!!!!! ONLY FOR LOCAL TESTING
-  displayImages()
-  const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json() //LOCAL TESTING
+
+  // Wind Aloft
+  const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
   windAloft(openmeteoData.hourly, gcpWindAloftData)
+
+  // Sounding & Soaring
   soundingData = await (await fetch(soundingURL)).json()
   const soaringForecastText = await (await fetch(soaringForecastURL)).text()
   sounding(soundingData, soaringForecastText)  
+
+  // Time Series
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
   timeSeries(timeSeriesData)
+
+  // Wind Map Metadata
   const windMapData = await (await fetch(windMapDataURL)).json()
   windMap(windMapData)
+
+  // NWS
   const nwsForecastData = await (await fetch(nwsForecastURL)).json()
   nwsForecast(nwsForecastData)
+
+  // Area Forecast
   const areaForecastText = await (await fetch(areaForecastURL)).text()
   areaForecast(areaForecastText)
+
+  // displayImagesLocal()
+  displayImages()
 })();
 
-// make new zone chart to reflect actual data, data off?
 // use fronts graphic? Jetstream graphic
 // unused data? gcp wind aloft temps, etc.
 // Pressure forecast? History?
-// add About? Resources?
 // Hide tokens?
 // Fix Chrome error/warning: Third-party cookie will be blocked in future Chrome versions as part of Privacy Sandbox.
 // * https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg

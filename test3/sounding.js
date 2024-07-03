@@ -27,8 +27,8 @@ const svg = d3.select('#skew-t-d3')
 function sounding(data, text) {
   maxTempF = processSoaringForecast(text)
   liftParams = getLiftParams(data, maxTempF)
-  document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-  document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
+  document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : '--'
+  document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : '--'
   decodedSkewTChart(data, maxTempF, liftParams)
   if (now.getHours() >= 7) {
     document.getElementById('hi-res-sounding-div').style.display = 'block'
@@ -37,57 +37,61 @@ function sounding(data, text) {
 };
 
 function processSoaringForecast(text) {
-  const textStart = text.search(/[Dd][Aa][Tt][Ee]\.{3}.+/)
-  const textEnd = text.search(/[Ft][Tt]\/[Mm][Ii][Nn]/) + 6
-  const soaringForecast = text.slice(textStart, textEnd)
+  const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
   const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
-  const hiTemp = parseInt(soaringForecast.slice(hiTempRow+22,hiTempRow+27))
+  const hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
   document.getElementById('soaring-forecast').innerText = soaringForecast
   document.getElementById('hi-temp').innerHTML = hiTemp
   return hiTemp
 };
 
-function getLiftParams(data, temp, position = 0, raobSlope, raobYInt, params = {}) {
-  let interpolateX1, interpolateX2, interpolateY1, interpolateY2
+function interpolate(x1, y1, x2, y2, targetY) {
+  const slope = (y1 - y2) / (x1 - x2)
+  const yInt = y1 - (slope * x1)
+  const targetX = (targetY - yInt) / slope
+  return {
+    altitude: y1 + (targetX - x1) * (y2 - y1) / (x2 - x1),
+    temp: targetX,
+  }
+};
+
+function getLiftParams(data, temp) {
+  let position = 0
+  const params = {}
   const tempC = (temp - 32) * 5 / 9
   const surfaceAlt_m = 1289
   const dalrSlope = -101.6 // Metric equivalent to -5.4 F / 1,000' (1000/3.28084 & 3deg C) = 101.6
   const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
 
-  // Find height of -3 index first (thermal index is -3)
+  // First find height of -3 index (thermal index = -3)
   while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
   if (position === 0) {
     params.neg3 = null
     params.neg3Temp = null
-  }
-  else {
-    interpolateX1 = data[position].Temp_c
-    interpolateY1 = data[position].Altitude_m
-    interpolateX2 = data[position - 1].Temp_c
-    interpolateY2 = data[position - 1].Altitude_m
-    if (interpolateX1 !== interpolateX2) {
-      raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-      raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-      const interpolateX = (raobYInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - raobSlope)
-      params.neg3 = interpolateY1 + (interpolateX - interpolateX1) * (interpolateY2 - interpolateY1) / (interpolateX2 - interpolateX1)
+  } else {
+    const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
+    const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
+    if (temp1 !== temp2) {
+      const { altitude, temp } = interpolate(temp1, alt1, temp2, alt2, -3 * dalrSlope + dalrYInt)
+      params.neg3 = altitude
+      params.neg3Temp = temp
+    } else {
+      params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
+      params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
     }
-    else params.neg3 = (interpolateX1 + 3) * dalrSlope + dalrYInt
-    params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
   }
 
-  // Now find top of lift (where thermal index is 0)
+  // Next find top of lift (thermal index = 0)
   try {
     while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < 0) position++
-    interpolateX1 = data[position].Temp_c
-    interpolateY1 = data[position].Altitude_m
-    interpolateX2 = data[position - 1].Temp_c
-    interpolateY2 = data[position - 1].Altitude_m
-    if (interpolateX1 !== interpolateX2) {
-      raobSlope = (interpolateY1 - interpolateY2) / (interpolateX1 - interpolateX2)
-      raobYInt = interpolateY1 - (raobSlope * interpolateX1)
-      params.tol = ((dalrSlope * raobYInt) - (raobSlope * dalrYInt)) / (dalrSlope - raobSlope)
+    const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
+    const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
+    if (temp1 !== temp2) {
+      const { altitude } = interpolate(temp1, alt1, temp2, alt2, 0)
+      params.tol = altitude
+    } else {
+      params.tol = temp1 * dalrSlope + dalrYInt
     }
-    else params.tol = (interpolateX1 * dalrSlope) + dalrYInt
     params.tolTemp = (params.tol - dalrYInt) / dalrSlope
   } catch (error) {
     params.tol = null
@@ -120,7 +124,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
   // Plot Temp line
   const tempLine = d3.line()
     .x(d => x((d.Temp_c * 9 / 5) + 32))
-    .y(d => y(d.Altitude_m * 3.28084 / 1000))
+    .y(d => y(d.Altitude_m * ftPerMeter / 1000))
   svg.append('path').datum(data)
     .attr('d', tempLine)
     .attr('fill', 'none')
@@ -130,7 +134,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
   // Plot Dewpoint line
   const dewpointLine = d3.line()
     .x(d => x((d.Dewpoint_c * 9 / 5) + 32))
-    .y(d => y(d.Altitude_m * 3.28084 / 1000))
+    .y(d => y(d.Altitude_m * ftPerMeter / 1000))
   svg.append('path').datum(data)
     .attr('d', dewpointLine)
     .attr('fill', 'none')
@@ -229,60 +233,60 @@ function drawDALRParams (temp, params) {
     .attr('stroke', 'white')
     .attr('stroke-width', 2)
     .attr('x1', x((params.neg3Temp * 9 / 5) + 32))
-    .attr('y1', y(params.neg3 * 3.28084 / 1000))
+    .attr('y1', y(params.neg3 * ftPerMeter / 1000))
     .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
-    .attr('y2', y(params.neg3 * 3.28084 / 1000))
+    .attr('y2', y(params.neg3 * ftPerMeter / 1000))
   
   // -3 label
   svg.append('g').append('text')
     .attr('class', 'liftlabels')
     .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
-    .attr('y', y(params.neg3 * 3.28084 / 1000 - 0.6))
+    .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.6))
     .text('-3')
   
   // -3 height
   svg.append('g').append('text')
     .attr('class', 'liftheights')
     .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
-    .attr('y', y(params.neg3 * 3.28084 / 1000 - 0.5))
-    .text(Math.round(params.neg3 * 3.28084).toLocaleString())
+    .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.5))
+    .text(Math.round(params.neg3 * ftPerMeter).toLocaleString())
 
   // Top of lift point
   svg.append('g').append('circle')
     .attr('class', 'tolcircle')
     .attr('fill', 'white')
     .attr('cx', x((params.tolTemp * 9 / 5) + 32))
-    .attr('cy', y(params.tol * 3.28084 / 1000))
+    .attr('cy', y(params.tol * ftPerMeter / 1000))
     .attr('r', 6)
 
   // Top of lift label
   svg.append('g').append('text')
     .attr('class', 'liftlabels')
     .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-    .attr('y', y(params.tol * 3.28084 / 1000))
+    .attr('y', y(params.tol * ftPerMeter / 1000))
     .text('ToL')
   
   // Top of lift height
   svg.append('g').append('text')
     .attr('class', 'liftheights')
     .attr('x', x((params.tolTemp * 9 / 5) + 32 + 10))
-    .attr('y', y(params.tol * 3.28084 / 1000))
-    .text(`${Math.round(params.tol * 3.28084).toLocaleString()}`)
+    .attr('y', y(params.tol * ftPerMeter / 1000))
+    .text(`${Math.round(params.tol * ftPerMeter).toLocaleString()}`)
 };
 
 function d3Update(userLiftParams) {
   document.getElementById('out-of-range').style.display = 'none'
   const userTemp = parseInt(document.getElementById('user-temp').value)
   if (!userTemp) return
-  try { userLiftParams = getLiftParams(soundingData, userTemp) }
-  catch {
+  try {
+    userLiftParams = getLiftParams(soundingData, userTemp)
+  } catch {
     outOfRange(userTemp)
     return
   }
-  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * 3.28084 / 1000 > 20 || !userLiftParams.tol) {
+  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * ftPerMeter / 1000 > 20 || !userLiftParams.tol) {
     outOfRange(userTemp)
-  }
-  else {
+  } else {
     clearChart()
     drawDALRParams(userTemp, userLiftParams)
   }
