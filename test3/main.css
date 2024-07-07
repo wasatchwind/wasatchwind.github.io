@@ -84,8 +84,8 @@ a:active {
   opacity: 0.5;
 }
 .svgbg { fill: #212529; }
-.xAxis { font-size: 40%; }
-.yAxis { font-size: 40%; }
+.xAxis { font-size: 160%; }
+.yAxis { font-size: 160%; }
 .maxtemp {
   fill: #0dcaf0;
   font-size: calc(1.475rem + 2.7vw);

@@ -3,7 +3,7 @@ const now = new Date()
 const ftPerMeter = 3.28084
 const slider = buildNavSlider()
 const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
-let activeNav = 0, navItems = [], sunset, soundingData
+let activeNav = 0, navItems = [], sunset//, soundingData
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -164,8 +164,8 @@ function extractText(text, startPattern, endPattern, offset) {
 };
 
 function areaForecast(text) {
-  const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\n\.[Ss][Yy][Nn]/, 0)
-  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp]/, /&&/, 11).replace(/\n/g, ' ')
+  const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
+  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo]/, /&&/, 0).replace(/\n/g, ' ')
   const aviation = extractText(text, /\.[Aa][Vv][Ii].+[Nn]\.{3}/, /\n\n[Rr\.].+[Ee][Ss][Tt]\s[Oo]/, 12).replace(/\n/g, ' ')
   document.getElementById('area-forecast-time').innerText = forecastDate
   document.getElementById('area-forecast-synopsis').innerText = synopsis
