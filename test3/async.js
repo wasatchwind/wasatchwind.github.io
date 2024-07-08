@@ -41,7 +41,7 @@
   const areaForecastText = await (await fetch(areaForecastURL)).text()
   areaForecast(areaForecastText)
 
-  // displayImagesLocal()
+  // displayImagesLocal() // LOCAL TOGGLE
   displayImages()
 })();
 
