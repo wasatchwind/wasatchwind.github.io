@@ -1,102 +1,198 @@
 'use strict';
-const now = new Date();
-const nextDay = now.getHours() > 18 ? `&nbsp;&nbsp;(${new Date(now.setHours(now.getHours() + 24)).toLocaleString('en-us', {weekday: 'long'})})&nbsp;&nbsp;` : ''
-let currentDiv = 'wind', liftParams = {}
-let maxTempF, soundingData = {}
+const now = new Date()
+const ftPerMeter = 3.28084
+const slider = buildNavSlider()
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
+let activeNav = 0, navItems = [], sunset, soundingData
 
 function reload() {
-    history.scrollRestoration = 'manual'
-    location.reload()
+  history.scrollRestoration = 'manual'
+  location.reload()
 };
 
-function toggleDiv(newDiv) {
-    document.getElementById(currentDiv).style.display = 'none'
-    document.getElementById(`${currentDiv}-title`).className = 'display-3 fw-semibold text-warning'
-    document.getElementById(`${currentDiv}-border`).className = 'tile-border overflow-hidden'
-    document.getElementById(`${newDiv}-title`).className = 'display-3 fw-semibold text-info'
-    document.getElementById(`${newDiv}-border`).className = 'tile-border-selected overflow-hidden'
-    document.getElementById(newDiv).style.display = 'block'
-    currentDiv = newDiv
+function getCookie(name) {
+  const decodedCookie = decodeURIComponent(document.cookie)
+  const cookies = decodedCookie.split('; ')
+  for (const cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split('=')
+    if (cookieName === name) {
+      return cookieValue
+    }
+  }
+  return null
+};
+
+// Marquee slider (https://keen-slider.io/docs)
+function buildMarquee() {
+  const marqueeSpeed = getCookie('marqueeSpeed') || 800
+  const animation = { duration: marqueeSpeed, easing: (t) => t }
+  const options = {
+    loop: true,
+    slides: { perView: 4 },
+    created(m) { m.moveToIdx(1, true, animation) },
+    updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
+    animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
+  };
+  const marquee = new KeenSlider('#marquee', options)
+};
+buildMarquee();
+
+// Menu navigation carousel/slider (https://keen-slider.io/docs)
+function buildNavSlider() {
+  const options = {
+    loop: true,
+    slides: { perView: 1 },
+    slideChanged: () => {
+      activeNav = slider.track.details.rel
+      navUpdate()
+      window.scrollTo(0,0)
+    }
+  }
+  return new KeenSlider('#slider', options)
+};
+
+(function buildStationSettings() {
+  stations.forEach(station => {
+    if (station !== 'KSLC') {
+      const status = getCookie(`${station}`) || 'on'
+      const onElement = document.getElementById(`${station}=on`)
+      const offElement = document.getElementById(`${station}=off`)
+      const mainElement = document.getElementById(`${station}-main`)
+      if (status === 'on') {
+        onElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+        offElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+        mainElement.style.display = 'block'
+      } else {
+        onElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+        offElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+        mainElement.style.display = 'none'
+      }
+    }
+  })
+})();
+
+(function buildMarqueeSettings() {
+  const marqueeSpeed = getCookie('marqueeSpeed') || 800
+  const speeds = [1200, 800, 400]
+  speeds.forEach(speed => {
+    const element = document.getElementById(`marquee-${speed}`)
+    element.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  })
+  const activeElement = document.getElementById(`marquee-${marqueeSpeed}`)
+  activeElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+})();
+
+function marqueeSetSpeed(speed) {
+  document.cookie = `marqueeSpeed=${speed}; max-age=31536000; path=/`
+  const speeds = [1200, 800, 400]
+  speeds.forEach(d => {
+    const element = document.getElementById(`marquee-${d}`)
+    element.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  })
+  const activeElement = document.getElementById(`marquee-${speed}`)
+  activeElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+  buildMarquee()
+  reload()
 };
 
 function toggleWindChart(div) {
-    const element = document.getElementById(div)
-    if (element.style.display==='' || element.style.display==='none') {
-        element.style.display = 'block'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#8722;'
-    }
-    else {
-        element.style.display = 'none'
-        document.getElementById(`${div}-toggle`).innerHTML = '&#43;'
-    }
+  const element = document.getElementById(div)
+  const toggleElement = document.getElementById(`${div}-toggle`)
+  const isHidden = element.style.display === '' || element.style.display === 'none'
+  element.style.display = isHidden ? 'block' : 'none'
+  toggleElement.innerHTML = isHidden ? '&#8722;' : '&#43;'
 };
 
-function tempTrend(history, latest, forecast) {
-    const temp = history.temp.slice(-3).concat(latest.temp.slice(-1),forecast.temp)
-    const time = history.time.slice(-3).concat(latest.time.slice(-1),forecast.time)
-    const tempInt = temp.map(d => parseInt(d))
-    const min = Math.min(...tempInt)
-    const max = Math.max(...tempInt)
-    const tempBar = tempInt.map(d => `${Math.round((((d - min) * 100)/(max - min)) + 50)}px`)
-    const barColor = tempInt.map(d => `${100 - Math.round((((d - min) * 100)/(max - min)))}%`)
-    for (let i=0; i<temp.length; i++) {
-        document.getElementById(`temp-${i}`).innerHTML = temp[i]
-        document.getElementById(`temptime-${i}`).innerHTML = time[i]
-        document.getElementById(`tempbar-${i}`).style.height = tempBar[i]
-        document.getElementById(`tempbar-${i}`).style.background = `linear-gradient(to top, var(--bs-purple) ${barColor[i]}, var(--bs-red))`
-    }
+function stationSetToggle(data) {
+  document.cookie = `${data}; max-age=31536000; path=/`
+  const element = document.getElementById(data)
+  element.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+  const [station, status] = data.split('=')
+  const oppositeStatus = status === 'off' ? 'on' : 'off'
+  const oppositeElement = document.getElementById(`${station}=${oppositeStatus}`)
+  oppositeElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+  const mainElement = document.getElementById(`${station}-main`)
+  mainElement.style.display = status === 'off' ? 'none' : 'block'
 };
 
-function windSurfaceForecastGraphical() {
-    const offsetTime = now.getTimezoneOffset() / 60 === 6 ? '5 pm' : '4 pm'
-    const windImageURL = 'https://graphical.weather.gov/images/utah/WindSpd4_utah.png'
-    const gustImageURL = 'https://graphical.weather.gov/images/utah/WindGust4_utah.png'
-    document.getElementById('graphical-wind-time').innerHTML = `Surface Forecast @ ${offsetTime}`
-    document.getElementById('graphical-wind-img').src = windImageURL
-    document.getElementById('graphical-gust-img').src = gustImageURL
-    document.getElementById('graphical-wind-div').style.display = 'block'
+function navOrder(sunsetFormatted, today = new Date()) {
+  sunsetFormatted = new Date(sunset).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
+  document.getElementById('sunset').innerHTML = sunsetFormatted
+  const nextDay = new Date(today)
+  nextDay.setDate(today.getDate() + 1)
+  const nextDayFormatted = `${nextDay.toLocaleString('en-us', {weekday: 'short'})}+`
+  navItems = ['Today', nextDayFormatted, 'Settings', 'Misc.', 'GPS', 'Cams', 'Now']
+  const currentHour = now.getHours()
+  const sunsetHour = new Date(sunset).getHours()
+  if (currentHour >= 14 && currentHour <= sunsetHour - 1) {
+    slider.moveToIdx(navItems.length - 1, true, { duration: 0 })
+  }
+  else if (currentHour >= sunsetHour - 1) {
+    slider.moveToIdx(1, true, { duration: 0 })
+  }
 };
 
-function processSoaringForecast(text) {
-    const textStart = text.search(/[Dd][Aa][Tt][Ee]\.{3}.+/)
-    const textEnd = text.search(/[Ft][Tt]\/[Mm][Ii][Nn]/) + 6
-    const soaringForecast = text.slice(textStart, textEnd)
-    document.getElementById('soaring-forecast').innerText = soaringForecast
+function navUpdate () {
+  const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1
+  const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1
+  document.getElementById('topnav-left').innerHTML = navItems[left]
+  document.getElementById('topnav-active').innerHTML = navItems[activeNav]
+  document.getElementById('topnav-right').innerHTML = navItems[right]
 };
 
-function processAreaForecast(text) {
-    const preStart = text.search(/<pre/)
-    const preEnd = text.search(/<\/pre>/)
-    text = text.slice(preStart, preEnd)
-    const dateStart = text.search(/\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]\s/)
-    const dateEnd = text.search(/\s\d{1,2}\s202\d{1}\n/) + 7
-    const forecastDate = text.slice(dateStart, dateEnd)
-    const synopsisStart = text.search(/[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/) + 11
-    const synopsisEnd = text.search(/&&\n\n\./)
-    const synopsis = text.slice(synopsisStart, synopsisEnd).replace(/\n/g, ' ')
-    const aviationStart = text.search(/[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]\.{3}KSLC\.{3}/) + 18
-    const aviationEnd = text.search(/\n\n\.[Rr][Ee][Ss][Tt]|\n\n[Rr][Ee][Ss][Tt]/)
-    const aviation = text.slice(aviationStart, aviationEnd).replace(/\n/g, ' ')
-    document.getElementById('area-forecast-date').innerText = forecastDate
-    document.getElementById('area-forecast-synopsis').innerText = synopsis
-    document.getElementById('area-forecast-aviation').innerText = aviation
+function navSet() {
+  navOrder()
+  navUpdate(activeNav)
 };
 
-(function getGraphicalForecastImages() {
-    const url = 'https://graphical.weather.gov/images/slc/'
-    const timeStr = (now.getHours() > 18 || now.getHours() < 7) ? 5 : 1
-    document.getElementById('sky-next-day').innerHTML = nextDay
-    for (let i=0; i<4; i++) {
-        document.getElementById(`graphical-sky-${i}`).src = `${url}Sky${timeStr+i}_slc.png`
-        document.getElementById(`graphical-wx-${i}`).src = `${url}Wx${timeStr+i}_slc.png`
-    }
-})();
+function buildStationURL(stationString = '') {
+  stations.forEach(station => {
+    stationString += `&stid=${station}`
+  })
+  return stationString
+};
 
-(function getMorningSkewT() {
-    if (now.getHours() > 6 && now.getHours() < 19) {
-        const date = now.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/')
-        const skewTURL = `https://climate.cod.edu/data/raob/KSLC/skewt/KSLC.skewt.${date[2]}${date[0]}${date[1]}.12.gif`
-        document.getElementById('skew-t-img').src = skewTURL
-    }
-    else document.getElementById('skew-t-div').style.display = 'none'
-})();
+function windMap(data) {
+  const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
+  document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
+};
+
+function extractText(text, startPattern, endPattern, offset) {
+  const startIndex = text.search(startPattern) + offset
+  const endIndex = text.search(endPattern)
+  return text.slice(startIndex, endIndex)
+};
+
+function areaForecast(text) {
+  const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
+  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo]/, /&&/, 0).replace(/\n/g, ' ')
+  const aviation = extractText(text, /\.[Aa][Vv][Ii].+[Nn]\.{3}/, /\n\n[Rr\.].+[Ee][Ss][Tt]\s[Oo]/, 12).replace(/\n/g, ' ')
+  document.getElementById('area-forecast-time').innerText = forecastDate
+  document.getElementById('area-forecast-synopsis').innerText = synopsis
+  document.getElementById('area-forecast-aviation').innerText = aviation
+  document.getElementById('area-forecast-div').style.display = 'block'
+  document.getElementById('area-forecast-aviation-div').style.display = 'block'
+};
+
+function displayImages() {
+  if (now.getHours() >= 6 && now.getHours() < 18) {
+    const windImageURL = 'https://graphical.weather.gov/images/SLC/WindSpd4_utah.png'
+    const gustImageURL = 'https://graphical.weather.gov/images/SLC/WindGust4_utah.png'
+    document.getElementById('surface-wind-img').src = windImageURL
+    document.getElementById('surface-gust-img').src = gustImageURL
+    document.getElementById('surface-wind-div').style.display = 'block'
+  }
+  if (now.getHours() >= sunset.slice(11,13)-1 && now.getHours() < 24) {
+    document.getElementById('hourly-chart-tomorrow').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+    document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
+  }
+  else {
+    document.getElementById('hourly-chart-today').src = 'https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6'
+    document.getElementById('hourly-chart-today-div').style.display = 'block'
+  }
+  document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
+  document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
+  document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg'
+  document.getElementById('cam-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg'
+  document.getElementById('cam-east').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+};

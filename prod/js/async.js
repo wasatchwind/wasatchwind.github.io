@@ -1,120 +1,44 @@
 'use strict';
 (async () => {
-    // TIMESERIES (GCP & NWS TOKEN API)
-    try {
-        // let nwsToken
-        // const nwsTokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/nws-token-local-open-cors' //STAGE/LOCAL
-        // try { nwsToken = await (await fetch(nwsTokenURL)).json() }
-        // catch (error) { console.log('NWS token fetch failed') }
-        const timeSeriesURL = `https://api.mesowest.net/v2/station/timeseries?&stid=KSLC&stid=UTOLY&stid=AMB&stid=KU42&stid=FPS&stid=OGP&stid=HF012&recent=520&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=f8258474e4a348ceb3192e4d205f71da`
-        const timeSeriesData = await (await fetch(timeSeriesURL)).json()
-        if (timeSeriesData.SUMMARY.RESPONSE_MESSAGE === 'OK') {
-            ensureWindData(timeSeriesData)
-            ensureGustData(timeSeriesData)
-            ensureDirData(timeSeriesData)
-            if (timeSeriesData.STATION[0].STID === 'KSLC') {
-                kslcTiles(timeSeriesData.STATION[0].OBSERVATIONS)
-                zoneHistoryChart(timeSeriesData.STATION[0].OBSERVATIONS)
-            }
-            for (let i=0; i<timeSeriesData.STATION.length; i++) windChart(timeSeriesData.STATION[i].STID, timeSeriesData.STATION[i].OBSERVATIONS)
-        }
-        else throw(console.log('Timeseries fetch failed'))
-    } catch (error) {
-        console.log(error)
-        document.getElementById('tile-wspd-12').innerHTML = 'Timeseries data error<br>Refresh or try again later'
-        document.getElementById('tile-wspd-12').className = 'fs-2'
-    }
+  const stationsURL = buildStationURL()
+  const openmeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.77069&longitude=-111.96503&daily=sunset,temperature_2m_max&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cape,lifted_index,pressure_msl,windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,geopotential_height_850hPa,geopotential_height_800hPa,geopotential_height_750hPa,geopotential_height_700hPa,geopotential_height_650hPa,geopotential_height_600hPa,geopotential_height_550hPa&windspeed_unit=mph&temperature_unit=fahrenheit&forecast_hours=6&forecast_days=1&timezone=America%2FDenver'
+  const gcpWindAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-forecast'
+  const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
+  const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'
+  const timeSeriesURL = `https://api.synopticdata.com/v2/station/timeseries?${stationsURL}&recent=720&vars=air_temp,altimeter,wind_direction,wind_gust,wind_speed&units=english,speed|mph,temp|F&obtimezone=local&timeformat=%-I:%M%20%p&token=f8258474e4a348ceb3192e4d205f71da`
+  const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
+  const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
+  const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1&glossary=0'
+  
+  // Open Meteo
+  const openmeteoData = await (await fetch(openmeteoURL)).json()
+  sunset = openmeteoData.daily.sunset[0]
+  navSet()
 
-    // WIND ALOFT (GCP)
-    try {
-        const windAloftURL = 'https://us-west3-wasatchwind.cloudfunctions.net/wind-aloft-ftp'
-        const windAloftData = await (await fetch(windAloftURL)).json()
-        windAloftDir(windAloftData.Dirs)
-        windAloftSpeed(windAloftData.Spds)
-        windAloftTime(windAloftData["Start time"], windAloftData["End time"])
-    } catch (error) {
-        console.log('Wind aloft fetch failed')
-        document.getElementById('wind-aloft').innerHTML = 'Data error: Refresh or try again later'
-    }
+  // Wind Aloft
+  const gcpWindAloftData = await (await fetch(gcpWindAloftURL)).json()
+  windAloft(openmeteoData.hourly, gcpWindAloftData)
 
-    // SOUNDING/RAOB (GCP)
-    const maxTempURL = 'https://storage.googleapis.com/wasatch-wind-static/maxtemp.json'
-    const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json'
-    try {
-        maxTempF = (await (await fetch(maxTempURL)).json()).maxtemp
-        document.getElementById('max-temp').innerHTML = maxTempF ? `${maxTempF}&deg;` : 'err'
-    } catch (error) { console.log('Max temp fetch failed') }
-    try {
-        soundingData = await (await fetch(soundingURL)).json()
-    } catch (error) { console.log('Sounding data fetch failed') }
-    if (maxTempF && soundingData) {
-        liftParams = getLiftParams(maxTempF, soundingData)
-        document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * 3.28084).toLocaleString() : '--'
-        document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * 3.28084).toLocaleString() : '--'
-        decodedSkewTChart(maxTempF, soundingData, liftParams)
-    }
+  // Sounding & Soaring
+  soundingData = await (await fetch(soundingURL)).json()
+  const soaringForecastText = await (await fetch(soaringForecastURL)).text()
+  sounding(soundingData, soaringForecastText)  
 
-    // LATEST WEATHER OBSERVATIONS (NWS PUBLIC API)
-    try {
-        let nwsLatestData
-        const nwsLatestURL = 'https://api.weather.gov/stations/KSLC/observations/latest'
-        try { nwsLatestData = await (await fetch(nwsLatestURL)).json() }
-        catch (error) { console.log ('NWS latest fetch failed') }
-        if (nwsLatestData.properties) {
-            document.getElementById('current-icon').src = nwsLatestData.properties.icon
-        }
-    } catch (error) { console.log(error) }
+  // Time Series
+  const timeSeriesData = await (await fetch(timeSeriesURL)).json()
+  timeSeries(timeSeriesData)
 
-    // WIND MAP SNAPSHOT (GCP)
-    try {
-        let windMapData
-        const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
-        try { windMapData = await (await fetch(windMapDataURL)).json() }
-        catch (error) { console.log('Wind map fetch failed') }
-        const timestamp = new Date(windMapData.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
-        const windMapImageURL = 'https://storage.cloud.google.com/wasatch-wind-static/wind-map-save.png'
-        document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
-    } catch (error) { console.log(error) }
+  // Wind Map Metadata
+  const windMapData = await (await fetch(windMapDataURL)).json()
+  windMap(windMapData)
 
-    // NEXT 3 DAYS (NWS PUBLIC API)
-    try {
-        let nwsForecastData
-        const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast'
-        try { nwsForecastData = await (await fetch(nwsForecastURL)).json() }
-        catch (error) { console.log('NWS forecast fetch failed') }
-        if (nwsForecastData) nwsForecastProcess(nwsForecastData)
-    } catch (error) { console.log(error) }
+  // NWS
+  const nwsForecastData = await (await fetch(nwsForecastURL)).json()
+  nwsForecast(nwsForecastData)
 
-    // SOARING FORECAST TEXT
-    try {
-        let soaringForecastText
-        const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1&glossary=0'
-        try { soaringForecastText = await (await fetch(soaringForecastURL)).text() }
-        catch (error) {
-            console.log('Soaring Forecast fetch failed')
-            document.getElementById('soaring-forecast-div').innerText = 'Data error: Refresh or try again later'
-        }
-        processSoaringForecast(soaringForecastText)
-    } catch (error) { console.log(error) }
+  // Area Forecast
+  const areaForecastText = await (await fetch(areaForecastURL)).text()
+  areaForecast(areaForecastText)
 
-    // AREA FORECAST DISCUSSION TEXT
-    try {
-        let areaForecastText
-        const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1&glossary=0'
-        try { areaForecastText = await (await fetch(areaForecastURL)).text() }
-        catch (error) {
-            console.log('Area Forecast fetch failed')
-            document.getElementById('area-forecast-div').innerText = 'Data error: Refresh or try again later'
-        }
-        processAreaForecast(areaForecastText)
-    } catch (error) { console.log(error) }
-
-    if (now.getHours() > 5 && now.getHours() < 17) {
-        windSurfaceForecastGraphical()
-    }
-    const latestCamImageURL = 'https://meso1.chpc.utah.edu/station_cameras/armstrong_cam/armstrong_cam_current.jpg'
-    document.getElementById('latest-cam').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
-    document.getElementById('latest-cam').src = latestCamImageURL
-    document.getElementById('spinner').style.display = 'none'
-    document.getElementById('wind').style.display = 'block'
+  displayImages()
 })();
