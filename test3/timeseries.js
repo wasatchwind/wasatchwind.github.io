@@ -119,7 +119,7 @@ function windChartBarColor(stid, data) {
 };
 
 function calculateZone(alti, temp, currentZones = [], zone = {}) {
-  const zoneSlope = [-0.000555, -0.001111, -0.001666, -0.003, -0.004286, -0.004933, -0.0055, -1]
+  const zoneSlope = [-0.000555, -0.001111, -0.001666, -0.003, -0.004286, -0.004933, -0.0055, 99]
   const zoneIntercept = [29.9167, 30.0111, 30.1083, 30.27, 30.4286, 30.5327, 30.6425, 99]
   zoneSlope.forEach((slope, i) => {
     currentZones.push(Math.round((slope * temp + zoneIntercept[i]) * 100) / 100)
