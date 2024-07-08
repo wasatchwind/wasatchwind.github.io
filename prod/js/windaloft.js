@@ -38,7 +38,7 @@ function openmeteoWindAloft(data, redLimit = 22) {
     if (key.startsWith('windspeed')) {
       value.forEach((speed, i) => {
         const windspeed = Math.round(speed)
-        const barb = windspeed > 40 ? 45 : Math.ceil(windspeed / 5) * 5
+        const barb = windspeed > 45 ? 50 : Math.ceil(windspeed / 5) * 5
         if (key.includes('surfac')) {
           redLimit = 22
         }
@@ -86,7 +86,7 @@ function gcpWindAloft(data) {
 
 function gcpWindAloftRows (i, windspeed, winddirection, redlimit = 22, accelerator = 0) {
   for (const [key, value] of Object.entries(windspeed)) {
-    const barb = value > 40 ? 45 : Math.ceil(value / 5) * 5
+    const barb = value > 45 ? 50 : Math.ceil(value / 5) * 5
     document.getElementById(`${key.slice(-3)}-${i}`).style.backgroundColor = windAloftColor(value, redlimit)
     document.getElementById(`windspeed_${key}-${i}`).innerHTML = value
     document.getElementById(`winddirection_${key}-${i}`).src = `prod/images/barbs/barb${barb}.png`
