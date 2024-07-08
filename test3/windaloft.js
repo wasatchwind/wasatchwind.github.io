@@ -66,7 +66,7 @@ function windAloftLongtermTime(time) {
   const adjustedTime = time - timezoneOffset
   if (adjustedTime === 0) return 'Midnight'
   if (adjustedTime === 12) return 'Noon'
-  return `${Math.abs(adjustedTime)}${adjustedTime < 12 ? 'am' : 'pm'}`
+  return `${Math.abs(adjustedTime)}${adjustedTime < 0 ? 'pm' : 'am'}`
 };
 
 function gcpWindAloft(data) {
