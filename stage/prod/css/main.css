@@ -10,7 +10,6 @@ body {
   color: white;
   text-align: center;
 }
-.border-10 { --bs-border-width: 10px; }
 .mb-div-end { margin-bottom: 8rem; }
 .title-font { font-size: 500%; }
 .gust-color { color: hotpink; }
