@@ -196,27 +196,3 @@ function displayImages() {
   document.getElementById('cam-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg'
   document.getElementById('cam-east').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
 };
-
-// LOCAL ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-function displayImagesLocal() {
-  if (now.getHours() >= 6 && now.getHours() < 18) {
-    const windImageURL = 'images/wind-graphic.png'
-    const gustImageURL = 'images/gust-graphic.png'
-    document.getElementById('surface-wind-img').src = windImageURL
-    document.getElementById('surface-gust-img').src = gustImageURL
-    document.getElementById('surface-wind-div').style.display = 'block'
-  }
-  if (now.getHours() >= sunset.slice(11,13)-1 && now.getHours() < 24) {
-    document.getElementById('hourly-chart-tomorrow').src = 'images/Plotter.png'
-    document.getElementById('hourly-chart-tomorrow-div').style.display = 'block'
-  }
-  else {
-    document.getElementById('hourly-chart-today').src = 'images/Plotter.png'
-    document.getElementById('hourly-chart-today-div').style.display = 'block'
-  }
-  document.getElementById('wind-map').src = 'images/wind-map-save.png'
-  document.getElementById('satellite-gif').src = 'images/sat.gif'
-  document.getElementById('cam-south').src = 'images/cam.png'
-  document.getElementById('cam-west').src = 'images/cam.png'
-  document.getElementById('cam-east').src = 'images/cam.png'
-};

@@ -297,7 +297,7 @@ function outOfRange(userTemp) {
   document.getElementById('out-of-range').style.display = 'block'
   document.getElementById('user-temp').value = null
   return
-}
+};
 
 function d3Clear() {
   document.getElementById('out-of-range').style.display = 'none'

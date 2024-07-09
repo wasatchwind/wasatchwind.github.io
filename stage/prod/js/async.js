@@ -1,5 +1,4 @@
 'use strict';
-
 (async () => {
   const stationsURL = buildStationURL()
   const openmeteoURL = 'https://api.open-meteo.com/v1/gfs?latitude=40.77069&longitude=-111.96503&daily=sunset,temperature_2m_max&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cape,lifted_index,pressure_msl,windspeed_850hPa,windspeed_800hPa,windspeed_750hPa,windspeed_700hPa,windspeed_650hPa,windspeed_600hPa,windspeed_550hPa,winddirection_850hPa,winddirection_800hPa,winddirection_750hPa,winddirection_700hPa,winddirection_650hPa,winddirection_600hPa,winddirection_550hPa,geopotential_height_850hPa,geopotential_height_800hPa,geopotential_height_750hPa,geopotential_height_700hPa,geopotential_height_650hPa,geopotential_height_600hPa,geopotential_height_550hPa&windspeed_unit=mph&temperature_unit=fahrenheit&forecast_hours=6&forecast_days=1&timezone=America%2FDenver'
@@ -41,20 +40,5 @@
   const areaForecastText = await (await fetch(areaForecastURL)).text()
   areaForecast(areaForecastText)
 
-  // displayImagesLocal() // LOCAL TOGGLE
   displayImages()
 })();
-
-// use fronts graphic? Jetstream graphic
-// unused data? gcp wind aloft temps, etc.
-// Pressure forecast? History?
-// Hide tokens?
-// Fix Chrome error/warning: Third-party cookie will be blocked in future Chrome versions as part of Privacy Sandbox.
-// * https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg
-// * https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg
-// * https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif
-
-// MOVING TO GITHUB TESTS
-// HTML: TURN OFF TESTS.JS
-// ASYNC.JS: SWITCH ALL COMMENTED/GREEN
-// MAIN.JS: UNCOMMENT SOUNDINGDATA VARIABLE
