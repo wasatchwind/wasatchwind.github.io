@@ -42,7 +42,7 @@
 
   displayImages()
 
-  const tokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/token-test'
+  const tokenURL = 'https://storage.cloud.google.com/wasatch-wind-static/test.json'
   const token = await (await fetch(tokenURL)).json()
   console.log(token)
   
