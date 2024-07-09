@@ -41,4 +41,9 @@
   areaForecast(areaForecastText)
 
   displayImages()
+
+  const tokenURL = 'https://us-west3-wasatchwind.cloudfunctions.net/token-test'
+  const token = await (await fetch(tokenURL)).json()
+  console.log(token)
+  
 })();
