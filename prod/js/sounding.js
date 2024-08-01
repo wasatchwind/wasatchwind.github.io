@@ -49,9 +49,10 @@ function interpolate(x1, y1, x2, y2, targetY) {
   const slope = (y1 - y2) / (x1 - x2)
   const yInt = y1 - (slope * x1)
   const targetX = (targetY - yInt) / slope
+  const neg3Factor = targetY === 0 ? 1 : (y2 - y1) / (x2 - x1)
   return {
-    altitude: y1 + (targetX - x1) * (y2 - y1) / (x2 - x1),
-    temp: targetX,
+    altitude: y1 + (targetX - x1) * neg3Factor,
+    temp: targetX
   }
 };
 
