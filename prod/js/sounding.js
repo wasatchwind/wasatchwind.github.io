@@ -45,25 +45,10 @@ function processSoaringForecast(text) {
   return hiTemp
 };
 
-function interpolateTol(x1, y1, x2, y2, targetY) {
+function interpolate(x1, y1, x2, y2) {
   const slope = (y1 - y2) / (x1 - x2)
   const yInt = y1 - (slope * x1)
-  const targetX = (targetY - yInt) / slope
-  const neg3Factor = targetY === 0 ? 1 : (y2 - y1) / (x2 - x1)
-  return {
-    altitude: y1 + (targetX - x1) * neg3Factor,
-    temp: targetX
-  }
-};
-
-function interpolateNeg3(x1, y1, x2, y2, dalrYInt, dalrSlope) {
-  const slope = (y1 - y2) / (x1 - x2)
-  const yInt = y1 - (slope * x1)
-  const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
-  return {
-    altitude: y1 + (targetX - x1) * (y2 - y1) / (x2 - x1),
-    temp: targetX + 3
-  }
+  return { slope, yInt }
 };
 
 function getLiftParams(data, temp) {
@@ -83,9 +68,10 @@ function getLiftParams(data, temp) {
     const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
     const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
     if (temp1 !== temp2) {
-      const { altitude, temp } = interpolateNeg3(temp1, alt1, temp2, alt2, dalrYInt, dalrSlope)
-      params.neg3 = altitude
-      params.neg3Temp = temp
+      const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
+      const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
+      params.neg3 = alt1 + (targetX - temp1) * (alt2 - alt1) / (temp2 - temp1)
+      params.neg3Temp = targetX + 3
     } else {
       params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
       params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
@@ -98,8 +84,9 @@ function getLiftParams(data, temp) {
     const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
     const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
     if (temp1 !== temp2) {
-      const { altitude } = interpolateTol(temp1, alt1, temp2, alt2, 0)
-      params.tol = altitude
+      const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
+      const targetX = -yInt / slope
+      params.tol = alt1 + (targetX - temp1)
     } else {
       params.tol = temp1 * dalrSlope + dalrYInt
     }
