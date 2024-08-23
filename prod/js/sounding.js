@@ -45,7 +45,7 @@ function processSoaringForecast(text) {
   return hiTemp
 };
 
-function interpolate(x1, y1, x2, y2, targetY) {
+function interpolateTol(x1, y1, x2, y2, targetY) {
   const slope = (y1 - y2) / (x1 - x2)
   const yInt = y1 - (slope * x1)
   const targetX = (targetY - yInt) / slope
@@ -53,6 +53,16 @@ function interpolate(x1, y1, x2, y2, targetY) {
   return {
     altitude: y1 + (targetX - x1) * neg3Factor,
     temp: targetX
+  }
+};
+
+function interpolateNeg3(x1, y1, x2, y2, dalrYInt, dalrSlope) {
+  const slope = (y1 - y2) / (x1 - x2)
+  const yInt = y1 - (slope * x1)
+  const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
+  return {
+    altitude: y1 + (targetX - x1) * (y2 - y1) / (x2 - x1),
+    temp: targetX + 3
   }
 };
 
@@ -73,7 +83,7 @@ function getLiftParams(data, temp) {
     const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
     const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
     if (temp1 !== temp2) {
-      const { altitude, temp } = interpolate(temp1, alt1, temp2, alt2, -3 * dalrSlope + dalrYInt)
+      const { altitude, temp } = interpolateNeg3(temp1, alt1, temp2, alt2, dalrYInt, dalrSlope)
       params.neg3 = altitude
       params.neg3Temp = temp
     } else {
@@ -88,7 +98,7 @@ function getLiftParams(data, temp) {
     const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
     const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
     if (temp1 !== temp2) {
-      const { altitude } = interpolate(temp1, alt1, temp2, alt2, 0)
+      const { altitude } = interpolateTol(temp1, alt1, temp2, alt2, 0)
       params.tol = altitude
     } else {
       params.tol = temp1 * dalrSlope + dalrYInt
