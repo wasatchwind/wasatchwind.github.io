@@ -37,9 +37,16 @@ function sounding(data, text) {
 };
 
 function processSoaringForecast(text) {
-  const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
-  const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
-  const hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
+  // WINTER FORMAT:
+  // const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
+  // const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
+  // const hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
+
+  // SUMMER FORMAT:
+  const soaringForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0)
+  const hiTempRow = soaringForecast.match(/(?<=maximum temp.+\s)\d{2,3}/)
+  const hiTemp = parseInt(hiTempRow[0])
+  
   document.getElementById('soaring-forecast').innerText = soaringForecast
   document.getElementById('hi-temp').innerHTML = hiTemp
   return hiTemp
