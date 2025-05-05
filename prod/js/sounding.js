@@ -43,9 +43,19 @@ function processSoaringForecast(text) {
   // const hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
 
   // SUMMER FORMAT:
-  const soaringForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0)
-  const hiTempRow = soaringForecast.match(/(?<=maximum temp.+\s)\d{2,3}/)
-  const hiTemp = parseInt(hiTempRow[0])
+  const rawForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0).split('\n')
+  const date = rawForecast[0]
+  const rateOfLift = rawForecast[4].slice(48)
+  const topOfLift = parseInt(rawForecast[5].match(/\d{4,5}/)[0]).toLocaleString()
+  const hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
+  const odTime = rawForecast[9].slice(48)
+  const neg3 = parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
+  const soaringForecast = `${date}
+  
+  Top of Lift: ${topOfLift}
+  Height of -3 Index: ${neg3}
+  Max Rate of Lift: ${rateOfLift}
+  Overdevelopment Time: ${odTime}`
   
   document.getElementById('soaring-forecast').innerText = soaringForecast
   document.getElementById('hi-temp').innerHTML = hiTemp
