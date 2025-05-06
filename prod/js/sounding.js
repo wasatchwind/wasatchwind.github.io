@@ -52,9 +52,9 @@ function processSoaringForecast(text) {
   const neg3 = parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
   const soaringForecast = `${date}
   
-  Top of Lift:  ${topOfLift}
-  Height of -3: ${neg3}
-  OD Time:      ${odTime}
+  Top of Lift.... ${topOfLift}
+  Height of -3... ${neg3}
+  OD Time........ ${odTime}
   
   Max Rate of Lift:
   ${rateOfLift}`
