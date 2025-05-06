@@ -54,6 +54,7 @@ function processSoaringForecast(text) {
   
   Top of Lift: ${topOfLift}
   Height of -3 Index: ${neg3}
+  
   Max Rate of Lift:
   ${rateOfLift}
   
