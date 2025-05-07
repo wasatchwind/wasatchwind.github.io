@@ -44,23 +44,23 @@ function processSoaringForecast(text) {
 
   // SUMMER FORMAT:
   const rawForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0).split('\n')
-  // const date = rawForecast[0]
-  // const rateOfLift = rawForecast[4].slice(48)
-  // const topOfLift = parseInt(rawForecast[5].match(/\d{4,5}/)[0]).toLocaleString()
+  const date = rawForecast[0]
+  const rateOfLift = rawForecast[4].slice(48)
+  const topOfLift = parseInt(rawForecast[5].slice(48))
   const hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
-  // const odTime = rawForecast[9].slice(48)
-  // const neg3 = parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
-  // const soaringForecast = `${date}
+  const odTime = rawForecast[9].slice(48)
+  const neg3 = rawForecast[12].slice(48) === 'None' ? rawForecast[12].slice(48) : parseInt(rawForecast[12].match(/\d{1,5}/)[0]).toLocaleString()
+  const soaringForecast = `${date}
   
-  // Top of Lift.... ${topOfLift}
-  // Height of -3... ${neg3}
-  // OD Time........ ${odTime}
+  Top of Lift.... ${topOfLift}
+  Height of -3... ${neg3}
+  OD Time........ ${odTime}
   
-  // Max Rate of Lift:
-  // ${rateOfLift}`
+  Max Rate of Lift:
+  ${rateOfLift}`
   
-  // document.getElementById('soaring-forecast').innerText = soaringForecast
-  // document.getElementById('hi-temp').innerHTML = hiTemp
+  document.getElementById('soaring-forecast').innerText = soaringForecast
+  document.getElementById('hi-temp').innerHTML = hiTemp
   return hiTemp
 };
 
