@@ -23,7 +23,7 @@
   // Sounding & Soaring
   soundingData = await (await fetch(soundingURL)).json()
   const soaringForecastText = await (await fetch(soaringForecastURL)).text()
-  sounding(soundingData, soaringForecastText)  
+  sounding(soundingData, soaringForecastText)
 
   // Time Series
   const timeSeriesData = await (await fetch(timeSeriesURL)).json()
