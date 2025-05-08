@@ -46,7 +46,7 @@ function processSoaringForecast(text) {
   const rawForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0).split('\n')
   const date = rawForecast[0]
   const rateOfLift = rawForecast[4].slice(48)
-  const topOfLift = parseInt(rawForecast[5].slice(48))
+  const topOfLift = parseInt(rawForecast[5].slice(48)).toLocaleString()
   const hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
   const odTime = rawForecast[9].slice(48)
   const neg3 = rawForecast[12].slice(48) === 'None' ? rawForecast[12].slice(48) : parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
