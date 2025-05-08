@@ -2,7 +2,7 @@
 const now = new Date()
 const ftPerMeter = 3.28084
 const slider = buildNavSlider()
-const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'HF012', 'FPS', 'OGP', 'KSLC']
 let activeNav = 0, navItems = [], sunset, soundingData
 
 function reload() {
