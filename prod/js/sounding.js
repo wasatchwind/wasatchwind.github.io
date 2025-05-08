@@ -49,7 +49,7 @@ function processSoaringForecast(text) {
   const topOfLift = parseInt(rawForecast[5].slice(48))
   const hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
   const odTime = rawForecast[9].slice(48)
-  const neg3 = rawForecast[12].slice(48) === 'None' ? rawForecast[12].slice(48) : parseInt(rawForecast[12].match(/\d{1,5}/)[0]).toLocaleString()
+  const neg3 = rawForecast[12].slice(48) === 'None' ? rawForecast[12].slice(48) : parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
   const soaringForecast = `${date}
   
   Top of Lift.... ${topOfLift}
