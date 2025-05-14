@@ -79,22 +79,27 @@ function getLiftParams(data, temp) {
   const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
 
   // First find height of -3 index (thermal index = -3)
-  while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
-  if (position === 0) {
+  try {
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
+    if (position === 0) {
+      params.neg3 = null
+      params.neg3Temp = null
+    } else {
+      const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
+      const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
+      if (temp1 !== temp2) {
+        const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
+        const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
+        params.neg3 = alt1 + (targetX - temp1) * (alt2 - alt1) / (temp2 - temp1)
+        params.neg3Temp = targetX + 3
+      } else {
+        params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
+        params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
+      }
+    }
+  } catch (error) {
     params.neg3 = null
     params.neg3Temp = null
-  } else {
-    const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
-    const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
-    if (temp1 !== temp2) {
-      const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
-      const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
-      params.neg3 = alt1 + (targetX - temp1) * (alt2 - alt1) / (temp2 - temp1)
-      params.neg3Temp = targetX + 3
-    } else {
-      params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
-      params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
-    }
   }
 
   // Next find top of lift (thermal index = 0)
