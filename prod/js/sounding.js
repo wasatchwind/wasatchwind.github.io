@@ -55,15 +55,21 @@ function processSoaringForecast(text) {
     ${rateOfLift}`
   
     if (date === dateCheck) hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
+
+    document.getElementById('soaring-forecast').innerText = soaringForecast
+    document.getElementById('hi-temp').innerHTML = hiTemp
+
+    return hiTemp
   } catch { // WINTER FORMAT
     const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
     const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
     hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
-  }
 
-  document.getElementById('soaring-forecast').innerText = soaringForecast
-  document.getElementById('hi-temp').innerHTML = hiTemp
-  return hiTemp
+    document.getElementById('soaring-forecast').innerText = soaringForecast
+    document.getElementById('hi-temp').innerHTML = hiTemp
+
+    return hiTemp
+  }
 };
 
 function interpolate(x1, y1, x2, y2) {
