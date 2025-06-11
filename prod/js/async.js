@@ -24,6 +24,7 @@ let hiTemp = null; // Global variable sourced conditionally
   windAloft(openmeteoData.hourly, gcpWindAloftData)
 
   // Sounding & Soaring
+  soundingData = await (await fetch(soundingURL)).json()
   const soaringForecastPageContent = await (await fetch(soaringForecastURL)).text()
   const soaringForecastText = parsePreText(soaringForecastPageContent)
   sounding(soundingData, soaringForecastText)
