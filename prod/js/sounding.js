@@ -38,27 +38,23 @@ function sounding(data, text) {
 
 function processSoaringForecast(text) {
   try { // SUMMER FORMAT
-    let outdated = ''
-    const parsedLines = text.split('\n')
-    const date = parsedLines[6]
-    const rateOfLift = parsedLines[12].slice(48)
-    const topOfLift = parseInt(parsedLines[13].slice(48)).toLocaleString()
-    const odTime = parsedLines[17].slice(48)
-    const neg3 = parsedLines[20].slice(48) === 'None' ? parsedLines[20].slice(48) : parseInt(parsedLines[20].match(/\d{4,5}/)[0]).toLocaleString()
-    const dateCheck = now.toLocaleString('en-US', {weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'})
-    if (date.slice(11) === dateCheck) hiTemp = parseInt(parsedLines[15].match(/\d{2,3}/))
-    else outdated = '(!)'
+    const rawForecast = extractText(text, /(?<=This forecast is for )/, /\nWave/, 0).split('\n')Add commentMore actions
+    const date = rawForecast[0].slice(0, -1)
+    const dateCheck = now.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+    const rateOfLift = rawForecast[4].slice(48)
+    const topOfLift = parseInt(rawForecast[5].slice(48)).toLocaleString()
+    const odTime = rawForecast[9].slice(48)
+    const neg3 = rawForecast[12].slice(48) === 'None' ? rawForecast[12].slice(48) : parseInt(rawForecast[12].match(/\d{4,5}/)[0]).toLocaleString()
+    const soaringForecast = `${date}
+        
+        Top of Lift.... ${topOfLift}
+        Height of - 3...${neg3}
+        OD Time........ ${odTime}
+        
+        Max Rate of Lift:
+        ${rateOfLift}`
     
-    const soaringForecast = `${date} ${outdated}
-
-    Max Temp....... ${hiTemp}
-    
-    Top of Lift.... ${topOfLift}
-    Height of -3... ${neg3}
-    OD Time........ ${odTime}
-    
-    Max Rate of Lift:
-    ${rateOfLift}`
+    if (date === dateCheck) hiTemp = parseInt(rawForecast[7].match(/\d{2,3}/))
 
     document.getElementById('soaring-forecast').innerText = soaringForecast
     document.getElementById('hi-temp').innerHTML = hiTemp
