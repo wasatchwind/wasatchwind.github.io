@@ -48,7 +48,7 @@ let hiTemp = null; // Global variable sourced conditionally
 
   displayImages()
 
-  // Helper function to process text for Area Forecase and Soaring Forecast:
+  // Helper function to process text for Area Forecast and Soaring Forecast:
   function parsePreText(rawContent) {
     const parser = new DOMParser()
     const response = parser.parseFromString(rawContent, 'text/html')
