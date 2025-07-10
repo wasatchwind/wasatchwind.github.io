@@ -160,7 +160,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
   svg.append('path').datum(data)
     .attr('d', tempLine)
     .attr('fill', 'none')
-    .attr('stroke', 'var(--bs-red)')
+    .attr('stroke', 'var(--bs-orange)')
     .attr('stroke-width', 4)
   
   // Plot Dewpoint line
