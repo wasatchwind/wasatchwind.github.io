@@ -198,7 +198,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
   // Draw y axis
   svg.append('g')
     .attr('class', 'yAxis')
-    .call(d3.axisLeft(y).tickFormat(d => `${d}k'`))
+    .call(d3.axisLeft(y).tickFormat(d => `${d}k`))
   
   // Draw blank gray polygon to cover upper right grid
   const p1 = `M ${x(25)} 0, `
@@ -216,39 +216,31 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
     .attr('class', 'dewpoint')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(12.5))
+    .attr('y', y(11.5))
     .text('Dewpoint')
   svg.append('text')
     .attr('class', 'temp')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(10.5))
+    .attr('y', y(10.25))
     .text('Air Temp')
   svg.append('text')
     .attr('class', 'dalr')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(8.5))
+    .attr('y', y(9))
     .text('DALR')
   
   drawDALRParams(maxTemp, liftParams)
 };
 
 function drawDALRParams (temp, params) {
-  // Legend label max temp
-  svg.append('text')
-    .attr('class', 'white')
-    .attr('text-anchor', 'end')
-    .attr('x', x(113))
-    .attr('y', y(18.5))
-    .text(`Surface Temp: ${temp}°`)
-
   // Legend label top of lift
   svg.append('text')
     .attr('class', 'white')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(16.5))
+    .attr('y', y(19))
     .text(`Top of Lift: ${Math.round(params.tol * ftPerMeter).toLocaleString()}`)
 
   // Legend label -3 index
@@ -256,8 +248,16 @@ function drawDALRParams (temp, params) {
     .attr('class', 'white')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(14.5))
+    .attr('y', y(17))
     .text(`-3 Index: ${Math.round(params.neg3 * ftPerMeter).toLocaleString()}`)
+
+  // Legend label max temp
+  svg.append('text')
+    .attr('class', 'white')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(15))
+    .text(`@ ${temp}°`)
 
   // Max temp DALR line
   svg.append('g').append('line')
@@ -278,7 +278,7 @@ function drawDALRParams (temp, params) {
   svg.append('g').append('line')
     .attr('class', 'neg3line')
     .attr('stroke', 'white')
-    .attr('stroke-width', 2)
+    .attr('stroke-width', 3)
     .attr('x1', x((params.neg3Temp * 9 / 5) + 32))
     .attr('y1', y(params.neg3 * ftPerMeter / 1000))
     .attr('x2', x((params.neg3Temp * 9 / 5) + 32 - 5.4))
@@ -287,8 +287,8 @@ function drawDALRParams (temp, params) {
   // -3 label
   svg.append('g').append('text')
     .attr('class', 'liftlabels')
-    .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
-    .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.6))
+    .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 2))
+    .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.3))
     .text('-3')
 
   // Top of lift point
@@ -303,7 +303,7 @@ function drawDALRParams (temp, params) {
   svg.append('g').append('text')
     .attr('class', 'liftlabels')
     .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-    .attr('y', y(params.tol * ftPerMeter / 1000))
+    .attr('y', y(params.tol * ftPerMeter / 1000 - 0.3))
     .text('ToL')
 };
 
@@ -317,7 +317,7 @@ function d3Update(userLiftParams) {
     outOfRange(userTemp)
     return
   }
-  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || userLiftParams.tol * ftPerMeter / 1000 > 20 || !userLiftParams.tol) {
+  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || !userLiftParams.tol) {
     outOfRange(userTemp)
   } else {
     clearChart()
