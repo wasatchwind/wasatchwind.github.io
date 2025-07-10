@@ -166,8 +166,8 @@ function extractText(text, startPattern, endPattern, offset) {
 
 function areaForecast(text) {
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
-  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 0)
-  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 0)
+  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 8)
+  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 8)
   document.getElementById('area-forecast-time').innerText = forecastDate
   document.getElementById('area-forecast-synopsis').innerText = synopsis
   document.getElementById('area-forecast-aviation').innerText = aviation
