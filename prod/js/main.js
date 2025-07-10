@@ -159,14 +159,15 @@ function windMap(data) {
 
 function extractText(text, startPattern, endPattern, offset) {
   const startIndex = text.search(startPattern) + offset
+  text = text.slice(startIndex)
   const endIndex = text.search(endPattern)
-  return text.slice(startIndex, endIndex)
+  return text.slice(0, endIndex).replace(/\n/g, ' ')
 };
 
 function areaForecast(text) {
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
-  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo]/, /&&/, 0).replace(/\n/g, ' ')
-  const aviation = extractText(text, /\.[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 9).replace(/\n/g, ' ')
+  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 0)
+  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 0)
   document.getElementById('area-forecast-time').innerText = forecastDate
   document.getElementById('area-forecast-synopsis').innerText = synopsis
   document.getElementById('area-forecast-aviation').innerText = aviation
