@@ -53,10 +53,11 @@ function processSoaringForecast(text) {
     
     Top of Lift.... ${topOfLift}
     Height of -3... ${neg3}
-    OD Time........ ${odTime}
+    Max Lift Rate.. ${rateOfLift}
+    OD Time........ ${odTime}`
     
-    Max Rate of Lift:
-    ${rateOfLift}`
+    // Max Rate of Lift:
+    // ${rateOfLift}`
 
     document.getElementById('soaring-forecast').innerText = soaringForecast
     document.getElementById('hi-temp').innerHTML = hiTemp
