@@ -2,7 +2,7 @@
 const now = new Date()
 const ftPerMeter = 3.28084
 const slider = buildNavSlider()
-const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KU42', 'HF012', 'FPS', 'OGP', 'KSLC']
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'HF012', 'FPS', 'OGP', 'KSLC']
 let activeNav = 0, navItems = [], sunset, soundingData
 
 function reload() {
@@ -159,14 +159,15 @@ function windMap(data) {
 
 function extractText(text, startPattern, endPattern, offset) {
   const startIndex = text.search(startPattern) + offset
+  text = text.slice(startIndex)
   const endIndex = text.search(endPattern)
-  return text.slice(startIndex, endIndex)
+  return text.slice(0, endIndex).replace(/\n/g, ' ')
 };
 
 function areaForecast(text) {
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
-  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo]/, /&&/, 0).replace(/\n/g, ' ')
-  const aviation = extractText(text, /\.[Aa][Vv][Ii].+[Nn]\.{3}/, /\n\n[Rr\.].+[Ee][Ss][Tt]\s[Oo]/, 12).replace(/\n/g, ' ')
+  const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 0)
+  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 0)
   document.getElementById('area-forecast-time').innerText = forecastDate
   document.getElementById('area-forecast-synopsis').innerText = synopsis
   document.getElementById('area-forecast-aviation').innerText = aviation
@@ -193,6 +194,6 @@ function displayImages() {
   document.getElementById('wind-map').src = 'https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png'
   document.getElementById('satellite-gif').src = 'https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif'
   document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg'
-  document.getElementById('cam-west').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/Draper.latest.jpg'
-  document.getElementById('cam-east').src = 'https://www.wrh.noaa.gov/images/slc/camera/latest/darren2.latest.jpg'
+  document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700'
+  document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573'
 };
