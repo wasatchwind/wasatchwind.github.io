@@ -91,11 +91,6 @@ a:active {
   font-weight: 500;
   line-height: 1.2;
 }
-@media (min-width: 1200px) {
-  .white {
-    font-size: 3.5rem;
-  }
-}
 .dewpoint {
   fill: #20c997;
   font-size: 3.5vw;
