@@ -83,40 +83,33 @@ a:active {
   opacity: 0.5;
 }
 .svgbg { fill: #212529; }
-.xAxis { font-size: 160%; }
-.yAxis { font-size: 160%; }
-.maxtemp {
-  fill: #0dcaf0;
+.xAxis { font-size: 180%; }
+.yAxis { font-size: 180%; }
+.white {
+  fill: white;
   font-size: calc(1.475rem + 2.7vw);
   font-weight: 500;
   line-height: 1.2;
 }
 @media (min-width: 1200px) {
-  .maxtemp {
+  .white {
     font-size: 3.5rem;
   }
 }
 .dewpoint {
   fill: #20c997;
-  font-size: calc(1.475rem + 2.7vw);
+  font-size: 3.5vw;
   font-weight: 500;
-  line-height: 1.2;
-}
-@media (min-width: 1200px) {
-  .dewpoint {
-    font-size: 3.5rem;
-  }
 }
 .temp {
   fill: #dc3545;
-  font-size: calc(1.475rem + 2.7vw);
+  font-size: 3.5vw;
   font-weight: 500;
-  line-height: 1.2;
 }
-@media (min-width: 1200px) {
-  .temp {
-    font-size: 3.5rem;
-  }
+.dalr {
+  fill: #0dcaf0;
+  font-size: 3.5vw;
+  font-weight: 500;
 }
 .dalrlabel {
   fill: #6c757d;
@@ -125,7 +118,7 @@ a:active {
 }
 .liftlabels {
   fill: white;
-  font-size: 160%;
+  font-size: 200%;
 }
 .liftheights {
   fill: white;
