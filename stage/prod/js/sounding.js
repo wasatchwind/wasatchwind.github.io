@@ -37,22 +37,47 @@ function sounding(data, text) {
 };
 
 function processSoaringForecast(text) {
-  const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
-  const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
-  const hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
-  document.getElementById('soaring-forecast').innerText = soaringForecast
-  document.getElementById('hi-temp').innerHTML = hiTemp
-  return hiTemp
+  try { // SUMMER FORMAT
+    let outdated = ''
+    const parsedLines = text.split('\n')
+    const date = parsedLines[6]
+    const rateOfLift = parsedLines[12].slice(48)
+    const topOfLift = parseInt(parsedLines[13].slice(48)).toLocaleString()
+    const odTime = parsedLines[17].slice(48)
+    const neg3 = parsedLines[20].slice(48) === 'None' ? parsedLines[20].slice(48) : parseInt(parsedLines[20].match(/\d{4,5}/)[0]).toLocaleString()
+    const dateCheck = now.toLocaleString('en-US', {weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'})
+    if (date.slice(11) === dateCheck) hiTemp = parseInt(parsedLines[15].match(/\d{2,3}/))
+    else outdated = '(!)'
+    
+    const soaringForecast = `${date} ${outdated}
+    
+    Top of Lift.... ${topOfLift}
+    Height of -3... ${neg3}
+    OD Time........ ${odTime}
+    
+    Max Rate of Lift:
+    ${rateOfLift}`
+
+    document.getElementById('soaring-forecast').innerText = soaringForecast
+    document.getElementById('hi-temp').innerHTML = hiTemp
+
+    return hiTemp
+  } catch { // WINTER FORMAT
+    const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
+    const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
+    hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
+
+    document.getElementById('soaring-forecast').innerText = soaringForecast
+    document.getElementById('hi-temp').innerHTML = hiTemp
+
+    return hiTemp
+  }
 };
 
-function interpolate(x1, y1, x2, y2, targetY) {
+function interpolate(x1, y1, x2, y2) {
   const slope = (y1 - y2) / (x1 - x2)
   const yInt = y1 - (slope * x1)
-  const targetX = (targetY - yInt) / slope
-  return {
-    altitude: y1 + (targetX - x1) * (y2 - y1) / (x2 - x1),
-    temp: targetX,
-  }
+  return { slope, yInt }
 };
 
 function getLiftParams(data, temp) {
@@ -64,21 +89,27 @@ function getLiftParams(data, temp) {
   const dalrYInt = surfaceAlt_m - (dalrSlope * tempC)
 
   // First find height of -3 index (thermal index = -3)
-  while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
-  if (position === 0) {
+  try {
+    while (data[position].Temp_c - ((data[position].Altitude_m - dalrYInt) / dalrSlope) < -3) position++
+    if (position === 0) {
+      params.neg3 = null
+      params.neg3Temp = null
+    } else {
+      const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
+      const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
+      if (temp1 !== temp2) {
+        const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
+        const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope)
+        params.neg3 = alt1 + (targetX - temp1) * (alt2 - alt1) / (temp2 - temp1)
+        params.neg3Temp = targetX + 3
+      } else {
+        params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
+        params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
+      }
+    }
+  } catch (error) {
     params.neg3 = null
     params.neg3Temp = null
-  } else {
-    const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
-    const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
-    if (temp1 !== temp2) {
-      const { altitude, temp } = interpolate(temp1, alt1, temp2, alt2, -3 * dalrSlope + dalrYInt)
-      params.neg3 = altitude
-      params.neg3Temp = temp
-    } else {
-      params.neg3 = (temp1 + 3) * dalrSlope + dalrYInt
-      params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope
-    }
   }
 
   // Next find top of lift (thermal index = 0)
@@ -87,8 +118,9 @@ function getLiftParams(data, temp) {
     const { Temp_c: temp1, Altitude_m: alt1 } = data[position]
     const { Temp_c: temp2, Altitude_m: alt2 } = data[position - 1]
     if (temp1 !== temp2) {
-      const { altitude } = interpolate(temp1, alt1, temp2, alt2, 0)
-      params.tol = altitude
+      const { slope, yInt } = interpolate(temp1, alt1, temp2, alt2)
+      const targetX = -yInt / slope
+      params.tol = alt1 + (targetX - temp1)
     } else {
       params.tol = temp1 * dalrSlope + dalrYInt
     }
@@ -179,26 +211,25 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
     .attr('class', 'svgbg')
     .attr('d', polygon)
   
-  // DALR label
-  svg.append('text')
-    .attr('class', 'dalrlabel')
-    .attr('transform', `rotate(45, ${x(-3)}, ${y(6)})`)
-    .style('text-anchor', 'start')
-    .text(`Dry Adiabatic Lapse Rate: -5.4° F / 1,000 ft`)
-  
   // Legend labels
   svg.append('text')
     .attr('class', 'dewpoint')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(16.5))
+    .attr('y', y(12.5))
     .text('Dewpoint')
   svg.append('text')
     .attr('class', 'temp')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
-    .attr('y', y(14.5))
-    .text('Temp')
+    .attr('y', y(10.5))
+    .text('Air Temp')
+  svg.append('text')
+    .attr('class', 'dalr')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(8.5))
+    .text('DALR')
   
   drawDALRParams(maxTemp, liftParams)
 };
@@ -206,11 +237,27 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
 function drawDALRParams (temp, params) {
   // Legend label max temp
   svg.append('text')
-    .attr('class', 'maxtemp')
+    .attr('class', 'white')
     .attr('text-anchor', 'end')
     .attr('x', x(113))
     .attr('y', y(18.5))
-    .text(`Max Temp DALR: ${temp}°`)
+    .text(`Surface Temp: ${temp}°`)
+
+  // Legend label top of lift
+  svg.append('text')
+    .attr('class', 'white')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(16.5))
+    .text(`Top of Lift: ${Math.round(params.tol * ftPerMeter).toLocaleString()}`)
+
+  // Legend label -3 index
+  svg.append('text')
+    .attr('class', 'white')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(14.5))
+    .text(`-3 Index: ${Math.round(params.neg3 * ftPerMeter).toLocaleString()}`)
 
   // Max temp DALR line
   svg.append('g').append('line')
@@ -243,13 +290,6 @@ function drawDALRParams (temp, params) {
     .attr('x', x((params.neg3Temp * 9 / 5) + 32 - 3))
     .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.6))
     .text('-3')
-  
-  // -3 height
-  svg.append('g').append('text')
-    .attr('class', 'liftheights')
-    .attr('x', x((params.neg3Temp * 9 / 5) + 32 + 4))
-    .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.5))
-    .text(Math.round(params.neg3 * ftPerMeter).toLocaleString())
 
   // Top of lift point
   svg.append('g').append('circle')
@@ -265,13 +305,6 @@ function drawDALRParams (temp, params) {
     .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
     .attr('y', y(params.tol * ftPerMeter / 1000))
     .text('ToL')
-  
-  // Top of lift height
-  svg.append('g').append('text')
-    .attr('class', 'liftheights')
-    .attr('x', x((params.tolTemp * 9 / 5) + 32 + 10))
-    .attr('y', y(params.tol * ftPerMeter / 1000))
-    .text(`${Math.round(params.tol * ftPerMeter).toLocaleString()}`)
 };
 
 function d3Update(userLiftParams) {
@@ -311,6 +344,6 @@ function clearChart() {
   svg.select('line.neg3line').remove()
   svg.selectAll('text.liftlabels').remove()
   svg.selectAll('text.liftheights').remove()
-  svg.select('text.maxtemp').remove()
+  svg.selectAll('text.white').remove()
   svg.select('circle.tolcircle').remove()
 };
