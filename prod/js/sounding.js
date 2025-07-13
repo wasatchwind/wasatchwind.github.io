@@ -51,10 +51,10 @@ function processSoaringForecast(text) {
     
     const soaringForecast = `${date} ${outdated}
     
-    Top of Lift.... ${topOfLift}
-    Height of -3... ${neg3}
-    Max Lift Rate.. ${rateOfLift}
-    OD Time........ ${odTime}`
+    Top of Lift...... ${topOfLift}
+    Height of -3..... ${neg3}
+    Max Lift Rate.... ${rateOfLift}
+    OD Time.......... ${odTime}`
 
     document.getElementById('soaring-forecast').innerText = soaringForecast
     document.getElementById('hi-temp').innerHTML = hiTemp
