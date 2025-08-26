@@ -2,7 +2,7 @@
 const now = new Date()
 const ftPerMeter = 3.28084
 const slider = buildNavSlider()
-const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'HF012', 'FPS', 'OGP', 'KSLC']
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'FPS', 'OGP', 'KSLC']
 let activeNav = 0, navItems = [], sunset, soundingData
 
 function reload() {
@@ -197,3 +197,4 @@ function displayImages() {
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700'
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573'
 };
+
