@@ -680,28 +680,21 @@
             <div id="KSVR=off" onclick="stationSetToggle('KSVR=off')">Off</div>
           </div>
 
-          <!-- (7) Station Toggle HF012 -->
-          <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
-            <div class="col-5 display-3 text-info text-start">Northside</div>
-            <div id="HF012=on" onclick="stationSetToggle('HF012=on')">On</div>
-            <div id="HF012=off" onclick="stationSetToggle('HF012=off')">Off</div>
-          </div>
-
-          <!-- (8) Station Toggle FPS -->
+          <!-- (7) Station Toggle FPS -->
           <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Southside</div>
             <div id="FPS=on" onclick="stationSetToggle('FPS=on')">On</div>
             <div id="FPS=off" onclick="stationSetToggle('FPS=off')">Off</div>
           </div>
 
-          <!-- (9) Station Toggle OGP -->
+          <!-- (8) Station Toggle OGP -->
           <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
             <div class="col-5 display-3 text-info text-start">Ogden Peak</div>
             <div id="OGP=on" onclick="stationSetToggle('OGP=on')">On</div>
             <div id="OGP=off" onclick="stationSetToggle('OGP=off')">Off</div>
           </div>
 
-          <!-- (10) Synoptic Plug -->
+          <!-- (9) Synoptic Plug -->
           <div class="d-flex display-6 justify-content-center mt-4">
             <div class="text-secondary fw-semibold">Weather station data from&nbsp;</div>
             <a href="https://synopticdata.com/">Synoptic</a>
@@ -1610,152 +1603,6 @@
               </div>
             </div>
 
-            <!-- Wind Chart Northside (HF012) -->
-            <div id="HF012-main">
-              <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
-                <div class="d-flex align-items-end">
-                  <div class="align-self-center display-1 text-warning" id="HF012-toggle"
-                    onclick="toggleWindChart('HF012')">
-                    &#43;</div>
-                  <div class="display-3 text-info mx-4">Northside</div>
-                </div>
-                <div class="col-5 d-flex justify-content-between me-2">
-                  <div class="align-self-end display-6 fw-semibold text-secondary" id="HF012-time-12">No Data</div>
-                  <div class="col-2 display-4" id="HF012-wdir-12"></div>
-                  <div class="col-2 display-4 fw-semibold" id="HF012-wspd-12"></div>
-                  <div class="col-2 display-6 fw-semibold gust-color" id="HF012-gust-12"></div>
-                </div>
-              </div>
-              <div class="bg-dark rounded-4">
-                <div class="collapse" id="HF012">
-                  <a href="https://www.weather.gov/wrh/timeseries?site=HF012&hours=72" target="_blank">
-                    <div class="align-items-end d-flex">
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-0">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-0"></div>
-                        <div id="HF012-wbar-0"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-0"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-0"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-0"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-1">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-1"></div>
-                        <div id="HF012-wbar-1"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-1"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-1"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-1"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-2">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-2"></div>
-                        <div id="HF012-wbar-2"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-2"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-2"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-2"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-3">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-3"></div>
-                        <div id="HF012-wbar-3"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-3"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-3"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-3"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-4">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-4"></div>
-                        <div id="HF012-wbar-4"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-4"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-4"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-4"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-5">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-5"></div>
-                        <div id="HF012-wbar-5"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-5"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-5"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-5"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-6">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-6"></div>
-                        <div id="HF012-wbar-6"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-6"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-6"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-6"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-7">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-7"></div>
-                        <div id="HF012-wbar-7"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-7"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-7"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-7"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-8">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-8"></div>
-                        <div id="HF012-wbar-8"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-8"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-8"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-8"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-9">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-9"></div>
-                        <div id="HF012-wbar-9"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-9"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-9"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-9"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-10">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-10"></div>
-                        <div id="HF012-wbar-10"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-10"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-10"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-10"></div>
-                      </div>
-                      <div class="col px-1">
-                        <div class="gust-color h2" id="HF012-gust-11">&nbsp;</div>
-                        <div class="bg-danger" id="HF012-gbar-11"></div>
-                        <div id="HF012-wbar-11"></div>
-                        <div class="bg-secondary fs-1 fw-bold"><span id="HF012-wspd-11"></span></div>
-                        <div>
-                          <div class="display-4" id="HF012-wdir-11"></div>
-                        </div>
-                        <div class="fs-4" id="HF012-time-11"></div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-
             <!-- Wind Chart Southside (FPS) -->
             <div id="FPS-main">
               <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
@@ -2076,3 +1923,4 @@
 </body>
 
 </html>
+
