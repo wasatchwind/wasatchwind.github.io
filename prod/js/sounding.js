@@ -36,42 +36,6 @@ function sounding(data, text) {
   }
 };
 
-// function processSoaringForecast(text) {
-//   try { // SUMMER FORMAT
-//     let outdated = ''
-//     const parsedLines = text.split('\n')
-//     const date = parsedLines[6]
-//     const rateOfLift = parsedLines[12].slice(48)
-//     const topOfLift = parseInt(parsedLines[13].slice(48)).toLocaleString()
-//     const odTime = parsedLines[17].slice(48)
-//     const neg3 = parsedLines[20].slice(48) === 'None' ? parsedLines[20].slice(48) : parseInt(parsedLines[20].match(/\d{4,5}/)[0]).toLocaleString()
-//     const dateCheck = now.toLocaleString('en-US', {weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'})
-//     if (date.slice(11) === dateCheck) hiTemp = parseInt(parsedLines[15].match(/\d{2,3}/))
-//     else outdated = '(!)'
-    
-//     const soaringForecast = `${date} ${outdated}
-    
-//     Top of Lift...... ${topOfLift}
-//     Height of -3..... ${neg3}
-//     Max Lift Rate.... ${rateOfLift}
-//     OD Time.......... ${odTime}`
-
-//     document.getElementById('soaring-forecast').innerText = soaringForecast
-//     document.getElementById('hi-temp').innerHTML = hiTemp
-
-//     return hiTemp
-//   } catch { // WINTER FORMAT
-//     const soaringForecast = extractText(text, /[Dd][Aa][Tt][Ee]\.{3}.+/, /\n[Uu][Pp][Pp]/, 0)
-//     const hiTempRow = soaringForecast.search(/[Mm][Aa][Xx]\s[Tt][Ee][Mm][Pp].+/)
-//     hiTemp = parseInt(soaringForecast.slice(hiTempRow + 23, hiTempRow + 26))
-
-//     document.getElementById('soaring-forecast').innerText = soaringForecast
-//     document.getElementById('hi-temp').innerHTML = hiTemp
-
-//     return hiTemp
-//   }
-// };
-
 function processSoaringForecast(text) {
   if (text.search(/MINUS/) > 0) { // WINTER FORMAT
     hiTemp = parseInt(text.match(/\d{2,3}(?=\sDEG)/))
@@ -388,4 +352,5 @@ function clearChart() {
   svg.selectAll('text.white').remove()
   svg.select('circle.tolcircle').remove()
 };
+
 
