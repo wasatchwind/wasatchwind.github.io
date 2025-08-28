@@ -158,6 +158,14 @@ function extractText(text, startPattern, endPattern, offset) {
   return text.slice(0, endIndex).replace(/\n/g, ' ')
 };
 
+// Function to extract and return <pre> text for Soaring Forecast and Area Forecast
+function parsePreText(rawContent) {
+  const parser = new DOMParser();
+  const response = parser.parseFromString(rawContent, 'text/html');
+  const preElement = response.querySelector('pre');
+  return preElement.textContent;
+};
+
 function areaForecast(text) {
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
   const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 8)
@@ -191,3 +199,4 @@ function displayImages() {
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700'
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573'
 };
+
