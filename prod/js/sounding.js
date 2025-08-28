@@ -24,7 +24,8 @@ const svg = d3.select('#skew-t-d3')
   .append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`)
 
-function sounding(data, text) {
+function sounding(data, soaringForecastText) {
+  const text = parsePreText(soaringForecastText); // Function on main.js
   maxTempF = processSoaringForecast(text)
   liftParams = getLiftParams(data, maxTempF)
   document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : '--'
@@ -352,5 +353,6 @@ function clearChart() {
   svg.selectAll('text.white').remove()
   svg.select('circle.tolcircle').remove()
 };
+
 
 
