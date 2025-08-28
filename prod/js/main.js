@@ -1,9 +1,10 @@
 'use strict';
+// Global variables
 const now = new Date()
 const ftPerMeter = 3.28084
 const slider = buildNavSlider()
-const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'FPS', 'OGP', 'KSLC']
-let activeNav = 0, navItems = [], sunset, soundingData
+const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'FPS', 'OGP', 'KSLC']; //avoid duplicate tracking - use json coming from synoptic async?
+let activeNav = 0, navItems = [], sunset, soundingData, hiTemp = null;
 
 function reload() {
   history.scrollRestoration = 'manual'
@@ -145,13 +146,6 @@ function navSet() {
   navUpdate(activeNav)
 };
 
-function buildStationURL(stationString = '') {
-  stations.forEach(station => {
-    stationString += `&stid=${station}`
-  })
-  return stationString
-};
-
 function windMap(data) {
   const timestamp = new Date(data.timeCreated).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}).toLowerCase();
   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
@@ -197,4 +191,3 @@ function displayImages() {
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700'
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573'
 };
-
