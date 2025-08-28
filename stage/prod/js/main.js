@@ -1,11 +1,11 @@
 'use strict';
-// Global variables
-const now = new Date()
-const ftPerMeter = 3.28084
-const slider = buildNavSlider()
-const stations = ['UTOLY', 'REY', 'AMB', 'HDP', 'KSVR', 'FPS', 'OGP', 'KSLC']; //avoid duplicate tracking - use json coming from synoptic async?
-let activeNav = 0, navItems = [], sunset, soundingData, hiTemp = null;
 
+// Global variables
+const now = new Date();
+const slider = buildNavSlider();
+let activeNav = 0, navItems = [], stations = [], sunset = '', soundingData = {}, hiTemp = null;
+
+// Reload/refresh the page
 function reload() {
   history.scrollRestoration = 'manual'
   location.reload()
@@ -116,6 +116,11 @@ function stationSetToggle(data) {
   mainElement.style.display = status === 'off' ? 'none' : 'block'
 };
 
+function setHiTempAndSunset(data) {
+  sunset = data.sunset[0];
+  hiTemp = Math.round(data.temperature_2m_max[0]);
+};
+
 function navOrder(sunsetFormatted, today = new Date()) {
   sunsetFormatted = new Date(sunset).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   document.getElementById('sunset').innerHTML = sunsetFormatted
@@ -151,6 +156,14 @@ function windMap(data) {
   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`
 };
 
+// Function to extract and return <pre> text for Soaring Forecast and Area Forecast
+function parsePreText(rawContent) {
+  const parser = new DOMParser();
+  const response = parser.parseFromString(rawContent, 'text/html');
+  const preElement = response.querySelector('pre');
+  return preElement.textContent;
+};
+
 function extractText(text, startPattern, endPattern, offset) {
   const startIndex = text.search(startPattern) + offset
   text = text.slice(startIndex)
@@ -158,7 +171,8 @@ function extractText(text, startPattern, endPattern, offset) {
   return text.slice(0, endIndex).replace(/\n/g, ' ')
 };
 
-function areaForecast(text) {
+function areaForecast(areaForecastText) {
+  const text = parsePreText(areaForecastText);
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0)
   const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 8)
   const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 8)
