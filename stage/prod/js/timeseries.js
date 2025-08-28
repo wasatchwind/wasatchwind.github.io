@@ -1,5 +1,27 @@
 'use strict';
+
 function timeSeries(data) {
+
+  (function buildStationSettings() {
+    stations.forEach(station => {
+      if (station !== 'KSLC') {
+        const status = getCookie(`${station}`) || 'on'
+        const onElement = document.getElementById(`${station}=on`)
+        const offElement = document.getElementById(`${station}=off`)
+        const mainElement = document.getElementById(`${station}-main`)
+        if (status === 'on') {
+          onElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+          offElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+          mainElement.style.display = 'block'
+        } else {
+          onElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2'
+          offElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2'
+          mainElement.style.display = 'none'
+        }
+      }
+    })
+  })();
+
   // Loop through all stations in the data to build wind charts
   data.STATION.forEach(station => {
     buildWindChart(station.STID, station.OBSERVATIONS)
@@ -102,7 +124,7 @@ function windChartBarHeight(stid, wspd, gust) {
 
 function windChartBarColor(stid, data) {
   const highStations = ['REY', 'AMB', 'HDP', 'OGP']
-  const yellow = highStations.includes(stid) ? 20 : stid==='FPS' ? 15 : 10
+  const yellow = highStations.includes(stid) ? 20 : stid === 'FPS' ? 15 : 10
   const red = highStations.includes(stid) ? 30 : 20
   const barColors = data.map(d => {
     if (d > yellow && d < red) {
