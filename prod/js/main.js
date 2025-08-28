@@ -116,6 +116,11 @@ function stationSetToggle(data) {
   mainElement.style.display = status === 'off' ? 'none' : 'block'
 };
 
+function setHiTempAndSunset(data) {
+  sunset = data.sunset[0];
+  hiTemp = Math.round(data.temperature_2m_max[0]);
+};
+
 function navOrder(sunsetFormatted, today = new Date()) {
   sunsetFormatted = new Date(sunset).toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}).slice(0,-3)
   document.getElementById('sunset').innerHTML = sunsetFormatted
@@ -199,4 +204,5 @@ function displayImages() {
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700'
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573'
 };
+
 
