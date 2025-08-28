@@ -4,6 +4,7 @@ let maxTempF, liftParams = {}
 const surfaceAlt = 4.229
 const maxAlt = 20
 const dalr = 5.4
+const ftPerMeter = 3.28084
 const screenWidth = window.innerWidth
 const proportionalHeight = screenWidth * 0.67
 const margin = {
@@ -347,3 +348,4 @@ function clearChart() {
   svg.selectAll('text.white').remove()
   svg.select('circle.tolcircle').remove()
 };
+
