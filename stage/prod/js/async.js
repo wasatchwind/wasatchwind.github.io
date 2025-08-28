@@ -19,14 +19,6 @@ function buildAPIURL(params, repeatKeys = []) {
   return query.toString();
 };
 
-// Function to process text for Area Forecast and Soaring Forecast
-function parsePreText(rawContent) {
-  const parser = new DOMParser()
-  const response = parser.parseFromString(rawContent, 'text/html')
-  const preElement = response.querySelector('pre')
-  return preElement.textContent
-};
-
 // Async IIFE
 // Get Open Meteo API data (documentation: https://open-meteo.com/en/docs/gfs-api)
 // Get Wind Aloft data via either AWS or GCP cloud function
@@ -75,20 +67,29 @@ function parsePreText(rawContent) {
 
   const openMeteoURL = `https://api.open-meteo.com/v1/gfs?${buildAPIURL(openMeteoParams)}`;
 
-  // Wind Aloft data via AWS Lambda (uses CORS config in console: Configuration > Function URL)
+  // Wind Aloft data - toggle between AWS and GCP (both exist for backup purposes)
+  // AWS Lambda function (uses CORS config in console: Configuration > Function URL)
   const windAloftURL = 'https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws';
-
-  // Wind Aloft data via GCP Cloud Function (uses CORS in code)
+  // GCP Cloud Function (uses CORS in code)
   // const windAloftURL = 'https://python-wind-aloft-ftp-483547589035.us-west2.run.app';
 
   const openmeteoData = await (await fetch(openMeteoURL)).json();
   const gcpWindAloftData = await (await fetch(windAloftURL)).json();
+  setHiTempAndSunset(openmeteoData.daily); // main.js
+  navSet(); // main.js
+  displayImages(); // main.js
+  windAloft(openmeteoData.hourly, gcpWindAloftData); // windaloft.js
+})();
 
-  sunset = openmeteoData.daily.sunset[0]; // Global variable (main.js)
-  hiTemp = Math.round(openmeteoData.daily.temperature_2m_max[0]); // Global variable (main.js)
-  navSet();
-  windAloft(openmeteoData.hourly, gcpWindAloftData);
-  displayImages();
+// Async IIFE
+// Get Sounding data via GCP Cloud Storage
+// Get Soaring Forecast text via the SLC Soarcast page - provides hiTemp (required to process soundingData)
+(async () => {
+  const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json';
+  const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1';
+  soundingData = await (await fetch(soundingURL)).json(); // Global variable (main.js)
+  const soaringForecastPageContent = await (await fetch(soaringForecastURL)).text();
+  sounding(soundingData, soaringForecastPageContent); // sounding.js
 })();
 
 // Aysnc IIFE
@@ -96,37 +97,7 @@ function parsePreText(rawContent) {
 (async () => {
   const timeSeriesURL = 'https://python-synoptic-api-483547589035.us-west3.run.app';
   const timeSeriesData = await (await fetch(timeSeriesURL)).json();
-  timeSeries(timeSeriesData);
-})();
-
-// Async IIFE
-// Get Sounding data
-// Get Soaring data
-(async () => {
-  const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json';
-  const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1';
-
-  soundingData = await (await fetch(soundingURL)).json(); // Global variable (main.js)
-  const soaringForecastPageContent = await (await fetch(soaringForecastURL)).text();
-  const soaringForecastText = parsePreText(soaringForecastPageContent);
-  sounding(soundingData, soaringForecastText);
-})();
-
-// Async IIFE
-// Get Area Forecast data
-(async () => {
-  const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1';
-  const areaForecastPageContent = await (await fetch(areaForecastURL)).text();
-  const areaForecastPreText = parsePreText(areaForecastPageContent);
-  areaForecast(areaForecastPreText);
-})();
-
-// Async IIFE
-// Get Wind Map Metadata
-(async () => {
-  const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png'
-  const windMapData = await (await fetch(windMapDataURL)).json()
-  windMap(windMapData)
+  timeSeries(timeSeriesData); // timeseries.js
 })();
 
 // Async IIFE
@@ -134,5 +105,21 @@ function parsePreText(rawContent) {
 (async () => {
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
   const nwsForecastData = await (await fetch(nwsForecastURL)).json();
-  nwsForecast(nwsForecastData);
+  nwsForecast(nwsForecastData); // nws.js
+})();
+
+// Async IIFE
+// Get Area Forecast text via the SLC Area Forecast page
+(async () => {
+  const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1';
+  const areaForecastPageContent = await (await fetch(areaForecastURL)).text();
+  areaForecast(areaForecastPageContent); // main.js
+})();
+
+// Async IIFE
+// Get Wind Map metadata from GCP Cloud Storage
+(async () => {
+  const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
+  const windMapData = await (await fetch(windMapDataURL)).json();
+  windMap(windMapData); // main.js
 })();
