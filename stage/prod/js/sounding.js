@@ -82,7 +82,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
     .attr('width', x(15))
     .attr('x', x(-35))
     .attr('y', y(22));
-  
+
   // Draw x axis
   svg.append('g')
     .attr('class', 'xAxis')
@@ -93,6 +93,37 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
   svg.append('g')
     .attr('class', 'yAxis')
     .call(d3.axisLeft(y).tickFormat(d => `${d}k`));
+
+  // Draw blank gray polygon to cover upper right grid
+  const p1 = `M ${x(25)} 0, `;
+  const p2 = `L ${x(110)} ${y(surfaceAlt)}, `;
+  const p3 = `L ${width + margin.right} ${y(surfaceAlt)}, `;
+  const p4 = `L ${width + margin.right} 0, `;
+  const p5 = `L ${x(25)} 0`;
+  const polygon = p1 + p2 + p3 + p4 + p5;
+  svg.append('path')
+    .attr('class', 'svgbg')
+    .attr('d', polygon);
+
+  // Legend labels
+  svg.append('text')
+    .attr('class', 'dewpoint')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(11.5))
+    .text('Dewpoint');
+  svg.append('text')
+    .attr('class', 'temp')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(10.25))
+    .text('Air Temp');
+  svg.append('text')
+    .attr('class', 'dalr')
+    .attr('text-anchor', 'end')
+    .attr('x', x(113))
+    .attr('y', y(9))
+    .text('DALR');
 
   // Wind barbs section:
   // Wind barbs constants
@@ -200,7 +231,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
           .attr('y1', posY)
           .attr('x2', endX)
           .attr('y2', endY)
-          .attr('stroke', 'red')
+          .attr('stroke', 'white')
           .attr('stroke-width', 5)
           .attr('stroke-linecap', 'round');
 
@@ -213,7 +244,7 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
           .attr('y1', posY)
           .attr('x2', endX)
           .attr('y2', endY)
-          .attr('stroke', 'red')
+          .attr('stroke', 'white')
           .attr('stroke-width', 5)
           .attr('stroke-linecap', 'round');
 
@@ -221,37 +252,6 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
       }
     });
   }); // End Wind barbs section
-
-  // Draw blank gray polygon to cover upper right grid
-  const p1 = `M ${x(25)} 0, `;
-  const p2 = `L ${x(110)} ${y(surfaceAlt)}, `;
-  const p3 = `L ${width + margin.right} ${y(surfaceAlt)}, `;
-  const p4 = `L ${width + margin.right} 0, `;
-  const p5 = `L ${x(25)} 0`;
-  const polygon = p1 + p2 + p3 + p4 + p5;
-  svg.append('path')
-    .attr('class', 'svgbg')
-    .attr('d', polygon);
-
-  // Legend labels
-  svg.append('text')
-    .attr('class', 'dewpoint')
-    .attr('text-anchor', 'end')
-    .attr('x', x(113))
-    .attr('y', y(11.5))
-    .text('Dewpoint');
-  svg.append('text')
-    .attr('class', 'temp')
-    .attr('text-anchor', 'end')
-    .attr('x', x(113))
-    .attr('y', y(10.25))
-    .text('Air Temp');
-  svg.append('text')
-    .attr('class', 'dalr')
-    .attr('text-anchor', 'end')
-    .attr('x', x(113))
-    .attr('y', y(9))
-    .text('DALR');
 
   drawDALRParams(maxTemp, liftParams);
 };
