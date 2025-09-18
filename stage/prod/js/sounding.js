@@ -197,8 +197,8 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
 
     // Create symbol sequence from outer -> inner: pennants (50), full(10), half(5)
     const symbols = [];
-    while (roundedSpeed >= 50) { symbols.push('pennant'); speedLeft -= 50; }
-    while (roundedSpeed >= 10) { symbols.push('full'); speedLeft -= 10; }
+    while (roundedSpeed >= 50) { symbols.push('pennant'); roundedSpeed -= 50; }
+    while (roundedSpeed >= 10) { symbols.push('full'); roundedSpeed -= 10; }
     if (roundedSpeed >= 5) symbols.push('half');
 
     // Draw symbols starting at the tip and moving back along the shaft
@@ -482,4 +482,5 @@ function clearChart() {
   svg.selectAll('text.liftheights').remove();
   svg.selectAll('text.white').remove();
   svg.select('circle.tolcircle').remove();
+
 };
