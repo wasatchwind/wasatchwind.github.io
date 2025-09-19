@@ -239,7 +239,7 @@ function areaForecast(areaForecastPage) {
   const text = parsePreText(areaForecastPage);
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0);
   const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 8);
-  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 8);
+  const aviation = extractText(text, /\.[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 9);
   document.getElementById('area-forecast-time').innerText = forecastDate;
   document.getElementById('area-forecast-synopsis').innerText = synopsis;
   document.getElementById('area-forecast-aviation').innerText = aviation;
@@ -269,4 +269,5 @@ function displayImages() {
   document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg';
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700';
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573';
+
 };
