@@ -3,29 +3,29 @@
 
 <head>
   <title>Wasatch Wind</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-  <link rel="stylesheet" href="prod/css/main.css">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="prod/css/main.css" rel="stylesheet">
+  <link href="favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+  <link href="favicon/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32">
+  <link href="favicon/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16">
 </head>
 
 <body>
 
   <div class="container-fluid">
 
-    <!-- MAIN COMPONENT: STICKY TOP -->
+    <!-- STICKY TOP 3 SECTIONS -->
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
 
-      <!-- (1) Title Row -->
+      <!-- STICKY TOP > SECTION (1 OF 3): TITLE -->
       <div class="align-items-center d-flex justify-content-between">
         <img src="prod/images/pg.gif" height="125px">
         <div class="display-1 text-info title-font">Wasatch Wind</div>
         <img src="prod/images/refresh.png" onclick="reload()" height="125px">
       </div>
 
-      <!-- (2) Marquee Slider -->
+      <!-- STICKY TOP > SECTION (2 OF 3): MARQUEE SLIDER -->
       <div class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide1">
           <div class="text-info">-3 Index</div>
@@ -71,7 +71,7 @@
         </div>
       </div>
 
-      <!-- (3) Navigation Sequence -->
+      <!-- STICKY TOP > SECTION (3 OF 3): NAVIGATION SLIDER -->
       <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
         <div class="text-warning">&#9001;</div>
         <div class="col display-2" id="topnav-left"></div>
@@ -83,14 +83,14 @@
     </div>
     <!-- END STICKY TOP -->
 
-    <!-- MAIN COMPONENT: BODY SLIDER -->
+    <!-- BODY SLIDER 7 PAGES -->
     <div class="align-items-center d-flex justify-content-between mb-div-end">
       <div class="keen-slider" id="slider">
 
-        <!-- PAGE 1: TODAY -->
+        <!-- PAGE 1: TODAY (7 SECTIONS) -->
         <div class="keen-slider__slide number-slide1 pe-2">
 
-          <!-- (1) Graphical Surface Wind Forecast -->
+          <!-- PAGE 1: TODAY > SECTION (1 OF 7) GRAPHICAL SURFACE WIND FORECAST -->
           <div class="collapse mb-4" id="surface-wind-div">
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
               <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
@@ -105,728 +105,33 @@
             </a>
           </div>
 
-          <!-- (2) Wind Aloft Forecast -->
+          <!-- PAGE 1: TODAY > SECTION (2 OF 7) WIND ALOFT FORECAST -->
           <div class="collapse mb-4" id="wind-aloft-div">
             <div class="display-3 text-info">Wind Aloft Forecast</div>
+
+            <!-- GROUP 0 (FIRST 6 HOURS) -->
             <div class="bg-dark border rounded-4" id="wind-aloft-group0">
               <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">18,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-0">
-                    <img class="col-8" id="winddirection_altitude_18k-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-0">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-1">
-                    <img class="col-8" id="winddirection_altitude_18k-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-1">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-2">
-                    <img class="col-8" id="winddirection_altitude_18k-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-2">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-3">
-                    <img class="col-8" id="winddirection_altitude_18k-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-3">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-4">
-                    <img class="col-8" id="winddirection_altitude_18k-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-4">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-5">
-                    <img class="col-8" id="winddirection_altitude_18k-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-5">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_550hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">550 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-0">
-                    <img class="col-8" id="winddirection_550hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-1">
-                    <img class="col-8" id="winddirection_550hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-2">
-                    <img class="col-8" id="winddirection_550hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-3">
-                    <img class="col-8" id="winddirection_550hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-4">
-                    <img class="col-8" id="winddirection_550hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-5">
-                    <img class="col-8" id="winddirection_550hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_600hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">600 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-0">
-                    <img class="col-8" id="winddirection_600hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-1">
-                    <img class="col-8" id="winddirection_600hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-2">
-                    <img class="col-8" id="winddirection_600hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-3">
-                    <img class="col-8" id="winddirection_600hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-4">
-                    <img class="col-8" id="winddirection_600hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-5">
-                    <img class="col-8" id="winddirection_600hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">12,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-0">
-                    <img class="col-8" id="winddirection_altitude_12k-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-0">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-1">
-                    <img class="col-8" id="winddirection_altitude_12k-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-1">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-2">
-                    <img class="col-8" id="winddirection_altitude_12k-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-2">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-3">
-                    <img class="col-8" id="winddirection_altitude_12k-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-3">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-4">
-                    <img class="col-8" id="winddirection_altitude_12k-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-4">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-5">
-                    <img class="col-8" id="winddirection_altitude_12k-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-5">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_650hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">650 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-0">
-                    <img class="col-8" id="winddirection_650hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-1">
-                    <img class="col-8" id="winddirection_650hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-2">
-                    <img class="col-8" id="winddirection_650hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-3">
-                    <img class="col-8" id="winddirection_650hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-4">
-                    <img class="col-8" id="winddirection_650hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-5">
-                    <img class="col-8" id="winddirection_650hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_700hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">700 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-0">
-                    <img class="col-8" id="winddirection_700hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-1">
-                    <img class="col-8" id="winddirection_700hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-2">
-                    <img class="col-8" id="winddirection_700hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-3">
-                    <img class="col-8" id="winddirection_700hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-4">
-                    <img class="col-8" id="winddirection_700hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-5">
-                    <img class="col-8" id="winddirection_700hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">9,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-0">
-                    <img class="col-8" id="winddirection_altitude_09k-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-0">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-1">
-                    <img class="col-8" id="winddirection_altitude_09k-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-1">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-2">
-                    <img class="col-8" id="winddirection_altitude_09k-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-2">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-3">
-                    <img class="col-8" id="winddirection_altitude_09k-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-3">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-4">
-                    <img class="col-8" id="winddirection_altitude_09k-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-4">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-5">
-                    <img class="col-8" id="winddirection_altitude_09k-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-5">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_750hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">750 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-0">
-                    <img class="col-8" id="winddirection_750hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-1">
-                    <img class="col-8" id="winddirection_750hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-2">
-                    <img class="col-8" id="winddirection_750hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-3">
-                    <img class="col-8" id="winddirection_750hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-4">
-                    <img class="col-8" id="winddirection_750hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-5">
-                    <img class="col-8" id="winddirection_750hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_800hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">800 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-0">
-                    <img class="col-8" id="winddirection_800hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-1">
-                    <img class="col-8" id="winddirection_800hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-2">
-                    <img class="col-8" id="winddirection_800hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-3">
-                    <img class="col-8" id="winddirection_800hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-4">
-                    <img class="col-8" id="winddirection_800hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-5">
-                    <img class="col-8" id="winddirection_800hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_850hPa-group0"></div>
-                    <div class="fs-2 fw-semibold text-secondary">850 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-0">
-                    <img class="col-8" id="winddirection_850hPa-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-1">
-                    <img class="col-8" id="winddirection_850hPa-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-2">
-                    <img class="col-8" id="winddirection_850hPa-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-3">
-                    <img class="col-8" id="winddirection_850hPa-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-4">
-                    <img class="col-8" id="winddirection_850hPa-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-5">
-                    <img class="col-8" id="winddirection_850hPa-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-5"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-6 text-info">Surface</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-0">
-                    <img class="col-8" id="winddirection_surfac-0">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-0"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-1">
-                    <img class="col-8" id="winddirection_surfac-1">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-1"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-2">
-                    <img class="col-8" id="winddirection_surfac-2">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-2"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-3">
-                    <img class="col-8" id="winddirection_surfac-3">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-3"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-4">
-                    <img class="col-8" id="winddirection_surfac-4">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-4"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-5">
-                    <img class="col-8" id="winddirection_surfac-5">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-5"></div>
-                  </div>
-                </div>
-                <div class="align-items-center d-flex display-5 text-info">
-                  <div class="col text-info text-start"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-0"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-1"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-2"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-3"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-4"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-5"></div>
-                </div>
+                <div id="wind-aloft-group0-rows"></div>
+                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-0"></div>
               </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;</div>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;
+              </div>
             </div>
+
+            <!-- GROUP 1 (NEXT 6 HOURS) -->
             <div class="bg-dark border collapse rounded-4" id="wind-aloft-group1">
               <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">18,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-6">
-                    <img class="col-8" id="winddirection_altitude_18k-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-6">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-7">
-                    <img class="col-8" id="winddirection_altitude_18k-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-7">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-8">
-                    <img class="col-8" id="winddirection_altitude_18k-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-8">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-9">
-                    <img class="col-8" id="winddirection_altitude_18k-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-9">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-10">
-                    <img class="col-8" id="winddirection_altitude_18k-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-10">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex align-items-center" id="18k-11">
-                    <img class="col-8" id="winddirection_altitude_18k-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_18k-11">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_550hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">550 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-6">
-                    <img class="col-8" id="winddirection_550hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-7">
-                    <img class="col-8" id="winddirection_550hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-8">
-                    <img class="col-8" id="winddirection_550hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-9">
-                    <img class="col-8" id="winddirection_550hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-10">
-                    <img class="col-8" id="winddirection_550hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="550hPa-11">
-                    <img class="col-8" id="winddirection_550hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_550hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_600hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">600 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-6">
-                    <img class="col-8" id="winddirection_600hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-7">
-                    <img class="col-8" id="winddirection_600hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-8">
-                    <img class="col-8" id="winddirection_600hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-9">
-                    <img class="col-8" id="winddirection_600hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-10">
-                    <img class="col-8" id="winddirection_600hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="600hPa-11">
-                    <img class="col-8" id="winddirection_600hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_600hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">12,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-6">
-                    <img class="col-8" id="winddirection_altitude_12k-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-6">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-7">
-                    <img class="col-8" id="winddirection_altitude_12k-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-7">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-8">
-                    <img class="col-8" id="winddirection_altitude_12k-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-8">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-9">
-                    <img class="col-8" id="winddirection_altitude_12k-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-9">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-10">
-                    <img class="col-8" id="winddirection_altitude_12k-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-10">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="12k-11">
-                    <img class="col-8" id="winddirection_altitude_12k-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_12k-11">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_650hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">650 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-6">
-                    <img class="col-8" id="winddirection_650hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-7">
-                    <img class="col-8" id="winddirection_650hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-8">
-                    <img class="col-8" id="winddirection_650hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-9">
-                    <img class="col-8" id="winddirection_650hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-10">
-                    <img class="col-8" id="winddirection_650hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="650hPa-11">
-                    <img class="col-8" id="winddirection_650hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_650hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_700hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">700 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-6">
-                    <img class="col-8" id="winddirection_700hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-7">
-                    <img class="col-8" id="winddirection_700hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-8">
-                    <img class="col-8" id="winddirection_700hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-9">
-                    <img class="col-8" id="winddirection_700hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-10">
-                    <img class="col-8" id="winddirection_700hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="700hPa-11">
-                    <img class="col-8" id="winddirection_700hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_700hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-5 text-info">9,000</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-6">
-                    <img class="col-8" id="winddirection_altitude_09k-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-6">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-7">
-                    <img class="col-8" id="winddirection_altitude_09k-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-7">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-8">
-                    <img class="col-8" id="winddirection_altitude_09k-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-8">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-9">
-                    <img class="col-8" id="winddirection_altitude_09k-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-9">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-10">
-                    <img class="col-8" id="winddirection_altitude_09k-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-10">
-                    </div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="09k-11">
-                    <img class="col-8" id="winddirection_altitude_09k-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_altitude_09k-11">
-                    </div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_750hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">750 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-6">
-                    <img class="col-8" id="winddirection_750hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-7">
-                    <img class="col-8" id="winddirection_750hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-8">
-                    <img class="col-8" id="winddirection_750hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-9">
-                    <img class="col-8" id="winddirection_750hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-10">
-                    <img class="col-8" id="winddirection_750hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="750hPa-11">
-                    <img class="col-8" id="winddirection_750hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_750hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_800hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">800 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-6">
-                    <img class="col-8" id="winddirection_800hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-7">
-                    <img class="col-8" id="winddirection_800hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-8">
-                    <img class="col-8" id="winddirection_800hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-9">
-                    <img class="col-8" id="winddirection_800hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-10">
-                    <img class="col-8" id="winddirection_800hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="800hPa-11">
-                    <img class="col-8" id="winddirection_800hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_800hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="col text-start">
-                    <div class="display-5 text-info" id="geopotential_height_850hPa-group1"></div>
-                    <div class="fs-2 fw-semibold text-secondary">850 hPa</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-6">
-                    <img class="col-8" id="winddirection_850hPa-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-7">
-                    <img class="col-8" id="winddirection_850hPa-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-8">
-                    <img class="col-8" id="winddirection_850hPa-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-9">
-                    <img class="col-8" id="winddirection_850hPa-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-10">
-                    <img class="col-8" id="winddirection_850hPa-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="850hPa-11">
-                    <img class="col-8" id="winddirection_850hPa-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_850hPa-11"></div>
-                  </div>
-                </div>
-                <div class="border-bottom border-secondary d-flex">
-                  <div class="align-self-center col text-start">
-                    <div class="display-6 text-info">Surface</div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-6">
-                    <img class="col-8" id="winddirection_surfac-6">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-6"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-7">
-                    <img class="col-8" id="winddirection_surfac-7">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-7"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-8">
-                    <img class="col-8" id="winddirection_surfac-8">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-8"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-9">
-                    <img class="col-8" id="winddirection_surfac-9">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-9"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-10">
-                    <img class="col-8" id="winddirection_surfac-10">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-10"></div>
-                  </div>
-                  <div class="border-1 border-secondary border-start col d-flex" id="surfac-11">
-                    <img class="col-8" id="winddirection_surfac-11">
-                    <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_surfac-11"></div>
-                  </div>
-                </div>
-                <div class="align-items-center d-flex display-5 text-info">
-                  <div class="col text-info text-start"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-6"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-7"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-8"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-9"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-10"></div>
-                  <div class="border-1 border-secondary border-start col" id="windaloft-time-11"></div>
-                </div>
+                <div id="wind-aloft-group1-rows"></div>
+                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-1"></div>
               </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6 hours</div>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6
+                hours
+              </div>
             </div>
           </div>
 
-          <!-- (3) 48 Hour Chart (Today) -->
+          <!-- PAGE 1: TODAY > SECTION (3 OF 7) 48 HOUR CHART (TODAY) -->
           <div class="collapse mb-4" id="hourly-chart-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
               target="_blank">
@@ -835,7 +140,7 @@
             </a>
           </div>
 
-          <!-- (4) Hi-Res Sounding D3 Chart -->
+          <!-- PAGE 1: TODAY > SECTION (4 OF 7) HI-RES SOUNDING D3.JS CHART -->
           <div class="collapse mb-4" id="hi-res-sounding-div">
             <div class="display-3 text-info">Morning Sounding Profile</div>
             <div class="bg-dark border rounded-4">
@@ -855,7 +160,7 @@
             </div>
           </div>
 
-          <!-- (5) NWS Soaring Forecast -->
+          <!-- PAGE 1: TODAY > SECTION (5 OF 7) NWS SOARING FORECAST -->
           <div class="collapse mb-4" id="nws-soaring-forecast-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1"
               target="_blank">
@@ -866,7 +171,7 @@
             </a>
           </div>
 
-          <!-- (6) Area Forecast Discussion: Aviation -->
+          <!-- PAGE 1: TODAY > SECTION (6 OF 7) AREA FORECAST DISCUSSION: AVIATION -->
           <div class="collapse mb-4" id="area-forecast-aviation-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
               target="_blank">
@@ -877,13 +182,12 @@
             </a>
           </div>
 
-          <!-- (7) NWS Today/This Afternoon Forecast -->
+          <!-- PAGE 1: TODAY > SECTION (7 OF 7) NWS TODAY/THIS AFTERNOON FORECAST -->
           <div class="collapse mb-4" id="nws-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
-              <div class="display-3 forecast-day0-day text-info"></div>
-              <div class="bg-dark border d-flex rounded-4 text-start">
-                <img class="align-self-start col-3 forecast-day0-img rounded-4">
-                <div class="col display-6 font-monospace forecast-day0-txt ps-2"></div>
+              <div class="display-3 text-info">General Forecast</div>
+              <div class="bg-dark border rounded-4">
+                <div id="forecast-day0-today"></div>
               </div>
             </a>
           </div>
@@ -891,10 +195,10 @@
         </div>
         <!-- END PAGE 1: TODAY -->
 
-        <!-- PAGE 2: TOMORROW -->
+        <!-- PAGE 2: TOMORROW (4 SECTIONS) -->
         <div class="keen-slider__slide number-slide2 pe-2">
 
-          <!-- (1) 48 Hour Chart (Tomorrow) -->
+          <!-- PAGE 2: TOMORROW > SECTION (1 OF 4) 48 HOUR CHART (TOMORROW) -->
           <div class="collapse mb-4" id="hourly-chart-tomorrow-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
               target="_blank">
@@ -903,53 +207,23 @@
             </a>
           </div>
 
-          <!-- (2) NWS Multiday -->
+          <!-- PAGE 2: TOMORROW > SECTION (2 OF 4) NWS MULTI-DAY -->
           <div class="collapse mb-4" id="nws-multiday-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info">Days Ahead</div>
               <div class="bg-dark border rounded-4">
                 <div class="collapse" id="nws-today-multiday-div">
-                  <div class="d-flex border-bottom">
-                    <img class="align-self-start col-3 forecast-day0-img rounded-4">
-                    <div class="col display-6 font-monospace ps-2">
-                      <div class="forecast-day0-day text-decoration-underline"></div>
-                      <div class="forecast-day0-txt text-start"></div>
-                    </div>
-                  </div>
+                  <div id="forecast-day0"></div>      
                 </div>
-                <div class="d-flex border-bottom">
-                  <img class="align-self-start col-3 rounded-4" id="forecast-day1-img">
-                  <div class="col display-6 font-monospace ps-2">
-                    <div class="text-decoration-underline" id="forecast-day1-day"></div>
-                    <div class="text-start" id="forecast-day1-txt"></div>
-                  </div>
-                </div>
-                <div class="d-flex border-bottom">
-                  <img class="align-self-start col-3 rounded-4" id="forecast-day2-img">
-                  <div class="col display-6 font-monospace ps-2">
-                    <div class="text-decoration-underline" id="forecast-day2-day"></div>
-                    <div class="text-start" id="forecast-day2-txt"></div>
-                  </div>
-                </div>
-                <div class="d-flex border-bottom">
-                  <img class="align-self-start col-3 rounded-4" id="forecast-day3-img">
-                  <div class="col display-6 font-monospace ps-2">
-                    <div class="text-decoration-underline" id="forecast-day3-day"></div>
-                    <div class="text-start" id="forecast-day3-txt"></div>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <img class="align-self-start col-3 rounded-4" id="forecast-day4-img">
-                  <div class="col display-6 font-monospace ps-2">
-                    <div class="text-decoration-underline" id="forecast-day4-day"></div>
-                    <div class="text-start" id="forecast-day4-txt"></div>
-                  </div>
-                </div>
+                <div id="forecast-day1"></div>    
+                <div id="forecast-day2"></div>    
+                <div id="forecast-day3"></div>    
+                <div id="forecast-day4"></div>
               </div>
             </a>
           </div>
 
-          <!-- (3) Area Forecast Discussion -->
+          <!-- PAGE 2: TOMORROW > SECTION (3 OF 4) AREA FORECAST DISCUSSION -->
           <div class="collapse mb-4" id="area-forecast-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
               target="_blank">
@@ -962,29 +236,11 @@
             </a>
           </div>
 
-          <!-- (4) 24hr Long Term Wind Aloft -->
+          <!-- PAGE 2: TOMORROW > SECTION (4 OF 4) 24-HR LONG TERM WIND ALOFT -->
           <div class="mb-4" id="wind-aloft-longterm-div">
             <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
               <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
-              <div class="border overflow-hidden rounded-4">
-                <div class="align-items-center border border-bottom d-flex display-3 justify-content-center"
-                  id="18k-longterm">
-                  <div class="col-3">18,000</div>
-                  <img class="col-1" id="winddirection_altitude_18k-longterm">
-                  <div class="col-2 fw-semibold" id="windspeed_altitude_18k-longterm"></div>
-                </div>
-                <div class="align-items-center border border-bottom d-flex display-3 justify-content-center"
-                  id="12k-longterm">
-                  <div class="col-3">12,000</div>
-                  <img class="col-1" id="winddirection_altitude_12k-longterm">
-                  <div class="col-2 fw-semibold" id="windspeed_altitude_12k-longterm"></div>
-                </div>
-                <div class="align-items-center d-flex display-3 justify-content-center" id="09k-longterm">
-                  <div class="col-3">9,000</div>
-                  <img class="col-1" id="winddirection_altitude_09k-longterm">
-                  <div class="col-2 fw-semibold" id="windspeed_altitude_09k-longterm"></div>
-                </div>
-              </div>
+              <div class="border overflow-hidden rounded-4" id="wind-aloft-longterm-rows"></div>
             </a>
           </div>
 
