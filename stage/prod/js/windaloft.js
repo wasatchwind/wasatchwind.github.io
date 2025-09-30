@@ -109,7 +109,6 @@ function buildAPIURL(params, repeatKeys = []) {
 }
 
 function windAloft(openmeteoData, gcpWindAloftData) {
-  console.log(openmeteoData, gcpWindAloftData)
   openmeteoWindAloft(openmeteoData);
   gcpWindAloft(gcpWindAloftData);
   const container = document.getElementById('wind-aloft-div');
