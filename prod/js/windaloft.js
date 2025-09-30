@@ -109,7 +109,6 @@ function buildAPIURL(params, repeatKeys = []) {
 }
 
 function windAloft(openmeteoData, gcpWindAloftData) {
-  console.log(openmeteoData, gcpWindAloftData)
   openmeteoWindAloft(openmeteoData);
   gcpWindAloft(gcpWindAloftData);
   const container = document.getElementById('wind-aloft-div');
@@ -241,4 +240,5 @@ function gcpWindAloft(data) {
   const el = document.getElementById('wind-aloft-time-longterm');
   if (el) el.innerHTML = `Wind Aloft ${longtermStartTime} - ${longtermEndTime}`;
   gcpWindAloftRows('longterm', data.forecast_24h.wind_speed, data.forecast_24h.wind_direction);
+
 }
