@@ -105,7 +105,7 @@ function buildAPIURL(params, repeatKeys = []) {
 (async () => {
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
   const nwsForecastData = await (await fetch(nwsForecastURL)).json();
-  nwsForecast(nwsForecastData); // nws.js
+  nwsForecast(nwsForecastData); // main.js
 })();
 
 // Async IIFE
@@ -124,3 +124,4 @@ function buildAPIURL(params, repeatKeys = []) {
   windMap(windMapData); // main.js
 
 })();
+
