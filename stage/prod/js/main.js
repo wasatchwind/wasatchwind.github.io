@@ -107,7 +107,7 @@ function toggleWindChart(div) {
   const element = document.getElementById(div);
   const toggleElement = document.getElementById(`${div}-toggle`);
   const isHidden = element.style.display === '' || element.style.display === 'none';
-  
+
   element.style.display = isHidden ? 'block' : 'none';
   toggleElement.innerHTML = isHidden ? '&#8722;' : '&#43;';
 };
@@ -195,51 +195,41 @@ function parsePreText(rawContent) {
   return preElement.textContent;
 };
 
-// Process and display forecast elements
-function updateForecastElements(i, period) {
-  const dayName = period.name;
-  const forecastText = period.detailedForecast;
-  const iconURL = period.icon.slice(0, 5) === 'https' ? period.icon : `https://api.weather.gov${period.icon}`;
-  if (i === 0) {
-    const forecastDayElements = document.getElementsByClassName(`forecast-day${i}-day`);
-    const forecastTextElements = document.getElementsByClassName(`forecast-day${i}-txt`);
-    const forecastImgElements = document.getElementsByClassName(`forecast-day${i}-img`);
-    for (let j = 0; j < 2; j++) { //day 0 element appears 2 times in HTML
-      forecastDayElements[j].innerHTML = dayName;
-      forecastTextElements[j].innerHTML = forecastText;
-      forecastImgElements[j].src = iconURL;
-    };
-  } else {
-    document.getElementById(`forecast-day${i}-day`).innerHTML = dayName;
-    document.getElementById(`forecast-day${i}-txt`).innerHTML = forecastText;
-    document.getElementById(`forecast-day${i}-img`).src = iconURL;
-  };
-};
-
-// Initial processing of forecast data, calls updateForecastElements() for iterations
-function nwsForecast(data, forecastDays = 5) {
-  const periods = data.properties.periods;
-  const isDaytime = periods[0].isDaytime;
-  let position = isDaytime ? 0 : 1;
-  for (let i = 0; i < forecastDays; i++) {
-    updateForecastElements(i, periods[position]);
-    position += 2;
-  };
-  if (now.getHours() >= 5 && isDaytime) {
-    document.getElementById('nws-today-div').style.display = 'block';
-  };
-  if (now.getHours() >= 12 && !isDaytime) {
-    document.getElementById('nws-today-multiday-div').style.display = 'block';
-  };
-  document.getElementById('nws-multiday-div').style.display = 'block';
-};
+function nwsForecast(data) {
+  const forecastDaysCount = 5;
+  const isDaytime = data[0].isDaytime;
+  let period = isDaytime ? 0 : 1;
+  for (let i = 0; i < forecastDaysCount; i++) {
+    let qualifier = "";
+    let border = `<div class="border-bottom"></div>`;
+    if (isDaytime && i === 0) {
+      qualifier = "-today";
+      border = '';
+      document.getElementById('nws-today-div').style.display = 'block';
+    } else {
+      document.getElementById('nws-today-multiday-div').style.display = 'block';
+    }
+    const div = `
+    <div class="d-flex">
+      <div class="col-3">
+        <div class="display-6 text-info">${data[period].name}</div>
+        <img class="align-self-start rounded-4 w-100" src="${data[period].icon}">
+      </div>
+      <div class="col display-6 font-monospace ps-2 text-start">${data[period].detailedForecast}</div>
+    </div>
+    ${border}`;
+    document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
+    period += 2;
+  }
+  document.getElementById('nws-multiday-div').style.display = 'block'; // Display "Days Ahead" block
+}
 
 // Process and display the Area Forecast
 function areaForecast(areaForecastPage) {
   const text = parsePreText(areaForecastPage);
   const forecastDate = extractText(text, /\d{3,4}\s[PpAa][Mm]\s[Mm][DdSs][Tt]/, /\s202\d{1}\n/, 0);
   const synopsis = extractText(text, /[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]/, /&&/, 8);
-  const aviation = extractText(text, /[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 8);
+  const aviation = extractText(text, /\.[Aa][Vv][Ii][Aa][Tt][Ii][Oo][Nn]/, /REST|.+REST\s|.+Rest\s/, 9);
   document.getElementById('area-forecast-time').innerText = forecastDate;
   document.getElementById('area-forecast-synopsis').innerText = synopsis;
   document.getElementById('area-forecast-aviation').innerText = aviation;
@@ -269,4 +259,5 @@ function displayImages() {
   document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg';
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700';
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573';
+
 };
