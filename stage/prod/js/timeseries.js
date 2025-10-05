@@ -1,16 +1,52 @@
 'use strict';
 
 function timeSeries(data) {
+
+  function makeDiv(classes, id, html = '') {
+    const element = document.createElement('div');
+    if (classes) element.classList.add(...classes);
+    if (id) element.id = id;
+    if (html) element.innerHTML = html;
+    return element;
+  }
+
   // Loop through all stations in the data to build wind charts
-  data.STATION.forEach(station => {
+  data.forEach(station => {
+    // Set station elevation except for KSLC
+    if (station.STID !== "KSLC") {
+      const elevation = parseInt(station.ELEVATION).toLocaleString();
+      document.getElementById(`${station.STID}-elevation`).innerHTML = elevation;
+    }
+
+    const readings = station.STID === "AMB" ? 6 : 12;
+    const chart = document.getElementById(`${station.STID}-chart`);
+    chart.innerHTML = '';
+
+    for (let i = 0; i < readings; i++) {
+      const col = makeDiv(['col', 'px-1']);
+      col.append(
+        makeDiv(['gust-color', 'h2'], `${station.STID}-gust-${i}`, '&nbsp;'),
+        makeDiv(['bg-danger'], `${station.STID}-gbar-${i}`),
+        makeDiv([], `${station.STID}-wbar-${i}`),
+        (() => {
+          const windSpeed = makeDiv(['bg-secondary', 'fs-1', 'fw-bold']);
+          windSpeed.append(makeDiv([], `${station.STID}-wspd-${i}`));
+          return windSpeed;
+        })(),
+        (() => {
+          const windDirection = makeDiv();
+          windDirection.append(makeDiv(['display-4'], `${station.STID}-wdir-${i}`));
+          return windDirection;
+        })(),
+        makeDiv(['fs-4'], `${station.STID}-time-${i}`)
+      );
+      chart.append(col);
+    }
     buildWindChart(station.STID, station.OBSERVATIONS);
   });
 
-  // If the first station is KSLC also calculate Zone
-  if (data.STATION[0].STID = 'KSLC') {
-    const kslcData = data.STATION[0].OBSERVATIONS;
-    getZone(kslcData.altimeter_set_1, kslcData.air_temp_set_1);
-  };
+  const kslcData = data.find(station => station.STID === "KSLC");
+  if (kslcData) getZone(kslcData.OBSERVATIONS.altimeter_set_1, kslcData.OBSERVATIONS.air_temp_set_1);
   document.getElementById('wind-charts-div').style.display = 'block';
 };
 

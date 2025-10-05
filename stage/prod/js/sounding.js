@@ -482,5 +482,4 @@ function clearChart() {
   svg.selectAll('text.liftheights').remove();
   svg.selectAll('text.white').remove();
   svg.select('circle.tolcircle').remove();
-
 };
