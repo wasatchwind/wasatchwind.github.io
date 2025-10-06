@@ -1,4 +1,5 @@
 'use strict';
+navSet(); // main.js
 
 // Function to return an API URL assembled from specific input parameters
 function buildAPIURL(params, repeatKeys = []) {
@@ -76,7 +77,6 @@ function buildAPIURL(params, repeatKeys = []) {
   const openmeteoData = await (await fetch(openMeteoURL)).json();
   const gcpWindAloftData = await (await fetch(windAloftURL)).json();
   setHiTempAndSunset(openmeteoData.daily); // main.js
-  navSet(); // main.js
   windAloft(openmeteoData.hourly, gcpWindAloftData); // windaloft.js
   displayImages(); // main.js
 })();
@@ -124,4 +124,5 @@ function buildAPIURL(params, repeatKeys = []) {
   windMap(windMapData); // main.js
 
 })();
+
 
