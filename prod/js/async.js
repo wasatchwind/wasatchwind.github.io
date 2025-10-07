@@ -1,5 +1,4 @@
 'use strict';
-navSet(); // main.js
 
 // Function to return an API URL assembled from specific input parameters
 function buildAPIURL(params, repeatKeys = []) {
@@ -77,6 +76,7 @@ function buildAPIURL(params, repeatKeys = []) {
   const openmeteoData = await (await fetch(openMeteoURL)).json();
   const gcpWindAloftData = await (await fetch(windAloftURL)).json();
   setHiTempAndSunset(openmeteoData.daily); // main.js
+  navSet(); // main.js, needs sunset time first
   windAloft(openmeteoData.hourly, gcpWindAloftData); // windaloft.js
   displayImages(); // main.js
 })();
@@ -97,7 +97,7 @@ function buildAPIURL(params, repeatKeys = []) {
 (async () => {
   const timeSeriesURL = 'https://python-synoptic-api-483547589035.us-west3.run.app';
   const timeSeriesData = await (await fetch(timeSeriesURL)).json();
-  timeSeries(timeSeriesData); // timeseries.js
+  timeSeries(timeSeriesData.STATION); // timeseries.js
 })();
 
 // Async IIFE
@@ -105,7 +105,7 @@ function buildAPIURL(params, repeatKeys = []) {
 (async () => {
   const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
   const nwsForecastData = await (await fetch(nwsForecastURL)).json();
-  nwsForecast(nwsForecastData); // main.js
+  nwsForecast(nwsForecastData.properties.periods); // main.js
 })();
 
 // Async IIFE
@@ -124,5 +124,3 @@ function buildAPIURL(params, repeatKeys = []) {
   windMap(windMapData); // main.js
 
 })();
-
-
