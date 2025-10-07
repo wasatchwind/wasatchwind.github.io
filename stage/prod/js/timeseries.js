@@ -1,46 +1,59 @@
 'use strict';
 
 function timeSeries(data) {
-
-  function makeDiv(classes, id, html = '') {
-    const element = document.createElement('div');
-    if (classes) element.classList.add(...classes);
-    if (id) element.id = id;
-    if (html) element.innerHTML = html;
-    return element;
-  }
-
   // Loop through all stations in the data to build wind charts
   data.forEach(station => {
+    const readings = station.STID === "AMB" ? 6 : 12;
     // Set station elevation except for KSLC
     if (station.STID !== "KSLC") {
       const elevation = parseInt(station.ELEVATION).toLocaleString();
-      document.getElementById(`${station.STID}-elevation`).innerHTML = elevation;
+      const name = (stid) => {
+        return Object.values(stationList).find(station => station.stid === stid).name;
+      };
+      const stationMain = document.getElementById(`${station.STID}-main`);
+      const div = `
+      <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
+        <div class="d-flex align-items-end">
+          <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle" onclick="toggleWindChart('${station.STID}')">&#43;</div>
+          <div class="mx-4">
+            <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
+            <div class="display-3 text-info"">${name(station.STID)}</div>
+          </div>
+        </div>
+        <div class="col-5 d-flex justify-content-between me-2">
+          <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readings}">No Data</div>
+          <div class="col-2 display-4" id="${station.STID}-wdir-${readings}"></div>
+          <div class="col-2 display-4 fw-semibold" id="${station.STID}-wspd-${readings}"></div>
+          <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readings}"></div>
+        </div>
+      </div>
+      <div class="bg-dark rounded-4">
+        <div class="collapse" id="${station.STID}">
+          <a href="https://www.weather.gov/wrh/timeseries?site=${station.STID}&hours=72" target="_blank">
+            <div class="align-items-end d-flex" id="${station.STID}-chart"></div>
+          </a>
+        </div>
+      </div>`;
+      stationMain.innerHTML = div;
     }
 
-    const readings = station.STID === "AMB" ? 6 : 12;
     const chart = document.getElementById(`${station.STID}-chart`);
-    chart.innerHTML = '';
-
     for (let i = 0; i < readings; i++) {
-      const col = makeDiv(['col', 'px-1']);
-      col.append(
-        makeDiv(['gust-color', 'h2'], `${station.STID}-gust-${i}`, '&nbsp;'),
-        makeDiv(['bg-danger'], `${station.STID}-gbar-${i}`),
-        makeDiv([], `${station.STID}-wbar-${i}`),
-        (() => {
-          const windSpeed = makeDiv(['bg-secondary', 'fs-1', 'fw-bold']);
-          windSpeed.append(makeDiv([], `${station.STID}-wspd-${i}`));
-          return windSpeed;
-        })(),
-        (() => {
-          const windDirection = makeDiv();
-          windDirection.append(makeDiv(['display-4'], `${station.STID}-wdir-${i}`));
-          return windDirection;
-        })(),
-        makeDiv(['fs-4'], `${station.STID}-time-${i}`)
-      );
-      chart.append(col);
+      const div = document.createElement('div');
+      div.className = 'col px-1';
+
+      div.innerHTML = `
+      <div class="gust-color h2" id="${station.STID}-gust-${i}">&nbsp;</div>
+      <div class="bg-danger" id="${station.STID}-gbar-${i}"></div>
+      <div id="${station.STID}-wbar-${i}"></div>
+      <div class="bg-secondary fs-1 fw-bold">
+        <div id="${station.STID}-wspd-${i}"></div>
+      </div>
+      <div>
+        <div class="display-4" id="${station.STID}-wdir-${i}"></div>
+      </div>
+      <div class="fs-4" id="${station.STID}-time-${i}"></div>`;
+      chart.appendChild(div);
     }
     buildWindChart(station.STID, station.OBSERVATIONS);
   });

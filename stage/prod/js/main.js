@@ -5,6 +5,15 @@ const now = new Date();
 const slider = buildNavSlider();
 const ftPerMeter = 3.28084;
 let activeNav = 0, navItems = [], sunset = '', soundingData = {}, hiTemp = null;
+const stationList = {
+  station_0: { name: 'Alta Baldy', stid: 'AMB' },
+  station_1: { name: 'Airport 2', stid: 'KSVR' },
+  station_2: { name: 'Hidden Peak', stid: 'HDP' },
+  station_3: { name: 'Ogden Peak', stid: 'OGP' },
+  station_4: { name: 'Olypmus Cove', stid: 'UTOLY' },
+  station_5: { name: 'Reynolds Peak', stid: 'REY' },
+  station_6: { name: 'Southside', stid: 'FPS' }
+};
 
 // Reload/refresh page
 function reload() {
@@ -236,36 +245,6 @@ function displayImages() {
 // IIFE builds station settings on/off list; independent of timeseries.js data since stations may be temporarily down
 // Hardcoded list must be updated here and index.html for added/removed stations (alphabetical order by name)
 (function buildStationSettings() {
-  const stationList = {
-    station_0: {
-      name: 'Alta Baldy',
-      stid: 'AMB'
-    },
-    station_1: {
-      name: 'Airport 2',
-      stid: 'KSVR'
-    },
-    station_2: {
-      name: 'Hidden Peak',
-      stid: 'HDP'
-    },
-    station_3: {
-      name: 'Ogden Peak',
-      stid: 'OGP'
-    },
-    station_4: {
-      name: 'Olypmus Cove',
-      stid: 'UTOLY'
-    },
-    station_5: {
-      name: 'Reynolds Peak',
-      stid: 'REY'
-    },
-    station_6: {
-      name: 'Southside',
-      stid: 'FPS'
-    }
-  };
 
   // Loop through each station to set up html divs, check for cookies, and label on/off accordingly
   for (const key in stationList) {
@@ -274,23 +253,19 @@ function displayImages() {
       <div class="col-5 display-3 text-info text-start">${stationList[key].name}</div>
       <div id="${stationList[key].stid}=on" onclick="stationSetToggle('${stationList[key].stid}=on')">On</div>
       <div id="${stationList[key].stid}=off" onclick="stationSetToggle('${stationList[key].stid}=off')">Off</div>
-    </div>`
+    </div>`;
     document.getElementById(key).innerHTML = div;
-    document.getElementById(`${stationList[key].stid}-name`).innerHTML = stationList[key].name;
 
     const status = getCookie(stationList[key].stid) || "on";
     const on = document.getElementById(`${stationList[key].stid}=on`);
     const off = document.getElementById(`${stationList[key].stid}=off`);
-    const stationChart = document.getElementById(`${stationList[key].stid}-main`);
 
     if (status === 'on') {
       on.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
       off.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
-      stationChart.style.display = 'block';
     } else {
       on.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
       off.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
-      stationChart.style.display = 'none';
     }
   }
 })();
