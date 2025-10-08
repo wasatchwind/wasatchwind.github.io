@@ -192,6 +192,14 @@ function decodedSkewTChart(data, maxTemp, liftParams) {
       .attr('stroke-width', 5)
       .attr('stroke-linecap', 'round');
 
+    // Draw a circle at the anchor
+    svg.append('circle')
+      .attr('cx', barbAnchorX)
+      .attr('cy', yPos)
+      .attr('r', 5)              // slightly larger than half stroke-width (so it stands out)
+      .attr('fill', 'white')    // or 'white', or any highlight color
+      .attr('stroke', 'none');   // or use stroke if you want a border
+
     // Convert speed to nearest 5 knots (standard)
     let roundedSpeed = Math.round(windSpd / 5) * 5;
 
