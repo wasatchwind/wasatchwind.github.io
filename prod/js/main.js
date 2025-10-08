@@ -8,11 +8,14 @@ let activeNav = 0, navItems = [], sunset = '', soundingData = {}, hiTemp = null;
 const stationList = {
   station_0: { name: 'Alta Baldy', stid: 'AMB' },
   station_1: { name: 'Airport 2', stid: 'KSVR' },
-  station_2: { name: 'Hidden Peak', stid: 'HDP' },
-  station_3: { name: 'Ogden Peak', stid: 'OGP' },
-  station_4: { name: 'Olypmus Cove', stid: 'UTOLY' },
-  station_5: { name: 'Reynolds Peak', stid: 'REY' },
-  station_6: { name: 'Southside', stid: 'FPS' }
+  station_2: { name: 'Clayton Peak', stid: 'BRW' },
+  station_3: { name: 'Hidden Peak', stid: 'HDP' },
+  station_4: { name: 'Ogden Peak', stid: 'OGP' },
+  station_5: { name: 'Olypmus Cove', stid: 'UTOLY' },
+  station_6: { name: 'Parleys Mouth', stid: 'UT5'},
+  station_7: { name: 'Pepperwood', stid: 'D6120' },
+  station_8: { name: 'Reynolds Peak', stid: 'REY' },
+  station_9: { name: 'Southside', stid: 'FPS' }
 };
 
 // Reload/refresh page

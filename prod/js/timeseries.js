@@ -221,5 +221,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById('trend').innerHTML = trendChar;
   document.getElementById('zone').innerHTML = zone.num;
   document.getElementById('zone').style.color = zone.col;
-
 };
