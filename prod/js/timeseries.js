@@ -7,9 +7,6 @@ function timeSeries(data) {
     // Set station elevation except for KSLC
     if (station.STID !== "KSLC") {
       const elevation = parseInt(station.ELEVATION).toLocaleString();
-      const name = (stid) => {
-        return Object.values(stationList).find(station => station.stid === stid).name;
-      };
       const stationMain = document.getElementById(`${station.STID}-main`);
       const div = `
       <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
@@ -17,7 +14,7 @@ function timeSeries(data) {
           <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle" onclick="toggleWindChart('${station.STID}')">&#43;</div>
           <div class="mx-4">
             <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
-            <div class="display-3 text-info"">${name(station.STID)}</div>
+            <div class="display-3 text-info"">${stationList[station.STID].name}</div>
           </div>
         </div>
         <div class="col-5 d-flex justify-content-between me-2">
@@ -150,9 +147,9 @@ function windChartBarHeight(stid, wspd, gust) {
 };
 
 function windChartBarColor(stid, data) {
-  const highStations = ['REY', 'AMB', 'HDP', 'OGP'];
-  const yellow = highStations.includes(stid) ? 20 : stid === 'FPS' ? 15 : 10;
-  const red = highStations.includes(stid) ? 30 : 20;
+  const peakStations = ['AMB', 'BRW', 'HDP', 'OGP', 'REY'];
+  const yellow = peakStations.includes(stid) ? 20 : stid === 'FPS' ? 15 : 10;
+  const red = peakStations.includes(stid) ? 30 : 20;
   const barColors = data.map(d => {
     if (d > yellow && d < red) {
       return 'var(--bs-yellow)';

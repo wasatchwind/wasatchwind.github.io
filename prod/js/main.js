@@ -5,17 +5,18 @@ const now = new Date();
 const slider = buildNavSlider();
 const ftPerMeter = 3.28084;
 let activeNav = 0, navItems = [], sunset = '', soundingData = {}, hiTemp = null;
+
 const stationList = {
-  station_0: { name: 'Alta Baldy', stid: 'AMB' },
-  station_1: { name: 'Airport 2', stid: 'KSVR' },
-  station_2: { name: 'Clayton Peak', stid: 'BRW' },
-  station_3: { name: 'Hidden Peak', stid: 'HDP' },
-  station_4: { name: 'Ogden Peak', stid: 'OGP' },
-  station_5: { name: 'Olypmus Cove', stid: 'UTOLY' },
-  station_6: { name: 'Parleys Mouth', stid: 'UT5'},
-  station_7: { name: 'Pepperwood', stid: 'D6120' },
-  station_8: { name: 'Reynolds Peak', stid: 'REY' },
-  station_9: { name: 'Southside', stid: 'FPS' }
+  AMB: { name: 'Alta Baldy' },
+  KSVR: { name: 'Airport 2' },
+  BRW: { name: 'Clayton Peak' },
+  HDP: { name: 'Hidden Peak' },
+  OGP: { name: 'Ogden Peak' },
+  UTOLY: { name: 'Olypmus Cove' },
+  UT5: { name: 'Parleys Mouth' },
+  D6120: { name: 'Pepperwood' },
+  REY: { name: 'Reynolds Peak' },
+  FPS: { name: 'Southside' }
 };
 
 // Reload/refresh page
@@ -254,14 +255,14 @@ function displayImages() {
     const div = `
     <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
       <div class="col-5 display-3 text-info text-start">${stationList[key].name}</div>
-      <div id="${stationList[key].stid}=on" onclick="stationSetToggle('${stationList[key].stid}=on')">On</div>
-      <div id="${stationList[key].stid}=off" onclick="stationSetToggle('${stationList[key].stid}=off')">Off</div>
+      <div id="${key}=on" onclick="stationSetToggle('${key}=on')">On</div>
+      <div id="${key}=off" onclick="stationSetToggle('${key}=off')">Off</div>
     </div>`;
-    document.getElementById(key).innerHTML = div;
+    document.getElementById(`${key}-onoff`).innerHTML = div;
 
-    const status = getCookie(stationList[key].stid) || "on";
-    const on = document.getElementById(`${stationList[key].stid}=on`);
-    const off = document.getElementById(`${stationList[key].stid}=off`);
+    const status = getCookie(key) || "on";
+    const on = document.getElementById(`${key}=on`);
+    const off = document.getElementById(`${key}=off`);
 
     if (status === 'on') {
       on.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
