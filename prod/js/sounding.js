@@ -13,7 +13,7 @@ const margin = {
   left: screenWidth * 0.02,
   right: screenWidth * 0.027
 };
-const extraLeft = margin.left * 4.5; // Adjusts final left margin spacing
+const extraLeft = margin.left * 4.5; // Adjusts final left margin spacing for fitting wind barbs
 const width = screenWidth - margin.left - margin.right;
 const height = proportionalHeight - margin.top - margin.bottom;
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right - extraLeft]).domain([-10, 110]);

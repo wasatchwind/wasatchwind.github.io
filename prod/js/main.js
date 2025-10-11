@@ -4,8 +4,6 @@
 const now = new Date();
 const slider = buildNavSlider();
 const ftPerMeter = 3.28084;
-let activeNav = 0, navItems = [], sunset = '', soundingData = {}, hiTemp = null;
-
 const stationList = {
   AMB: { name: 'Alta Baldy' },
   KSVR: { name: 'Airport 2' },
@@ -18,12 +16,43 @@ const stationList = {
   REY: { name: 'Reynolds Peak' },
   FPS: { name: 'Southside' }
 };
+const openMeteoParams = {
+  latitude: 40.77069,
+  longitude: -111.96503,
+  daily: ['sunset', 'temperature_2m_max'],
+  hourly: [
+    'temperature_2m', 'temperature_800hPa', 'wind_speed_10m', 'wind_direction_10m', 'wind_gusts_10m', 'cape', 'lifted_index', 'pressure_msl',
+    'windspeed_850hPa', 'windspeed_800hPa', 'windspeed_750hPa', 'windspeed_700hPa', 'windspeed_650hPa', 'windspeed_600hPa', 'windspeed_550hPa',
+    'winddirection_850hPa', 'winddirection_800hPa', 'winddirection_750hPa', 'winddirection_700hPa', 'winddirection_650hPa', 'winddirection_600hPa', 'winddirection_550hPa',
+    'geopotential_height_850hPa', 'geopotential_height_800hPa', 'geopotential_height_750hPa', 'geopotential_height_700hPa', 'geopotential_height_650hPa', 'geopotential_height_600hPa', 'geopotential_height_550hPa'
+  ],
+  windspeed_unit: 'mph',
+  temperature_unit: 'fahrenheit',
+  forecast_hours: 12,
+  forecast_days: 1,
+  timezone: 'America/Denver'
+};
+let activeNav = 0, navItems = [], sunset = '', soundingData = {}, hiTemp = null;
+
+// Function to return an API URL assembled from specific input parameters
+function buildAPIURL(params, repeatKeys = []) {
+  const query = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (repeatKeys.includes(key) && Array.isArray(value)) {
+      value.forEach(v => query.append(key, v));
+    } else {
+      query.set(key, Array.isArray(value) ? value.join(',') : value);
+    }
+  }
+  return query.toString();
+}
 
 // Reload/refresh page
 function reload() {
   history.scrollRestoration = 'manual';
   location.reload();
-};
+}
 
 // Get cookies for marquee speed and station toggles user settings
 function getCookie(name) {
@@ -36,10 +65,10 @@ function getCookie(name) {
     }
   }
   return null;
-};
+}
 
 // Marquee slider (https://keen-slider.io/docs)
-function buildMarquee() {
+(function buildMarquee() {
   const marqueeSpeed = getCookie('marqueeSpeed') || 800;
   const animation = { duration: marqueeSpeed, easing: (t) => t };
   const options = {
@@ -50,8 +79,7 @@ function buildMarquee() {
     animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
   };
   const marquee = new KeenSlider('#marquee', options);
-};
-buildMarquee();
+})();
 
 // Menu navigation carousel/slider (https://keen-slider.io/docs)
 function buildNavSlider() {
@@ -65,7 +93,7 @@ function buildNavSlider() {
     }
   };
   return new KeenSlider('#slider', options);
-};
+}
 
 // Marquee setup
 (function buildMarqueeSettings() {
@@ -91,7 +119,7 @@ function marqueeSetSpeed(speed) {
   activeElement.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
   buildMarquee();
   reload();
-};
+}
 
 // Wind chart toggle for expand/collapse
 function toggleWindChart(div) {
@@ -101,7 +129,7 @@ function toggleWindChart(div) {
 
   element.style.display = isHidden ? 'block' : 'none';
   toggleElement.innerHTML = isHidden ? '&#8722;' : '&#43;';
-};
+}
 
 function toggleWindAloft() {
   const group0 = document.getElementById('wind-aloft-group0');
@@ -110,13 +138,13 @@ function toggleWindAloft() {
 
   group0.style.display = showGroup1 ? 'none' : 'block';
   group1.style.display = showGroup1 ? 'block' : 'none';
-};
+}
 
 // Set global variables sunset and hiTemp
 function setHiTempAndSunset(data) {
   sunset = data.sunset[0];
   hiTemp = Math.round(data.temperature_2m_max[0]);
-};
+}
 
 // Set up the order of the left/right scrollable tabs
 function navOrder(sunsetFormatted, today = new Date()) {
@@ -133,8 +161,8 @@ function navOrder(sunsetFormatted, today = new Date()) {
   }
   else if (currentHour >= sunsetHour - 1) {
     slider.moveToIdx(1, true, { duration: 0 });
-  };
-};
+  }
+}
 
 // Update nav with user interaction swipe
 function navUpdate() {
@@ -143,7 +171,7 @@ function navUpdate() {
   document.getElementById('topnav-left').innerHTML = navItems[left];
   document.getElementById('topnav-active').innerHTML = navItems[activeNav];
   document.getElementById('topnav-right').innerHTML = navItems[right];
-};
+}
 
 // Update nav with user interaction click
 window.simulateSwipe = function (direction) {
@@ -155,13 +183,13 @@ window.simulateSwipe = function (direction) {
 function navSet() {
   navOrder();
   navUpdate(activeNav);
-};
+}
 
 // Display the timestamp for the Wind Map image
 function windMap(data) {
   const timestamp = new Date(data.timeCreated).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase();
   document.getElementById('wind-map-timestamp').innerHTML = `Wind Map @ ${timestamp}`;
-};
+}
 
 // Extract specific text using Regex for Soaring Forecast and Area Forecast
 function extractText(text, startPattern, endPattern, offset) {
@@ -169,7 +197,7 @@ function extractText(text, startPattern, endPattern, offset) {
   text = text.slice(startIndex);
   const endIndex = text.search(endPattern);
   return text.slice(0, endIndex).replace(/\n/g, ' ');
-};
+}
 
 // Function to extract and return <pre> text for Soaring Forecast and Area Forecast
 function parsePreText(rawContent) {
@@ -177,7 +205,7 @@ function parsePreText(rawContent) {
   const response = parser.parseFromString(rawContent, 'text/html');
   const preElement = response.querySelector('pre');
   return preElement.textContent;
-};
+}
 
 function nwsForecast(data) {
   const forecastDaysCount = 5;
@@ -219,7 +247,7 @@ function areaForecast(areaForecastPage) {
   document.getElementById('area-forecast-aviation').innerText = aviation;
   document.getElementById('area-forecast-div').style.display = 'block';
   document.getElementById('area-forecast-aviation-div').style.display = 'block';
-};
+}
 
 // Display remaining images using view logic based on sunset time
 function displayImages() {
@@ -243,8 +271,7 @@ function displayImages() {
   document.getElementById('cam-south').src = 'https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg';
   document.getElementById('cam-west').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700';
   document.getElementById('cam-east').src = 'https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573';
-
-};
+}
 
 // IIFE builds station settings on/off list; independent of timeseries.js data since stations may be temporarily down
 // Hardcoded list must be updated here and index.html for added/removed stations (alphabetical order by name)
@@ -287,4 +314,4 @@ function stationSetToggle(stid) {
   element.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
   oppositeElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
   mainElement.style.display = status === 'off' ? 'none' : 'block';
-};
+}

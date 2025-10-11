@@ -1,13 +1,7 @@
 'use strict';
 
-// -------------------------
-// Helpers for ID normalization
-// -------------------------
+// Helper for ID normalization
 const getShortPrefix = prefix => prefix.startsWith('altitude_') ? prefix.slice(-3) : prefix;
-
-// -------------------------
-// Dynamic HTML Generation
-// -------------------------
 
 function createWindAloftRow({ label, prefix, startIdx = 0, count = 6, hasGeoHeight = false, groupId }) {
   const row = document.createElement('div');
@@ -37,7 +31,6 @@ function createWindAloftRow({ label, prefix, startIdx = 0, count = 6, hasGeoHeig
       <div class="align-self-start col-4 fs-2 fw-semibold pe-2 text-end" id="windspeed_${prefix}-${idx}"></div>`;
     row.appendChild(cell);
   }
-
   return row;
 }
 
