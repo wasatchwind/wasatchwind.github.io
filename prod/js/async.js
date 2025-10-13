@@ -30,11 +30,8 @@
   async function getSoundingAndSoaring() {
     const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json';
     const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1';
-
-    const [soundingData, soaringForecastPageContent] = await Promise.all([ // soundingData is a global variable in main.js
-      fetch(soundingURL).then(res => res.json()),
-      fetch(soaringForecastURL).then(res => res.text())
-    ]);
+    const soaringForecastPageContent = await (await fetch(soaringForecastURL)).text();
+    soundingData = await (await fetch(soundingURL)).json();
     sounding(soundingData, soaringForecastPageContent); // sounding.js
   }
 
@@ -74,4 +71,5 @@
     getAreaForecast(),
     getWindMap()
   ]);
+
 })();
