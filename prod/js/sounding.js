@@ -271,7 +271,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr('text-anchor', 'end')
     .attr('x', x(113))
     .attr('y', y(19))
-    .text(`Top of Lift: ${Math.round(params.tol * ftPerMeter).toLocaleString()}`);
+    .text(`Top of Lift: ${params.tol < 1289 ? '--' : Math.round(params.tol * ftPerMeter).toLocaleString()}`);
 
   // Legend label -3 index
   svg.append('text')
@@ -279,7 +279,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr('text-anchor', 'end')
     .attr('x', x(113))
     .attr('y', y(17))
-    .text(`-3 Index: ${Math.round(params.neg3 * ftPerMeter).toLocaleString()}`);
+    .text(`-3 Index: ${!params.neg3 ? '--' : Math.round(params.neg3 * ftPerMeter).toLocaleString()}`);
 
   // Legend label max temp
   svg.append('text')
@@ -321,20 +321,22 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr('y', y(params.neg3 * ftPerMeter / 1000 - 0.3))
     .text('-3');
 
-  // Top of lift point
-  svg.append('g').append('circle')
-    .attr('class', 'tolcircle')
-    .attr('fill', 'white')
-    .attr('cx', x((params.tolTemp * 9 / 5) + 32))
-    .attr('cy', y(params.tol * ftPerMeter / 1000))
-    .attr('r', 6);
+  if (params.tol > 1288) {
+    // Top of lift point
+    svg.append('g').append('circle')
+      .attr('class', 'tolcircle')
+      .attr('fill', 'white')
+      .attr('cx', x((params.tolTemp * 9 / 5) + 32))
+      .attr('cy', y(params.tol * ftPerMeter / 1000))
+      .attr('r', 6);
 
-  // Top of lift label
-  svg.append('g').append('text')
-    .attr('class', 'liftlabels')
-    .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
-    .attr('y', y(params.tol * ftPerMeter / 1000 - 0.3))
-    .text('ToL');
+    // Top of lift label
+    svg.append('g').append('text')
+      .attr('class', 'liftlabels')
+      .attr('x', x((params.tolTemp * 9 / 5) + 32 + 2))
+      .attr('y', y(params.tol * ftPerMeter / 1000 - 0.3))
+      .text('ToL');
+  }
 };
 
 function sounding(data, soaringForecastText) {
@@ -342,7 +344,7 @@ function sounding(data, soaringForecastText) {
   maxTempF = processSoaringForecast(text);
   liftParams = getLiftParams(data, maxTempF);
   document.getElementById('neg3').innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : '--';
-  document.getElementById('tol').innerHTML = liftParams.tol ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : '--';
+  document.getElementById('tol').innerHTML = liftParams.tol > 1288 ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : '--';
   decodedSkewTChart(data, maxTempF, liftParams);
   if (now.getHours() >= 7) {
     document.getElementById('hi-res-sounding-div').style.display = 'block';

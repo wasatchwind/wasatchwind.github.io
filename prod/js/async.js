@@ -19,10 +19,8 @@
     ]);
     setHiTempAndSunset(openmeteoData.daily); // main.js
     navSet(); // main.js (needs sunset time first)
-    await Promise.all([
-      windAloft(openmeteoData.hourly, gcpWindAloftData), //windaloft.js
-      displayImages() // main.js
-    ]);
+    windAloft(openmeteoData.hourly, gcpWindAloftData), //windaloft.js
+    displayImages() // main.js
   }
 
   // Get Sounding data via GCP Cloud Storage
