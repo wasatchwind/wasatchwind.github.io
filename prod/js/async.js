@@ -8,9 +8,9 @@
 
   // Wind Aloft data - toggle between AWS and GCP (both exist for backup purposes)
   // AWS Lambda function (uses CORS config in console: Configuration > Function URL)
-  const windAloftURL = 'https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws';
+  // const windAloftURL = 'https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws';
   // GCP Cloud Function (uses CORS in source code)
-  // const windAloftURL = 'https://python-wind-aloft-ftp-483547589035.us-west2.run.app';
+  const windAloftURL = 'https://python-wind-aloft-ftp-483547589035.us-west2.run.app';
 
   const [openmeteoData, gcpWindAloftData] = await Promise.all([
     fetch(openMeteoURL).then(res => res.json()),
@@ -58,4 +58,5 @@
   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
   const windMapData = await (await fetch(windMapDataURL)).json();
   windMap(windMapData); // main.js
+
 })();
