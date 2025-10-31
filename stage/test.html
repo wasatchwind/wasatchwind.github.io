@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swipe Pages</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        .slider {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            transition: transform 0.3s ease;
+        }
+
+        .page {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+
+        .page:nth-child(1) {
+            background: #3498db;
+        }
+
+        .page:nth-child(2) {
+            background: #e67e22;
+        }
+
+        .page:nth-child(3) {
+            background: #2ecc71;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slider" id="slider">
+        <div class="page">Page 1</div>
+        <div class="page">Page 2</div>
+        <div class="page">Page 3</div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        let pages = document.querySelectorAll('.page');
+        let current = 0;
+        let startX = 0, currentX = 0;
+        const total = pages.length;
+
+        // Clone first and last for infinite loop
+        slider.prepend(pages[total - 1].cloneNode(true));
+        slider.append(pages[0].cloneNode(true));
+        pages = document.querySelectorAll('.page');
+        slider.style.transform = `translateX(-100vw)`; // start on "real" first page
+
+        function setSlide(index) {
+            slider.style.transition = 'transform 0.3s ease';
+            slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
+        }
+
+        function handleTransitionEnd() {
+            slider.style.transition = 'none';
+            if (current < 0) current = total - 1;
+            if (current >= total) current = 0;
+            slider.style.transform = `translateX(-${(current + 1) * 100}vw)`;
+        }
+        slider.addEventListener('transitionend', handleTransitionEnd);
+
+        slider.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+            slider.style.transition = 'none';
+        });
+
+        slider.addEventListener('touchmove', e => {
+            currentX = e.touches[0].clientX;
+            const delta = currentX - startX;
+            slider.style.transform = `translateX(${delta - (current + 1) * 100}vw)`;
+        });
+
+        slider.addEventListener('touchend', e => {
+            const delta = currentX - startX;
+            if (Math.abs(delta) > 50) {
+                if (delta < 0) current++;
+                else current--;
+            }
+            setSlide(current);
+        });
+    </script>
+</body>
+
+</html>
