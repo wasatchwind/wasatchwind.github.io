@@ -58,6 +58,4 @@
   const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
   const windMapData = await (await fetch(windMapDataURL)).json();
   windMap(windMapData); // main.js
-
 })();
-
