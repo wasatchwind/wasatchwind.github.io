@@ -1,109 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swipe Pages</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Swipe Pages</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: sans-serif; background: #000; color: #fff; }
 
-        body {
-            overflow: hidden;
-            font-family: sans-serif;
-        }
+  /* --- NAV BAR --- */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 60px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    z-index: 10;
+  }
 
-        .slider {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            transition: transform 0.3s ease;
-        }
+  .nav-title {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
 
-        .page {
-            min-width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            color: white;
-        }
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
 
-        .page:nth-child(1) {
-            background: #3498db;
-        }
+  .nav-buttons button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
 
-        .page:nth-child(2) {
-            background: #e67e22;
-        }
+  .nav-buttons button:hover {
+    background: rgba(255,255,255,0.35);
+  }
 
-        .page:nth-child(3) {
-            background: #2ecc71;
-        }
-    </style>
+  /* --- SLIDER --- */
+  .slider {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    touch-action: pan-y;
+    transition: transform 0.35s ease-out;
+  }
+
+  .page {
+    flex: 0 0 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    color: #fff;
+  }
+
+  /* Distinct colors for clarity */
+  .page:nth-child(1) { background: #e74c3c; }
+  .page:nth-child(2) { background: #f39c12; }
+  .page:nth-child(3) { background: #f1c40f; color: #000; }
+  .page:nth-child(4) { background: #2ecc71; }
+  .page:nth-child(5) { background: #1abc9c; }
+  .page:nth-child(6) { background: #3498db; }
+  .page:nth-child(7) { background: #9b59b6; }
+
+  /* Offset for nav bar so it doesn’t overlap content */
+  .page-content {
+    padding-top: 60px;
+  }
+</style>
 </head>
-
 <body>
-    <div class="slider" id="slider">
-        <div class="page">Page 1</div>
-        <div class="page">Page 2</div>
-        <div class="page">Page 3</div>
-        <div class="page">Page 4</div>
-        <div class="page">Page 5</div>
-        <div class="page">Page 6</div>
-        <div class="page">Page 7</div>
+  <!-- Fixed top navigation bar -->
+  <div class="navbar">
+    <div class="nav-title" id="pageIndicator">Page 1 of 7</div>
+    <div class="nav-buttons">
+      <button id="prevBtn">←</button>
+      <button id="nextBtn">→</button>
     </div>
+  </div>
 
-    <script>
-        const slider = document.getElementById('slider');
-        let pages = document.querySelectorAll('.page');
-        let current = 0;
-        let startX = 0, currentX = 0;
-        const total = pages.length;
+  <!-- Swipeable slider -->
+  <div class="slider" id="slider">
+    <div class="page"><div class="page-content">Page 1</div></div>
+    <div class="page"><div class="page-content">Page 2</div></div>
+    <div class="page"><div class="page-content">Page 3</div></div>
+    <div class="page"><div class="page-content">Page 4</div></div>
+    <div class="page"><div class="page-content">Page 5</div></div>
+    <div class="page"><div class="page-content">Page 6</div></div>
+    <div class="page"><div class="page-content">Page 7</div></div>
+  </div>
 
-        // Clone first and last for infinite loop
-        slider.prepend(pages[total - 1].cloneNode(true));
-        slider.append(pages[0].cloneNode(true));
-        pages = document.querySelectorAll('.page');
-        slider.style.transform = `translateX(-100vw)`; // start on "real" first page
+<script>
+const slider = document.getElementById('slider');
+let pages = Array.from(document.querySelectorAll('.page'));
+const total = pages.length;
+let current = 0;
 
-        function setSlide(index) {
-            slider.style.transition = 'transform 0.3s ease';
-            slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
-        }
+const indicator = document.getElementById('pageIndicator');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
-        function handleTransitionEnd() {
-            slider.style.transition = 'none';
-            if (current < 0) current = total - 1;
-            if (current >= total) current = 0;
-            slider.style.transform = `translateX(-${(current + 1) * 100}vw)`;
-        }
-        slider.addEventListener('transitionend', handleTransitionEnd);
+// Clone first and last slides for infinite loop
+const firstClone = pages[0].cloneNode(true);
+const lastClone = pages[pages.length - 1].cloneNode(true);
+slider.appendChild(firstClone);
+slider.prepend(lastClone);
 
-        slider.addEventListener('touchstart', e => {
-            startX = e.touches[0].clientX;
-            slider.style.transition = 'none';
-        });
+pages = Array.from(document.querySelectorAll('.page'));
+slider.style.transform = `translateX(-100vw)`;
 
-        slider.addEventListener('touchmove', e => {
-            currentX = e.touches[0].clientX;
-            const delta = currentX - startX;
-            slider.style.transform = `translateX(${delta - (current + 1) * 100}vw)`;
-        });
+function updateIndicator() {
+  indicator.textContent = `Page ${current + 1} of ${total}`;
+}
 
-        slider.addEventListener('touchend', e => {
-            const delta = currentX - startX;
-            if (Math.abs(delta) > 50) {
-                if (delta < 0) current++;
-                else current--;
-            }
-            setSlide(current);
-        });
-    </script>
+function setSlide(index, animate = true) {
+  if (animate) slider.style.transition = 'transform 0.35s ease-out';
+  else slider.style.transition = 'none';
+  slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
+  updateIndicator();
+}
+
+slider.addEventListener('transitionend', () => {
+  if (current < 0) {
+    current = total - 1;
+    setSlide(current, false);
+  } else if (current >= total) {
+    current = 0;
+    setSlide(current, false);
+  }
+});
+
+let startX = 0, currentX = 0, startTime = 0;
+let isDragging = false;
+
+slider.addEventListener('touchstart', e => {
+  startX = e.touches[0].clientX;
+  currentX = startX;
+  startTime = Date.now();
+  isDragging = true;
+  slider.style.transition = 'none';
+});
+
+slider.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  currentX = e.touches[0].clientX;
+  const delta = currentX - startX;
+  slider.style.transform = `translateX(${delta - (current + 1) * 100}vw)`;
+});
+
+slider.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
+
+  const delta = currentX - startX;
+  const elapsed = Date.now() - startTime;
+  const velocity = Math.abs(delta) / elapsed; // px/ms
+  const flick = velocity > 0.5;
+  const distanceThreshold = Math.abs(delta) > window.innerWidth / 3;
+
+  if (delta < 0 && (distanceThreshold || flick)) current++;
+  else if (delta > 0 && (distanceThreshold || flick)) current--;
+
+  setSlide(current, true);
+});
+
+// Desktop navigation buttons
+prevBtn.addEventListener('click', () => {
+  current--;
+  setSlide(current, true);
+});
+
+nextBtn.addEventListener('click', () => {
+  current++;
+  setSlide(current, true);
+});
+
+// Keyboard navigation (optional for accessibility)
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') {
+    current--;
+    setSlide(current, true);
+  } else if (e.key === 'ArrowRight') {
+    current++;
+    setSlide(current, true);
+  }
+});
+
+updateIndicator();
+</script>
 </body>
-
 </html>
