@@ -1,235 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
+<script>
+const slider = document.getElementById('slider');
+const indicator = document.getElementById('pageIndicator');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinite Swipe Pages (Fixed Loop)</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0
-        }
+let pages = Array.from(document.querySelectorAll('.page'));
+const total = pages.length;
+let current = 0;
 
-        html,
-        body {
-            height: 100%;
-            overflow: hidden;
-            font-family: sans-serif;
-            background: #000;
-            color: #fff
-        }
+// clone ends for infinite loop
+const firstClone = pages[0].cloneNode(true);
+const lastClone = pages[pages.length - 1].cloneNode(true);
+slider.appendChild(firstClone);
+slider.prepend(lastClone);
+pages = Array.from(document.querySelectorAll('.page'));
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 60px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1em;
-            z-index: 10
-        }
+let isAnimating = false;
+let transitionTimer = null;
 
-        .nav-buttons {
-            display: flex;
-            gap: 8px
-        }
+// initial position
+slider.style.transform = `translateX(-100vw)`;
+updateIndicator();
 
-        .nav-buttons button {
-            background: rgba(255, 255, 255, 0.25);
-            border: none;
-            color: white;
-            font-size: 1.2em;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer
-        }
+function updateIndicator() {
+  indicator.textContent = `Page ${current + 1} of ${total}`;
+}
 
-        .nav-buttons button:hover {
-            background: rgba(255, 255, 255, 0.4)
-        }
+function jumpTo(index) {
+  slider.style.transition = 'none';
+  slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
+}
 
-        .slider {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-            transition: transform .35s ease-out;
-            touch-action: pan-y
-        }
+function setSlide(index) {
+  // guard
+  if (isAnimating) return;
+  isAnimating = true;
 
-        .page {
-            flex: 0 0 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            color: #fff
-        }
+  slider.style.transition = 'transform 0.35s ease-out';
+  slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
 
-        .page:nth-child(1) {
-            background: black
-        }
+  // Safety reset if transitionend never fires
+  clearTimeout(transitionTimer);
+  transitionTimer = setTimeout(() => {
+    isAnimating = false;
+  }, 600);
+}
 
-        .page:nth-child(2) {
-            background: black
-        }
+slider.addEventListener('transitionend', () => {
+  slider.style.transition = 'none';
+  if (current < 0) {
+    current = total - 1;
+    jumpTo(current);
+  } else if (current >= total) {
+    current = 0;
+    jumpTo(current);
+  }
+  updateIndicator();
+  isAnimating = false;
+  clearTimeout(transitionTimer);
+});
 
-        .page:nth-child(3) {
-            background: black
-        }
+/* -------- Touch swipe handling with improved snapping -------- */
+let startX = 0, currentX = 0, startTime = 0, isDragging = false;
 
-        .page:nth-child(4) {
-            background: black
-        }
+slider.addEventListener('touchstart', e => {
+  // Cancel any ongoing transition instantly
+  clearTimeout(transitionTimer);
+  isAnimating = false;
+  slider.style.transition = 'none';
 
-        .page:nth-child(5) {
-            background: black
-        }
+  startX = currentX = e.touches[0].clientX;
+  startTime = Date.now();
+  isDragging = true;
+});
 
-        .page:nth-child(6) {
-            background: black
-        }
+slider.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  currentX = e.touches[0].clientX;
+  const delta = currentX - startX;
+  slider.style.transform = `translateX(${delta - (current + 1) * 100}vw)`;
+});
 
-        .page:nth-child(7) {
-            background: black
-        }
+slider.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
 
-        .page-content {
-            padding-top: 60px
-        }
-    </style>
-</head>
+  const delta = currentX - startX;
+  const elapsed = Date.now() - startTime;
+  const velocity = Math.abs(delta) / elapsed;
 
-<body>
-    <div class="navbar">
-        <div id="pageIndicator">Page 1 of 7</div>
-        <div class="nav-buttons">
-            <button id="prevBtn">←</button>
-            <button id="nextBtn">→</button>
-        </div>
-    </div>
+  const screenWidth = window.innerWidth;
+  const halfway = screenWidth / 2;
 
-    <div class="slider" id="slider">
-        <div class="page">
-            <div class="page-content">Page 1</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 2</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 3</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 4</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 5</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 6</div>
-        </div>
-        <div class="page">
-            <div class="page-content">Page 7</div>
-        </div>
-    </div>
+  let moved = false;
 
-    <script>
-        const slider = document.getElementById('slider');
-        const indicator = document.getElementById('pageIndicator');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+  // 1️⃣ If halfway past next page → snap forward/back
+  if (Math.abs(delta) > halfway) {
+    moved = true;
+    current += delta < 0 ? 1 : -1;
+  }
+  // 2️⃣ If flick is fast enough → move even if short distance
+  else if (velocity > 0.5) {
+    moved = true;
+    current += delta < 0 ? 1 : -1;
+  }
 
-        let pages = Array.from(document.querySelectorAll('.page'));
-        const total = pages.length;
-        let current = 0;
+  // Otherwise snap back to current
+  if (!moved) {
+    setSlide(current);
+  } else {
+    setSlide(current);
+  }
+});
 
-        // clone ends
-        const firstClone = pages[0].cloneNode(true);
-        const lastClone = pages[pages.length - 1].cloneNode(true);
-        slider.appendChild(firstClone);
-        slider.prepend(lastClone);
-        pages = Array.from(document.querySelectorAll('.page'));
+/* -------- Desktop buttons -------- */
+prevBtn.onclick = () => {
+  if (isAnimating) return;
+  current--;
+  setSlide(current);
+};
+nextBtn.onclick = () => {
+  if (isAnimating) return;
+  current++;
+  setSlide(current);
+};
 
-        let isAnimating = false;
-
-        // initial offset
-        slider.style.transform = `translateX(-100vw)`;
-        updateIndicator();
-
-        function updateIndicator() {
-            indicator.textContent = `Page ${current + 1} of ${total}`;
-        }
-
-        function jumpTo(index) {
-            slider.style.transition = 'none';
-            slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
-        }
-
-        function setSlide(index) {
-            if (isAnimating) return;
-            isAnimating = true;
-            slider.style.transition = 'transform 0.35s ease-out';
-            slider.style.transform = `translateX(-${(index + 1) * 100}vw)`;
-        }
-
-        slider.addEventListener('transitionend', () => {
-            slider.style.transition = 'none';
-            if (current < 0) {
-                current = total - 1;
-                jumpTo(current);
-            } else if (current >= total) {
-                current = 0;
-                jumpTo(current);
-            }
-            updateIndicator();
-            isAnimating = false;
-        });
-
-        /* -------- Touch swipe handling with momentum -------- */
-        let startX = 0, currentX = 0, startTime = 0, isDragging = false;
-
-        slider.addEventListener('touchstart', e => {
-            if (isAnimating) return;
-            startX = currentX = e.touches[0].clientX;
-            startTime = Date.now();
-            isDragging = true;
-            slider.style.transition = 'none';
-        });
-
-        slider.addEventListener('touchmove', e => {
-            if (!isDragging) return;
-            currentX = e.touches[0].clientX;
-            const delta = currentX - startX;
-            slider.style.transform = `translateX(${delta - (current + 1) * 100}vw)`;
-        });
-
-        slider.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            isDragging = false;
-            const delta = currentX - startX;
-            const elapsed = Date.now() - startTime;
-            const velocity = Math.abs(delta) / elapsed;
-            const flick = velocity > 0.5;
-            const threshold = Math.abs(delta) > window.innerWidth / 3;
-            if (delta < 0 && (threshold || flick)) current++;
-            else if (delta > 0 && (threshold || flick)) current--;
-            setSlide(current);
-        });
-
-        /* -------- Desktop buttons -------- */
-        prevBtn.onclick = () => { current--; setSlide(current); }
-        nextBtn.onclick = () => { current++; setSlide(current); }
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowLeft') { current--; setSlide(current); }
-            if (e.key === 'ArrowRight') { current++; setSlide(current); }
-        });
-    </script>
-</body>
-
-</html>
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' && !isAnimating) {
+    current--;
+    setSlide(current);
+  }
+  if (e.key === 'ArrowRight' && !isAnimating) {
+    current++;
+    setSlide(current);
+  }
+});
+</script>
