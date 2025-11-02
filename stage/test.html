@@ -149,7 +149,7 @@
     const total = pages.length;
     let current = 0;
 
-    // clone first and last for infinite loop
+    // Clone first and last for infinite loop
     const firstClone = pages[0].cloneNode(true);
     const lastClone = pages[pages.length - 1].cloneNode(true);
     slider.appendChild(firstClone);
@@ -158,15 +158,12 @@
 
     let isAnimating = false;
     let transitionTimer = null;
+    let cooldown = false; // <--- prevent rapid-fire swipes
 
-    // initialize to first real page
     function updateTransform() {
       const screenWidth = window.innerWidth;
       slider.style.transform = `translateX(-${(current + 1) * screenWidth}px)`;
     }
-
-    updateTransform();
-    updateIndicator();
 
     function updateIndicator() {
       indicator.textContent = `Page ${current + 1} of ${total}`;
@@ -179,16 +176,20 @@
     }
 
     function setSlide(index) {
-      if (isAnimating) return;
+      if (isAnimating || cooldown) return;
       isAnimating = true;
-      const screenWidth = window.innerWidth;
+      cooldown = true; // <--- activate cooldown
 
+      const screenWidth = window.innerWidth;
       slider.style.transition = 'transform 0.35s ease-out';
       slider.style.transform = `translateX(-${(index + 1) * screenWidth}px)`;
 
-      // Failsafe reset if transitionend never fires
+      // Failsafe + cooldown reset
       clearTimeout(transitionTimer);
-      transitionTimer = setTimeout(() => (isAnimating = false), 700);
+      transitionTimer = setTimeout(() => {
+        isAnimating = false;
+        cooldown = false;
+      }, 600); // matches transition + buffer
     }
 
     slider.addEventListener('transitionend', () => {
@@ -198,7 +199,9 @@
 
       updateTransform();
       updateIndicator();
+
       isAnimating = false;
+      setTimeout(() => (cooldown = false), 50); // small delay before re-enabling
       clearTimeout(transitionTimer);
     });
 
@@ -206,10 +209,9 @@
     let startX = 0, currentX = 0, startTime = 0, isDragging = false;
 
     slider.addEventListener('touchstart', e => {
+      if (isAnimating) return;
       clearTimeout(transitionTimer);
-      isAnimating = false;
       slider.style.transition = 'none';
-
       startX = currentX = e.touches[0].clientX;
       startTime = Date.now();
       isDragging = true;
@@ -225,7 +227,7 @@
     });
 
     slider.addEventListener('touchend', () => {
-      if (!isDragging) return;
+      if (!isDragging || isAnimating) return;
       isDragging = false;
 
       const delta = currentX - startX;
@@ -234,11 +236,7 @@
       const screenWidth = window.innerWidth;
 
       const halfway = screenWidth / 2;
-      let moved = false;
-
-      // move if halfway or fast swipe
       if (Math.abs(delta) > halfway || velocity > 0.5) {
-        moved = true;
         current += delta < 0 ? 1 : -1;
       }
 
@@ -274,8 +272,11 @@
       slider.style.transition = 'none';
       updateTransform();
     });
-  </script>
 
+    // Initialize
+    jumpTo(current);
+    updateIndicator();
+  </script>
 
 </body>
 
