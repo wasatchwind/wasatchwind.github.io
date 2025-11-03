@@ -30,7 +30,7 @@ body {
 }
 
 .zoom-container {
-  touch-action: pinch-zoom;
+  touch-action: pan-y pinch-zoom;
 }
 
 /* LINKS */
