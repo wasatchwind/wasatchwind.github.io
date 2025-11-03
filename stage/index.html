@@ -88,109 +88,100 @@
 
         <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 7 SECTIONS -->
         <div class="keen-slider__slide number-slide1 pe-2">
-          <div class="zoom-container">
 
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 7): GRAPHICAL SURFACE WIND FORECAST -->
-            <div class="collapse mb-4" id="surface-wind-div">
-              <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-                <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
-                <div class="d-flex fs-1 justify-content-center text-info">
-                  <div class="col-6">Wind</div>
-                  <div class="col-6">Gust</div>
-                </div>
-                <div class="d-flex">
-                  <img class="rounded-4 col-6 pe-1" id="surface-wind-img">
-                  <img class="rounded-4 col-6 ps-1" id="surface-gust-img">
-                </div>
-              </a>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (2 OF 7): WIND ALOFT FORECAST -->
-            <div class="collapse mb-4" id="wind-aloft-div">
-              <div class="display-3 text-info">Wind Aloft Forecast</div>
-
-              <div class="bg-dark border rounded-4" id="wind-aloft-group0"> <!-- GROUP 0 (FIRST 6 HOURS) -->
-                <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                  <div id="wind-aloft-group0-rows"></div>
-                  <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-0"></div>
-                </a>
-                <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours
-                  &rarr;
-                </div>
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 7): GRAPHICAL SURFACE WIND FORECAST -->
+          <div class="collapse mb-4" id="surface-wind-div">
+            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+              <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
+              <div class="d-flex fs-1 justify-content-center text-info">
+                <div class="col-6">Wind</div>
+                <div class="col-6">Gust</div>
               </div>
-
-              <div class="bg-dark border collapse rounded-4" id="wind-aloft-group1"> <!-- GROUP 1 (NEXT 6 HOURS) -->
-                <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                  <div id="wind-aloft-group1-rows"></div>
-                  <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-1"></div>
-                </a>
-                <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6
-                  hours</div>
+              <div class="d-flex">
+                <img class="rounded-4 col-6 pe-1" id="surface-wind-img">
+                <img class="rounded-4 col-6 ps-1" id="surface-gust-img">
               </div>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (3 OF 7): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
-            <div class="collapse mb-4" id="hourly-chart-today-div">
-              <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
-                target="_blank">
-                <div class="display-3 text-info">Hourly Forecast Chart</div>
-                <img class="rounded-4 w-100" id="hourly-chart-today">
-              </a>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (4 OF 7): HI-RES SOUNDING D3.JS CHART -->
-            <div class="collapse mb-4" id="hi-res-sounding-div">
-              <div class="display-3 text-info">Morning Sounding Profile</div>
-              <div class="bg-dark border rounded-4">
-                <a href="https://climate.cod.edu/data/raob/KSLC/skewt/" target="_blank">
-                  <div class="w-100" id="skew-t-d3"></div>
-                </a>
-                <div class="display-6 fw-semibold text-secondary">DALR: Dry Adiabatic Lapse Rate (-5.4&deg; F / 1,000
-                  ft)</div>
-                <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
-                <div class="collapse display-6 text-info" id="out-of-range"></div>
-                <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
-                  <div onclick="d3Clear()">Reset</div>
-                  <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number"
-                    min="0" max="110" placeholder="&deg; F" id="user-temp">
-                  <div onclick="d3Update()">Enter</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (5 OF 7): NWS SOARING FORECAST TEXT-->
-            <div class="collapse mb-4" id="nws-soaring-forecast-div">
-              <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1"
-                target="_blank">
-                <div class="display-3 text-info">NWS Soaring Forecast Basics</div>
-                <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                  <div id="soaring-forecast"></div>
-                </div>
-              </a>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (6 OF 7): AREA FORECAST DISCUSSION: AVIATION TEXT-->
-            <div class="collapse mb-4" id="area-forecast-aviation-div">
-              <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
-                target="_blank">
-                <div class="display-3 text-info">Aviation Forecast</div>
-                <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                  <div id="area-forecast-aviation"></div>
-                </div>
-              </a>
-            </div>
-
-            <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 7): NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
-            <div class="collapse mb-4" id="nws-today-div">
-              <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
-                <div class="display-3 text-info">General Forecast</div>
-                <div class="bg-dark border rounded-4">
-                  <div id="forecast-day0-today"></div>
-                </div>
-              </a>
-            </div>
-            
+            </a>
           </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (2 OF 7): WIND ALOFT FORECAST -->
+          <div class="collapse mb-4" id="wind-aloft-div">
+            <div class="display-3 text-info">Wind Aloft Forecast</div>
+
+            <div class="bg-dark border rounded-4" id="wind-aloft-group0"> <!-- GROUP 0 (FIRST 6 HOURS) -->
+              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+                <div id="wind-aloft-group0-rows"></div>
+                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-0"></div>
+              </a>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;
+              </div>
+            </div>
+
+            <div class="bg-dark border collapse rounded-4" id="wind-aloft-group1"> <!-- GROUP 1 (NEXT 6 HOURS) -->
+              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+                <div id="wind-aloft-group1-rows"></div>
+                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-1"></div>
+              </a>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6 hours</div>
+            </div>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (3 OF 7): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="hourly-chart-today-div">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+              <div class="display-3 text-info">Hourly Forecast Chart</div>
+              <img class="rounded-4 w-100" id="hourly-chart-today">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (4 OF 7): HI-RES SOUNDING D3.JS CHART -->
+          <div class="collapse mb-4" id="hi-res-sounding-div">
+            <div class="display-3 text-info">Morning Sounding Profile</div>
+            <div class="bg-dark border rounded-4">
+              <a href="https://climate.cod.edu/data/raob/KSLC/skewt/" target="_blank">
+                <div class="w-100" id="skew-t-d3"></div>
+              </a>
+              <div class="display-6 fw-semibold text-secondary">DALR: Dry Adiabatic Lapse Rate (-5.4&deg; F / 1,000 ft)</div>
+              <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
+              <div class="collapse display-6 text-info" id="out-of-range"></div>
+              <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
+                <div onclick="d3Clear()">Reset</div>
+                <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
+                <div onclick="d3Update()">Enter</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (5 OF 7): NWS SOARING FORECAST TEXT-->
+          <div class="collapse mb-4" id="nws-soaring-forecast-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">NWS Soaring Forecast Basics</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
+                <div id="soaring-forecast"></div>
+              </div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (6 OF 7): AREA FORECAST DISCUSSION: AVIATION TEXT-->
+          <div class="collapse mb-4" id="area-forecast-aviation-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">Aviation Forecast</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
+                <div id="area-forecast-aviation"></div>
+              </div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 7): NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="nws-today-div">
+            <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
+              <div class="display-3 text-info">General Forecast</div>
+              <div class="bg-dark border rounded-4">
+                <div id="forecast-day0-today"></div>
+              </div>
+            </a>
+          </div>
+
         </div>
         <!-- END BODY SLIDER > PAGE (1 OF 7) > TODAY -->
 
@@ -199,8 +190,7 @@
 
           <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 4): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="hourly-chart-tomorrow-div">
-            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
-              target="_blank">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
               <img class="rounded-4 w-100" id="hourly-chart-tomorrow">
             </a>
@@ -224,8 +214,7 @@
 
           <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (3 OF 4): AREA FORECAST DISCUSSION TEXT -->
           <div class="collapse mb-4" id="area-forecast-div">
-            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
-              target="_blank">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
               <div class="display-3 text-info">Area Forecast Discusson</div>
               <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
                 <div id="area-forecast-time"></div>
@@ -293,12 +282,10 @@
                   <a href="https://www.uhgpga.org/flying-sites" target="_blank">&#128279;&nbsp;UHGPGA Site Guide</a>
                 </div>
                 <div class="my-5">
-                  <a href="https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11"
-                    target="_blank">&#128279;&nbsp;Hike & Fly Calculator</a>
+                  <a href="https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11" target="_blank">&#128279;&nbsp;Hike & Fly Calculator</a>
                 </div>
                 <div class="my-5">
-                  <a href="https://ambrosephoto.com/category/paragliding/" target="_blank">&#128279;&nbsp;Jeff Ambrose
-                    Articles</a>
+                  <a href="https://ambrosephoto.com/category/paragliding/" target="_blank">&#128279;&nbsp;Jeff Ambrose Articles</a>
                 </div>
               </div>
             </div>
@@ -313,8 +300,7 @@
             <div>Created & Maintained: Matt Hanson</div>
             <div>Contact: matthansonx@gmail.com</div>
             <br>
-            <div><a href="https://account.venmo.com/u/Matt-Hansonx" target="_blank">&#128279;&nbsp;Donate Venmo:
-                @matt-hansonx</a></div>
+            <div><a href="https://account.venmo.com/u/Matt-Hansonx" target="_blank">&#128279;&nbsp;Donate Venmo: @matt-hansonx</a></div>
           </div>
 
         </div>
@@ -383,8 +369,7 @@
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (2 OF 4): WIND MAP SCREEN SHOT -->
           <div class="mb-4">
-            <a href="https://www.weather.gov/wrh/hazards?&zoom=10&scroll_zoom=false&center=40.70,-111.50&obs=true&obs_type=weather&elements=wind,gust&fontsize=4&obs_density=3"
-              target="_blank">
+            <a href="https://www.weather.gov/wrh/hazards?&zoom=10&scroll_zoom=false&center=40.70,-111.50&obs=true&obs_type=weather&elements=wind,gust&fontsize=4&obs_density=3" target="_blank">
               <div class="display-3 text-info" id="wind-map-timestamp"></div>
               <img class="rounded-4 w-100" id="wind-map">
             </a>
@@ -392,7 +377,7 @@
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (3 OF 4): WIND STATION CHARTS ALPHABETICAL BY NAME-->
           <div class="collapse mb-4" id="wind-charts-div">
-            <div id="AMB-main"></div> <!-- Alta Baldy -->
+            <div id="AMB-main"></div>  <!-- Alta Baldy -->
             <div id="KSVR-main"></div> <!-- Airport 2 -->
             <div id="BRW-main"></div> <!-- Clayton Peak -->
             <div id="HDP-main"></div> <!-- Hidden Peak -->
