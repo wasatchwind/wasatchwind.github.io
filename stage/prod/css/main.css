@@ -29,6 +29,10 @@ body {
   margin-bottom: -10px;
 }
 
+.zoom-container {
+  touch-action: pinch-zoom;
+}
+
 /* LINKS */
 a:active {
   color: white;
@@ -49,10 +53,6 @@ a:visited {
 }
 
 /* KEEN SLIDER */
-.keen-slider {
-  touch-action: pan-y pinch-zoom;
-}
-
 .keen-slider:not([data-keen-slider-disabled]) {
   align-content: flex-start;
   display: flex;
