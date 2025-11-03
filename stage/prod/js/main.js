@@ -19,6 +19,62 @@ const stationList = {
   FPS: { name: 'Southside' }
 };
 
+
+
+
+document.querySelectorAll(".zoom-container").forEach((el) => {
+  let startDist = 0
+  let scale = 1
+  let currentScale = 1
+  let center = { x: 0, y: 0 }
+
+  el.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      slider.options.drag = false // disable slide drag while zooming
+      startDist = getDistance(e.touches)
+      center = getCenter(e.touches)
+    }
+  })
+
+  el.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 2) {
+      const newDist = getDistance(e.touches)
+      scale = currentScale * (newDist / startDist)
+      scale = Math.max(1, Math.min(scale, 3)) // clamp zoom level
+      const dx = center.x - el.clientWidth / 2
+      const dy = center.y - el.clientHeight / 2
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`
+    }
+  })
+
+  el.addEventListener("touchend", (e) => {
+    if (e.touches.length < 2) {
+      currentScale = scale
+      slider.options.drag = true // re-enable slide swipe
+      if (currentScale <= 1.05) {
+        // Reset if basically zoomed out
+        currentScale = 1
+        el.style.transform = "scale(1)"
+      }
+    }
+  })
+})
+
+function getDistance(touches) {
+  const [a, b] = touches
+  const dx = a.clientX - b.clientX
+  const dy = a.clientY - b.clientY
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
+function getCenter(touches) {
+  const [a, b] = touches
+  return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 }
+}
+
+
+
+
 // Reload/refresh page
 function reload() {
   history.scrollRestoration = 'manual';
@@ -287,4 +343,5 @@ function stationSetToggle(stid) {
   element.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
   oppositeElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
   mainElement.style.display = status === 'off' ? 'none' : 'block';
+
 };
