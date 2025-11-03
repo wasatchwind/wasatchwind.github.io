@@ -1,169 +1,315 @@
-<script>
-  const slider = document.getElementById('slider');
-  const indicator = document.getElementById('pageIndicator');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
+<!DOCTYPE html>
+<html lang="en">
 
-  let pages = Array.from(document.querySelectorAll('.page'));
-  const total = pages.length;
-  let current = 0;
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Swipe Pages (Fixed Loop)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-  // Clone first and last for infinite loop
-  const firstClone = pages[0].cloneNode(true);
-  const lastClone = pages[pages.length - 1].cloneNode(true);
-  slider.appendChild(firstClone);
-  slider.prepend(lastClone);
-  pages = Array.from(document.querySelectorAll('.page'));
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      background: #000;
+      color: #fff
+    }
 
-  let isAnimating = false;
-  let transitionTimer = null;
-  let cooldown = false;
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1em;
+      z-index: 10
+    }
 
-  function updateTransform() {
-    const w = window.innerWidth;
-    slider.style.transform = `translateX(-${(current + 1) * w}px)`;
-  }
+    .nav-buttons {
+      display: flex;
+      gap: 8px
+    }
 
-  function updateIndicator() {
-    indicator.textContent = `Page ${current + 1} of ${total}`;
-  }
+    .nav-buttons button {
+      background: rgba(255, 255, 255, 0.25);
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer
+    }
 
-  function setSlide(index, duration = 0.35) {
-    if (isAnimating || cooldown) return;
-    isAnimating = true;
-    cooldown = true;
-    const w = window.innerWidth;
-    slider.style.transition = `transform ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
-    slider.style.transform = `translateX(-${(index + 1) * w}px)`;
-    clearTimeout(transitionTimer);
-    transitionTimer = setTimeout(() => {
+    .nav-buttons button:hover {
+      background: rgba(255, 255, 255, 0.4)
+    }
+
+    .slider {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      transition: transform .35s ease-out;
+      touch-action: pan-y
+    }
+
+    .page {
+      flex: 0 0 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      color: #fff
+    }
+
+    .page:nth-child(1) {
+      background: black
+    }
+
+    .page:nth-child(2) {
+      background: black
+    }
+
+    .page:nth-child(3) {
+      background: black
+    }
+
+    .page:nth-child(4) {
+      background: black
+    }
+
+    .page:nth-child(5) {
+      background: black
+    }
+
+    .page:nth-child(6) {
+      background: black
+    }
+
+    .page:nth-child(7) {
+      background: black
+    }
+
+    .page-content {
+      padding-top: 60px
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <div id="pageIndicator">Page 1 of 7</div>
+    <div class="nav-buttons">
+      <button id="prevBtn">←</button>
+      <button id="nextBtn">→</button>
+    </div>
+  </div>
+
+  <div class="slider" id="slider">
+    <div class="page">
+      <div class="page-content">Page 1</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 2</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 3</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 4</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 5</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 6</div>
+    </div>
+    <div class="page">
+      <div class="page-content">Page 7</div>
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById('slider');
+    const indicator = document.getElementById('pageIndicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let pages = Array.from(document.querySelectorAll('.page'));
+    const total = pages.length;
+    let current = 0;
+
+    // Clone first and last for infinite loop
+    const firstClone = pages[0].cloneNode(true);
+    const lastClone = pages[pages.length - 1].cloneNode(true);
+    slider.appendChild(firstClone);
+    slider.prepend(lastClone);
+    pages = Array.from(document.querySelectorAll('.page'));
+
+    let isAnimating = false;
+    let transitionTimer = null;
+    let cooldown = false;
+
+    function updateTransform() {
+      const w = window.innerWidth;
+      slider.style.transform = `translateX(-${(current + 1) * w}px)`;
+    }
+
+    function updateIndicator() {
+      indicator.textContent = `Page ${current + 1} of ${total}`;
+    }
+
+    function setSlide(index, duration = 0.35) {
+      if (isAnimating || cooldown) return;
+      isAnimating = true;
+      cooldown = true;
+      const w = window.innerWidth;
+      slider.style.transition = `transform ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
+      slider.style.transform = `translateX(-${(index + 1) * w}px)`;
+      clearTimeout(transitionTimer);
+      transitionTimer = setTimeout(() => {
+        isAnimating = false;
+        cooldown = false;
+      }, 600);
+    }
+
+    slider.addEventListener('transitionend', () => {
+      slider.style.transition = 'none';
+      if (current < 0) current = total - 1;
+      else if (current >= total) current = 0;
+      updateTransform();
+      updateIndicator();
       isAnimating = false;
-      cooldown = false;
-    }, 600);
-  }
+      setTimeout(() => (cooldown = false), 50);
+      clearTimeout(transitionTimer);
+    });
 
-  slider.addEventListener('transitionend', () => {
-    slider.style.transition = 'none';
-    if (current < 0) current = total - 1;
-    else if (current >= total) current = 0;
+    /* ---- Touch / Momentum Swipe ---- */
+    let startX = 0, currentX = 0, startY = 0;
+    let isDragging = false, lastX = 0, velocityX = 0;
+    let momentumFrame = null;
+
+    slider.addEventListener('touchstart', e => {
+      if (isAnimating) return;
+      cancelAnimationFrame(momentumFrame);
+      slider.style.transition = 'none';
+      startX = currentX = lastX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+    });
+
+    slider.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dx = e.touches[0].clientX - currentX;
+      velocityX = dx;
+      currentX = e.touches[0].clientX;
+      const deltaX = currentX - startX;
+      const deltaY = e.touches[0].clientY - startY;
+
+      // Pull-to-refresh gesture
+      if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 80 && window.scrollY === 0) {
+        location.reload();
+        return;
+      }
+
+      const w = window.innerWidth;
+      const offset = -((current + 1) * w) + deltaX;
+      slider.style.transform = `translateX(${offset}px)`;
+    });
+
+    slider.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      isDragging = false;
+
+      const w = window.innerWidth;
+      const delta = currentX - startX;
+      const threshold = w / 3;
+
+      if (Math.abs(delta) > threshold || Math.abs(velocityX) > 10) {
+        current += delta < 0 ? 1 : -1;
+      }
+
+      // Momentum inertia
+      let momentum = velocityX;
+      function animateMomentum() {
+        momentum *= 0.9;
+        if (Math.abs(momentum) > 0.5) {
+          const offset = parseFloat(slider.style.transform.replace(/[^-?\d.]/g, '')) + momentum;
+          slider.style.transform = `translateX(${offset}px)`;
+          momentumFrame = requestAnimationFrame(animateMomentum);
+        } else {
+          cancelAnimationFrame(momentumFrame);
+          setSlide(current);
+        }
+      }
+      animateMomentum();
+    });
+
+    /* ---- Desktop Buttons ---- */
+    prevBtn.onclick = () => {
+      if (isAnimating) return;
+      current--;
+      setSlide(current);
+    };
+    nextBtn.onclick = () => {
+      if (isAnimating) return;
+      current++;
+      setSlide(current);
+    };
+
+    /* ---- Keyboard Navigation ---- */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft' && !isAnimating) { current--; setSlide(current); }
+      if (e.key === 'ArrowRight' && !isAnimating) { current++; setSlide(current); }
+    });
+
+    /* ---- Pinch Zoom (current page only) ---- */
+    let scale = 1;
+    let lastScale = 1;
+
+    window.addEventListener('gesturestart', e => {
+      lastScale = scale;
+    });
+
+    window.addEventListener('gesturechange', e => {
+      const activePage = pages[current + 1]; // +1 for the cloned element offset
+      if (!activePage) return;
+      scale = Math.min(Math.max(lastScale * e.scale, 1), 3);
+      activePage.style.transformOrigin = 'center center';
+      activePage.style.transform = `scale(${scale})`;
+    });
+
+    window.addEventListener('gestureend', e => {
+      const activePage = pages[current + 1];
+      if (!activePage) return;
+      if (scale < 1.05) scale = 1;
+      activePage.style.transition = 'transform 0.2s ease-out';
+      activePage.style.transform = `scale(${scale})`;
+      setTimeout(() => activePage.style.transition = '', 250);
+    });
+
+    /* ---- Resize ---- */
+    window.addEventListener('resize', () => {
+      slider.style.transition = 'none';
+      updateTransform();
+    });
+
+    // Initialize
     updateTransform();
     updateIndicator();
-    isAnimating = false;
-    setTimeout(() => (cooldown = false), 50);
-    clearTimeout(transitionTimer);
-  });
+  </script>
 
-  /* ---- Touch / Momentum Swipe ---- */
-  let startX = 0, currentX = 0, startY = 0;
-  let isDragging = false, lastX = 0, velocityX = 0;
-  let momentumFrame = null;
 
-  slider.addEventListener('touchstart', e => {
-    if (isAnimating) return;
-    cancelAnimationFrame(momentumFrame);
-    slider.style.transition = 'none';
-    startX = currentX = lastX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    isDragging = true;
-  });
+</body>
 
-  slider.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    const dx = e.touches[0].clientX - currentX;
-    velocityX = dx;
-    currentX = e.touches[0].clientX;
-    const deltaX = currentX - startX;
-    const deltaY = e.touches[0].clientY - startY;
-
-    // Pull-to-refresh gesture
-    if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 80 && window.scrollY === 0) {
-      location.reload();
-      return;
-    }
-
-    const w = window.innerWidth;
-    const offset = -((current + 1) * w) + deltaX;
-    slider.style.transform = `translateX(${offset}px)`;
-  });
-
-  slider.addEventListener('touchend', e => {
-    if (!isDragging) return;
-    isDragging = false;
-
-    const w = window.innerWidth;
-    const delta = currentX - startX;
-    const threshold = w / 3;
-
-    if (Math.abs(delta) > threshold || Math.abs(velocityX) > 10) {
-      current += delta < 0 ? 1 : -1;
-    }
-
-    // Momentum inertia
-    let momentum = velocityX;
-    function animateMomentum() {
-      momentum *= 0.9;
-      if (Math.abs(momentum) > 0.5) {
-        const offset = parseFloat(slider.style.transform.replace(/[^-?\d.]/g, '')) + momentum;
-        slider.style.transform = `translateX(${offset}px)`;
-        momentumFrame = requestAnimationFrame(animateMomentum);
-      } else {
-        cancelAnimationFrame(momentumFrame);
-        setSlide(current);
-      }
-    }
-    animateMomentum();
-  });
-
-  /* ---- Desktop Buttons ---- */
-  prevBtn.onclick = () => {
-    if (isAnimating) return;
-    current--;
-    setSlide(current);
-  };
-  nextBtn.onclick = () => {
-    if (isAnimating) return;
-    current++;
-    setSlide(current);
-  };
-
-  /* ---- Keyboard Navigation ---- */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft' && !isAnimating) { current--; setSlide(current); }
-    if (e.key === 'ArrowRight' && !isAnimating) { current++; setSlide(current); }
-  });
-
-  /* ---- Pinch Zoom (current page only) ---- */
-  let scale = 1;
-  let lastScale = 1;
-
-  window.addEventListener('gesturestart', e => {
-    lastScale = scale;
-  });
-
-  window.addEventListener('gesturechange', e => {
-    const activePage = pages[current + 1]; // +1 for the cloned element offset
-    if (!activePage) return;
-    scale = Math.min(Math.max(lastScale * e.scale, 1), 3);
-    activePage.style.transformOrigin = 'center center';
-    activePage.style.transform = `scale(${scale})`;
-  });
-
-  window.addEventListener('gestureend', e => {
-    const activePage = pages[current + 1];
-    if (!activePage) return;
-    if (scale < 1.05) scale = 1;
-    activePage.style.transition = 'transform 0.2s ease-out';
-    activePage.style.transform = `scale(${scale})`;
-    setTimeout(() => activePage.style.transition = '', 250);
-  });
-
-  /* ---- Resize ---- */
-  window.addEventListener('resize', () => {
-    slider.style.transition = 'none';
-    updateTransform();
-  });
-
-  // Initialize
-  updateTransform();
-  updateIndicator();
-</script>
+</html>
