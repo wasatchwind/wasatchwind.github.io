@@ -52,7 +52,7 @@ a:visited {
 .keen-slider__slide img {
   touch-action: pinch-zoom pan-x pan-y;
   user-select: auto;
-  -webkit-user-drag: none;
+  -webkit-user-drag: auto;
   transition: transform 0.25s ease-out;
 }
 
