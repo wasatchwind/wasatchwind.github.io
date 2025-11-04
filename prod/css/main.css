@@ -64,6 +64,8 @@ a:active {
   flex-wrap: wrap;
 }
 
+#slider { touch-action: pan-x pan-y pinch-zoom !important; }
+
 /* D3 */
 .svg-container {
   display: inline-block;
