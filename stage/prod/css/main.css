@@ -29,10 +29,6 @@ body {
   margin-bottom: -10px;
 }
 
-.zoom-container {
-  touch-action: pan-y pinch-zoom;
-}
-
 /* LINKS */
 a:active {
   color: white;
@@ -55,6 +51,13 @@ a:visited {
 /* KEEN SLIDER */
 .keen-slider__slide img {
   touch-action: pinch-zoom pan-x pan-y;
+  user-select: auto;
+  -webkit-user-drag: none;
+  transition: transform 0.25s ease-out;
+}
+
+.keen-slider__slide img.zoomed {
+  transition: transform 0.25s ease-out;
 }
 
 .keen-slider:not([data-keen-slider-disabled]) {
