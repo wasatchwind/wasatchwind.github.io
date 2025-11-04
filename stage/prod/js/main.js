@@ -185,29 +185,6 @@ function navSet() {
   navUpdate(activeNav);
 }
 
-// --- Double-tap zoom support on slide images ---
-document.querySelectorAll(".keen-slider__slide img").forEach(img => {
-  let lastTap = 0
-  let zoomed = false
-
-  img.addEventListener("touchend", e => {
-    const now = Date.now()
-    if (now - lastTap < 300) { // double-tap threshold (ms)
-      e.preventDefault()
-      zoomed = !zoomed
-      if (zoomed) {
-        img.classList.add("zoomed")
-        img.style.transform = "scale(2)" // zoom in
-        img.style.transformOrigin = "center center"
-      } else {
-        img.classList.remove("zoomed")
-        img.style.transform = "scale(1)" // zoom out
-      }
-    }
-    lastTap = now
-  })
-})
-
 // Display the timestamp for the Wind Map image
 function windMap(data) {
   const timestamp = new Date(data.timeCreated).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase();
@@ -337,5 +314,4 @@ function stationSetToggle(stid) {
   element.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
   oppositeElement.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
   mainElement.style.display = status === 'off' ? 'none' : 'block';
-
 }
