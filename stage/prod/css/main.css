@@ -53,6 +53,10 @@ a:visited {
 }
 
 /* KEEN SLIDER */
+.keen-slider__slide img {
+  touch-action: pinch-zoom pan-x pan-y;
+}
+
 .keen-slider:not([data-keen-slider-disabled]) {
   align-content: flex-start;
   display: flex;
