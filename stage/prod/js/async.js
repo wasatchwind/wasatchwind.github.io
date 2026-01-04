@@ -1,8 +1,8 @@
 "use strict";
 
-// const data = await fetchData();
+const data = await fetchData();
 main(data);
-// displayImages(sunset);
+displayImages(sunset);
 
 async function fetchData() {
   const data = {};
@@ -91,4 +91,5 @@ async function fetchData() {
   }
 
   return data;
+
 }
