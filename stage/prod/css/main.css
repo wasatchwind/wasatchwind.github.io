@@ -1,4 +1,4 @@
-@media only screen and (min-width: 1365px) {
+@media only screen and (min-width: 1081px) {
   body {
     margin-left: 30%;
     margin-right: 30%;
@@ -12,10 +12,6 @@ body {
   text-align: center;
 }
 
-.gust-color {
-  color: hotpink;
-}
-
 .mb-div-end {
   margin-bottom: 8rem;
 }
@@ -24,18 +20,63 @@ body {
   font-size: 500%;
 }
 
+.gust-color {
+  color: hotpink;
+}
+
 .zone-margin {
   margin-top: -10px;
   margin-bottom: -10px;
 }
 
-/* LINKS */
-a:active {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
+/* WIND ALOFT FORECAST */
+#wind-aloft-rows-current6,
+#wind-aloft-rows-next6 {
+  display: grid;
+  grid-template-columns: auto repeat(6, 1fr);
 }
 
+.wind-aloft-row {
+  display: contents;
+}
+
+.wind-aloft-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wind-aloft-cell:first-child { /* Label column: stack label above sublabel */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.wind-aloft-cell:first-child .sublabel {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--bs-secondary);
+}
+
+.wind-aloft-forecast-speed {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: white;
+}
+
+.wind-aloft-forecast-barb {
+  align-self: center;
+  margin-right: auto;
+  width: 60%;
+  height: auto;
+}
+
+/* LINKS */
 a:link {
   color: white;
   background-color: transparent;
@@ -43,6 +84,12 @@ a:link {
 }
 
 a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:active {
   color: white;
   background-color: transparent;
   text-decoration: none;
@@ -85,44 +132,6 @@ a:visited {
 }
 
 /* D3 */
-.dalr {
-  fill: #0dcaf0;
-  font-size: 3.5vw;
-  font-weight: 500;
-}
-
-.dalrlabel {
-  fill: #6c757d;
-  font-size: calc(1.325rem + 0.9vw);
-  font-weight: 500;
-}
-
-.dewpoint {
-  fill: #20c997;
-  font-size: 3.5vw;
-  font-weight: 500;
-}
-
-.gridticks {
-  color: lightgray;
-  opacity: 0.5;
-}
-
-.liftheights {
-  fill: white;
-  font-size: 210%;
-  font-weight: bold;
-}
-
-.liftlabels {
-  fill: white;
-  font-size: 200%;
-}
-
-.svgbg {
-  fill: #212529;
-}
-
 .svg-container {
   display: inline-block;
   position: relative;
@@ -138,10 +147,21 @@ a:visited {
   left: 0;
 }
 
-.temp {
-  fill: #fd7e14;
-  font-size: 3.5vw;
-  font-weight: 500;
+.gridticks {
+  color: lightgray;
+  opacity: 0.5;
+}
+
+.svgbg {
+  fill: #212529;
+}
+
+.xAxis {
+  font-size: 180%;
+}
+
+.yAxis {
+  font-size: 180%;
 }
 
 .white {
@@ -151,10 +171,37 @@ a:visited {
   line-height: 1.2;
 }
 
-.xAxis {
-  font-size: 180%;
+.dewpoint {
+  fill: #20c997;
+  font-size: 3.5vw;
+  font-weight: 500;
 }
 
-.yAxis {
-  font-size: 180%;
+.temp {
+  fill: #fd7e14;
+  font-size: 3.5vw;
+  font-weight: 500;
+}
+
+.dalr {
+  fill: #0dcaf0;
+  font-size: 3.5vw;
+  font-weight: 500;
+}
+
+.dalrlabel {
+  fill: #6c757d;
+  font-size: calc(1.325rem + 0.9vw);
+  font-weight: 500;
+}
+
+.liftlabels {
+  fill: white;
+  font-size: 200%;
+}
+
+.liftheights {
+  fill: white;
+  font-size: 210%;
+  font-weight: bold;
 }
