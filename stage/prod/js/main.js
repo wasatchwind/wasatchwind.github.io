@@ -11,10 +11,8 @@
 // 4) Keen Slider: https://keen-slider.io/docs
 
 function main(data) {
-  console.log(data);
-
   // Set up top marquee and main body nav structure (Keen Slider)
-  const marquee = buildMarquee(); // !!!!!!!!!!!!!!!!! will this work without const?
+  const marquee = buildMarquee();
   slider = buildNavSlider();
   navUpdate();
 
@@ -324,4 +322,5 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
+
 };
