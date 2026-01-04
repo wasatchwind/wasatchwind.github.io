@@ -1,0 +1,245 @@
+"use strict";
+
+function processWindAloft(openMeteo, windAloft) {
+  injectWindAloftIntoOpenMeteo(openMeteo, windAloft);
+  windAloftLongterm(windAloft.forecast24h);
+  buildWindAloftForecast(openMeteo);
+}
+
+// Function to assimilate the NWS Wind Aloft data (windAloft) into the primary data source (openMeteo)
+function injectWindAloftIntoOpenMeteo(openMeteo, windAloft) {
+  const altitudes = ["9k", "12k", "18k"];
+  const fields = ["winddirection", "windspeed"];
+
+  function isHourInRange(hour, start, end) {
+    if (start < end) return hour >= start && hour < end;
+    else return hour >= start || hour < end;
+  }
+
+  // Helper function to select the correct forecast (UTC) for a given local time
+  function forecastSelector(utcHour) {
+    if (isHourInRange(utcHour, windAloft.forecast6h.starttime, windAloft.forecast6h.endtime)) return windAloft.forecast6h;
+    if (isHourInRange(utcHour, windAloft.forecast12h.starttime, windAloft.forecast12h.endtime)) return windAloft.forecast12h;
+    return windAloft.forecast24h;
+  }
+
+  for (const alt of altitudes) {
+    for (const field of fields) {
+      openMeteo[`${field}_${alt.replace("k", "000")}`] = openMeteo.time.map(t => {
+        const forecast = forecastSelector(new Date(t).getUTCHours());
+        return forecast[field][`altitude${alt}`];
+      });
+    }
+  }
+}
+
+// Set the color of each wind speed cell (or row in the longterm component)
+function windAloftColor(speed, altitude) {
+  if (speed < 11 || speed < altitude) return "#10654c";
+  if (speed < altitude + 6) return "#806104";
+  if (speed < altitude + 12) return "#7f3f0a";
+  return "#6e1b23";
+}
+
+
+
+////////////////////////////////////////
+// Main Wind Aloft Forecast component //
+////////////////////////////////////////
+function buildWindAloftForecast(data) {
+  buildWindAloftContainer("current6");
+  buildWindAloftContainer("next6");
+
+  // Build the HTML DOM containers for the Wind Aloft Forecast component (current 6 and next 6 hours)
+  function buildWindAloftContainer(timeframe) {
+    const container = document.getElementById(`wind-aloft-rows-${timeframe}`);
+    const startIndex = timeframe === "current6" ? 0 : 6;
+    const slice = timeframe === "current6" ? [0, 6] : [6, 12];
+    const pressureLevels = [550, 600, 650, 700, 750, 800, 850];
+
+    // Calculate the mean geopotential altitude for current 6 and next 6 hours
+    const geopotentialMeans = pressureLevels.map(hPa => {
+      const key = `geopotential_height_${hPa}hPa`;
+      const cohort = data[key].slice(...slice);
+      const avgMeters = cohort.reduce((a, b) => a + b, 0) / cohort.length;
+      return Math.round(avgMeters * ftPerMeter).toLocaleString();
+    });
+
+    // Since 12,000k can be below or above 650 hPa, both are set up for comparison as objects
+    const twelveK = {
+      label: "12,000",
+      sub: "NWS",
+      altitudeFt: 12000,
+      speedKey: "windspeed_12000",
+      dirKey: "winddirection_12000"
+    };
+
+    const hpa650 = {
+      label: geopotentialMeans[2],
+      sub: "650 hPa",
+      altitudeFt: Number(geopotentialMeans[2].replace(",", "")),
+      speedKey: "windspeed_650hPa",
+      dirKey: "winddirection_650hPa"
+    };
+
+    // Determine which is higher between twelveK and hpa650
+    const midLevels = [twelveK, hpa650].sort((a, b) => b.altitudeFt - a.altitudeFt);
+
+    const labels = [
+      { label: "18,000", sub: "NWS" },
+      { label: geopotentialMeans[0], sub: "550 hPa" },
+      { label: geopotentialMeans[1], sub: "600 hPa" },
+      ...midLevels.map(l => ({ label: l.label, sub: l.sub })), // Insert twelveK and hpa650
+      { label: geopotentialMeans[3], sub: "700 hPa" },
+      { label: "9,000", sub: "NWS" },
+      { label: geopotentialMeans[4], sub: "750 hPa" },
+      { label: geopotentialMeans[5], sub: "800 hPa" },
+      { label: geopotentialMeans[6], sub: "850 hPa" },
+      { label: "4,260", sub: "Surface" },
+      { label: "", sub: "" } // Time row is empty in column 1
+    ];
+
+    // Build rows
+    labels.forEach((row, rowIndex) => {
+      const rowEl = document.createElement("div");
+      rowEl.className = "display-5 text-info wind-aloft-row";
+
+      for (let col = 0; col < 7; col++) {
+        const cell = document.createElement("div");
+        cell.className = "border border-1 border-dark display-5 text-info wind-aloft-cell";
+
+        // Column 1: Labels
+        if (col === 0) cell.innerHTML = `<div>${row.label}</div>${`<div class="sublabel">${row.sub}</div>`}`;
+
+        // Data cells
+        else if (rowIndex < 11) {
+          const windAloftRows = [
+            { speed: "windspeed_18000", dir: "winddirection_18000" },
+            { speed: "windspeed_550hPa", dir: "winddirection_550hPa" },
+            { speed: "windspeed_600hPa", dir: "winddirection_600hPa" },
+            ...midLevels.map(l => ({ speed: l.speedKey, dir: l.dirKey })), // Insert twelveK and hpa650
+            { speed: "windspeed_700hPa", dir: "winddirection_700hPa" },
+            { speed: "windspeed_9000", dir: "winddirection_9000" },
+            { speed: "windspeed_750hPa", dir: "winddirection_750hPa" },
+            { speed: "windspeed_800hPa", dir: "winddirection_800hPa" },
+            { speed: "windspeed_850hPa", dir: "winddirection_850hPa" },
+            { speed: "wind_speed_10m", dir: "wind_direction_10m" }
+          ];
+
+          const hourIndex = startIndex + (col - 1);
+          const rowConfig = windAloftRows[rowIndex];
+          const speed = data[rowConfig.speed][hourIndex];
+          const direction = data[rowConfig.dir][hourIndex];
+          const altitude = Math.round(Number(row.label.replace(/,/, "")) / 1000);
+
+          populateWindCell(cell, speed, direction, altitude);
+        }
+
+        // Time row
+        else {
+          const time = new Date(data.time[startIndex + (col - 1)]);
+          cell.textContent = time.toLocaleTimeString([], { hour: "numeric", hour12: true }).toLowerCase();
+        }
+
+        rowEl.appendChild(cell);
+      }
+
+      container.appendChild(rowEl);
+    });
+
+    function populateWindCell(cell, speed, direction, altitude) {
+      const speedEl = document.createElement("div");
+      speedEl.className = "wind-aloft-forecast-speed";
+      speedEl.textContent = Math.round(speed);
+
+      const barb = Math.min(50, Math.floor(speed / 5) * 5);
+      const img = document.createElement("img");
+      img.src = `prod/images/barbs/barb${barb}.png`;
+      img.className = "wind-aloft-forecast-barb";
+      img.alt = Math.round(speed);
+      img.style.transform = `rotate(${direction}deg)`;
+
+      cell.append(speedEl, img);
+      cell.style.backgroundColor = windAloftColor(Math.round(speed), altitude);
+    }
+  }
+}
+
+
+
+////////////////////////////////////////////////
+// Wind Aloft Longterm (NWS 24 hour forecast) //
+////////////////////////////////////////////////
+function windAloftLongterm(data) {
+  const altitudes = [18, 12, 9];
+
+  buildWindAloftLongtermContainer(altitudes);
+  injectWindAloftLongTermData(altitudes);
+
+  // Build the HTML DOM container for wind aloft long term
+  function buildWindAloftLongtermContainer(altitudes) {
+    const container = document.getElementById("wind-aloft-rows-longterm");
+
+    altitudes.forEach((alt, index) => {
+      const row = document.createElement("div");
+      row.className = "align-items-center d-flex display-3 justify-content-around";
+      row.id = `wind-aloft-longterm-${alt}k`;
+
+      row.innerHTML = `
+        <div class="col">${alt.toLocaleString()},000'</div>
+        <img class="col-1" id="wind-aloft-longterm-dir-${alt}k">
+        <div class="col d-flex justify-content-center">
+          <div class="fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
+          <div>&nbsp;mph</div>
+        </div>
+        <div class="col" id="wind-aloft-longterm-temp-${alt}k"></div>`;
+
+      container.appendChild(row);
+
+      // Insert border after first 2 rows but not the third/final row
+      if (index < altitudes.length - 1) {
+        container.appendChild(document.createElement("div")).className = "border border-dark";
+      }
+    });
+  }
+
+  // Load long term data (forecast24h) into the container
+  function injectWindAloftLongTermData(altitudes) {
+
+    // Format start and end time from UTC
+    const formatTime = utc => {
+      const localTime = utc - timezoneOffset;
+      if (localTime === 0) return "Midnight";
+      if (localTime === 12) return "Noon";
+      return `${Math.abs(localTime)}${localTime < 0 ? " pm" : " am"}`;
+    };
+
+    // Set the formatted start/end time into the heading
+    const headingEl = document.getElementById("wind-aloft-time-longterm");
+    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)}`;
+
+    // Normalize the data into an object
+    const byAltitude = {};
+    altitudes.forEach(alt => {
+      byAltitude[alt] = {
+        speed: data.windspeed[`altitude${alt}k`],
+        dir: data.winddirection[`altitude${alt}k`],
+        temp: data.temperature[`altitude${alt}k`]
+      };
+    });
+
+    // Render
+    altitudes.forEach(alt => {
+      const { speed, dir, temp } = byAltitude[alt];
+
+      const row = document.getElementById(`wind-aloft-longterm-${alt}k`);
+      const barb = Math.min(50, Math.floor(speed / 5) * 5);
+
+      row.style.backgroundColor = windAloftColor(Math.round(speed), alt);
+      document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
+      document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
+      document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
+      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp} &deg;F`;
+    });
+  }
+}

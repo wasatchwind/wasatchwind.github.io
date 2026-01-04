@@ -1,61 +1,94 @@
-'use strict';
+"use strict";
 
-// Get Open Meteo API data (documentation: https://open-meteo.com/en/docs/gfs-api)
-// Get Wind Aloft data via either AWS or GCP cloud function (redundancy)
-(async function getOpenMeteoAndWindAloft() {
-  const openMeteoURL = new URL('https://api.open-meteo.com/v1/gfs?');
-  openMeteoURL.search = buildAPIURL(openMeteoParams);
+// const data = await fetchData();
+main(data);
+// displayImages(sunset);
 
-  // Wind Aloft data - toggle between AWS and GCP (both exist for backup purposes)
-  // AWS Lambda function (uses CORS config in console: Configuration > Function URL)
-  const windAloftURL = 'https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws';
-  // GCP Cloud Function (uses CORS in source code)
-  // const windAloftURL = 'https://python-wind-aloft-ftp-483547589035.us-west2.run.app';
+async function fetchData() {
+  const data = {};
 
-  const [openmeteoData, gcpWindAloftData] = await Promise.all([
-    fetch(openMeteoURL).then(res => res.json()),
-    fetch(windAloftURL).then(res => res.json())
-  ]);
-  setHiTempAndSunset(openmeteoData.daily); // main.js
-  navSet(); // main.js (needs sunset time first)
-  windAloft(openmeteoData.hourly, gcpWindAloftData), //windaloft.js
-    displayImages() // main.js
-})();
+  // Helper function to assemble openMeteoParams into a full URL
+  function buildApiUrl(params, repeatKeys = []) {
+    const query = new URLSearchParams();
 
-// Get Sounding data via GCP Cloud Storage
-// Get Soaring Forecast text via the SLC Soarcast page - provides hiTemp (required to process soundingData)
-(async function getSoundingAndSoaring() {
-  const soundingURL = 'https://storage.googleapis.com/wasatch-wind-static/raob.json';
-  const soaringForecastURL = 'https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1';
-  const soaringForecastPageContent = await (await fetch(soaringForecastURL)).text();
-  soundingData = await (await fetch(soundingURL)).json();
-  sounding(soundingData, soaringForecastPageContent); // sounding.js
-})();
+    for (const [key, value] of Object.entries(params)) {
+      if (repeatKeys.includes(key) && Array.isArray(value)) value.forEach(v => query.append(key, v));
+      else query.set(key, Array.isArray(value) ? value.join(",") : value);
+    }
+    return query.toString();
+  }
 
-// Get Synoptic Time Series API data (documentation: https://docs.synopticdata.com/services/weather-api)
-(async function getTimeSeries() {
-  const timeSeriesURL = 'https://python-synoptic-api-483547589035.us-west3.run.app';
-  const timeSeriesData = await (await fetch(timeSeriesURL)).json();
-  timeSeries(timeSeriesData.STATION); // timeseries.js
-})();
+  const openMeteoParams = {
+    latitude: 40.77069,
+    longitude: -111.96503,
+    daily: ["sunset", "temperature_2m_max"],
+    hourly: [
+      "wind_speed_10m",
+      "wind_direction_10m",
+      "windspeed_850hPa",
+      "windspeed_800hPa",
+      "windspeed_750hPa",
+      "windspeed_700hPa",
+      "windspeed_650hPa",
+      "windspeed_600hPa",
+      "windspeed_550hPa",
+      "winddirection_850hPa",
+      "winddirection_800hPa",
+      "winddirection_750hPa",
+      "winddirection_700hPa",
+      "winddirection_650hPa",
+      "winddirection_600hPa",
+      "winddirection_550hPa",
+      "geopotential_height_850hPa",
+      "geopotential_height_800hPa",
+      "geopotential_height_750hPa",
+      "geopotential_height_700hPa",
+      "geopotential_height_650hPa",
+      "geopotential_height_600hPa",
+      "geopotential_height_550hPa"
+    ],
+    windspeed_unit: "mph",
+    temperature_unit: "fahrenheit",
+    forecast_hours: 12,
+    forecast_days: 1,
+    timezone: "America/Denver"
+  };
 
-// Get NWS API data (documentation: https://www.weather.gov/documentation/services-web-api)
-(async function getNWSForecast() {
-  const nwsForecastURL = 'https://api.weather.gov/gridpoints/SLC/97,175/forecast';
-  const nwsForecastData = await (await fetch(nwsForecastURL)).json();
-  nwsForecast(nwsForecastData.properties.periods); // main.js
-})();
+  const openMeteoUrl = new URL("https://api.open-meteo.com/v1/gfs?");
+  openMeteoUrl.search = buildApiUrl(openMeteoParams);
+  const synopticTimeSeriesUrl = "https://python-synoptic-api-483547589035.us-west3.run.app";
+  // const windAloftForecastUrl = "https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws";
+  const windAloftForecastUrl = "https://python-wind-aloft-ftp-483547589035.us-west2.run.app"; // GCP backup (modified)
+  const soundingUrl = "https://storage.googleapis.com/wasatch-wind-static/raob.json";
+  const soaringForecastUrl = "https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1";
+  const areaForecastUrl = "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1";
+  const nwsForecastUrl = "https://api.weather.gov/gridpoints/SLC/97,175/forecast";
+  const windMapDataUrl = "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png";
 
-// Get Area Forecast text via the SLC Area Forecast page
-(async function getAreaForecast() {
-  const areaForecastURL = 'https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1';
-  const areaForecastPageContent = await (await fetch(areaForecastURL)).text();
-  areaForecast(areaForecastPageContent); // main.js
-})();
+  const dataSources = [
+    { name: "openMeteo", url: openMeteoUrl, type: "json" },
+    { name: "synoptic", url: synopticTimeSeriesUrl, type: "json" },
+    { name: "windAloft", url: windAloftForecastUrl, type: "json" },
+    { name: "sounding", url: soundingUrl, type: "json" },
+    { name: "soaringForecast", url: soaringForecastUrl, type: "text" },
+    { name: "areaForecast", url: areaForecastUrl, type: "text" },
+    { name: "nwsForecast", url: nwsForecastUrl, type: "json" },
+    { name: "windMapMeta", url: windMapDataUrl, type: "json" }
+  ];
 
-// Get Wind Map metadata from GCP Cloud Storage
-(async function getWindMap() {
-  const windMapDataURL = 'https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png';
-  const windMapData = await (await fetch(windMapDataURL)).json();
-  windMap(windMapData); // main.js
-})();
+  const results = await Promise.allSettled(
+    dataSources.map(async ({ name, url, type }) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${name} failed: ${res.status}`);
+      const data = type === "json" ? await res.json() : await res.text();
+      return { name, data };
+    })
+  );
+
+  for (const result of results) {
+    if (result.status === "fulfilled") data[result.value.name] = result.value.data;
+    else console.error(result.response);
+  }
+
+  return data;
+}
