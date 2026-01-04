@@ -12,7 +12,7 @@
 
 function main(data) {
   // Set up top marquee and main body nav structure (Keen Slider)
-  const marquee = buildMarquee();
+  buildMarquee();
   slider = buildNavSlider();
   navUpdate();
 
@@ -324,3 +324,4 @@ function clearChart() {
   svg.select("circle.tolcircle").remove();
 
 };
+
