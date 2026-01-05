@@ -1,7 +1,7 @@
 "use strict";
 
 // Dependencies:
-// 1) sunset: determines the default order of nav items (from openMeteo)
+// 1) sunset: determines the default order of nav items and some display logic (from openMeteo)
 // 2) hiTemp: needed for the Morning Sounding Profile component (from openMeto and soaringForecast)
 
 // Documentation:
@@ -14,7 +14,10 @@
 buildMarquee();
 
 function main(data) {
-  // Set up main body nav structure (Keen Slider)
+  console.log(data);
+
+  // Set up top marquee and main body nav structure (Keen Slider)
+  // buildMarquee();
   slider = buildNavSlider();
   navUpdate();
 
@@ -324,7 +327,4 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
-
 };
-
-

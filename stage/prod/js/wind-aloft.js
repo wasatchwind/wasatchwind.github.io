@@ -186,12 +186,9 @@ function windAloftLongterm(data) {
       row.id = `wind-aloft-longterm-${alt}k`;
 
       row.innerHTML = `
-        <div class="col">${alt.toLocaleString()},000'</div>
+        <div class="col">${alt.toLocaleString()},000</div>
         <img class="col-1" id="wind-aloft-longterm-dir-${alt}k">
-        <div class="col d-flex justify-content-center">
-          <div class="fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
-          <div>&nbsp;mph</div>
-        </div>
+        <div class="col d-flex justify-content-center fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
         <div class="col" id="wind-aloft-longterm-temp-${alt}k"></div>`;
 
       container.appendChild(row);
@@ -239,7 +236,7 @@ function windAloftLongterm(data) {
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
       document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
-      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp} &deg;F`;
+      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp}&deg;`;
     });
   }
 }

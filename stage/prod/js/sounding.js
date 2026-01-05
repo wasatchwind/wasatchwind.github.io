@@ -395,5 +395,4 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
       .attr("y", y(params.tol * ftPerMeter / 1000 - 0.3))
       .text("ToL");
   }
-
 }

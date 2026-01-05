@@ -22,9 +22,9 @@ function processSoaringForecastPage(text) {
 
   const soaringForecast = `${forecastDate}
   
-  High Temp...... ${hiTemp} °F
-  Top of Lift.... ${topOfLift.toLocaleString()}'
-  Height of -3... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString() + "'"}
+  High Temp...... ${hiTemp}°
+  Top of Lift.... ${topOfLift.toLocaleString()}
+  Height of -3... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
   Max Lift Rate.. ${rateOfLift}
   OD Time........ ${odTime}`;
 
