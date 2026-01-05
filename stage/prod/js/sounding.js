@@ -29,43 +29,45 @@ function getLiftParams(data, temp, position = 0) {
     const { Temp_c, Altitude_m } = data[position];
     const ti = Temp_c - ((Altitude_m - dalrYInt) / dalrSlope);
 
-    // Find -3 thermal index altitude and temp (neg3)
-    if (!foundNeg3 && ti >= -3) {
-      if (position === 0) {
-        params.neg3 = null;
-        params.neg3Temp = null;
-      } else {
+    try {
+      // Find -3 thermal index altitude and temp (neg3)
+      if (!foundNeg3 && ti >= -3) {
+        if (position === 0) {
+          params.neg3 = null;
+          params.neg3Temp = null;
+        } else {
+          const { Temp_c: t1, Altitude_m: a1 } = data[position];
+          const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];
+
+          if (t1 !== t2) {
+            const { slope, yInt } = interpolate(t1, a1, t2, a2);
+            const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope);
+            params.neg3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
+            params.neg3Temp = targetX + 3;
+          } else {
+            params.neg3 = (t1 + 3) * dalrSlope + dalrYInt;
+            params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope;
+          }
+        }
+        foundNeg3 = true;
+      }
+
+      // Find 0 thermal index altitude and temp (top of lift)
+      if (foundNeg3 && !foundTOL && ti >= 0) {
         const { Temp_c: t1, Altitude_m: a1 } = data[position];
         const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];
 
         if (t1 !== t2) {
           const { slope, yInt } = interpolate(t1, a1, t2, a2);
-          const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope);
-          params.neg3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
-          params.neg3Temp = targetX + 3;
-        } else {
-          params.neg3 = (t1 + 3) * dalrSlope + dalrYInt;
-          params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope;
-        }
+          const targetX = -yInt / slope;
+          params.tol = a1 + (targetX - t1);
+        } else params.tol = t1 * dalrSlope + dalrYInt;
+
+        params.tolTemp = (params.tol - dalrYInt) / dalrSlope;
+        foundTOL = true;
       }
-      foundNeg3 = true;
-    }
-
-    // Find 0 thermal index altitude and temp (top of lift)
-    if (foundNeg3 && !foundTOL && ti >= 0) {
-      const { Temp_c: t1, Altitude_m: a1 } = data[position];
-      const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];
-
-      if (t1 !== t2) {
-        const { slope, yInt } = interpolate(t1, a1, t2, a2);
-        const targetX = -yInt / slope;
-        params.tol = a1 + (targetX - t1);
-      } else params.tol = t1 * dalrSlope + dalrYInt;
-
-      params.tolTemp = (params.tol - dalrYInt) / dalrSlope;
-      foundTOL = true;
-    }
-    position++;
+      position++;
+    } catch { break; }
   }
   return params;
 }
@@ -393,4 +395,5 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
       .attr("y", y(params.tol * ftPerMeter / 1000 - 0.3))
       .text("ToL");
   }
+
 }
