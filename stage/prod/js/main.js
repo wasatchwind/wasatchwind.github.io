@@ -14,10 +14,7 @@
 buildMarquee();
 
 function main(data) {
-  console.log(data);
-
-  // Set up top marquee and main body nav structure (Keen Slider)
-  // buildMarquee();
+  // Set up main body nav structure (Keen Slider)
   slider = buildNavSlider();
   navUpdate();
 
