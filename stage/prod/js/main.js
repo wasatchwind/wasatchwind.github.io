@@ -10,9 +10,11 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
+// Build Marquee asap so it isn't static while everything else loads
+buildMarquee();
+
 function main(data) {
-  // Set up top marquee and main body nav structure (Keen Slider)
-  buildMarquee();
+  // Set up main body nav structure (Keen Slider)
   slider = buildNavSlider();
   navUpdate();
 
@@ -324,4 +326,5 @@ function clearChart() {
   svg.select("circle.tolcircle").remove();
 
 };
+
 
