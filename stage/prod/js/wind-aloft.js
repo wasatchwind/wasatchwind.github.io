@@ -205,10 +205,15 @@ function windAloftLongterm(data) {
 
     // Format start and end time from UTC
     const formatTime = utc => {
-      const localTime = utc - timezoneOffset;
-      if (localTime === 0) return "Midnight";
-      if (localTime === 12) return "Noon";
-      return `${Math.abs(localTime)}${localTime < 0 ? " pm" : " am"}`;
+      const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
+
+      if (local24 === 0) return "Midnight";
+      if (local24 === 12) return "Noon";
+
+      const isPM = local24 >= 12;
+      const hour12 = local24 % 12 || 12;
+
+      return `${hour12} ${isPM ? "pm" : "am"}`;
     };
 
     // Set the formatted start/end time into the heading
@@ -239,4 +244,5 @@ function windAloftLongterm(data) {
       document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp}&deg;`;
     });
   }
+
 }
