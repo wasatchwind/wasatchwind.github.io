@@ -45,7 +45,8 @@ function processAreaForecastPage(text) {
   const forecastDate = preText.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
   const synopsis = preText.match(/\.SYNOPSIS([\s\S]*?)\r?\n\r?\n/)?.[1]?.trim();
   const aviation = preText.match(/\.AVIATION\.\.\.([\s\S]*?)\n\n/)?.[1]?.replace(/\n+/g, " ").trim() ?? null;
-  const keyMessages = preText.match(/\.KEY MESSAGES\.\.\.([\s\S]*?)(?:\n&&|\n\.)/)?.[1]?.replace(/\n\s+(?!-)/g, " ").trim() ?? null;
+  const keyMessages = preText.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trimStart().split(/\n(?=- )/)
+    .map(m => m.replace(/\n(?!- )/g, " ").trim()).join("\n\n") ?? null;
   const areaForecast = `${forecastDate ? forecastDate : "Date error"}
   
   Key Messages:
@@ -60,4 +61,5 @@ function processAreaForecastPage(text) {
   document.getElementById("area-forecast-div").style.display = "block";
   document.getElementById("area-forecast-aviation").innerText = aviation ? aviation : "No aviation details";
   document.getElementById("area-forecast-aviation-div").style.display = "block";
+
 }
