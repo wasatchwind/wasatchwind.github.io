@@ -244,5 +244,4 @@ function windAloftLongterm(data) {
       document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp}&deg;`;
     });
   }
-
 }
