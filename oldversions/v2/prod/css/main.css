@@ -1,1 +1,124 @@
+@media only screen and (min-width: 1365px) {
+  body {
+    margin-left: 30%;
+    margin-right: 30%;
+    zoom: 0.4;
+  }
+}
+body {
+  background: black;
+  color: white;
+  text-align: center;
+}
+.mb-div-end { margin-bottom: 8rem; }
+.title-font { font-size: 500%; }
+.gust-color { color: hotpink; }
+.zone-margin {
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
 
+/* LINKS */
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:active {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+/* KEEN SLIDER */
+.keen-slider:not([data-keen-slider-disabled]) {
+  align-content: flex-start;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+}
+.keen-slider:not([data-keen-slider-disabled]) .keen-slider__slide {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100%;
+}
+.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-reverse] {
+  flex-direction: row-reverse;
+}
+.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-v] {
+  flex-wrap: wrap;
+}
+
+#slider { touch-action: pan-x pan-y pinch-zoom !important; }
+
+/* D3 */
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+.gridticks {
+  color: lightgray;
+  opacity: 0.5;
+}
+.svgbg { fill: #212529; }
+.xAxis { font-size: 180%; }
+.yAxis { font-size: 180%; }
+.white {
+  fill: white;
+  font-size: calc(1.475rem + 2.7vw);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.dewpoint {
+  fill: #20c997;
+  font-size: 3.5vw;
+  font-weight: 500;
+}
+.temp {
+  fill: #fd7e14;
+  font-size: 3.5vw;
+  font-weight: 500;
+}
+.dalr {
+  fill: #0dcaf0;
+  font-size: 3.5vw;
+  font-weight: 500;
+}
+.dalrlabel {
+  fill: #6c757d;
+  font-size: calc(1.325rem + 0.9vw);
+  font-weight: 500;
+}
+.liftlabels {
+  fill: white;
+  font-size: 200%;
+}
+.liftheights {
+  fill: white;
+  font-size: 210%;
+  font-weight: bold;
+}
