@@ -2,36 +2,38 @@
 <html>
 
 <head>
+  <!-- META -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wasatch Wind: local wind and weather tools for paragliding conditions assessment">
   <title>Wasatch Wind</title>
-
-  <!-- BOOTSTRAP -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-  <!-- CSS -->
-  <link href="prod/css/main.css" rel="stylesheet">
 
   <!-- FAVICON -->
   <link href="favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
   <link href="favicon/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32">
   <link href="favicon/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16">
+
+  <!-- CSS & BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="prod/css/main.css" rel="stylesheet">
 </head>
 
 <body>
   <div class="container-fluid">
 
     <!-- STICKY TOP: 3 SECTIONS -->
-    <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
+    <header class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
 
-      <!-- STICKY TOP > SECTION (1 OF 3): TITLE -->
-      <div class="align-items-center d-flex justify-content-between">
+      <!-- SECTION (1 OF 3): TITLE HEADING -->
+      <section class="align-items-center d-flex justify-content-between">
         <img src="prod/images/pg.gif" height="125px">
         <div class="display-1 text-info title-font">Wasatch Wind</div>
         <img src="prod/images/refresh.png" onclick="reload()" height="125px">
-      </div>
+      </section>
 
-      <!-- STICKY TOP > SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
-      <div class="display-5 keen-slider" id="marquee">
+      <!-- SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
+      <section class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide1">
           <div class="text-info">-3 Index</div>
           <div id="neg3"></div>
@@ -74,18 +76,18 @@
           <div class="text-info">Sunset</div>
           <div id="sunset"></div>
         </div>
-      </div>
+      </section>
 
-      <!-- STICKY TOP > SECTION (3 OF 3): NAVIGATION/SWIPE SLIDER -->
-      <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
+      <!-- SECTION (3 OF 3): NAVIGATION/SWIPE SLIDER -->
+      <section class="align-items-end d-flex display-1 justify-content-between text-secondary">
         <div class="fw-semibold text-warning" onclick="simulateSwipe('left')">&#171;</div>
         <div class="col display-2" id="topnav-left"></div>
         <div class="col fw-semibold text-white" id="topnav-active"></div>
         <div class="col display-2" id="topnav-right"></div>
         <div class="fw-semibold text-warning" onclick="simulateSwipe('right')">&#187;</div>
-      </div>
+      </section>
 
-    </div>
+    </header>
     <!-- END STICKY TOP -->
 
     <!-- BODY SLIDER: 7 PAGES -->
@@ -93,7 +95,7 @@
       <div class="keen-slider" id="slider">
 
         <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 8 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
+        <section class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
 
           <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 8): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="surface-wind-today-div">
@@ -104,8 +106,8 @@
                 <div class="col-6">Gust</div>
               </div>
               <div class="d-flex">
-                <img class="rounded-4 col-6 pe-1" id="surface-wind-today-img">
-                <img class="rounded-4 col-6 ps-1" id="surface-gust-today-img">
+                <img class="rounded-4 col-6 pe-1" loading="lazy" id="surface-wind-today-img">
+                <img class="rounded-4 col-6 ps-1" loading="lazy" id="surface-gust-today-img">
               </div>
             </a>
           </div>
@@ -136,7 +138,7 @@
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
               target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
-              <img class="rounded-4 w-100" id="hourly-chart-today">
+              <img class="rounded-4 w-100" loading="lazy" id="hourly-chart-today">
             </a>
           </div>
 
@@ -203,11 +205,11 @@
             </a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (1 OF 7) > TODAY -->
 
         <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 5 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
+        <section class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
 
           <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 5): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="surface-wind-tomorrow-div">
@@ -218,8 +220,8 @@
                 <div class="col-6">Gust</div>
               </div>
               <div class="d-flex">
-                <img class="rounded-4 col-6 pe-1" id="surface-wind-tomorrow-img">
-                <img class="rounded-4 col-6 ps-1" id="surface-gust-tomorrow-img">
+                <img class="rounded-4 col-6 pe-1" loading="lazy" id="surface-wind-tomorrow-img">
+                <img class="rounded-4 col-6 ps-1" loading="lazy" id="surface-gust-tomorrow-img">
               </div>
             </a>
           </div>
@@ -237,7 +239,7 @@
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
               target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
-              <img class="rounded-4 w-100" id="hourly-chart-tomorrow">
+              <img class="rounded-4 w-100" loading="lazy" id="hourly-chart-tomorrow">
             </a>
           </div>
 
@@ -268,11 +270,11 @@
             </a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (2 OF 7) > TOMORROW -->
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: 3 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
+        <section class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
 
           <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL (4000, 1000, or 500)-->
           <div class="border-bottom d-flex justify-content-between py-4">
@@ -303,17 +305,17 @@
             <a class="text-warning" href="https://synopticdata.com/">Synoptic</a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (3 OF 7) > SETTINGS -->
 
         <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: 6 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
+        <section class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
 
           <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (1 OF 6): UHGPGA FLYING SITES -->
           <div class="mb-4">
             <a href="https://www.uhgpga.org/flying-sites" target="_blank">
               <div class="display-3 text-info">UHGPGA Flying Sites</div>
-              <img class="rounded-4 w-100" src="prod/images/UHGPGAflyingsites.png">
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/UHGPGAflyingsites.png">
             </a>
           </div>
 
@@ -321,21 +323,21 @@
           <div class="mb-4">
             <a href="https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11" target="_blank">
               <div class="display-3 text-info">Hike & Fly Calculator</div>
-              <img class="rounded-4 w-100" src="prod/images/hikeandfly.png">
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/hikeandfly.png">
             </a>
           </div>
 
           <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (3 OF 6): AMBROSE PRESSURE ZONE -->
           <div class="mb-4">
             <div class="display-3 text-info">Zone (Ambrose Pressure Zone)</div>
-            <img class="rounded-4 w-100" src="prod/images/zonechart.jpg">
+            <img class="rounded-4 w-100" loading="lazy" src="prod/images/zonechart.jpg">
           </div>
 
           <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (4 OF 6): UTAH PARAGLIDING -->
           <div class="mb-4">
             <a href="https://utahparagliding.com/" target="_blank">
               <div class="display-3 text-info">Learn To Paraglide</div>
-              <img class="bg-light rounded-4 w-100" src="prod/images/utahparagliding.png">
+              <img class="bg-light rounded-4 w-100" loading="lazy" src="prod/images/utahparagliding.png">
               <div class="display-6 font-monospace">(I am not affiliated with Utah Paragliding but I learned to fly
                 there)</div>
             </a>
@@ -380,37 +382,37 @@
             </a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (4 OF 7) > MISC -->
 
         <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: 2 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
+        <section class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
 
           <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: SECTION (1 OF 2): LIVETRACK24 -->
           <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
             <div class="display-3"><br></div>
-            <img class="rounded-4 w-100" src="prod/images/livetrack24.png">
+            <img class="rounded-4 w-100" loading="lazy" src="prod/images/livetrack24.png">
           </a>
 
           <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: SECTION (2 OF 2): XCFIND -->
           <div class="mb-4">
             <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
               <div class="display-3"><br></div>
-              <img class="rounded-4 w-100" src="prod/images/xcfind.png">
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/xcfind.png">
             </a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (5 OF 7) > GPS -->
 
         <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: 3 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
+        <section class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
 
           <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (1 OF 3): LOOKING EAST -->
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
               <div class="display-3 text-info">East</div>
-              <img class="rounded-4 w-100" id="cam-east">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-east">
             </a>
           </div>
 
@@ -418,7 +420,7 @@
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
               <div class="display-3 text-info">West</div>
-              <img class="rounded-4 w-100" id="cam-west">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-west">
             </a>
           </div>
 
@@ -426,15 +428,15 @@
           <div class="mb-4">
             <a href="https://horel.chpc.utah.edu/uunet_camera_display.html" target="_blank">
               <div class="display-3 text-info">South</div>
-              <img class="rounded-4 w-100" id="cam-south">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-south">
             </a>
           </div>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (6 OF 7) > CAMS -->
 
         <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: 4 SECTIONS -->
-        <div class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
+        <section class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (1 OF 4): KSLC CHART -->
           <div class="mb-4" id="KSLC-main">
@@ -470,10 +472,10 @@
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (4 OF 4): SATELLITE GIF -->
           <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
             <div class="display-3 text-info">IR Last 4 Hours</div>
-            <img class="rounded-4 w-100" id="satellite-gif">
+            <img class="rounded-4 w-100" loading="lazy" id="satellite-gif">
           </a>
 
-        </div>
+        </section>
         <!-- END BODY SLIDER > PAGE (7 OF 7) > NOW -->
 
       </div>
