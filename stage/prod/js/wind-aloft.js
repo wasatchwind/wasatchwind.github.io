@@ -218,7 +218,7 @@ function windAloftLongterm(data) {
 
     // Set the formatted start/end time into the heading
     const headingEl = document.getElementById("wind-aloft-time-longterm");
-    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)}`;
+    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay.slice(0, -1)}`;
 
     // Normalize the data into an object
     const byAltitude = {};

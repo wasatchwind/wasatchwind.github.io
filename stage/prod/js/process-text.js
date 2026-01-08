@@ -57,9 +57,7 @@ function processAreaForecastPage(text) {
 
   ${synopsis ? synopsis.replace(/\n/g, " ") : "No synopsis - click for full discussion"}`;
 
-  document.getElementById("area-forecast").innerText = areaForecast;
-  document.getElementById("area-forecast-div").style.display = "block";
   document.getElementById("area-forecast-aviation").innerText = aviation ? aviation : "No aviation details";
-  document.getElementById("area-forecast-aviation-div").style.display = "block";
-
+  document.getElementById("area-forecast-today").innerText = areaForecast;
+  document.getElementById("area-forecast-tomorrow").innerText = areaForecast;
 }

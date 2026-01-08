@@ -10,9 +10,10 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build Marquee asap so it isn't static while everything else loads
+// Build Marquee immediately so it isn't static while everything else loads
 buildMarquee();
 
+// Process all fetched data
 function main(data) {
   // Set up main body nav structure (Keen Slider)
   slider = buildNavSlider();
@@ -21,12 +22,13 @@ function main(data) {
   // Get sunset and set default nav order (varies based on sunset time)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
+  displayImages(sunset);
   const sunsetFormatted = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
   document.getElementById("sunset").innerHTML = sunsetFormatted;
 
-  // Get hiTemp options from openMeteo and soaringForecast
-  const hiTempOpenMeteo = data.openMeteo.daily.temperature_2m_max[0];
+  // Get hiTemp from soaringForecast and open meteo (open meteo as backup in case soaring forecast fails)
   const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast);
+  const hiTempOpenMeteo = data.openMeteo.daily.temperature_2m_max[0];
   hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo;
   document.getElementById("hi-temp").innerHTML = hiTemp;
 
@@ -34,7 +36,7 @@ function main(data) {
   const windMapTimestamp = new Date(data.windMapMeta.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
   document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
 
-  // data is not global but soundingData must be for D3 functions to work
+  // Fetched data is not global but soundingData must be for D3 functions to work (Reset/Update)
   soundingData = data.sounding;
 
   processSounding(data.sounding, hiTemp);
@@ -43,10 +45,11 @@ function main(data) {
   processGeneralForecast(data.nwsForecast.properties.periods);
   processSynoptic(data.synoptic.STATION);
 
+  // For user settings
   buildMarqueeSettings();
   buildStationSettings();
 
-  // Display all main pages last
+  // Display all main pages last after nav slider setup
   document.getElementById("today-page").style.display = "block";
   document.getElementById("tomorrow-page").style.display = "block";
   document.getElementById("settings-page").style.display = "block";
@@ -58,60 +61,34 @@ function main(data) {
 
 
 
-//////////////////////////
-// NWS General Forecast //
-//////////////////////////
-function processGeneralForecast(data) {
-  const forecastDaysCount = 5;
-  const isDaytime = data[0].isDaytime;
-  let period = isDaytime ? 0 : 1;
-  for (let i = 0; i < forecastDaysCount; i++) {
-    let qualifier = "";
-    let border = `<div class="border-bottom"></div>`;
-    if (isDaytime && i === 0) {
-      qualifier = "-today";
-      border = "";
-      document.getElementById("nws-today-div").style.display = "block";
-    } else {
-      document.getElementById("nws-today-multiday-div").style.display = "block";
-    }
-    const div = `
-      <div class="d-flex">
-        <div class="col-3">
-          <div class="display-6 text-info">${data[period].name}</div>
-          <img class="align-self-start rounded-4 w-100" src="${data[period].icon}">
-        </div>
-        <div class="col display-6 font-monospace ps-2 text-start">${data[period].detailedForecast}</div>
-      </div>
-    ${border}`;
-    document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
-    period += 2;
-  }
-  document.getElementById("nws-multiday-div").style.display = "block"; // Display "Days Ahead" block
-}
-
-
-
 ////////////////////////////////////////////////////////
 // Display web images based on sunset time view logic //
 ////////////////////////////////////////////////////////
 function displayImages(sunset) {
-  sunset = new Date(sunset);
+  // Only display the graphical wind & gust images between 7 am & 5 pm (period of relevancy)
+  if (now.getHours() > 6 && now.getHours() < 18) {
+    document.getElementById("surface-wind-today-img").src = "https://graphical.weather.gov/images/SLC/WindSpd4_utah.png";
+    document.getElementById("surface-gust-today-img").src = "https://graphical.weather.gov/images/SLC/WindGust4_utah.png";
+    document.getElementById("surface-wind-today-div").style.display = "block";
+  } else if (now.getHours() > 19) {
+    document.getElementById("surface-wind-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindSpd8_utah.png";
+    document.getElementById("surface-gust-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindGust8_utah.png";
+    document.getElementById("surface-wind-tomorrow-time").innerHTML = `Afternoon Surface Wind Forecast ${nextDay.slice(0,-1)}`;
+    document.getElementById("surface-wind-tomorrow-div").style.display = "block";
+  }
 
-  if (now.getHours() >= 6 && now.getHours() < 18) {
-    document.getElementById("surface-wind-img").src = "https://graphical.weather.gov/images/SLC/WindSpd4_utah.png";
-    document.getElementById("surface-gust-img").src = "https://graphical.weather.gov/images/SLC/WindGust4_utah.png";
-    document.getElementById("surface-wind-div").style.display = "block";
-  };
-
+  // Display hourly wind chart on the Tomorrow page after sunset; otherwise display on the Today page
   if (now.getHours() >= sunset.getHours() - 1 && now.getHours() < 24) {
     document.getElementById("hourly-chart-tomorrow").src = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
     document.getElementById("hourly-chart-tomorrow-div").style.display = "block";
+    document.getElementById("area-forecast-tomorrow-div").style.display = "block";
   } else {
     document.getElementById("hourly-chart-today").src = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
     document.getElementById("hourly-chart-today-div").style.display = "block";
+    document.getElementById("area-forecast-today-div").style.display = "block";
   };
 
+  // Display all remaining web hosted images
   document.getElementById("wind-map").src = "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png";
   document.getElementById("satellite-gif").src = "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif";
   document.getElementById("cam-south").src = "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg";
@@ -121,31 +98,54 @@ function displayImages(sunset) {
 
 
 
+//////////////////////////
+// NWS General Forecast //
+//////////////////////////
+function processGeneralForecast(data) {
+  const forecastDaysCount = 5;
+  const isDaytime = data[0].isDaytime;
+  let period = isDaytime ? 0 : 1;
+
+  for (let i = 0; i < forecastDaysCount; i++) {
+    let qualifier = "";
+    let border = `<div class="border-bottom"></div>`;
+
+    if (isDaytime && i === 0) {
+      qualifier = "-today";
+      border = "";
+      document.getElementById("nws-today-div").style.display = "block";
+    } else document.getElementById("nws-today-multiday-div").style.display = "block";
+
+    const div = `
+      <div class="d-flex">
+        <div class="col-3">
+          <div class="display-6 text-info">${data[period].name}</div>
+          <img class="align-self-start rounded-4 w-100" src="${data[period].icon}">
+        </div>
+        <div class="col display-6 font-monospace ps-2 text-start">${data[period].detailedForecast}</div>
+      </div>
+    ${border}`;
+
+    document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
+    period += 2;
+  }
+}
+
+
+
 ///////////////
 // Utilities //
 ///////////////
+
 // Reload/refresh page
 function reload() {
   history.scrollRestoration = "manual";
   location.reload();
 }
 
-// Get cookies for user settings
-function getCookie(name) {
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookies = decodedCookie.split("; ");
-  for (const cookie of cookies) {
-    const [cookieName, cookieValue] = cookie.split("=");
-    if (cookieName === name) {
-      return cookieValue;
-    }
-  }
-  return null;
-}
-
-// Build top marquee slider
+// Build top marquee slider (default speed medium: 1000)
 function buildMarquee() {
-  const marqueeSpeed = getCookie("marqueeSpeed") || 1000;
+  const marqueeSpeed = localStorage.getItem("marquee") || 1000;
   const animation = { duration: marqueeSpeed, easing: (t) => t };
   const options = {
     loop: true,
@@ -161,12 +161,9 @@ function buildMarquee() {
 function navOrder(sunset) {
   const currentHour = now.getHours();
   const sunsetHour = new Date(sunset).getHours();
-  if (currentHour >= 14 && currentHour <= sunsetHour - 1) {
-    slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  }
-  else if (currentHour >= sunsetHour - 1) {
-    slider.moveToIdx(1, true, { duration: 0 });
-  }
+
+  if (currentHour >= 14 && currentHour <= sunsetHour - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (currentHour >= sunsetHour - 1) slider.moveToIdx(1, true, { duration: 0 });
 }
 
 // Main body slider (nav pages)
@@ -180,6 +177,7 @@ function buildNavSlider() {
       window.scrollTo(0, 0)
     }
   };
+
   return new KeenSlider("#slider", options);
 }
 
@@ -187,6 +185,7 @@ function buildNavSlider() {
 function navUpdate() {
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
+
   document.getElementById("topnav-left").innerHTML = navItems[left];
   document.getElementById("topnav-active").innerHTML = navItems[activeNav];
   document.getElementById("topnav-right").innerHTML = navItems[right];
@@ -198,14 +197,13 @@ window.simulateSwipe = function (direction) {
   else if (direction === "right") slider.next();
 }
 
-// Wind chart toggle for expand/collapse
-function toggleWindChart(div) {
-  const element = document.getElementById(div);
-  const toggleElement = document.getElementById(`${div}-toggle`);
-  const isHidden = element.style.display === '' || element.style.display === 'none';
+// Wind chart toggle for expand/collapse for each station (Now page)
+function toggleWindChart(id) {
+  const el = document.getElementById(id);
+  const toggle = document.getElementById(`${id}-toggle`);
+  const isHidden = el.classList.toggle("collapse");
 
-  element.style.display = isHidden ? 'block' : 'none';
-  toggleElement.innerHTML = isHidden ? '&#8722;' : '&#43;';
+  toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
 }
 
 // Wind Aloft Forecast toggle current 6 hours and next 6 hours
@@ -214,72 +212,69 @@ function toggleWindAloft() {
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
-// Marquee setup
+// Marquee user settings options (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
 function buildMarqueeSettings() {
-  const marqueeSpeed = getCookie("marqueeSpeed") || 1000;
+  const marqueeSpeed = localStorage.getItem("marquee") || 1000;
+  // const marqueeSpeed = getLocalStorage("marquee") || 1000;
   const speeds = [4000, 1000, 500];
+
   speeds.forEach(speed => {
     const element = document.getElementById(`marquee-${speed}`);
     element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
   });
+
   const activeElement = document.getElementById(`marquee-${marqueeSpeed}`);
   activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
 }
 
-// Marquee speed
+// Set cookie for marquee user settings speed (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
 function marqueeSetSpeed(speed) {
-  document.cookie = `marqueeSpeed=${speed}; max-age=31536000; path=/`;
+  localStorage.setItem("marquee", speed);
   const speeds = [4000, 1000, 500];
+
   speeds.forEach(d => {
     const element = document.getElementById(`marquee-${d}`);
     element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
   });
+
   const activeElement = document.getElementById(`marquee-${speed}`);
   activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
-  buildMarquee();
+
+  buildMarquee(); // Puts new settings into immediate effect
 }
 
-// Build station settings toggle on/off list; independent of timeseries.js data since stations may be temporarily down
-// Hardcoded list must be updated here and index.html for added/removed stations (alphabetical order by name)
+// Build station settings toggle on/off list
+// Independent of Synoptic time series data since stations may be temporarily down
+// To add/remove stations:
+// * Update hardcoded stationList on global.js (alphabetical by station label)
+// * Update hardcoded lists in index.html (stations displayed and station show/hide in user settings)
 function buildStationSettings() {
+  Object.entries(stationList).forEach(([stid, station]) => {
+    const container = document.getElementById(`${stid}-onoff`);
+    container.innerHTML = `
+      <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
+        <div class="col-5 display-3 text-info text-start">${station.name}</div>
+        <div id="${stid}-on" onclick="stationSetToggle('${stid}', 'on')">On</div>
+        <div id="${stid}-off" onclick="stationSetToggle('${stid}', 'off')">Off</div>
+      </div>
+    `;
 
-  // Loop through each station to set up html divs, check for cookies, and label on/off accordingly
-  for (const key in stationList) {
-    const div = `
-    <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
-      <div class="col-5 display-3 text-info text-start">${stationList[key].name}</div>
-      <div id="${key}=on" onclick="stationSetToggle('${key}=on')">On</div>
-      <div id="${key}=off" onclick="stationSetToggle('${key}=off')">Off</div>
-    </div>`;
-    document.getElementById(`${key}-onoff`).innerHTML = div;
-
-    const status = getCookie(key) || "on";
-    const on = document.getElementById(`${key}=on`);
-    const off = document.getElementById(`${key}=off`);
-
-    if (status === 'on') {
-      on.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
-      off.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
-    } else {
-      on.className = 'bg-dark border fw-normal px-4 rounded-5 py-2';
-      off.className = 'bg-success border fw-semibold px-4 rounded-5 py-2';
-    }
-  }
+    const state = localStorage.getItem(stid) || "on";
+    stationSetToggle(stid, state);
+  });
 }
 
 // Onclick function to toggle stations settings on/off
-function stationSetToggle(stid) {
-  document.cookie = `${stid}; max-age=31536000; path=/`; // Set/update cookie
+function stationSetToggle(stid, state) {
+  localStorage.setItem(stid, state)
 
-  const element = document.getElementById(stid);
-  const [station, status] = stid.split("=");
-  const oppositeStatus = status === "off" ? "on" : "off";
-  const oppositeElement = document.getElementById(`${station}=${oppositeStatus}`);
-  const mainElement = document.getElementById(`${station}-main`);
+  const mainEl = document.getElementById(`${stid}-main`);
+  const on = document.getElementById(`${stid}-on`);
+  const off = document.getElementById(`${stid}-off`);
 
-  element.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
-  oppositeElement.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
-  mainElement.style.display = status === "off" ? "none" : "block";
+  mainEl.style.display = state === "on" ? "block" : "none";
+  on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
+  off.className = state === "off" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
 }
 
 // D3 utilities
