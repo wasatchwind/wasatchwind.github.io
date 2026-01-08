@@ -67,7 +67,7 @@
             <div>&nbsp;&nbsp;</div>
             <div id="KSLC-wspd-12"></div>
             <div>&nbsp;</div>
-            <div class= "gust-color" id="KSLC-gust-12"></div>
+            <div class="gust-color" id="KSLC-gust-12"></div>
           </div>
         </div>
         <div class="keen-slider__slide number-slide7">
@@ -92,11 +92,11 @@
     <div class="align-items-center d-flex justify-content-between mb-div-end">
       <div class="keen-slider" id="slider">
 
-        <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 7 SECTIONS -->
+        <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 8 SECTIONS -->
         <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 8): GRAPHICAL SURFACE WIND FORECAST -->
-          <div class="collapse mb-4" id="surface-wind-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 8): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="surface-wind-today-div">
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
               <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
               <div class="d-flex fs-1 justify-content-center text-info">
@@ -104,8 +104,8 @@
                 <div class="col-6">Gust</div>
               </div>
               <div class="d-flex">
-                <img class="rounded-4 col-6 pe-1" id="surface-wind-img">
-                <img class="rounded-4 col-6 ps-1" id="surface-gust-img">
+                <img class="rounded-4 col-6 pe-1" id="surface-wind-today-img">
+                <img class="rounded-4 col-6 ps-1" id="surface-gust-today-img">
               </div>
             </a>
           </div>
@@ -182,13 +182,13 @@
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 8): AREA FORECAST DISCUSSION: KEY MESSAGES/SYNOPSIS TEXT-->
-          <div class="mb-4" id="area-forecast-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 8): AREA FORECAST DISCUSSION: KEY MESSAGES/SYNOPSIS TEXT (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="area-forecast-today-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
               target="_blank">
               <div class="display-3 text-info">Area Forecast Discusson</div>
               <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                <div id="area-forecast"></div>
+                <div id="area-forecast-today"></div>
               </div>
             </a>
           </div>
@@ -206,10 +206,33 @@
         </div>
         <!-- END BODY SLIDER > PAGE (1 OF 7) > TODAY -->
 
-        <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 4 SECTIONS -->
+        <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 5 SECTIONS -->
         <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 3): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 5): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="surface-wind-tomorrow-div">
+            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+              <div class="display-3 text-info" id="surface-wind-tomorrow-time"></div>
+              <div class="d-flex fs-1 justify-content-center text-info">
+                <div class="col-6">Wind</div>
+                <div class="col-6">Gust</div>
+              </div>
+              <div class="d-flex">
+                <img class="rounded-4 col-6 pe-1" id="surface-wind-tomorrow-img">
+                <img class="rounded-4 col-6 ps-1" id="surface-gust-tomorrow-img">
+              </div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (2 OF 5): 24-HR LONG TERM WIND ALOFT -->
+          <div class="mb-4" id="wind-aloft-longterm-div">
+            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
+              <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
+              <div class="border display-3 overflow-hidden rounded-4" id="wind-aloft-rows-longterm"></div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (3 OF 5): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="hourly-chart-tomorrow-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw="
               target="_blank">
@@ -218,7 +241,18 @@
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (2 OF 3): NWS MULTI-DAY FORECAST -->
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (4 OF 5): AREA FORECAST DISCUSSION: KEY MESSAGES/SYNOPSIS TEXT (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="area-forecast-tomorrow-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1"
+              target="_blank">
+              <div class="display-3 text-info">Area Forecast Discusson</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
+                <div id="area-forecast-tomorrow"></div>
+              </div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (5 OF 5): NWS MULTI-DAY FORECAST -->
           <div class="mb-4" id="nws-multiday-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info">Days Ahead</div>
@@ -234,21 +268,13 @@
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (3 OF 3): 24-HR LONG TERM WIND ALOFT -->
-          <div class="mb-4" id="wind-aloft-longterm-div">
-            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
-              <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
-              <div class="border display-3 overflow-hidden rounded-4" id="wind-aloft-rows-longterm"></div>
-            </a>
-          </div>
-
         </div>
         <!-- END BODY SLIDER > PAGE (2 OF 7) > TOMORROW -->
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: 3 SECTIONS -->
         <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
 
-          <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL -->
+          <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL (4000, 1000, or 500)-->
           <div class="border-bottom d-flex justify-content-between py-4">
             <div class="display-3 text-info">Marquee Speed</div>
             <div class="align-items-center col-7 display-5 d-flex justify-content-around">
@@ -467,6 +493,5 @@
   <script type="module" src="prod/js/async.js"></script>
 
 </body>
-
 
 </html>
