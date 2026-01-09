@@ -23,17 +23,17 @@
   <div class="container-fluid">
 
     <!-- STICKY TOP: 3 SECTIONS -->
-    <header class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
+    <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
 
       <!-- SECTION (1 OF 3): TITLE HEADING -->
-      <section class="align-items-center d-flex justify-content-between">
+      <div class="align-items-center d-flex justify-content-between">
         <img src="prod/images/pg.gif" height="125px">
         <div class="display-1 text-info title-font">Wasatch Wind</div>
         <img src="prod/images/refresh.png" onclick="reload()" height="125px">
-      </section>
+      </div>
 
       <!-- SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
-      <section class="display-5 keen-slider" id="marquee">
+      <div class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide1">
           <div class="text-info">-3 Index</div>
           <div id="neg3"></div>
@@ -76,18 +76,18 @@
           <div class="text-info">Sunset</div>
           <div id="sunset"></div>
         </div>
-      </section>
+      </div>
 
       <!-- SECTION (3 OF 3): NAVIGATION/SWIPE SLIDER -->
-      <section class="align-items-end d-flex display-1 justify-content-between text-secondary">
+      <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
         <div class="fw-semibold text-warning" onclick="simulateSwipe('left')">&#171;</div>
         <div class="col display-2" id="topnav-left"></div>
         <div class="col fw-semibold text-white" id="topnav-active"></div>
         <div class="col display-2" id="topnav-right"></div>
         <div class="fw-semibold text-warning" onclick="simulateSwipe('right')">&#187;</div>
-      </section>
+      </div>
 
-    </header>
+    </div>
     <!-- END STICKY TOP -->
 
     <!-- BODY SLIDER: 7 PAGES -->
@@ -95,7 +95,7 @@
       <div class="keen-slider" id="slider">
 
         <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 8 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
+        <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
 
           <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 8): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="surface-wind-today-div">
@@ -205,11 +205,11 @@
             </a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (1 OF 7) > TODAY -->
 
         <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 5 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
+        <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
 
           <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 5): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="surface-wind-tomorrow-div">
@@ -270,11 +270,11 @@
             </a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (2 OF 7) > TOMORROW -->
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: 3 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
+        <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
 
           <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL (4000, 1000, or 500)-->
           <div class="border-bottom d-flex justify-content-between py-4">
@@ -305,11 +305,11 @@
             <a class="text-warning" href="https://synopticdata.com/">Synoptic</a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (3 OF 7) > SETTINGS -->
 
         <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: 6 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
+        <div class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
 
           <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (1 OF 6): UHGPGA FLYING SITES -->
           <div class="mb-4">
@@ -382,11 +382,11 @@
             </a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (4 OF 7) > MISC -->
 
         <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: 2 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
+        <div class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
 
           <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: SECTION (1 OF 2): LIVETRACK24 -->
           <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
@@ -402,11 +402,11 @@
             </a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (5 OF 7) > GPS -->
 
         <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: 3 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
+        <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
 
           <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (1 OF 3): LOOKING EAST -->
           <div class="mb-4">
@@ -432,11 +432,11 @@
             </a>
           </div>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (6 OF 7) > CAMS -->
 
         <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: 4 SECTIONS -->
-        <section class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
+        <div class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (1 OF 4): KSLC CHART -->
           <div class="mb-4" id="KSLC-main">
@@ -475,7 +475,7 @@
             <img class="rounded-4 w-100" loading="lazy" id="satellite-gif">
           </a>
 
-        </section>
+        </div>
         <!-- END BODY SLIDER > PAGE (7 OF 7) > NOW -->
 
       </div>
