@@ -1,10 +1,14 @@
-"use strict";
+// "use strict";
 
-const now = new Date();
-const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}+`;
-const navItems = ["Today", nextDay, "Settings", "Misc.", "GPS", "Cams", "Now"];
-const timezoneOffset = now.getTimezoneOffset() / 60;
 const ftPerMeter = 3.28084;
+const now = new Date();
+const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
+
+// Nav pages
+const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
+let slider, activeNav = 0;
+
+// Used for 1) Displaying station data and 2) Station on/off toggle in user settings
 const stationList = {
   AMB: { name: "Alta Baldy" },
   KSVR: { name: "Airport 2" },
@@ -18,10 +22,8 @@ const stationList = {
   FPS: { name: "Southside" }
 };
 
-// If hiTemp, liftParams, and soundingData are not global then D3 Reset/Update won't work
-let slider, hiTemp, liftParams = {}, soundingData = {}, activeNav = 0;
-
-// D3
+// Global required for D3 Reset/Update > Visualize Other Thermal Temps (Morning Sounding Profile)
+let hiTemp, liftParams = {}, soundingData = {};
 const screenWidth = window.innerWidth;
 const proportionalHeight = screenWidth * 0.67;
 const margin = {
@@ -30,12 +32,12 @@ const margin = {
   left: screenWidth * 0.02,
   right: screenWidth * 0.027
 };
-const extraLeft = margin.left * 4.5; // Adjusts final left margin spacing for fitting wind barbs
+const windBarbs = margin.left * 4.5;
 const width = screenWidth - margin.left - margin.right;
 const height = proportionalHeight - margin.top - margin.bottom;
 const surfaceAlt = 4.229;
 const maxAlt = 20;
-const x = d3.scaleLinear().range([0, width - margin.left - margin.right - extraLeft]).domain([-10, 110]);
+const x = d3.scaleLinear().range([0, width - margin.left - margin.right - windBarbs]).domain([-10, 110]);
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt]);
 const svg = d3.select("#skew-t-d3")
   .append("svg")
@@ -43,4 +45,4 @@ const svg = d3.select("#skew-t-d3")
   .attr("width", width)
   .attr("height", proportionalHeight)
   .append("g")
-  .attr("transform", `translate(${margin.left + extraLeft},${margin.top})`);
+  .attr("transform", `translate(${margin.left + windBarbs},${margin.top})`);

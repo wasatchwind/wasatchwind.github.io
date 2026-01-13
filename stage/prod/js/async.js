@@ -1,21 +1,20 @@
 "use strict";
 
 const data = await fetchData();
-// console.log(data)
+console.log(data)
 main(data);
 
 async function fetchData() {
   const data = {};
 
-  // Helper function to assemble openMeteoParams into a full URL
-  function buildApiUrl(params, repeatKeys = []) {
+  // Helper function that assembles api params into a full URL
+  function buildApiUrl(baseUrl, params, repeatKeys = []) {
     const query = new URLSearchParams();
-
     for (const [key, value] of Object.entries(params)) {
       if (repeatKeys.includes(key) && Array.isArray(value)) value.forEach(v => query.append(key, v));
       else query.set(key, Array.isArray(value) ? value.join(",") : value);
     }
-    return query.toString();
+    return `${baseUrl}${query.toString()}`;
   }
 
   const openMeteoParams = {
@@ -54,33 +53,35 @@ async function fetchData() {
     timezone: "America/Denver"
   };
 
-  const openMeteoUrl = new URL("https://api.open-meteo.com/v1/gfs?");
-  openMeteoUrl.search = buildApiUrl(openMeteoParams);
-  const synopticTimeSeriesUrl = "https://python-synoptic-api-483547589035.us-west3.run.app";
-  // const windAloftForecastUrl = "https://2kjkumjjzukwnuiomukqzexcfy0yfynp.lambda-url.us-west-1.on.aws";
-  const windAloftForecastUrl = "https://python-wind-aloft-ftp-483547589035.us-west2.run.app"; // GCP backup (modified)
-  const soundingUrl = "https://storage.googleapis.com/wasatch-wind-static/raob.json";
-  const soaringForecastUrl = "https://forecast.weather.gov/product.php?site=SLC&issuedby=SLC&product=SRG&format=TXT&version=1";
-  const areaForecastUrl = "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=TXT&version=1";
-  const nwsForecastUrl = "https://api.weather.gov/gridpoints/SLC/97,175/forecast";
-  const windMapDataUrl = "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png";
+  const openMeteoUrl = buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams);                      // Open Meteo
+  const synopticTimeSeriesUrl = "https://python-synoptic-api-483547589035.us-west3.run.app";                    // Synoptic
+  const soundingUrl = "https://storage.googleapis.com/wasatch-wind-static/raob.json";                           // Google Cloud
+  const windMapDataUrl = "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png"; // Google Cloud
+  const windAloftForecast6Url = "https://api.weather.gov/products/types/FD1/locations/US1/latest";              // NWS API
+  const windAloftForecast12Url = "https://api.weather.gov/products/types/FD3/locations/US3/latest";             // NWS API
+  const windAloftForecast24Url = "https://api.weather.gov/products/types/FD5/locations/US5/latest";             // NWS API
+  const soaringForecastUrl = "https://api.weather.gov/products/types/SRG/locations/SLC/latest";                 // NWS API
+  const areaForecastUrl = "https://api.weather.gov/products/types/AFD/locations/SLC/latest";                    // NWS API
+  const generalForecastUrl = "https://api.weather.gov/gridpoints/SLC/97,175/forecast";                          // NWS API
 
   const dataSources = [
-    { name: "openMeteo", url: openMeteoUrl, type: "json" },
-    { name: "synoptic", url: synopticTimeSeriesUrl, type: "json" },
-    { name: "windAloft", url: windAloftForecastUrl, type: "json" },
-    { name: "sounding", url: soundingUrl, type: "json" },
-    { name: "soaringForecast", url: soaringForecastUrl, type: "text" },
-    { name: "areaForecast", url: areaForecastUrl, type: "text" },
-    { name: "nwsForecast", url: nwsForecastUrl, type: "json" },
-    { name: "windMapMeta", url: windMapDataUrl, type: "json" }
+    { name: "openMeteo", url: openMeteoUrl },
+    { name: "synopticTimeseries", url: synopticTimeSeriesUrl },
+    { name: "windAloft6", url: windAloftForecast6Url },
+    { name: "windAloft12", url: windAloftForecast12Url },
+    { name: "windAloft24", url: windAloftForecast24Url },
+    { name: "sounding", url: soundingUrl },
+    { name: "soaringForecast", url: soaringForecastUrl },
+    { name: "areaForecast", url: areaForecastUrl },
+    { name: "generalForecast", url: generalForecastUrl },
+    { name: "windMapScreenshotMetadata", url: windMapDataUrl }
   ];
 
   const results = await Promise.allSettled(
-    dataSources.map(async ({ name, url, type }) => {
+    dataSources.map(async ({ name, url }) => {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`${name} failed: ${res.status}`);
-      const data = type === "json" ? await res.json() : await res.text();
+      const data = await res.json();
       return { name, data };
     })
   );

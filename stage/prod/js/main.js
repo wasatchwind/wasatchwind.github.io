@@ -1,55 +1,50 @@
 "use strict";
 
-// Dependencies:
-// 1) sunset: determines the default order of nav items and some display logic (from openMeteo)
-// 2) hiTemp: needed for the Morning Sounding Profile component (from openMeto and soaringForecast)
+console.log("IDEAS")
+console.log("open meteo: tol/neg3 forecast based on temp aloft. Also Cape, LI, boundary layer height, vert velocity, weather model, daily max wind/gust")
 
-// Documentation:
+// Data source documentation:
 // 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
 // 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build Marquee immediately so it isn't static while everything else loads
+// Build app structure immediately before data populates
 buildMarquee();
+slider = buildNavSlider();
 
-// Process all fetched data
 function main(data) {
-  // Set up main body nav structure (Keen Slider)
-  slider = buildNavSlider();
-  navUpdate();
 
-  // Get sunset and set default nav order (varies based on sunset time)
+  // Key dependency: sunset
+  // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
-  displayImages(sunset);
-  const sunsetFormatted = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
-  document.getElementById("sunset").innerHTML = sunsetFormatted;
+  sunsetVisibilityLogic(sunset);
+  document.getElementById("sunset").innerHTML = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
-  // Get hiTemp from soaringForecast and open meteo (open meteo as backup in case soaring forecast fails)
-  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast);
+  // Key dependency: hiTemp, soundingData (global for D3 functions)
+  // Needed to process the Morning Sounding Profile component
+  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = data.openMeteo.daily.temperature_2m_max[0];
-  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo;
+  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG, Open Meteo as backup
+  soundingData = data.sounding;
+  processSounding(soundingData, hiTemp);
   document.getElementById("hi-temp").innerHTML = hiTemp;
 
-  // Format and display wind map timestamp
-  const windMapTimestamp = new Date(data.windMapMeta.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
-  document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
+  // Process the remaining fetched data
+  processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24);
+  processAreaForecastPage(data.areaForecast.productText);
+  processGeneralForecast(data.generalForecast.properties.periods);
+  processSynoptic(data.synopticTimeseries.STATION);
 
-  // Fetched data is not global but soundingData must be for D3 functions to work (Reset/Update)
-  soundingData = data.sounding;
-
-  processSounding(data.sounding, hiTemp);
-  processWindAloft(data.openMeteo.hourly, data.windAloft);
-  processAreaForecastPage(data.areaForecast);
-  processGeneralForecast(data.nwsForecast.properties.periods);
-  processSynoptic(data.synoptic.STATION);
-
-  // For user settings
+  // Set up user settings page
   buildMarqueeSettings();
   buildStationSettings();
 
-  // Display all main pages last after nav slider setup
+  // Display all main pages last for smooth appearance/loading
+  displayImages();
+  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
+  document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
   document.getElementById("today-page").style.display = "block";
   document.getElementById("tomorrow-page").style.display = "block";
   document.getElementById("settings-page").style.display = "block";
@@ -61,23 +56,10 @@ function main(data) {
 
 
 
-////////////////////////////////////////////////////////
-// Display web images based on sunset time view logic //
-////////////////////////////////////////////////////////
-function displayImages(sunset) {
-  // Only display the graphical wind & gust images between 7 am & 5 pm (period of relevancy)
-  if (now.getHours() > 6 && now.getHours() < 18) {
-    document.getElementById("surface-wind-today-img").src = "https://graphical.weather.gov/images/SLC/WindSpd4_utah.png";
-    document.getElementById("surface-gust-today-img").src = "https://graphical.weather.gov/images/SLC/WindGust4_utah.png";
-    document.getElementById("surface-wind-today-div").style.display = "block";
-  } else if (now.getHours() > 19) {
-    document.getElementById("surface-wind-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindSpd8_utah.png";
-    document.getElementById("surface-gust-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindGust8_utah.png";
-    document.getElementById("surface-wind-tomorrow-time").innerHTML = `Afternoon Surface Wind Forecast ${nextDay.slice(0,-1)}`;
-    document.getElementById("surface-wind-tomorrow-div").style.display = "block";
-  }
-
-  // Display hourly wind chart on the Tomorrow page after sunset; otherwise display on the Today page
+//////////////////////////////////////////////////////////////////////////////////////////
+// Sunset-based visibility logic for Hourly Forecast Chart and Area Forecast Discussion //
+//////////////////////////////////////////////////////////////////////////////////////////
+function sunsetVisibilityLogic(sunset) {
   if (now.getHours() >= sunset.getHours() - 1 && now.getHours() < 24) {
     document.getElementById("hourly-chart-tomorrow").src = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
     document.getElementById("hourly-chart-tomorrow-div").style.display = "block";
@@ -87,8 +69,28 @@ function displayImages(sunset) {
     document.getElementById("hourly-chart-today-div").style.display = "block";
     document.getElementById("area-forecast-today-div").style.display = "block";
   };
+}
 
-  // Display all remaining web hosted images
+
+
+///////////////////////////////////////////////
+// Display all remaining web accessed images //
+///////////////////////////////////////////////
+function displayImages() {
+
+  // Afternoon Surface Wind Forecast
+  if (now.getHours() > 6 && now.getHours() < 18) {
+    document.getElementById("surface-wind-today-img").src = "https://graphical.weather.gov/images/SLC/WindSpd4_utah.png";
+    document.getElementById("surface-gust-today-img").src = "https://graphical.weather.gov/images/SLC/WindGust4_utah.png";
+    document.getElementById("surface-wind-today-div").style.display = "block";
+  } else if (now.getHours() > 19) {
+    document.getElementById("surface-wind-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindSpd8_utah.png";
+    document.getElementById("surface-gust-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindGust8_utah.png";
+    document.getElementById("surface-wind-tomorrow-time").innerHTML = `Afternoon Surface Wind Forecast ${nextDay}`;
+    document.getElementById("surface-wind-tomorrow-div").style.display = "block";
+  }
+
+  // Display all remaining web hosted images (Wind Map screenshot, Satellite, Cams)
   document.getElementById("wind-map").src = "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png";
   document.getElementById("satellite-gif").src = "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif";
   document.getElementById("cam-south").src = "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg";
@@ -98,53 +100,15 @@ function displayImages(sunset) {
 
 
 
-//////////////////////////
-// NWS General Forecast //
-//////////////////////////
-function processGeneralForecast(data) {
-  const forecastDaysCount = 5;
-  const isDaytime = data[0].isDaytime;
-  let period = isDaytime ? 0 : 1;
-
-  for (let i = 0; i < forecastDaysCount; i++) {
-    let qualifier = "";
-    let border = `<div class="border-bottom"></div>`;
-
-    if (isDaytime && i === 0) {
-      qualifier = "-today";
-      border = "";
-      document.getElementById("nws-today-div").style.display = "block";
-    } else document.getElementById("nws-today-multiday-div").style.display = "block";
-
-    const div = `
-      <div class="d-flex">
-        <div class="col-3">
-          <div class="display-6 text-info">${data[period].name}</div>
-          <img class="align-self-start rounded-4 w-100" src="${data[period].icon}">
-        </div>
-        <div class="col display-6 font-monospace ps-2 text-start">${data[period].detailedForecast}</div>
-      </div>
-    ${border}`;
-
-    document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
-    period += 2;
-  }
-}
-
-
-
 ///////////////
 // Utilities //
 ///////////////
-
-// Reload/refresh page
 function reload() {
   history.scrollRestoration = "manual";
   location.reload();
 }
 
-// Build top marquee slider (default speed medium: 1000)
-function buildMarquee() {
+function buildMarquee() { // Set up core app structure
   const marqueeSpeed = localStorage.getItem("marquee") || 1000;
   const animation = { duration: marqueeSpeed, easing: (t) => t };
   const options = {
@@ -157,17 +121,7 @@ function buildMarquee() {
   const marquee = new KeenSlider("#marquee", options);
 }
 
-// Determine which navItem (page) is the default activeNav position based on sunset time
-function navOrder(sunset) {
-  const currentHour = now.getHours();
-  const sunsetHour = new Date(sunset).getHours();
-
-  if (currentHour >= 14 && currentHour <= sunsetHour - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  else if (currentHour >= sunsetHour - 1) slider.moveToIdx(1, true, { duration: 0 });
-}
-
-// Main body slider (nav pages)
-function buildNavSlider() {
+function buildNavSlider() { // Set up core app structure
   const options = {
     loop: true,
     slides: { perView: 1 },
@@ -177,12 +131,18 @@ function buildNavSlider() {
       window.scrollTo(0, 0)
     }
   };
-
   return new KeenSlider("#slider", options);
 }
 
-// Update nav with user input (swipe)
-function navUpdate() {
+function navOrder(sunset) { // Determine which navItem (page) is the default activeNav position based on sunset time
+  const currentHour = now.getHours();
+  const sunsetHour = new Date(sunset).getHours();
+
+  if (currentHour >= 14 && currentHour <= sunsetHour - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (currentHour >= sunsetHour - 1) slider.moveToIdx(1, true, { duration: 0 });
+}
+
+function navUpdate() { // Update nav slider/page with user input (touch/drag swipe)
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
 
@@ -191,14 +151,12 @@ function navUpdate() {
   document.getElementById("topnav-right").innerHTML = navItems[right];
 }
 
-// Update nav with user input (click)
-window.simulateSwipe = function (direction) {
+window.simulateSwipe = function (direction) { // Update nav slider/page with user input (click)
   if (direction === "left") slider.prev();
   else if (direction === "right") slider.next();
 }
 
-// Wind chart toggle for expand/collapse for each station (Now page)
-function toggleWindChart(id) {
+function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
   const el = document.getElementById(id);
   const toggle = document.getElementById(`${id}-toggle`);
   const isHidden = el.classList.toggle("collapse");
@@ -206,16 +164,18 @@ function toggleWindChart(id) {
   toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
 }
 
-// Wind Aloft Forecast toggle current 6 hours and next 6 hours
-function toggleWindAloft() {
+function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hours
   document.getElementById("wind-aloft-current6").classList.toggle("collapse");
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
-// Marquee user settings options (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
-function buildMarqueeSettings() {
+
+
+////////////////////////
+// User settings page //
+////////////////////////
+function buildMarqueeSettings() { // Marquee user settings options (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
   const marqueeSpeed = localStorage.getItem("marquee") || 1000;
-  // const marqueeSpeed = getLocalStorage("marquee") || 1000;
   const speeds = [4000, 1000, 500];
 
   speeds.forEach(speed => {
@@ -227,8 +187,7 @@ function buildMarqueeSettings() {
   activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
 }
 
-// Set cookie for marquee user settings speed (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
-function marqueeSetSpeed(speed) {
+function marqueeSetSpeed(speed) { // Marquee user settings speed (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
   localStorage.setItem("marquee", speed);
   const speeds = [4000, 1000, 500];
 
@@ -243,12 +202,7 @@ function marqueeSetSpeed(speed) {
   buildMarquee(); // Puts new settings into immediate effect
 }
 
-// Build station settings toggle on/off list
-// Independent of Synoptic time series data since stations may be temporarily down
-// To add/remove stations:
-// * Update hardcoded stationList on global.js (alphabetical by station label)
-// * Update hardcoded lists in index.html (stations displayed and station show/hide in user settings)
-function buildStationSettings() {
+function buildStationSettings() { // Build station settings toggle on/off list
   Object.entries(stationList).forEach(([stid, station]) => {
     const container = document.getElementById(`${stid}-onoff`);
     container.innerHTML = `
@@ -264,8 +218,7 @@ function buildStationSettings() {
   });
 }
 
-// Onclick function to toggle stations settings on/off
-function stationSetToggle(stid, state) {
+function stationSetToggle(stid, state) { // Onclick function to toggle stations settings on/off
   localStorage.setItem(stid, state)
 
   const mainEl = document.getElementById(`${stid}-main`);
@@ -277,7 +230,11 @@ function stationSetToggle(stid, state) {
   off.className = state === "off" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
 }
 
-// D3 utilities
+
+
+//////////////////
+// D3 utilities //
+//////////////////
 function d3Update() {
   let userLiftParams;
   document.getElementById("out-of-range").style.display = "none";

@@ -74,10 +74,11 @@ function getLiftParams(data, temp, position = 0) {
 
 
 
-//////////////////////////
-// Build Sounding Chart //
-//////////////////////////
+//////////////////////////////////////////
+// Build Morning Sounding Profile Chart //
+//////////////////////////////////////////
 function buildSoundingChart(data, hiTemp, liftParams) {
+
   // Set vertical x axis gridlines
   const xAxisGrid = d3.axisTop(x).tickSize(0 - y(4)).ticks(23);
   svg.append("g")

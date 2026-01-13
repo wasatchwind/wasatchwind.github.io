@@ -1,13 +1,38 @@
 "use strict";
 
-function processWindAloft(openMeteo, windAloft) {
-  injectWindAloftIntoOpenMeteo(openMeteo, windAloft);
-  windAloftLongterm(windAloft.forecast24h);
+function processWindAloft(openMeteo, windAloft6, windAloft12, windAloft24) {
+  windAloft6 = parseWindAloft(windAloft6.productText);
+  windAloft12 = parseWindAloft(windAloft12.productText);
+  windAloft24 = parseWindAloft(windAloft24.productText);
+  injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAloft24);
+  windAloftLongterm(windAloft24);
   buildWindAloftForecast(openMeteo);
 }
 
+function parseWindAloft(text) {
+  const timeframe = text.match(/FOR USE\s+(\d{2})00-(\d{2})00Z/);
+  const starttime = Number(timeframe[1]);
+  const endtime = Number(timeframe[2]);
+  const slc = text.match(/^SLC.*$/m)?.[0];
+  const alts = ["altitude9k", "altitude12k", "altitude18k"];
+  const windspeed = {};
+  const winddirection = {};
+  const temperature = {};
+  const data = slc.slice(17, 41);
+
+  for (let i = 0; i < alts.length; i++) {
+    const block = data.slice(i * 8, i * 8 + 7);
+    const dir = parseInt(block.slice(0, 2), 10) * 10;
+    winddirection[alts[i]] = dir === 990 ? null : dir;
+    windspeed[alts[i]] = Math.round(parseInt(block.slice(2, 4)) * 1.15078);
+    temperature[alts[i]] = Math.round(parseInt(block.slice(4, 7)) * 9 / 5 + 32);
+  }
+
+  return { starttime, endtime, windspeed, winddirection, temperature };
+}
+
 // Function to assimilate the NWS Wind Aloft data (windAloft) into the primary data source (openMeteo)
-function injectWindAloftIntoOpenMeteo(openMeteo, windAloft) {
+function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAloft24) {
   const altitudes = ["9k", "12k", "18k"];
   const fields = ["winddirection", "windspeed"];
 
@@ -18,9 +43,9 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft) {
 
   // Helper function to select the correct forecast (UTC) for a given local time
   function forecastSelector(utcHour) {
-    if (isHourInRange(utcHour, windAloft.forecast6h.starttime, windAloft.forecast6h.endtime)) return windAloft.forecast6h;
-    if (isHourInRange(utcHour, windAloft.forecast12h.starttime, windAloft.forecast12h.endtime)) return windAloft.forecast12h;
-    return windAloft.forecast24h;
+    if (isHourInRange(utcHour, windAloft6.starttime, windAloft6.endtime)) return windAloft6;
+    if (isHourInRange(utcHour, windAloft12.starttime, windAloft12.endtime)) return windAloft12;
+    return windAloft24;
   }
 
   for (const alt of altitudes) {
@@ -205,6 +230,7 @@ function windAloftLongterm(data) {
 
     // Format start and end time from UTC
     const formatTime = utc => {
+      const timezoneOffset = now.getTimezoneOffset() / 60;
       const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
 
       if (local24 === 0) return "Midnight";
@@ -218,7 +244,7 @@ function windAloftLongterm(data) {
 
     // Set the formatted start/end time into the heading
     const headingEl = document.getElementById("wind-aloft-time-longterm");
-    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay.slice(0, -1)}`;
+    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
 
     // Normalize the data into an object
     const byAltitude = {};
