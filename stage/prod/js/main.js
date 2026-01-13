@@ -12,6 +12,7 @@ console.log("open meteo: tol/neg3 forecast based on temp aloft. Also Cape, LI, b
 // Build app structure immediately before data populates
 buildMarquee();
 slider = buildNavSlider();
+navUpdate();
 
 function main(data) {
 
@@ -276,4 +277,5 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
+
 };
