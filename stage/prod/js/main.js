@@ -1,8 +1,5 @@
 "use strict";
 
-console.log("IDEAS")
-console.log("open meteo: tol/neg3 forecast based on temp aloft. Also Cape, LI, boundary layer height, vert velocity, weather model, daily max wind/gust")
-
 // Data source documentation:
 // 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
 // 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
@@ -279,3 +276,4 @@ function clearChart() {
   svg.select("circle.tolcircle").remove();
 
 };
+
