@@ -27,9 +27,9 @@
 
       <!-- SECTION (1 OF 3): TITLE HEADING -->
       <div class="align-items-center d-flex justify-content-between">
-        <img src="prod/images/pg.gif" height="125px">
+        <img height="125px" src="prod/images/pg.gif">
         <div class="display-1 text-info title-font">Wasatch Wind</div>
-        <img src="prod/images/refresh.png" onclick="reload()" height="125px">
+        <img height="125px" onclick="reload()" src="prod/images/refresh.png">
       </div>
 
       <!-- SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
@@ -89,6 +89,9 @@
 
     </div>
     <!-- END STICKY TOP -->
+
+    <!-- LOADING SPINNER -->
+    <img class="w-25" id="spinner" src="/prod/images/spinner.gif">
 
     <!-- BODY SLIDER: 7 PAGES -->
     <div class="align-items-center d-flex justify-content-between mb-div-end">
@@ -337,7 +340,7 @@
           <div class="mb-4">
             <a href="https://utahparagliding.com/" target="_blank">
               <div class="display-3 text-info">Learn To Paraglide</div>
-              <img class="bg-light rounded-4 w-100" loading="lazy" src="prod/images/utahparagliding.png">
+              <img class="bg-light p-5 rounded-4 w-100" loading="lazy" src="prod/images/utahparagliding.png">
               <div class="display-6 font-monospace">(I am not affiliated with Utah Paragliding but I learned to fly
                 there)</div>
             </a>
@@ -347,11 +350,17 @@
           <div class="mb-4">
             <div class="display-3 text-info">General Info</div>
             <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-              <div>Unless noted otherwise:</div>
+              <div>Units (unless noted otherwise):</div>
               <br>
               <div>* Wind speed: mph</div>
               <div>* Altitude: feet</div>
               <div>* Temperature: &deg;F</div>
+              <br>
+              <br>
+              <div>Wind Aloft Forecast models:</div>
+              <br>
+              <div>* hPa: GFS & HRRR hybrid</div>
+              <div>* 9, 12, 18: NWS</div>
             </div>
           </div>
 
