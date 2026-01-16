@@ -1,6 +1,6 @@
 "use strict";
 
-const data = await fetchData();
+// const data = await fetchData();
 console.log(data)
 main(data);
 
@@ -16,7 +16,7 @@ async function fetchData() {
     }
     return `${baseUrl}${query.toString()}`;
   }
-
+  // 600, 700, 725, 750, 775, 800, 825, 850, 875
   const openMeteoParams = {
     latitude: 40.77069,
     longitude: -111.96503,
@@ -24,27 +24,30 @@ async function fetchData() {
     hourly: [
       "wind_speed_10m",
       "wind_direction_10m",
+      "windspeed_875hPa",
       "windspeed_850hPa",
+      "windspeed_825hPa",
       "windspeed_800hPa",
+      "windspeed_775hPa",
       "windspeed_750hPa",
       "windspeed_700hPa",
-      "windspeed_650hPa",
-      "windspeed_600hPa",
-      "windspeed_550hPa",
+      "windspeed_625hPa",
+      "winddirection_875hPa",
       "winddirection_850hPa",
+      "winddirection_825hPa",
       "winddirection_800hPa",
+      "winddirection_775hPa",
       "winddirection_750hPa",
       "winddirection_700hPa",
-      "winddirection_650hPa",
-      "winddirection_600hPa",
-      "winddirection_550hPa",
+      "winddirection_625hPa",
+      "geopotential_height_875hPa",
       "geopotential_height_850hPa",
+      "geopotential_height_825hPa",
       "geopotential_height_800hPa",
+      "geopotential_height_775hPa",
       "geopotential_height_750hPa",
       "geopotential_height_700hPa",
-      "geopotential_height_650hPa",
-      "geopotential_height_600hPa",
-      "geopotential_height_550hPa"
+      "geopotential_height_625hPa"
     ],
     windspeed_unit: "mph",
     temperature_unit: "fahrenheit",
@@ -93,3 +96,67 @@ async function fetchData() {
 
   return data;
 }
+
+// TESTING
+
+function buildApiUrl(baseUrl, params, repeatKeys = []) {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (repeatKeys.includes(key) && Array.isArray(value)) value.forEach(v => query.append(key, v));
+    else query.set(key, Array.isArray(value) ? value.join(",") : value);
+  }
+  return `${baseUrl}${query.toString()}`;
+}
+
+const openMeteoParams = {
+  latitude: 40.77069,
+  longitude: -111.96503,
+  hourly: [
+    "geopotential_height_875hPa",
+    "geopotential_height_850hPa",
+    "geopotential_height_825hPa",
+    "geopotential_height_800hPa",
+    "geopotential_height_775hPa",
+    "geopotential_height_750hPa",
+    "geopotential_height_725hPa",
+    "geopotential_height_700hPa",
+    "geopotential_height_675hPa",
+    "geopotential_height_650hPa",
+    "geopotential_height_625hPa",
+    "geopotential_height_600hPa",
+    "geopotential_height_575hPa",
+    "geopotential_height_550hPa",
+    "geopotential_height_525hPa",
+    "geopotential_height_500hPa",
+    "geopotential_height_475hPa",
+    "temperature_875hPa",
+    "temperature_850hPa",
+    "temperature_825hPa",
+    "temperature_800hPa",
+    "temperature_775hPa",
+    "temperature_750hPa",
+    "temperature_725hPa",
+    "temperature_700hPa",
+    "temperature_675hPa",
+    "temperature_650hPa",
+    "temperature_625hPa",
+    "temperature_600hPa",
+    "temperature_575hPa",
+    "temperature_550hPa",
+    "temperature_525hPa",
+    "temperature_500hPa",
+    "temperature_475hPa"
+  ],
+  windspeed_unit: "mph",
+  temperature_unit: "fahrenheit",
+  forecast_hours: 12,
+  forecast_days: 1,
+  timezone: "America/Denver"
+};
+
+const url = buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams);
+
+// const response = 
+
+// const response = await(await fetch(url)).json();
+// console.log(response)

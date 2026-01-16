@@ -1,5 +1,9 @@
 "use strict";
 
+console.log("IDEAS")
+console.log("open meteo: Cape, LI, boundary layer height, vert velocity, weather model, daily max wind/gust")
+console.log("fix wind aloft css/bootstrap")
+
 // Data source documentation:
 // 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
 // 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
@@ -17,7 +21,7 @@ function main(data) {
   // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
-  sunsetVisibilityLogic(sunset);
+  // sunsetVisibilityLogic(sunset);
   document.getElementById("sunset").innerHTML = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
   // Key dependency: hiTemp, soundingData (global for D3 functions)
@@ -34,14 +38,15 @@ function main(data) {
   processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
+  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Set up user settings page
   buildMarqueeSettings();
   buildStationSettings();
 
   // Display all main pages last for smooth appearance/loading
-  displayImages();
-  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
+  document.getElementById("spinner").style.display = "none";
+  // displayImages();
   document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
   document.getElementById("today-page").style.display = "block";
   document.getElementById("tomorrow-page").style.display = "block";
@@ -274,6 +279,4 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
-
 };
-

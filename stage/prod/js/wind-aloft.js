@@ -80,7 +80,8 @@ function buildWindAloftForecast(data) {
     const container = document.getElementById(`wind-aloft-rows-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
     const slice = timeframe === "current6" ? [0, 6] : [6, 12];
-    const pressureLevels = [550, 600, 650, 700, 750, 800, 850];
+    const pressureLevels = [625, 700, 750, 775, 800, 825, 850, 875];
+    const rowCount = pressureLevels.length + 4 // Surface + NWS 9, 12, 18 (4)
 
     // Calculate the mean geopotential altitude for current 6 and next 6 hours
     const geopotentialMeans = pressureLevels.map(hPa => {
@@ -90,36 +91,18 @@ function buildWindAloftForecast(data) {
       return Math.round(avgMeters * ftPerMeter).toLocaleString();
     });
 
-    // Since 12,000k can be below or above 650 hPa, both are set up for comparison as objects
-    const twelveK = {
-      label: "12,000",
-      sub: "NWS",
-      altitudeFt: 12000,
-      speedKey: "windspeed_12000",
-      dirKey: "winddirection_12000"
-    };
-
-    const hpa650 = {
-      label: geopotentialMeans[2],
-      sub: "650 hPa",
-      altitudeFt: Number(geopotentialMeans[2].replace(",", "")),
-      speedKey: "windspeed_650hPa",
-      dirKey: "winddirection_650hPa"
-    };
-
-    // Determine which is higher between twelveK and hpa650
-    const midLevels = [twelveK, hpa650].sort((a, b) => b.altitudeFt - a.altitudeFt);
-
     const labels = [
       { label: "18,000", sub: "NWS" },
-      { label: geopotentialMeans[0], sub: "550 hPa" },
-      { label: geopotentialMeans[1], sub: "600 hPa" },
-      ...midLevels.map(l => ({ label: l.label, sub: l.sub })), // Insert twelveK and hpa650
-      { label: geopotentialMeans[3], sub: "700 hPa" },
+      { label: geopotentialMeans[0], sub: `${pressureLevels[0]} hPa` },
+      { label: "12,000", sub: "NWS" },
+      { label: geopotentialMeans[1], sub: `${pressureLevels[1]} hPa` },
       { label: "9,000", sub: "NWS" },
-      { label: geopotentialMeans[4], sub: "750 hPa" },
-      { label: geopotentialMeans[5], sub: "800 hPa" },
-      { label: geopotentialMeans[6], sub: "850 hPa" },
+      { label: geopotentialMeans[2], sub: `${pressureLevels[2]} hPa` },
+      { label: geopotentialMeans[3], sub: `${pressureLevels[3]} hPa` },
+      { label: geopotentialMeans[4], sub: `${pressureLevels[4]} hPa` },
+      { label: geopotentialMeans[5], sub: `${pressureLevels[5]} hPa` },
+      { label: geopotentialMeans[6], sub: `${pressureLevels[6]} hPa` },
+      { label: geopotentialMeans[7], sub: `${pressureLevels[7]} hPa` },
       { label: "4,260", sub: "Surface" },
       { label: "", sub: "" } // Time row is empty in column 1
     ];
@@ -137,17 +120,19 @@ function buildWindAloftForecast(data) {
         if (col === 0) cell.innerHTML = `<div>${row.label}</div>${`<div class="sublabel">${row.sub}</div>`}`;
 
         // Data cells
-        else if (rowIndex < 11) {
+        else if (rowIndex < rowCount) {
           const windAloftRows = [
             { speed: "windspeed_18000", dir: "winddirection_18000" },
-            { speed: "windspeed_550hPa", dir: "winddirection_550hPa" },
-            { speed: "windspeed_600hPa", dir: "winddirection_600hPa" },
-            ...midLevels.map(l => ({ speed: l.speedKey, dir: l.dirKey })), // Insert twelveK and hpa650
-            { speed: "windspeed_700hPa", dir: "winddirection_700hPa" },
+            { speed: `windspeed_${pressureLevels[0]}hPa`, dir: `winddirection_${pressureLevels[0]}hPa` },
+            { speed: "windspeed_12000", dir: "winddirection_12000" },
+            { speed: `windspeed_${pressureLevels[1]}hPa`, dir: `winddirection_${pressureLevels[1]}hPa` },
             { speed: "windspeed_9000", dir: "winddirection_9000" },
-            { speed: "windspeed_750hPa", dir: "winddirection_750hPa" },
-            { speed: "windspeed_800hPa", dir: "winddirection_800hPa" },
-            { speed: "windspeed_850hPa", dir: "winddirection_850hPa" },
+            { speed: `windspeed_${pressureLevels[2]}hPa`, dir: `winddirection_${pressureLevels[2]}hPa` },
+            { speed: `windspeed_${pressureLevels[3]}hPa`, dir: `winddirection_${pressureLevels[3]}hPa` },
+            { speed: `windspeed_${pressureLevels[4]}hPa`, dir: `winddirection_${pressureLevels[4]}hPa` },
+            { speed: `windspeed_${pressureLevels[5]}hPa`, dir: `winddirection_${pressureLevels[5]}hPa` },
+            { speed: `windspeed_${pressureLevels[6]}hPa`, dir: `winddirection_${pressureLevels[6]}hPa` },
+            { speed: `windspeed_${pressureLevels[7]}hPa`, dir: `winddirection_${pressureLevels[7]}hPa` },
             { speed: "wind_speed_10m", dir: "wind_direction_10m" }
           ];
 
