@@ -162,7 +162,7 @@ function buildWindAloftForecast(data) {
       speedEl.className = "fs-1 fw-semibold text-white wind-aloft-forecast-speed";
       speedEl.textContent = Math.round(speed);
 
-      const barb = Math.min(50, Math.floor(speed / 5) * 5);
+      const barb = speed < 0.5 ? "calm" : Math.min(50, Math.floor(speed / 5) * 5);
       const img = document.createElement("img");
       img.src = `prod/images/barbs/barb${barb}.png`;
       img.className = "wind-aloft-forecast-barb";
@@ -246,7 +246,7 @@ function windAloftLongterm(data) {
       const { speed, dir, temp } = byAltitude[alt];
 
       const row = document.getElementById(`wind-aloft-longterm-${alt}k`);
-      const barb = Math.min(50, Math.floor(speed / 5) * 5);
+      const barb = speed < 0.5 ? "calm" : Math.min(50, Math.floor(speed / 5) * 5);
 
       row.style.backgroundColor = windAloftColor(Math.round(speed), alt);
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
@@ -257,3 +257,4 @@ function windAloftLongterm(data) {
   }
 
 }
+
