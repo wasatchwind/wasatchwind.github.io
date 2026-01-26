@@ -6,7 +6,7 @@ main(data);
 async function fetchData() {
   const data = {};
 
-  // Helper function that assembles api params into a full URL
+  // Helper function that assembles API params into a full URL
   function buildApiUrl(baseUrl, params, repeatKeys = []) {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
@@ -15,7 +15,8 @@ async function fetchData() {
     }
     return `${baseUrl}${query.toString()}`;
   }
-  
+
+  // hPa levels: 625, 700, 750, 775, 800, 825, 850, 875
   const openMeteoParams = {
     latitude: 40.77069,
     longitude: -111.96503,

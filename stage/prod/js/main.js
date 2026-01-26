@@ -1,15 +1,5 @@
 "use strict";
 
-console.log("IDEAS")
-console.log("open meteo: Cape, LI, boundary layer height, vert velocity, weather model, daily max wind/gust")
-console.log("fix wind aloft css/bootstrap")
-
-// Data source documentation:
-// 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
-// 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
-// 3) NWS API: https://www.weather.gov/documentation/services-web-api
-// 4) Keen Slider: https://keen-slider.io/docs
-
 // Build app structure immediately before data populates
 buildMarquee();
 slider = buildNavSlider();
@@ -279,5 +269,4 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
-
 };

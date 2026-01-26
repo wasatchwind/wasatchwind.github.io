@@ -104,20 +104,20 @@ function buildWindAloftForecast(data) {
       { label: geopotentialMeans[6], sub: `${pressureLevels[6]} hPa` },
       { label: geopotentialMeans[7], sub: `${pressureLevels[7]} hPa` },
       { label: "4,260", sub: "Surface" },
-      { label: "", sub: "" } // Time row is empty in column 1
+      { label: "", sub: "" } // Time row is empty in column 1 of the grid
     ];
 
     // Build rows
     labels.forEach((row, rowIndex) => {
       const rowEl = document.createElement("div");
-      rowEl.className = "display-5 text-info wind-aloft-row";
+      rowEl.className = "wind-aloft-row";
 
       for (let col = 0; col < 7; col++) {
         const cell = document.createElement("div");
-        cell.className = "border border-1 border-dark display-5 text-info wind-aloft-cell";
+        cell.className = "display-5 wind-aloft-cell";
 
         // Column 1: Labels
-        if (col === 0) cell.innerHTML = `<div>${row.label}</div>${`<div class="sublabel">${row.sub}</div>`}`;
+        if (col === 0) cell.innerHTML = `<div>${row.label}</div>${`<div class="display-6 fw-semibold fs-2 text-secondary">${row.sub}</div>`}`;
 
         // Data cells
         else if (rowIndex < rowCount) {
@@ -159,7 +159,7 @@ function buildWindAloftForecast(data) {
 
     function populateWindCell(cell, speed, direction, altitude) {
       const speedEl = document.createElement("div");
-      speedEl.className = "wind-aloft-forecast-speed";
+      speedEl.className = "fs-1 fw-semibold text-white wind-aloft-forecast-speed";
       speedEl.textContent = Math.round(speed);
 
       const barb = Math.min(50, Math.floor(speed / 5) * 5);
