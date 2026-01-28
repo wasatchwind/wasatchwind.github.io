@@ -128,8 +128,7 @@ function buildNavSlider() { // Set up core app structure
 }
 
 function navOrder(sunset) { // Determine which navItem (page) is the default activeNav position based on sunset time
-  // const currentHour = now.getHours();
-  const currentHour = 14;
+  const currentHour = now.getHours();
   const sunsetHour = new Date(sunset).getHours();
 
   if (currentHour >= 14 && currentHour <= sunsetHour - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
@@ -270,4 +269,5 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
+
 };
