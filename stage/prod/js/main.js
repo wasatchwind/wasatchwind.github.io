@@ -11,7 +11,7 @@ function main(data) {
   // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
-  // sunsetVisibilityLogic(sunset);
+  sunsetVisibilityLogic(sunset);
   document.getElementById("sunset").innerHTML = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
   // Key dependency: hiTemp, soundingData (global for D3 functions)
@@ -36,7 +36,7 @@ function main(data) {
 
   // Display all main pages last for smooth appearance/loading
   document.getElementById("spinner").style.display = "none";
-  // displayImages();
+  displayImages();
   document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
   document.getElementById("today-page").style.display = "block";
   document.getElementById("tomorrow-page").style.display = "block";
@@ -271,3 +271,4 @@ function clearChart() {
   svg.select("circle.tolcircle").remove();
 
 };
+
