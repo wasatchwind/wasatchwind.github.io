@@ -60,16 +60,16 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAl
 
 // Set the color of each wind speed cell (or row in the longterm component)
 function windAloftColor(speed, altitude) {
-  if (altitude <= 9) {
-    if (speed <= 10) return "#10654c";
-    if (speed <= 15) return "#806104";
-    if (speed <= 20) return "#7f3f0a";
-    return "#6e1b23";
+  if (altitude < 8) {
+    if (speed <= 10) return "#1E6A4B";
+    if (speed <= 15) return "#9A7B1F";
+    if (speed <= 20) return "#B45309";
+    return "#8B1D2C";
   }
-  if (speed <= altitude + 2) return "#10654c";
-  if (speed <= altitude + 6) return "#806104";
-  if (speed <= altitude + 12) return "#7f3f0a";
-  return "#6e1b23";
+  if (speed <= altitude + 2) return "#1E6A4B";
+  if (speed <= altitude + 6) return "#9A7B1F";
+  if (speed <= altitude + 12) return "#B45309";
+  return "#8B1D2C";
 }
 
 
@@ -263,3 +263,4 @@ function windAloftLongterm(data) {
   }
 
 }
+
