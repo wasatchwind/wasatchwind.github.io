@@ -118,7 +118,7 @@ function windChartSpeed(stid, wspd) {
   wspd.forEach((speed, i) => {
     const element = document.getElementById(`${stid}-wspd-${i}`);
     if (speed === "Calm") {
-      if (i === speed.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-1 text-center";
+      if (i === wspd.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-1 text-center";
       else element.className = "fs-3 fw-normal";
     }
     element.innerHTML = speed;
@@ -221,4 +221,5 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
+
 }
