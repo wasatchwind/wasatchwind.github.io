@@ -4,7 +4,7 @@ function processSynoptic(data) {
 
   // Loop through all stations in the data to build wind charts (sometimes stations are down)
   data.forEach(station => {
-    const readings = station.STID === "AMB" ? 6 : 12; // Only 6 historical readings needed for infrequently reporting stations
+    const readingCount = station.STID === "AMB" ? 6 : 12; // Only 6 historical readings needed for infrequently reporting stations
 
     // Exclude KSLC in the build loop since it's handled separately from the rest
     if (station.STID !== "KSLC") {
@@ -20,10 +20,10 @@ function processSynoptic(data) {
           </div>
         </div>
         <div class="col-5 d-flex justify-content-between me-2">
-          <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readings}">No Data</div>
-          <div class="col-2 display-2" id="${station.STID}-wdir-${readings}"></div>
-          <div class="col-2 display-4 fw-semibold" id="${station.STID}-wspd-${readings}"></div>
-          <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readings}"></div>
+          <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
+          <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
+          <div class="col-2 display-4 fw-semibold" id="${station.STID}-wspd-${readingCount}"></div>
+          <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
         </div>
       </div>
       <div class="bg-dark rounded-4">
@@ -36,12 +36,12 @@ function processSynoptic(data) {
     }
 
     const chart = document.getElementById(`${station.STID}-chart`);
-    for (let i = 0; i < readings; i++) {
+    for (let i = 0; i < readingCount; i++) {
       const div = document.createElement("div");
       div.className = "col px-1";
       div.innerHTML = `
       <div class="gust-color h2" id="${station.STID}-gust-${i}">&nbsp;</div>
-      <div class="bg-danger" id="${station.STID}-gbar-${i}"></div>
+      <div class="gust-bar" id="${station.STID}-gbar-${i}"></div>
       <div id="${station.STID}-wbar-${i}"></div>
       <div class="bg-secondary fs-1 fw-bold">
         <div id="${station.STID}-wspd-${i}"></div>
@@ -52,7 +52,7 @@ function processSynoptic(data) {
       <div class="fs-4" id="${station.STID}-time-${i}"></div>`;
       chart.appendChild(div);
     }
-    buildWindChart(station.STID, station.OBSERVATIONS, readings);
+    buildWindChart(station.STID, station.OBSERVATIONS, readingCount, station.ELEVATION);
   });
 
   // Build KSLC (main station & marquee)
@@ -66,29 +66,34 @@ function processSynoptic(data) {
 ///////////////////////////////////////
 // Build wind chart for each station //
 ///////////////////////////////////////
-function buildWindChart(stid, data, readings) {
+function buildWindChart(stid, data, readingCount, altitude) {
   const requiredKeys = ["date_time", "wind_direction_set_1", "wind_speed_set_1", "wind_gust_set_1"];
 
   // Ensure station data arrays are the correct length
   Object.keys(data).forEach(key => {
-    if (data[key].length < readings) {
-      const emptyArray = new Array(readings - data[key].length).fill(null);
+    if (data[key].length < readingCount) {
+      const emptyArray = new Array(readingCount - data[key].length).fill(null);
       data[key] = emptyArray.concat(data[key]);
-    } else data[key] = data[key].slice(-readings);
+    } else data[key] = data[key].slice(-readingCount);
   });
 
   // Ensure all stations have wind direction, speed, and gust data, even if null
   requiredKeys.forEach(key => {
-    if (!data[key]) data[key] = new Array(readings).fill(null);
+    if (!data[key]) data[key] = new Array(readingCount).fill(null);
     data[key].push(data[key][data[key].length - 1]); // Duplicate last data point for main chart display (non-expandable heading)
   });
 
+  // Round wind speed and gust speeds
+  const speedData = data.wind_speed_set_1.map(d => d === null ? "&nbsp;" : d < 0.5 ? "Calm" : Math.round(d));
+  const gustData = data.wind_gust_set_1.map(d => d === null ? "&nbsp;" : Math.round(d));
+  // console.log(stid, speedData)
+
   windChartTime(stid, data.date_time);
   windChartDirection(stid, data.wind_direction_set_1);
-  windChartSpeed(stid, data.wind_speed_set_1);
-  windChartGust(stid, data.wind_gust_set_1);
-  windChartBarHeight(stid, data.wind_speed_set_1, data.wind_gust_set_1);
-  windChartBarColor(stid, data.wind_speed_set_1);
+  windChartSpeed(stid, speedData);
+  windChartGust(stid, gustData);
+  windChartBarHeight(stid, speedData, gustData);
+  windChartBarColor(stid, speedData, altitude);
 }
 
 function windChartTime(stid, time) {
@@ -110,11 +115,10 @@ function windChartDirection(stid, wdir) {
 }
 
 function windChartSpeed(stid, wspd) {
-  const formattedSpeeds = wspd.map(d => d === null ? "&nbsp;" : d < 0.5 ? "Calm" : Math.round(d));
-  formattedSpeeds.forEach((speed, i) => {
+  wspd.forEach((speed, i) => {
     const element = document.getElementById(`${stid}-wspd-${i}`);
     if (speed === "Calm") {
-      if (i === formattedSpeeds.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-1 text-center";
+      if (i === speed.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-1 text-center";
       else element.className = "fs-3 fw-normal";
     }
     element.innerHTML = speed;
@@ -122,34 +126,48 @@ function windChartSpeed(stid, wspd) {
 }
 
 function windChartGust(stid, gust) {
-  const formattedGust = gust.map(d => d ? `g${Math.round(d)}` : "&nbsp;");
-  formattedGust.forEach((gust, i) => {
-    document.getElementById(`${stid}-gust-${i}`).innerHTML = gust;
+  gust.forEach((gust, i) => {
+    document.getElementById(`${stid}-gust-${i}`).innerHTML = gust === "&nbsp;" ? gust : `g${gust}`;
   });
 }
 
 function windChartBarHeight(stid, wspd, gust) {
-  const multiplier = Math.max(...gust) > 30 ? 1.3 : 4;
+  // Remove duplicate last reading since it's only used for the station heading which has no wind bar
   wspd.pop();
   gust.pop();
+
+  const wspdMax = Math.max(...wspd.filter(d => typeof d === "number"));
+  const gustMax = Math.max(...gust) || 0;
+
+  let heightModifier = 12; // Standard pixel multiplier (no gusts, wind <= 10)
+  if (wspdMax > 10 || gustMax > 10) heightModifier = 8;
+  if (wspdMax > 25 || gustMax > 20) heightModifier = 4;
+  if (wspdMax > 40 || gustMax > 35) heightModifier = 3;
+
   wspd.forEach((speed, i) => {
     const wbarElement = document.getElementById(`${stid}-wbar-${i}`);
     const gbarElement = document.getElementById(`${stid}-gbar-${i}`);
-    wbarElement.className = speed ? "border-1 border" : "";
-    wbarElement.style.height = `${speed * multiplier}px`;
-    gbarElement.style.height = `${(gust[i] - speed) * multiplier}px`;
+    wbarElement.style.height = `${speed * heightModifier}px`;
+    gbarElement.style.height = `${(gust[i] - speed) * heightModifier}px`;
   });
 }
 
-function windChartBarColor(stid, data) {
-  const peakStations = ["AMB", "BRW", "HDP", "OGP", "REY"];
-  const yellow = peakStations.includes(stid) ? 20 : stid === "FPS" ? 15 : 10;
-  const red = peakStations.includes(stid) ? 30 : 20;
-  const barColors = data.map(d => {
-    if (d > yellow && d < red) return "var(--bs-yellow)";
-    else if (d >= red) return "var(--bs-orange)";
-    else return "var(--bs-teal)";
+
+function windChartBarColor(stid, wspd, altitude) {
+  altitude = Math.round(Number(altitude) / 1000);
+  const barColors = wspd.map(d => {
+    if (altitude < 8) {
+      if (d <= 10) return "#1E6A4B";
+      if (d <= 15) return "#9A7B1F";
+      if (d <= 20) return "#B45309";
+      return "#8B1D2C";
+    }
+    if (d <= altitude + 2) return "#1E6A4B";
+    if (d <= altitude + 6) return "#9A7B1F";
+    if (d <= altitude + 12) return "#B45309";
+    return "#8B1D2C";
   });
+
   barColors.forEach((color, i) => {
     document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = color;
   });
@@ -191,7 +209,7 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
 function getZone(alti, temp, trendChar) {
   const zone = calculateZone(alti[alti.length - 1], temp[temp.length - 1]);
   const altiDiff = Math.round((alti[alti.length - 1] - alti[0]) * 100) / 100;
-  
+
   if (altiDiff > 0.01) trendChar = "&uarr;&uarr;";
   else if (altiDiff > 0) trendChar = "&uarr;";
   else if (altiDiff < -0.01) trendChar = "&darr;&darr;";
