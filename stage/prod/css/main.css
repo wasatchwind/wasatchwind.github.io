@@ -24,6 +24,11 @@ body {
   color: hotpink;
 }
 
+.gust-bar {
+  background-color: hotpink;
+  opacity: 40%;
+}
+
 .zone-margin {
   margin-top: -10px;
   margin-bottom: -10px;
