@@ -11,9 +11,9 @@ function processSynoptic(data) {
       const elevation = parseInt(station.ELEVATION).toLocaleString();
       const stationMain = document.getElementById(`${station.STID}-main`);
       stationMain.innerHTML = `
-      <div class="align-items-end border-bottom d-flex justify-content-between pb-3">
+      <div class="align-items-end border-bottom d-flex justify-content-between pb-3" onclick="toggleWindChart('${station.STID}')">
         <div class="d-flex align-items-end">
-          <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle" onclick="toggleWindChart('${station.STID}')">&#43;</div>
+          <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
           <div class="mx-4">
             <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
             <div class="display-3 text-info"">${stationList[station.STID].name}</div>
@@ -223,3 +223,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("zone").style.color = zone.col;
 
 }
+
