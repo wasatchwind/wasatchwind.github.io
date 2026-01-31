@@ -1,5 +1,18 @@
 "use strict";
 
+console.log("! IDEA: open meteo: Cape, LI, boundary layer height, vert velocity, daily max wind/gust, weather model")
+console.log("! IDEA: use more data from the soaring forecast: LCL, LI, KI")
+console.log("! IDEA: look at old versions and see if anything valuable")
+console.log("! IDEA: match color theme with zone colors")
+console.log("! IDEA: make wind number color instead of white for chart main rows")
+console.log("--------------------")
+
+// Data source documentation:
+// 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
+// 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
+// 3) NWS API: https://www.weather.gov/documentation/services-web-api
+// 4) Keen Slider: https://keen-slider.io/docs
+
 // Build app structure immediately before data populates
 buildMarquee();
 slider = buildNavSlider();
@@ -11,7 +24,7 @@ function main(data) {
   // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
-  sunsetVisibilityLogic(sunset);
+  // sunsetVisibilityLogic(sunset);
   document.getElementById("sunset").innerHTML = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
   // Key dependency: hiTemp, soundingData (global for D3 functions)
@@ -28,6 +41,7 @@ function main(data) {
   processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
+  processAtmospheric(data.openMeteo.hourly);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Set up user settings page
@@ -36,7 +50,7 @@ function main(data) {
 
   // Display all main pages last for smooth appearance/loading
   document.getElementById("spinner").style.display = "none";
-  displayImages();
+  // displayImages();
   document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
   document.getElementById("today-page").style.display = "block";
   document.getElementById("tomorrow-page").style.display = "block";
@@ -162,6 +176,26 @@ function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hou
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
+// Returns the color for wind speed based on altitude
+function windSpeedColor(speeds, altitude) {
+  if (typeof(speeds) === "number") speeds = [speeds];
+  const barColors = speeds.map(d => {
+    if (altitude < 8) {
+      if (d <= 10) return green;
+      if (d <= 15) return yellow;
+      if (d <= 20) return orange;
+      return red;
+    }
+    if (d <= altitude + 2) return green;
+    if (d <= altitude + 6) return yellow;
+    if (d <= altitude + 12) return orange;
+    return red;
+  });
+
+  if (barColors.length > 0) return barColors;
+  return barColors[0];
+}
+
 
 
 ////////////////////////
@@ -269,6 +303,4 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
-
 };
-

@@ -22,7 +22,7 @@ function processSynoptic(data) {
         <div class="col-5 d-flex justify-content-between me-2">
           <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
           <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
-          <div class="col-2 display-4 fw-semibold" id="${station.STID}-wspd-${readingCount}"></div>
+          <div class="col-2 display-4 fw-semibold rounded-4" id="${station.STID}-wspd-${readingCount}"></div>
           <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
         </div>
       </div>
@@ -86,11 +86,10 @@ function buildWindChart(stid, data, readingCount, altitude) {
   // Round wind speed and gust speeds
   const speedData = data.wind_speed_set_1.map(d => d === null ? "&nbsp;" : d < 0.5 ? "Calm" : Math.round(d));
   const gustData = data.wind_gust_set_1.map(d => d === null ? "&nbsp;" : Math.round(d));
-  // console.log(stid, speedData)
 
   windChartTime(stid, data.date_time);
   windChartDirection(stid, data.wind_direction_set_1);
-  windChartSpeed(stid, speedData);
+  windChartSpeed(stid, speedData, altitude);
   windChartGust(stid, gustData);
   windChartBarHeight(stid, speedData, gustData);
   windChartBarColor(stid, speedData, altitude);
@@ -114,14 +113,24 @@ function windChartDirection(stid, wdir) {
   });
 }
 
-function windChartSpeed(stid, wspd) {
+function windChartSpeed(stid, wspd, altitude) {
   wspd.forEach((speed, i) => {
     const element = document.getElementById(`${stid}-wspd-${i}`);
     if (speed === "Calm") {
-      if (i === wspd.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-1 text-center";
+      if (i === wspd.length - 1) {
+        element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold p-3 rounded-4 text-center";
+        element.style.backgroundColor = green;
+      }
       else element.className = "fs-3 fw-normal";
     }
     element.innerHTML = speed;
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Also class rounded-4 above
+    const test = typeof(speed) === "number" ? speed : 0;
+    const test1 = windSpeedColor(test, Math.round(Number(altitude) / 1000));
+    if (i === wspd.length - 1 & stid !== "KSLC") element.style.backgroundColor = test1;
+
   });
 }
 
@@ -152,22 +161,8 @@ function windChartBarHeight(stid, wspd, gust) {
   });
 }
 
-
 function windChartBarColor(stid, wspd, altitude) {
-  altitude = Math.round(Number(altitude) / 1000);
-  const barColors = wspd.map(d => {
-    if (altitude < 8) {
-      if (d <= 10) return "#1E6A4B";
-      if (d <= 15) return "#9A7B1F";
-      if (d <= 20) return "#B45309";
-      return "#8B1D2C";
-    }
-    if (d <= altitude + 2) return "#1E6A4B";
-    if (d <= altitude + 6) return "#9A7B1F";
-    if (d <= altitude + 12) return "#B45309";
-    return "#8B1D2C";
-  });
-
+  const barColors = windSpeedColor(wspd, Math.round(Number(altitude) / 1000));
   barColors.forEach((color, i) => {
     document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = color;
   });
@@ -184,22 +179,22 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
   switch (zone.num) {
     case 0:
     case 7:
-      zone.col = "var(--bs-red)";
+      zone.col = red;
       break;
     case 1:
     case 6:
-      zone.col = "var(--bs-orange)";
+      zone.col = orange;
       break;
     case 2:
     case 5:
-      zone.col = "var(--bs-yellow)";
+      zone.col = yellow;
       break;
     case 3:
       if (alti === currentZones[3]) zone.num = "LoP";
-      zone.col = "var(--bs-teal)";
+      zone.col = green;
       break;
     default:
-      zone.col = "var(--bs-teal)";
+      zone.col = green;
   }
 
   if (zone.num !== "LoP") zone.num = zone.num === 0 ? "&#9471;" : `&#1010${zone.num + 1};`;
@@ -221,6 +216,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
-
 }
-

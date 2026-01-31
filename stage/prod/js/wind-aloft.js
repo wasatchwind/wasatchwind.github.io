@@ -58,20 +58,6 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAl
   }
 }
 
-// Set the color of each wind speed cell (or row in the longterm component)
-function windAloftColor(speed, altitude) {
-  if (altitude < 8) {
-    if (speed <= 10) return "#1E6A4B";
-    if (speed <= 15) return "#9A7B1F";
-    if (speed <= 20) return "#B45309";
-    return "#8B1D2C";
-  }
-  if (speed <= altitude + 2) return "#1E6A4B";
-  if (speed <= altitude + 6) return "#9A7B1F";
-  if (speed <= altitude + 12) return "#B45309";
-  return "#8B1D2C";
-}
-
 
 
 ////////////////////////////////////////
@@ -176,7 +162,7 @@ function buildWindAloftForecast(data) {
       img.style.transform = `rotate(${direction}deg)`;
 
       cell.append(speedEl, img);
-      cell.style.backgroundColor = windAloftColor(Math.round(speed), altitude);
+      cell.style.backgroundColor = windSpeedColor(Math.round(speed), altitude);
     }
   }
 }
@@ -254,7 +240,7 @@ function windAloftLongterm(data) {
       const row = document.getElementById(`wind-aloft-longterm-${alt}k`);
       const barb = speed < 0.5 ? "calm" : Math.min(50, Math.floor(speed / 5) * 5);
 
-      row.style.backgroundColor = windAloftColor(Math.round(speed), alt);
+      row.style.backgroundColor = windSpeedColor(Math.round(speed), alt);
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
       document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
