@@ -9,8 +9,7 @@ function processSoaringForecastPage(text) {
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
   const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
-  // const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
-  const odTime = "1200"
+  const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const odTimeDisplay = odTime === "None" ? "" : `\n❗OD Time......... ${odTime}`;
 
   const soaringForecast = `${forecastDate}
@@ -84,3 +83,4 @@ function processGeneralForecast(data) {
   }
 
 }
+
