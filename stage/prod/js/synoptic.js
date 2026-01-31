@@ -117,10 +117,7 @@ function windChartSpeed(stid, wspd, altitude) {
   wspd.forEach((speed, i) => {
     const element = document.getElementById(`${stid}-wspd-${i}`);
     if (speed === "Calm") {
-      if (i === wspd.length - 1) {
-        element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold p-3 rounded-4 text-center";
-        element.style.backgroundColor = green;
-      }
+      if (i === wspd.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold p-3 rounded-4 text-center";
       else element.className = "fs-3 fw-normal";
     }
     element.innerHTML = speed;
@@ -129,7 +126,7 @@ function windChartSpeed(stid, wspd, altitude) {
     // Also class rounded-4 above
     const test = typeof(speed) === "number" ? speed : 0;
     const test1 = windSpeedColor(test, Math.round(Number(altitude) / 1000));
-    if (i === wspd.length - 1 & stid !== "KSLC") element.style.backgroundColor = test1;
+    if (i === wspd.length - 1 && stid !== "KSLC") element.style.backgroundColor = test1;
 
   });
 }
@@ -216,5 +213,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
-
 }

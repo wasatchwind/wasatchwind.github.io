@@ -1,6 +1,10 @@
 "use strict";
 
 const data = await fetchData();
+console.log("All data", data)
+console.log("Open Meteo Daily Max Wind: ", data.openMeteo.daily.wind_speed_10m_max[0])
+console.log("Open Meteo Daily Max Gust: ", data.openMeteo.daily.wind_gusts_10m_max[0])
+console.log("--------------------")
 main(data);
 
 async function fetchData() {
