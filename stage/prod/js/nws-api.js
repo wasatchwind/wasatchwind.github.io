@@ -9,15 +9,20 @@ function processSoaringForecastPage(text) {
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
   const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
+  const lcl = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim());
+  const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const odTimeDisplay = odTime === "None" ? "" : `\n❗OD Time......... ${odTime}`;
 
   const soaringForecast = `${forecastDate}
   
-  High Temp....... ${hiTemp}°
-  Top of Lift..... ${topOfLift.toLocaleString()}
-  Height of -3.... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
-  Max Lift Rate... ${rateOfLift}
+  High Temp......... ${hiTemp}°
+  Height of -3...... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
+  Top of Lift....... ${topOfLift.toLocaleString()}
+  Cloudbase (LCL)... ${lcl.toLocaleString()}
+
+  Max Lift Rate..... ${rateOfLift}
+  Lifted Index...... ${liftedIndex}
   ${odTimeDisplay}`;
 
   document.getElementById("soaring-forecast").innerText = soaringForecast;
@@ -81,6 +86,4 @@ function processGeneralForecast(data) {
     document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
     period += 2;
   }
-
 }
-
