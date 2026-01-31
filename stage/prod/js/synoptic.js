@@ -22,7 +22,7 @@ function processSynoptic(data) {
         <div class="col-5 d-flex justify-content-between me-2">
           <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
           <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
-          <div class="col-2 display-4 fw-semibold rounded-4" id="${station.STID}-wspd-${readingCount}"></div>
+          <div class="col-2 display-4 fw-semibold px-2 rounded-4" id="${station.STID}-wspd-${readingCount}"></div>
           <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
         </div>
       </div>
@@ -216,4 +216,5 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
+
 }
