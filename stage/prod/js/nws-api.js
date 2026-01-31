@@ -8,8 +8,10 @@ function processSoaringForecastPage(text) {
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
-  const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
+  // const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
+  const odTime = "1200"
+  const odTimeDisplay = odTime === "None" ? "" : `\n❗OD Time......... ${odTime}`;
 
   const soaringForecast = `${forecastDate}
   
@@ -17,7 +19,7 @@ function processSoaringForecastPage(text) {
   Top of Lift..... ${topOfLift.toLocaleString()}
   Height of -3.... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
   Max Lift Rate... ${rateOfLift}
-  OD Time......... ${odTime}`;
+  ${odTimeDisplay}`;
 
   document.getElementById("soaring-forecast").innerText = soaringForecast;
   document.getElementById("hi-temp").innerHTML = hiTemp;
@@ -80,4 +82,5 @@ function processGeneralForecast(data) {
     document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
     period += 2;
   }
+
 }
