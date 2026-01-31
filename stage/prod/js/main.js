@@ -41,7 +41,7 @@ function main(data) {
   processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
-  processAtmospheric(data.openMeteo.hourly);
+  // processAtmospheric(data.openMeteo.hourly);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Set up user settings page
@@ -303,4 +303,5 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
+
 };
