@@ -45,8 +45,8 @@ a:any-link {
 }
 
 /* WIND ALOFT FORECAST GRID */
-#wind-aloft-rows-current6,
-#wind-aloft-rows-next6 {
+#openmeteo-grid-current6,
+#openmeteo-grid-next6 {
   display: grid;
   grid-template-columns: auto repeat(6, 1fr);
 }
