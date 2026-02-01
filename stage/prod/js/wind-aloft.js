@@ -69,7 +69,7 @@ function buildWindAloftForecast(data) {
 
   // Build the HTML DOM containers for the Wind Aloft Forecast component (current 6 and next 6 hours)
   function buildWindAloftContainer(timeframe) {
-    const container = document.getElementById(`wind-aloft-rows-${timeframe}`);
+    const container = document.getElementById(`openmeteo-grid-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
     const slice = timeframe === "current6" ? [0, 6] : [6, 12];
     const pressureLevels = [625, 700, 750, 775, 800, 825, 850, 875];
@@ -180,7 +180,7 @@ function windAloftLongterm(data) {
 
   // Build the HTML DOM container for wind aloft long term
   function buildWindAloftLongtermContainer(altitudes) {
-    const container = document.getElementById("wind-aloft-rows-longterm");
+    const container = document.getElementById("openmeteo-grid-longterm");
 
     altitudes.forEach((alt, index) => {
       const row = document.createElement("div");

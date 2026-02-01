@@ -12,7 +12,8 @@ const red = "#8B1D2C";
 const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
 let slider, activeNav = 0;
 
-// Used for 1) Displaying station data and 2) Station on/off toggle in user settings
+// Used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
+// Can't rely on Synoptic data because stations sometimes go offline
 const stationList = {
   AMB: { name: "Alta Baldy" },
   KSVR: { name: "Airport 2" },
@@ -26,7 +27,7 @@ const stationList = {
   FPS: { name: "Southside" }
 };
 
-// Global required for D3 Reset/Update > Visualize Other Thermal Temps (Morning Sounding Profile)
+// Global required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
 let hiTemp, liftParams = {}, soundingData = {};
 const screenWidth = window.innerWidth;
 const proportionalHeight = screenWidth * 0.67;
@@ -50,8 +51,3 @@ const svg = d3.select("#skew-t-d3")
   .attr("height", proportionalHeight)
   .append("g")
   .attr("transform", `translate(${margin.left + windBarbs},${margin.top})`);
-
-
-
-// For testing - Remove in prod
-// const data = 

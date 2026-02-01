@@ -1,10 +1,5 @@
 "use strict";
 
-console.log("! IDEA: open meteo: Cape, LI, boundary layer height, vert velocity, daily max wind/gust, weather model")
-console.log("! IDEA: use more data from the soaring forecast: LCL, LI, KI")
-console.log("! IDEA: look at old versions and see if anything valuable")
-console.log("--------------------")
-
 // Data source documentation:
 // 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
 // 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
@@ -39,7 +34,6 @@ function main(data) {
   processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
-  processAtmospheric(data.openMeteo.hourly);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Set up user settings page
@@ -174,7 +168,7 @@ function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hou
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
-// Returns the color for wind speed based on altitude
+// Returns wind speed color based on altitude
 function windSpeedColor(speeds, altitude) {
   if (typeof(speeds) === "number") speeds = [speeds];
   const barColors = speeds.map(d => {
@@ -301,5 +295,4 @@ function clearChart() {
   svg.selectAll("text.liftheights").remove();
   svg.selectAll("text.white").remove();
   svg.select("circle.tolcircle").remove();
-
 };

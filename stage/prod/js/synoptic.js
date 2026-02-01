@@ -122,12 +122,9 @@ function windChartSpeed(stid, wspd, altitude) {
     }
     element.innerHTML = speed;
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Also class rounded-4 above
-    const test = typeof(speed) === "number" ? speed : 0;
-    const test1 = windSpeedColor(test, Math.round(Number(altitude) / 1000));
-    if (i === wspd.length - 1 && stid !== "KSLC") element.style.backgroundColor = test1;
-
+    const speedToNumber = typeof(speed) === "number" ? speed : 0;
+    const speedColor = windSpeedColor(speedToNumber, Math.round(Number(altitude) / 1000));
+    if (i === wspd.length - 1 && stid !== "KSLC") element.style.backgroundColor = speedColor;
   });
 }
 
@@ -213,8 +210,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
-
 }
-
-
-
