@@ -173,22 +173,22 @@ function calculateZone(alti, temp, currentZones = [], zone = {}) {
   switch (zone.num) {
     case 0:
     case 7:
-      zone.col = red;
+      zone.col = "var(--bs-red)";
       break;
     case 1:
     case 6:
-      zone.col = orange;
+      zone.col = "var(--bs-orange)";
       break;
     case 2:
     case 5:
-      zone.col = yellow;
+      zone.col = "var(--bs-yellow)";
       break;
     case 3:
       if (alti === currentZones[3]) zone.num = "LoP";
-      zone.col = green;
+      zone.col = "var(--bs-teal)";
       break;
     default:
-      zone.col = green;
+      zone.col = "var(--bs-teal)";
   }
 
   if (zone.num !== "LoP") zone.num = zone.num === 0 ? "&#9471;" : `&#1010${zone.num + 1};`;
@@ -210,4 +210,5 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").innerHTML = zone.num;
   document.getElementById("zone").style.color = zone.col;
+
 }
