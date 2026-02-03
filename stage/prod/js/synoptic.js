@@ -6,33 +6,33 @@ function processSynoptic(data) {
   data.forEach(station => {
     const readingCount = station.STID === "AMB" ? 6 : 12; // Only 6 historical readings needed for infrequently reporting stations
 
-    // Exclude KSLC in the build loop since it's handled separately from the rest
+    // Exclude KSLC in the station build loop since it doesn't have a toggle chart
     if (station.STID !== "KSLC") {
       const elevation = parseInt(station.ELEVATION).toLocaleString();
       const stationMain = document.getElementById(`${station.STID}-main`);
       stationMain.innerHTML = `
-      <div class="align-items-end border-bottom d-flex justify-content-between pb-3" onclick="toggleWindChart('${station.STID}')">
-        <div class="d-flex align-items-end">
-          <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
-          <div class="mx-4">
-            <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
-            <div class="display-3 text-info"">${stationList[station.STID].name}</div>
+        <div class="align-items-end border-bottom d-flex justify-content-between pb-3" onclick="toggleWindChart('${station.STID}')">
+          <div class="d-flex align-items-end">
+            <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
+            <div class="mx-4">
+              <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
+              <div class="display-3 text-info"">${stationList[station.STID].name}</div>
+            </div>
+          </div>
+          <div class="col-6 d-flex justify-content-between me-2">
+            <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
+            <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
+            <div class="col-2 display-4 fw-semibold rounded-4 text-center" id="${station.STID}-wspd-${readingCount}"></div>
+            <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
           </div>
         </div>
-        <div class="col-6 d-flex justify-content-between me-2">
-          <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
-          <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
-          <div class="col-2 display-4 fw-semibold rounded-4 text-center" id="${station.STID}-wspd-${readingCount}"></div>
-          <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
-        </div>
-      </div>
-      <div class="bg-dark rounded-4">
-        <div class="collapse" id="${station.STID}">
-          <a href="https://www.weather.gov/wrh/timeseries?site=${station.STID}&hours=72" target="_blank">
-            <div class="align-items-end d-flex" id="${station.STID}-chart"></div>
-          </a>
-        </div>
-      </div>`;
+        <div class="bg-dark rounded-4">
+          <div class="collapse" id="${station.STID}">
+            <a href="https://www.weather.gov/wrh/timeseries?site=${station.STID}&hours=72" target="_blank">
+              <div class="align-items-end d-flex" id="${station.STID}-chart"></div>
+            </a>
+          </div>
+        </div>`;
     }
 
     const chart = document.getElementById(`${station.STID}-chart`);
@@ -40,16 +40,13 @@ function processSynoptic(data) {
       const div = document.createElement("div");
       div.className = "col px-1";
       div.innerHTML = `
-      <div class="gust-color h2" id="${station.STID}-gust-${i}">&nbsp;</div>
-      <div class="gust-bar" id="${station.STID}-gbar-${i}"></div>
-      <div id="${station.STID}-wbar-${i}"></div>
-      <div class="bg-secondary fs-1 fw-bold">
-        <div id="${station.STID}-wspd-${i}"></div>
-      </div>
-      <div>
+        <div class="gust-color h2" id="${station.STID}-gust-${i}">&nbsp;</div>
+        <div class="gust-bar" id="${station.STID}-gbar-${i}"></div>
+        <div id="${station.STID}-wbar-${i}"></div>
+        <div class="bg-secondary fs-1 fw-bold" id="${station.STID}-wspd-${i}"></div>
         <div class="display-4" id="${station.STID}-wdir-${i}"></div>
-      </div>
-      <div class="fs-4" id="${station.STID}-time-${i}"></div>`;
+        <div class="fs-4" id="${station.STID}-time-${i}"></div>`;
+
       chart.appendChild(div);
     }
     buildWindChart(station.STID, station.OBSERVATIONS, readingCount, station.ELEVATION);
@@ -95,104 +92,96 @@ function buildWindChart(stid, data, readingCount, altitude) {
   windChartBarColor(stid, speedData, altitude);
 }
 
-function windChartTime(stid, time) {
-  const formattedTime = time.map(d => d ? d.slice(0, -3).toLowerCase() : d);
-  formattedTime.forEach((t, i) => {
-    if (stid === "KSLC" && i === formattedTime.length - 1) t = `${t} KSLC`;
-    document.getElementById(`${stid}-time-${i}`).innerHTML = t;
+function windChartTime(stid, times) {
+  times.forEach((time, i) => {
+    const el = document.getElementById(`${stid}-time-${i}`);
+    time = time.slice(0, -3).toLowerCase();
+    if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
+    el.innerHTML = time;
   });
 }
 
-function windChartDirection(stid, wdir) {
-  const wimg = wdir.map(d => d ? "&#10148;" : "&nbsp;");
-  const rotate = wdir.map(d => `rotate(${d + 90}deg)`);
-  wdir.forEach((direction, i) => {
-    const element = document.getElementById(`${stid}-wdir-${i}`);
-    element.innerHTML = wimg[i];
-    element.style.transform = rotate[i];
+function windChartDirection(stid, directions) {
+  directions.forEach((direction, i) => {
+    const el = document.getElementById(`${stid}-wdir-${i}`);
+    el.innerHTML = direction ? "&#10148;" : "&nbsp;";
+    el.style.transform = `rotate(${direction + 90}deg)`;
   });
 }
 
-function windChartSpeed(stid, wspd, altitude) {
-  wspd.forEach((speed, i) => {
-    const element = document.getElementById(`${stid}-wspd-${i}`);
+function windChartSpeed(stid, speeds, altitude) {
+  speeds.forEach((speed, i) => {
+    const el = document.getElementById(`${stid}-wspd-${i}`);
+
     if (speed === "Calm") {
-      if (i === wspd.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
-      else element.className = "fs-3 fw-normal";
+      if (i === speeds.length - 1) el.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
+      else el.className = "fs-3 fw-normal";
     }
-    element.innerHTML = speed;
 
-    const speedToNumber = typeof(speed) === "number" ? speed : 0;
+    const speedToNumber = typeof (speed) === "number" ? speed : 0;
     const speedColor = windSpeedColor(speedToNumber, Math.round(Number(altitude) / 1000));
-    if (i === wspd.length - 1 && stid !== "KSLC") element.style.backgroundColor = speedColor;
+    if (i === speeds.length - 1 && stid !== "KSLC") el.style.backgroundColor = speedColor;
+
+    el.innerHTML = speed;
   });
 }
 
 function windChartGust(stid, gust) {
   gust.forEach((gust, i) => {
-    document.getElementById(`${stid}-gust-${i}`).innerHTML = gust === "&nbsp;" ? gust : `g${gust}`;
+    const el = document.getElementById(`${stid}-gust-${i}`);
+    el.innerHTML = gust === "&nbsp;" ? gust : `g${gust}`;
   });
 }
 
-function windChartBarHeight(stid, wspd, gust) {
-  // Remove duplicate last reading since it's only used for the station heading which has no wind bar
-  wspd.pop();
-  gust.pop();
+function windChartBarHeight(stid, speeds, gusts) {
+  // Remove duplicate last reading since station main row has no wind bar
+  speeds.pop();
+  gusts.pop();
 
-  const wspdMax = Math.max(...wspd.filter(d => typeof d === "number"));
-  const gustMax = Math.max(...gust) || 0;
+  const wspdMax = Math.max(...speeds.filter(d => typeof d === "number"));
+  const gustMax = Math.max(...gusts) || 0;
 
-  let heightModifier = 12; // Standard pixel multiplier (no gusts, wind <= 10)
+  let heightModifier = 12; // Standard pixel multiplier (no gusts, wind <= 10), shrink size incrementally as wind speed gets higher
   if (wspdMax > 10 || gustMax > 10) heightModifier = 8;
   if (wspdMax > 25 || gustMax > 20) heightModifier = 4;
   if (wspdMax > 40 || gustMax > 35) heightModifier = 3;
 
-  wspd.forEach((speed, i) => {
+  speeds.forEach((speed, i) => {
     const wbarElement = document.getElementById(`${stid}-wbar-${i}`);
     const gbarElement = document.getElementById(`${stid}-gbar-${i}`);
     wbarElement.style.height = `${speed * heightModifier}px`;
-    gbarElement.style.height = `${(gust[i] - speed) * heightModifier}px`;
+    gbarElement.style.height = `${(gusts[i] - speed) * heightModifier}px`;
   });
 }
 
-function windChartBarColor(stid, wspd, altitude) {
-  const barColors = windSpeedColor(wspd, Math.round(Number(altitude) / 1000));
+function windChartBarColor(stid, speeds, altitude) {
+  const barColors = windSpeedColor(speeds, Math.round(Number(altitude) / 1000));
   barColors.forEach((color, i) => {
-    document.getElementById(`${stid}-wbar-${i}`).style.backgroundColor = color;
+    const el = document.getElementById(`${stid}-wbar-${i}`);
+    el.style.backgroundColor = color;
   });
 }
 
-function calculateZone(alti, temp, currentZones = [], zone = {}) {
-  const zoneSlope = [-0.000555, -0.001111, -0.001666, -0.003, -0.004286, -0.004933, -0.0055, 99];
-  const zoneIntercept = [29.9167, 30.0111, 30.1083, 30.27, 30.4286, 30.5327, 30.6425, 99];
-  zoneSlope.forEach((slope, i) => {
-    currentZones.push(Math.round((slope * temp + zoneIntercept[i]) * 100) / 100);
-  });
-  zone.num = currentZones.findIndex(d => d >= alti);
+function calculateZone(pressure, temp) {
+  const zones = [
+    { slope: -0.000555, intercept: 29.9167 },
+    { slope: -0.001111, intercept: 30.0111 },
+    { slope: -0.001666, intercept: 30.1083 },
+    { slope: -0.003000, intercept: 30.2700 },
+    { slope: -0.004286, intercept: 30.4286 },
+    { slope: -0.004933, intercept: 30.5327 },
+    { slope: -0.005500, intercept: 30.6425 },
+    { slope: 99, intercept: 99 }
+  ];
 
-  switch (zone.num) {
-    case 0:
-    case 7:
-      zone.col = "var(--bs-red)";
-      break;
-    case 1:
-    case 6:
-      zone.col = "var(--bs-orange)";
-      break;
-    case 2:
-    case 5:
-      zone.col = "var(--bs-yellow)";
-      break;
-    case 3:
-      if (alti === currentZones[3]) zone.num = "LoP";
-      zone.col = "var(--bs-teal)";
-      break;
-    default:
-      zone.col = "var(--bs-teal)";
-  }
+  const zonePressureLimits = zones.map(({ slope, intercept }) =>
+    Math.round((slope * temp + intercept) * 100) / 100
+  );
 
-  if (zone.num !== "LoP") zone.num = zone.num === 0 ? "&#9471;" : `&#1010${zone.num + 1};`;
-  return zone;
+  let zoneIndex = zonePressureLimits.findIndex(zone => zone >= pressure); // Find the first zone at or above the altitude
+  if (zoneIndex === 3 && pressure === zonePressureLimits[3]) zoneIndex = "LoP";
+
+  return zoneIndex;
 }
 
 function getZone(alti, temp, trendChar) {
@@ -208,7 +197,5 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("temp").innerHTML = Math.round(temp[temp.length - 1]);
   document.getElementById("alti").innerHTML = alti[alti.length - 1].toFixed(2);
   document.getElementById("trend").innerHTML = trendChar;
-  document.getElementById("zone").innerHTML = zone.num;
-  document.getElementById("zone").style.color = zone.col;
-
+  document.getElementById("zone").src = `prod/images/zones/zone${zone}.png`;
 }
