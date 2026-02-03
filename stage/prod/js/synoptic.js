@@ -180,7 +180,7 @@ function calculateZone(pressure, temp) {
 
   let zoneIndex = zonePressureLimits.findIndex(zone => zone >= pressure); // Find the first zone at or above the altitude
   if (zoneIndex === 3 && pressure === zonePressureLimits[3]) zoneIndex = "LoP";
-  zoneIndex = 0;
+  zoneIndex = 1;
   return zoneIndex;
 }
 
@@ -200,3 +200,4 @@ function getZone(alti, temp, trendChar) {
   document.getElementById("zone").src = `prod/images/zones/zone${zone}.png`;
 
 }
+
