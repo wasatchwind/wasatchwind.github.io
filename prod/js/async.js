@@ -94,5 +94,4 @@ async function fetchData() {
     else console.error(result.response);
   }
   return data;
-
 }
