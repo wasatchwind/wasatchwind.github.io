@@ -1,7 +1,6 @@
 "use strict";
 
-// const data = await fetchData();
-console.log("All data", data)
+const data = await fetchData();
 main(data);
 
 async function fetchData() {
@@ -95,4 +94,5 @@ async function fetchData() {
     else console.error(result.response);
   }
   return data;
+
 }
