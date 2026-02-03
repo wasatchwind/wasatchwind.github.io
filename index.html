@@ -2,13 +2,21 @@
 <html>
 
 <head>
+  <!-- META -->
+  <meta charset="utf-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <meta name="description" content="Wasatch Wind: local wind and weather tools for paragliding conditions assessment">
   <title>Wasatch Wind</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link href="prod/css/main.css" rel="stylesheet">
+
+  <!-- FAVICON -->
   <link href="favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
   <link href="favicon/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32">
   <link href="favicon/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16">
+
+  <!-- CSS & BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="prod/css/main.css" rel="stylesheet">
 </head>
 
 <body>
@@ -17,14 +25,14 @@
     <!-- STICKY TOP: 3 SECTIONS -->
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
 
-      <!-- STICKY TOP > SECTION (1 OF 3): TITLE -->
+      <!-- SECTION (1 OF 3): TITLE HEADING -->
       <div class="align-items-center d-flex justify-content-between">
-        <img src="prod/images/pg.gif" height="125px">
+        <img height="125px" src="prod/images/pg.gif">
         <div class="display-1 text-info title-font">Wasatch Wind</div>
-        <img src="prod/images/refresh.png" onclick="reload()" height="125px">
+        <img height="125px" onclick="reload()" src="prod/images/refresh.png">
       </div>
 
-      <!-- STICKY TOP > SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
+      <!-- SECTION (2 OF 3): MARQUEE/TICKER SLIDER -->
       <div class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide1">
           <div class="text-info">-3 Index</div>
@@ -35,7 +43,7 @@
           <div id="tol"></div>
         </div>
         <div class="keen-slider__slide number-slide3">
-          <div class="text-info">Temp &deg;F</div>
+          <div class="text-info">Temp</div>
           <div class="d-flex justify-content-center">
             <div id="temp"></div>
             <div class="text-secondary fw-semibold">&nbsp;/&nbsp;</div>
@@ -61,7 +69,7 @@
             <div>&nbsp;&nbsp;</div>
             <div id="KSLC-wspd-12"></div>
             <div>&nbsp;</div>
-            <div id="KSLC-gust-12"></div>
+            <div class="gust-color" id="KSLC-gust-12"></div>
           </div>
         </div>
         <div class="keen-slider__slide number-slide7">
@@ -70,7 +78,7 @@
         </div>
       </div>
 
-      <!-- STICKY TOP > SECTION (3 OF 3): NAVIGATION/SWIPE SLIDER -->
+      <!-- SECTION (3 OF 3): NAVIGATION/SWIPE SLIDER -->
       <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
         <div class="fw-semibold text-warning" onclick="simulateSwipe('left')">&#171;</div>
         <div class="col display-2" id="topnav-left"></div>
@@ -82,15 +90,18 @@
     </div>
     <!-- END STICKY TOP -->
 
+    <!-- LOADING SPINNER -->
+    <img class="spinner w-25" id="spinner" src="prod/images/spinner.gif">
+
     <!-- BODY SLIDER: 7 PAGES -->
     <div class="align-items-center d-flex justify-content-between mb-div-end">
       <div class="keen-slider" id="slider">
 
-        <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 7 SECTIONS -->
-        <div class="keen-slider__slide number-slide1 pe-2">
+        <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: 8 SECTIONS -->
+        <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 7): GRAPHICAL SURFACE WIND FORECAST -->
-          <div class="collapse mb-4" id="surface-wind-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (1 OF 8): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="surface-wind-today-div">
             <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
               <div class="display-3 text-info">Afternoon Surface Wind Forecast</div>
               <div class="d-flex fs-1 justify-content-center text-info">
@@ -98,49 +109,53 @@
                 <div class="col-6">Gust</div>
               </div>
               <div class="d-flex">
-                <img class="rounded-4 col-6 pe-1" id="surface-wind-img">
-                <img class="rounded-4 col-6 ps-1" id="surface-gust-img">
+                <img class="rounded-4 col-6 pe-1" loading="lazy" id="surface-wind-today-img">
+                <img class="rounded-4 col-6 ps-1" loading="lazy" id="surface-gust-today-img">
               </div>
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (2 OF 7): WIND ALOFT FORECAST -->
-          <div class="collapse mb-4" id="wind-aloft-div">
-            <div class="display-3 text-info">Wind Aloft Forecast</div>
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (2 OF 8): WIND ALOFT FORECAST -->
+          <div class="mb-4" id="wind-aloft-div">
+              <div class="display-3 text-info">Wind Aloft Forecast</div>
 
-            <div class="bg-dark border rounded-4" id="wind-aloft-group0"> <!-- GROUP 0 (FIRST 6 HOURS) -->
-              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div id="wind-aloft-group0-rows"></div>
-                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-0"></div>
-              </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;
+              <!-- CURRENT 6 HOURS -->
+              <div class="bg-dark border rounded-4" id="wind-aloft-current6">
+                <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+                  <div id="openmeteo-grid-current6"></div>
+                </a>
+                <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;</div>
               </div>
-            </div>
 
-            <div class="bg-dark border collapse rounded-4" id="wind-aloft-group1"> <!-- GROUP 1 (NEXT 6 HOURS) -->
-              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div id="wind-aloft-group1-rows"></div>
-                <div class="align-items-center d-flex display-5 text-info" id="windaloft-times-1"></div>
-              </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6 hours</div>
-            </div>
+              <!-- NEXT 6 HOURS -->
+              <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
+                <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+                  <div id="openmeteo-grid-next6"></div>
+                </a>
+                <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6 hours</div>
+              </div>
+
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (3 OF 7): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (3 OF 8): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="hourly-chart-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
               <div class="display-3 text-info">Hourly Forecast Chart</div>
-              <img class="rounded-4 w-100" id="hourly-chart-today">
+              <img class="rounded-4 w-100" loading="lazy" id="hourly-chart-today">
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (4 OF 7): HI-RES SOUNDING D3.JS CHART -->
-          <div class="collapse mb-4" id="hi-res-sounding-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (4 OF 8): SOUNDING D3.JS CHART -->
+          <div class="collapse mb-4" id="sounding-div">
             <div class="display-3 text-info">Morning Sounding Profile</div>
             <div class="bg-dark border rounded-4">
+
+              <!-- CHART -->
               <a href="https://climate.cod.edu/data/raob/KSLC/skewt/" target="_blank">
                 <div class="w-100" id="skew-t-d3"></div>
               </a>
+
+              <!-- INFO BELOW CHART & USER TEMP INPUT -->
               <div class="display-6 fw-semibold text-secondary">DALR: Dry Adiabatic Lapse Rate (-5.4&deg; F / 1,000 ft)</div>
               <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
               <div class="collapse display-6 text-info" id="out-of-range"></div>
@@ -149,55 +164,89 @@
                 <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
                 <div onclick="d3Update()">Enter</div>
               </div>
+
             </div>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (5 OF 7): NWS SOARING FORECAST TEXT-->
-          <div class="collapse mb-4" id="nws-soaring-forecast-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (5 OF 8): NWS SOARING FORECAST TEXT-->
+          <div class="mb-4" id="soaring-forecast-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
-              <div class="display-3 text-info">NWS Soaring Forecast Basics</div>
-              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                <div id="soaring-forecast"></div>
-              </div>
+              <div class="display-3 text-info">Soaring Forecast Summary</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start" id="soaring-forecast"></div>
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (6 OF 7): AREA FORECAST DISCUSSION: AVIATION TEXT-->
-          <div class="collapse mb-4" id="area-forecast-aviation-div">
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (6 OF 8): AREA FORECAST DISCUSSION: AVIATION TEXT-->
+          <div class="mb-4" id="area-forecast-aviation-div">
             <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
               <div class="display-3 text-info">Aviation Forecast</div>
-              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                <div id="area-forecast-aviation"></div>
-              </div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start" id="area-forecast-aviation"></div>
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 7): NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (7 OF 8): AREA FORECAST DISCUSSION: KEY MESSAGES/SYNOPSIS TEXT (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="area-forecast-today-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">Area Forecast Discusson</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start" id="area-forecast-today"></div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (8 OF 8): NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
           <div class="collapse mb-4" id="nws-today-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info">General Forecast</div>
-              <div class="bg-dark border rounded-4">
-                <div id="forecast-day0-today"></div>
-              </div>
+              <div class="bg-dark border rounded-4" id="forecast-day0-today"></div>
             </a>
           </div>
 
         </div>
         <!-- END BODY SLIDER > PAGE (1 OF 7) > TODAY -->
 
-        <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 4 SECTIONS -->
-        <div class="keen-slider__slide number-slide2 pe-2">
+        <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: 5 SECTIONS -->
+        <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 4): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
-          <div class="collapse mb-4" id="hourly-chart-tomorrow-div">
-            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
-              <div class="display-3 text-info">Hourly Forecast Chart</div>
-              <img class="rounded-4 w-100" id="hourly-chart-tomorrow">
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (1 OF 5): GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="surface-wind-tomorrow-div">
+            <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+              <div class="display-3 text-info" id="surface-wind-tomorrow-time"></div>
+              <div class="d-flex fs-1 justify-content-center text-info">
+                <div class="col-6">Wind</div>
+                <div class="col-6">Gust</div>
+              </div>
+              <div class="d-flex">
+                <img class="rounded-4 col-6 pe-1" loading="lazy" id="surface-wind-tomorrow-img">
+                <img class="rounded-4 col-6 ps-1" loading="lazy" id="surface-gust-tomorrow-img">
+              </div>
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (2 OF 4): NWS MULTI-DAY FORECAST -->
-          <div class="collapse mb-4" id="nws-multiday-div">
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (2 OF 5): 24-HR LONG TERM WIND ALOFT -->
+          <div class="mb-4" id="wind-aloft-longterm-div">
+            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
+              <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
+              <div class="border display-3 overflow-hidden rounded-4" id="openmeteo-grid-longterm"></div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (3 OF 5): 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="hourly-chart-tomorrow-div">
+            <a href="https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=" target="_blank">
+              <div class="display-3 text-info">Hourly Forecast Chart</div>
+              <img class="rounded-4 w-100" loading="lazy" id="hourly-chart-tomorrow">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (4 OF 5): AREA FORECAST DISCUSSION: KEY MESSAGES/SYNOPSIS TEXT (CONDITIONALLY DISPLAYED) -->
+          <div class="collapse mb-4" id="area-forecast-tomorrow-div">
+            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
+              <div class="display-3 text-info">Area Forecast Discusson</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start" id="area-forecast-tomorrow"></div>
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (5 OF 5): NWS MULTI-DAY FORECAST -->
+          <div class="mb-4" id="nws-multiday-div">
             <a href="https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE" target="_blank">
               <div class="display-3 text-info">Days Ahead</div>
               <div class="bg-dark border rounded-4">
@@ -212,33 +261,13 @@
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (3 OF 4): AREA FORECAST DISCUSSION TEXT -->
-          <div class="collapse mb-4" id="area-forecast-div">
-            <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1" target="_blank">
-              <div class="display-3 text-info">Area Forecast Discusson</div>
-              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-                <div id="area-forecast-time"></div>
-                <br>
-                <div id="area-forecast-synopsis"></div>
-              </div>
-            </a>
-          </div>
-
-          <!-- BODY SLIDER > PAGE (2 OF 7) > TOMORROW: SECTION (4 OF 4): 24-HR LONG TERM WIND ALOFT -->
-          <div class="mb-4" id="wind-aloft-longterm-div">
-            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low" target="_blank">
-              <div class="display-3 text-info" id="wind-aloft-time-longterm"></div>
-              <div class="border overflow-hidden rounded-4" id="wind-aloft-longterm-rows"></div>
-            </a>
-          </div>
-
         </div>
         <!-- END BODY SLIDER > PAGE (2 OF 7) > TOMORROW -->
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: 3 SECTIONS -->
-        <div class="keen-slider__slide number-slide3 pe-2">
+        <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
 
-          <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL -->
+          <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL (4000, 1000, or 500)-->
           <div class="border-bottom d-flex justify-content-between py-4">
             <div class="display-3 text-info">Marquee Speed</div>
             <div class="align-items-center col-7 display-5 d-flex justify-content-around">
@@ -270,56 +299,96 @@
         </div>
         <!-- END BODY SLIDER > PAGE (3 OF 7) > SETTINGS -->
 
-        <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: 3 SECTIONS -->
-        <div class="keen-slider__slide number-slide4 pe-2">
+        <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: 6 SECTIONS -->
+        <div class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
 
-          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (1 OF 3): RESOURCES -->
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (1 OF 6): UHGPGA FLYING SITES -->
           <div class="mb-4">
-            <div class="display-3 text-info">Resources</div>
-            <div class="bg-dark border rounded-4">
-              <div class="display-3 fw-semibold ms-2 text-start text-warning">
-                <div class="my-5">
-                  <a href="https://www.uhgpga.org/flying-sites" target="_blank">&#128279;&nbsp;UHGPGA Site Guide</a>
-                </div>
-                <div class="my-5">
-                  <a href="https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11" target="_blank">&#128279;&nbsp;Hike & Fly Calculator</a>
-                </div>
-                <div class="my-5">
-                  <a href="https://ambrosephoto.com/category/paragliding/" target="_blank">&#128279;&nbsp;Jeff Ambrose Articles</a>
-                </div>
-              </div>
+            <a href="https://www.uhgpga.org/flying-sites" target="_blank">
+              <div class="display-3 text-info">UHGPGA Flying Sites</div>
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/UHGPGAflyingsites.png">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (2 OF 6): HIKE & FLY CALCULATOR -->
+          <div class="mb-4">
+            <a href="https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11" target="_blank">
+              <div class="display-3 text-info">Hike & Fly Calculator</div>
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/hikeandfly.png">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (3 OF 6): AMBROSE PRESSURE ZONE -->
+          <div class="mb-4">
+            <div class="display-3 text-info">Zone (Ambrose Pressure Zone)</div>
+            <img class="rounded-4 w-100" loading="lazy" src="prod/images/zonechart.jpg">
+          </div>
+
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (5 OF 6): UNITS & MODELS -->
+          <div class="mb-4">
+            <div class="display-3 text-info">Units & Models</div>
+            <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
+              <div class="text-info">Units (unless noted otherwise):</div>
+              <div>&nbsp;&nbsp;Wind speed.... mph</div>
+              <div>&nbsp;&nbsp;Altitude...... feet</div>
+              <div>&nbsp;&nbsp;Temperature... &deg;F</div>
+              <br>
+              <div>The Wind Aloft Forecast uses a GFS + HRRR hybrid model except for 9k, 12k, and 18k which use NWS/NOAA Aviation Weather Center</div>
             </div>
           </div>
 
-          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (2 OF 3): AMBROSE PRESSURE ZONE -->
-          <img class="rounded-4 w-100" src="prod/images/zonechart.jpg">
-
-          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (3 OF 3): ABOUT -->
-          <div class="display-3 text-info">About</div>
-          <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
-            <div>Created & Maintained: Matt Hanson</div>
-            <div>Contact: matthansonx@gmail.com</div>
-            <br>
-            <div><a href="https://account.venmo.com/u/Matt-Hansonx" target="_blank">&#128279;&nbsp;Donate Venmo: @matt-hansonx</a></div>
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (6 OF 6): ABOUT -->
+          <div class="mb-4">
+            <a href="https://account.venmo.com/u/Matt-Hansonx" target="_blank">
+              <div class="display-3 text-info">About</div>
+              <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
+                <div>I am Matt Hanson, a local paraglider pilot flying since 2014, and created Wasatch Wind to assist with flying
+                  conditions assessment. The information provided is generalized and not intended to influence a decision to fly.</div>
+                <br>
+                <div>Feedback is welcome!</div>
+                <div class="d-flex">
+                  <div>My email:&nbsp;</div>
+                  <div class="fw-semibold text-warning">matthansonx@gmail.com</div>
+                </div>
+                <br>
+                <div>Wasatch Wind is free! I maintain it as a hobby but it takes time - donations are welcome!</div>
+                <br>
+                <div class="d-flex justify-content-center">
+                  <div class="d-flex">
+                    <div>Venmo:&nbsp;</div>
+                    <div class="fw-semibold text-warning">@matt-hansonx</div>
+                  </div>
+                </div>
+                <br>
+                <img height="450px" class="d-block mx-auto rounded-4" src="prod/images/venmo.jpg">
+              </div>
+            </a>
           </div>
+
+          <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (4 OF 6): LEARN TO PARAGLIDE -->
+          <div class="display-3 text-info">Learn To Paraglide</div>
+          <div class="display-6 font-monospace">(Where I learned but I am not affiliated)</div>
+          <a href="https://utahparagliding.com/" target="_blank">
+            <img class="bg-light p-5 rounded-4 w-100" loading="lazy" src="prod/images/utahparagliding.png">
+          </a>
 
         </div>
         <!-- END BODY SLIDER > PAGE (4 OF 7) > MISC -->
 
         <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: 2 SECTIONS -->
-        <div class="keen-slider__slide number-slide5 pe-2">
+        <div class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
 
           <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: SECTION (1 OF 2): LIVETRACK24 -->
-          <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
-            <div class="display-3"><br></div>
-            <img class="rounded-4 w-100" src="prod/images/livetrack24.png">
-          </a>
+          <div class="my-4"><br>
+            <a href="https://www.livetrack24.com/tracks/country/us" target="_blank">
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/livetrack24.png">
+            </a>
+          </div>
 
           <!-- BODY SLIDER > PAGE (5 OF 7) > GPS: SECTION (2 OF 2): XCFIND -->
-          <div class="mb-4">
+          <div class="mt-4"><br>
             <a href="https://xcfind.paraglide.us/map.html?id=15" target="_blank">
-              <div class="display-3"><br></div>
-              <img class="rounded-4 w-100" src="prod/images/xcfind.png">
+              <img class="rounded-4 w-100" loading="lazy" src="prod/images/xcfind.png">
             </a>
           </div>
 
@@ -327,13 +396,13 @@
         <!-- END BODY SLIDER > PAGE (5 OF 7) > GPS -->
 
         <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: 3 SECTIONS -->
-        <div class="keen-slider__slide number-slide6 pe-2">
+        <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
 
           <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (1 OF 3): LOOKING EAST -->
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
               <div class="display-3 text-info">East</div>
-              <img class="rounded-4 w-100" id="cam-east">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-east">
             </a>
           </div>
 
@@ -341,7 +410,7 @@
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
               <div class="display-3 text-info">West</div>
-              <img class="rounded-4 w-100" id="cam-west">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-west">
             </a>
           </div>
 
@@ -349,7 +418,7 @@
           <div class="mb-4">
             <a href="https://horel.chpc.utah.edu/uunet_camera_display.html" target="_blank">
               <div class="display-3 text-info">South</div>
-              <img class="rounded-4 w-100" id="cam-south">
+              <img class="rounded-4 w-100" loading="lazy" id="cam-south">
             </a>
           </div>
 
@@ -357,7 +426,7 @@
         <!-- END BODY SLIDER > PAGE (6 OF 7) > CAMS -->
 
         <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: 4 SECTIONS -->
-        <div class="keen-slider__slide number-slide7 pe-2">
+        <div class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (1 OF 4): KSLC CHART -->
           <div class="mb-4" id="KSLC-main">
@@ -376,8 +445,8 @@
           </div>
 
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (3 OF 4): WIND STATION CHARTS ALPHABETICAL BY NAME-->
-          <div class="collapse mb-4" id="wind-charts-div">
-            <div id="AMB-main"></div>  <!-- Alta Baldy -->
+          <div class="mb-4" id="wind-charts-div">
+            <div id="AMB-main"></div> <!-- Alta Baldy -->
             <div id="KSVR-main"></div> <!-- Airport 2 -->
             <div id="BRW-main"></div> <!-- Clayton Peak -->
             <div id="HDP-main"></div> <!-- Hidden Peak -->
@@ -392,7 +461,7 @@
           <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (4 OF 4): SATELLITE GIF -->
           <a href="https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw" target="_blank">
             <div class="display-3 text-info">IR Last 4 Hours</div>
-            <img class="rounded-4 w-100" id="satellite-gif">
+            <img class="rounded-4 w-100" loading="lazy" id="satellite-gif">
           </a>
 
         </div>
@@ -401,16 +470,18 @@
       </div>
     </div>
     <!-- END BODY SLIDER -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-    <script src="prod/js/keen-slider.min.js"></script>
-    <script src="prod/js/main.js"></script>
-    <script src="prod/js/windaloft.js"></script>
-    <script src="prod/js/timeseries.js"></script>
-    <script src="prod/js/sounding.js"></script>
-    <script src="prod/js/async.js"></script>
-
   </div>
+
+  <!-- JAVASCRIPT -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="prod/js/keen-slider.min.js"></script>
+  <script src="prod/js/global.js"></script>
+  <script src="prod/js/main.js"></script>
+  <script src="prod/js/synoptic.js"></script>
+  <script src="prod/js/nws-api.js"></script>
+  <script src="prod/js/wind-aloft.js"></script>
+  <script src="prod/js/sounding.js"></script>
+  <script type="module" src="prod/js/async.js"></script>
 
 </body>
 
