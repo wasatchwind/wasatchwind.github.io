@@ -1,8 +1,5 @@
 "use strict";
 
-const data = await fetchData();
-main(data);
-
 async function fetchData() {
   const data = {};
 
@@ -56,6 +53,7 @@ async function fetchData() {
     timezone: "America/Denver"
   };
 
+  // Data source URLs (alphabetical)
   const areaForecastUrl = "https://api.weather.gov/products/types/AFD/locations/SLC/latest";                    // NWS API
   const generalForecastUrl = "https://api.weather.gov/gridpoints/SLC/97,175/forecast";                          // NWS API
   const openMeteoUrl = buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams);                      // Open Meteo
@@ -80,6 +78,7 @@ async function fetchData() {
     { name: "windMapScreenshotMetadata", url: windMapDataUrl }
   ];
 
+  // Fetch data
   const results = await Promise.allSettled(
     dataSources.map(async ({ name, url }) => {
       const res = await fetch(url);
@@ -89,9 +88,13 @@ async function fetchData() {
     })
   );
 
+  // Build data from fetch responses
   for (const result of results) {
     if (result.status === "fulfilled") data[result.value.name] = result.value.data;
     else console.error(result.response);
   }
   return data;
 }
+
+const data = await fetchData();
+main(data);

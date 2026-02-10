@@ -244,7 +244,7 @@ function windAloftLongterm(data) {
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
       document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
-      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp}&deg;`;
+      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).textContent = `${temp}°`;
     });
   }
 }

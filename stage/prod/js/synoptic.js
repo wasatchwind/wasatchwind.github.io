@@ -97,7 +97,7 @@ function windChartTime(stid, times) {
     const el = document.getElementById(`${stid}-time-${i}`);
     time = time.slice(0, -3).toLowerCase();
     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
-    el.innerHTML = time;
+    el.textContent = time;
   });
 }
 
@@ -122,7 +122,7 @@ function windChartSpeed(stid, speeds, altitude) {
     const speedColor = windSpeedColor(speedToNumber, Math.round(Number(altitude) / 1000));
     if (i === speeds.length - 1 && stid !== "KSLC") el.style.backgroundColor = speedColor;
 
-    el.innerHTML = speed;
+    el.textContent = speed;
   });
 }
 
@@ -180,7 +180,7 @@ function calculateZone(pressure, temp) {
 
   let zoneIndex = zonePressureLimits.findIndex(zone => zone >= pressure); // Find the first zone at or above the altitude
   if (zoneIndex === 3 && pressure === zonePressureLimits[3]) zoneIndex = "LoP";
-  
+
   return zoneIndex;
 }
 
@@ -194,16 +194,8 @@ function getZone(alti, temp, trendChar) {
   else if (altiDiff < 0) trendChar = "&darr;";
   else trendChar = "";
 
-  document.getElementById("temp").innerHTML = Math.round(temp[temp.length - 1]);
-  document.getElementById("alti").innerHTML = alti[alti.length - 1].toFixed(2);
+  document.getElementById("temp").textContent = Math.round(temp[temp.length - 1]);
+  document.getElementById("alti").textContent = alti[alti.length - 1].toFixed(2);
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").src = `prod/images/zones/zone${zone}.png`;
-
 }
-
-
-
-
-
-
-

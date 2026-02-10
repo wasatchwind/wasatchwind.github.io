@@ -1,19 +1,18 @@
 // "use strict";
 
+// Globals
 const ftPerMeter = 3.28084;
 const now = new Date();
 const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
+const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"]; // Nav page headings
+const marqueeSpeeds = [4000, 1000, 500]; // Slow, Medium, Fast
 const green = "#1E6A4B";
 const yellow = "#9A7B1F";
 const orange = "#B45309";
 const red = "#8B1D2C";
 
-// Nav pages
-const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-let slider, activeNav = 0;
-
-// Used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
-// Can't rely on Synoptic data because stations sometimes go offline
+// stationList used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
+// Can't rely on Synoptic data fetch because stations are sometimes offline
 const stationList = {
   AMB: { name: "Alta Baldy" },
   KSVR: { name: "Airport 2" },
@@ -27,7 +26,7 @@ const stationList = {
   FPS: { name: "Southside" }
 };
 
-// Global required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
+// Required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
 let hiTemp, liftParams = {}, soundingData = {};
 const screenWidth = window.innerWidth;
 const proportionalHeight = screenWidth * 0.67;

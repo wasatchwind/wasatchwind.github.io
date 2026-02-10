@@ -1,11 +1,11 @@
 "use strict";
 
 function processSounding(data, hiTemp) {
-  if (now.getHours() >= 7) document.getElementById("sounding-div").style.display = "block";
-  else return;
+  if (now.getHours() < 7) return;
+  document.getElementById("sounding-div").style.display = "block";
   liftParams = getLiftParams(data, hiTemp);
-  document.getElementById("neg3").innerHTML = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : "--";
-  document.getElementById("tol").innerHTML = liftParams.tol > 1289 ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : "--";
+  document.getElementById("neg3").textContent = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : "--";
+  document.getElementById("tol").textContent = liftParams.tol > 1289 ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : "--";
 
   buildSoundingChart(data, hiTemp, liftParams);
 }
@@ -29,9 +29,9 @@ function getLiftParams(data, temp, position = 0) {
     const { Temp_c, Altitude_m } = data[position];
     const ti = Temp_c - ((Altitude_m - dalrYInt) / dalrSlope);
 
-    try {
-      // Find -3 thermal index altitude and temp (neg3)
+    try { // First find -3 thermal index altitude and temp (neg3)
       if (!foundNeg3 && ti >= -3) {
+        
         if (position === 0) {
           params.neg3 = null;
           params.neg3Temp = null;
@@ -52,7 +52,7 @@ function getLiftParams(data, temp, position = 0) {
         foundNeg3 = true;
       }
 
-      // Find 0 thermal index altitude and temp (top of lift)
+      // Next find 0 thermal index altitude and temp (top of lift)
       if (foundNeg3 && !foundTOL && ti >= 0) {
         const { Temp_c: t1, Altitude_m: a1 } = data[position];
         const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];

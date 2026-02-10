@@ -6,51 +6,52 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build app structure immediately before data populates
-buildMarquee();
-slider = buildNavSlider();
+// Build app/page structure immediately before data populates for smooth loading
+let slider = buildNavSlider(), activeNav = 0;
 navUpdate();
+buildMarquee();
 
 function main(data) {
+  console.log("All data", data)
 
   // Key dependency: sunset
   // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
   sunsetVisibilityLogic(sunset);
-  document.getElementById("sunset").innerHTML = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
+  document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
   // Key dependency: hiTemp, soundingData (global for D3 functions)
   // Needed to process the Morning Sounding Profile component
   const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = data.openMeteo.daily.temperature_2m_max[0];
   hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG, Open Meteo as backup
-  soundingData = data.sounding;
+  soundingData = data.sounding; // Global
   processSounding(soundingData, hiTemp);
-  document.getElementById("hi-temp").innerHTML = hiTemp;
+  document.getElementById("hi-temp").textContent = hiTemp;
 
-  // Process the remaining fetched data
+  // Process remaining fetched data
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24);
   processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
+  document.getElementById("wind-map-timestamp").textContent = `Wind Map @ ${windMapTimestamp}`;
 
-  // Set up user settings page
+  // Set up User Settings page
   buildMarqueeSettings();
   buildStationSettings();
 
-  // Display all main pages last for smooth appearance/loading
-  document.getElementById("spinner").style.display = "none";
+  // Display all remaining web-accessed images
   displayImages();
-  document.getElementById("wind-map-timestamp").innerHTML = `Wind Map @ ${windMapTimestamp}`;
-  document.getElementById("today-page").style.display = "block";
-  document.getElementById("tomorrow-page").style.display = "block";
-  document.getElementById("settings-page").style.display = "block";
-  document.getElementById("misc-page").style.display = "block";
-  document.getElementById("gps-page").style.display = "block";
-  document.getElementById("cams-page").style.display = "block";
-  document.getElementById("now-page").style.display = "block";
+
+  // Display all main pages last for smooth appearance/loading
+  document.getElementById("spinner").style.display = "none"; // Hide the loading spinner
+  const pages = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
+  pages.forEach(page => {
+    const el = document.getElementById(page);
+    el.style.display = "block";
+  });
 }
 
 
@@ -59,15 +60,13 @@ function main(data) {
 // Sunset-based visibility logic for Hourly Forecast Chart and Area Forecast Discussion //
 //////////////////////////////////////////////////////////////////////////////////////////
 function sunsetVisibilityLogic(sunset) {
-  if (now.getHours() >= sunset.getHours() - 1 && now.getHours() < 24) {
-    document.getElementById("hourly-chart-tomorrow").src = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
-    document.getElementById("hourly-chart-tomorrow-div").style.display = "block";
-    document.getElementById("area-forecast-tomorrow-div").style.display = "block";
-  } else {
-    document.getElementById("hourly-chart-today").src = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
-    document.getElementById("hourly-chart-today-div").style.display = "block";
-    document.getElementById("area-forecast-today-div").style.display = "block";
-  };
+  const hourlyChartUrl = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
+  const isAfterSunset = now.getHours() >= sunset.getHours() - 1;
+  const displayBlock = isAfterSunset ? "tomorrow" : "today";
+
+  document.getElementById(`hourly-chart-${displayBlock}`).src = hourlyChartUrl;
+  document.getElementById(`hourly-chart-${displayBlock}-div`).style.display = "block";
+  document.getElementById(`area-forecast-${displayBlock}-div`).style.display = "block";
 }
 
 
@@ -78,18 +77,20 @@ function sunsetVisibilityLogic(sunset) {
 function displayImages() {
 
   // Afternoon Surface Wind Forecast
-  if (now.getHours() > 6 && now.getHours() < 18) {
-    document.getElementById("surface-wind-today-img").src = "https://graphical.weather.gov/images/SLC/WindSpd4_utah.png";
-    document.getElementById("surface-gust-today-img").src = "https://graphical.weather.gov/images/SLC/WindGust4_utah.png";
-    document.getElementById("surface-wind-today-div").style.display = "block";
-  } else if (now.getHours() > 19) {
-    document.getElementById("surface-wind-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindSpd8_utah.png";
-    document.getElementById("surface-gust-tomorrow-img").src = "https://graphical.weather.gov/images/SLC/WindGust8_utah.png";
-    document.getElementById("surface-wind-tomorrow-time").innerHTML = `Afternoon Surface Wind Forecast ${nextDay}`;
-    document.getElementById("surface-wind-tomorrow-div").style.display = "block";
-  }
+  const currentHour = now.getHours();
+  if (currentHour < 7) return;
 
-  // Display all remaining web hosted images (Wind Map screenshot, Satellite, Cams)
+  const isDay = currentHour < 19;
+  const displayFactors = isDay ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 }
+  const windEl = document.getElementById(`surface-wind-${displayFactors.day}-img`);
+  const gustEl = document.getElementById(`surface-gust-${displayFactors.day}-img`);
+
+  windEl.src = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
+  gustEl.src = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
+  document.getElementById(`surface-wind-${displayFactors.day}-div`).style.display = "block";
+  if (!isDay) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
+
+  // Display all remaining web-accessed images (Wind Map screenshot, Satellite, Cams)
   document.getElementById("wind-map").src = "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png";
   document.getElementById("satellite-gif").src = "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif";
   document.getElementById("cam-south").src = "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg";
@@ -125,9 +126,9 @@ function buildNavSlider() { // Set up core app structure
     loop: true,
     slides: { perView: 1 },
     slideChanged: () => {
-      activeNav = slider.track.details.rel
-      navUpdate()
-      window.scrollTo(0, 0)
+      activeNav = slider.track.details.rel;
+      navUpdate();
+      window.scrollTo(0, 0);
     }
   };
   return new KeenSlider("#slider", options);
@@ -141,13 +142,13 @@ function navOrder(sunset) { // Determine which navItem (page) is the default act
   else if (currentHour >= sunsetHour - 1) slider.moveToIdx(1, true, { duration: 0 });
 }
 
-function navUpdate() { // Update nav slider/page with user input (touch/drag swipe)
+function navUpdate() { // Update nav slider/page based on time of day or user input (touch/drag swipe)
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
 
-  document.getElementById("topnav-left").innerHTML = navItems[left];
-  document.getElementById("topnav-active").innerHTML = navItems[activeNav];
-  document.getElementById("topnav-right").innerHTML = navItems[right];
+  document.getElementById("topnav-left").textContent = navItems[left];
+  document.getElementById("topnav-active").textContent = navItems[activeNav];
+  document.getElementById("topnav-right").textContent = navItems[right];
 }
 
 window.simulateSwipe = function (direction) { // Update nav slider/page with user input (click)
@@ -168,25 +169,21 @@ function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hou
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
-// Returns wind speed color based on altitude
-function windSpeedColor(speeds, altitude) {
-  if (typeof(speeds) === "number") speeds = [speeds];
-  const barColors = speeds.map(d => {
-    if (altitude < 8) {
-      if (d <= 10) return green;
-      if (d <= 15) return yellow;
-      if (d <= 20) return orange;
-      return red;
-    }
-    if (d <= altitude + 2) return green;
-    if (d <= altitude + 6) return yellow;
-    if (d <= altitude + 12) return orange;
+function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based on altitude (array returns array, single speed likewise)
+  const isArray = Array.isArray(speeds);
+  speeds = isArray ? speeds : [speeds];
+
+  const thresholds = altitude < 8 ? [10, 15, 20] : [altitude + 4, altitude + 10, altitude + 16];
+  const colors = speeds.map(speed => {
+    if (speed <= thresholds[0]) return green;
+    if (speed <= thresholds[1]) return yellow;
+    if (speed <= thresholds[2]) return orange;
     return red;
   });
 
-  if (barColors.length > 0) return barColors;
-  return barColors[0];
+  return isArray ? colors : colors[0];
 }
+
 
 
 
@@ -194,10 +191,9 @@ function windSpeedColor(speeds, altitude) {
 // User settings page //
 ////////////////////////
 function buildMarqueeSettings() { // Marquee user settings options (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
-  const marqueeSpeed = localStorage.getItem("marquee") || 1000;
-  const speeds = [4000, 1000, 500];
+  const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1];
 
-  speeds.forEach(speed => {
+  marqueeSpeeds.forEach(speed => {
     const element = document.getElementById(`marquee-${speed}`);
     element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
   });
@@ -208,9 +204,8 @@ function buildMarqueeSettings() { // Marquee user settings options (possible spe
 
 function marqueeSetSpeed(speed) { // Marquee user settings speed (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
   localStorage.setItem("marquee", speed);
-  const speeds = [4000, 1000, 500];
 
-  speeds.forEach(d => {
+  marqueeSpeeds.forEach(d => {
     const element = document.getElementById(`marquee-${d}`);
     element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
   });
@@ -229,10 +224,9 @@ function buildStationSettings() { // Build station settings toggle on/off list
         <div class="col-5 display-3 text-info text-start">${station.name}</div>
         <div id="${stid}-on" onclick="stationSetToggle('${stid}', 'on')">On</div>
         <div id="${stid}-off" onclick="stationSetToggle('${stid}', 'off')">Off</div>
-      </div>
-    `;
+      </div>`;
 
-    const state = localStorage.getItem(stid) || "on";
+    const state = localStorage.getItem(stid) || "on"; // Default to "on"
     stationSetToggle(stid, state);
   });
 }
@@ -260,39 +254,34 @@ function d3Update() {
   const userTemp = parseInt(document.getElementById("user-temp").value);
   if (!userTemp) return;
 
-  try {
-    userLiftParams = getLiftParams(soundingData, userTemp);
-  } catch {
-    outOfRange(userTemp);
+  try { userLiftParams = getLiftParams(soundingData, userTemp); }
+  catch {
+    d3OutOfRange(userTemp);
     return;
   };
 
-  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || !userLiftParams.tol) outOfRange(userTemp);
-  else {
-    clearChart();
-    drawDALRParams(userTemp, userLiftParams);
-  };
+  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || !userLiftParams.tol) d3OutOfRange(userTemp);
+  else d3Clear(userTemp, userLiftParams);
 };
 
-function outOfRange(userTemp) {
-  document.getElementById("out-of-range").innerHTML = `Error: parameters out of range for ${userTemp}&deg;`;
+function d3OutOfRange(userTemp) {
+  document.getElementById("out-of-range").textContent = `Error: parameters out of range for ${userTemp}°`;
   document.getElementById("out-of-range").style.display = "block";
   document.getElementById("user-temp").value = null;
   return;
 };
 
-function d3Clear() {
-  document.getElementById("out-of-range").style.display = "none";
-  clearChart();
-  drawDALRParams(hiTemp, liftParams);
-};
+function d3Clear(temp, params) {
+  if (!temp) temp = hiTemp; // d3Clear can be triggered from HTML without params so set to global defaults if null
+  if (!params) params = liftParams;
 
-function clearChart() {
   document.getElementById("user-temp").value = null;
-  svg.select("line.dalrline").remove();
-  svg.select("line.neg3line").remove();
-  svg.selectAll("text.liftlabels").remove();
-  svg.selectAll("text.liftheights").remove();
-  svg.selectAll("text.white").remove();
-  svg.select("circle.tolcircle").remove();
+  document.getElementById("out-of-range").style.display = "none";
+
+  const chartElements = ["line.dalrline", "line.neg3line", "text.liftlabels", "text.liftheights", "text.white", "circle.tolcircle"];
+  chartElements.forEach(element => {
+    svg.selectAll(element).remove();
+  });
+
+  drawDALRParams(temp, params);
 };

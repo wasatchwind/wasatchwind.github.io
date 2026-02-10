@@ -26,7 +26,7 @@ function processSoaringForecastPage(text) {
   ${odTimeDisplay}`;
 
   document.getElementById("soaring-forecast").innerText = soaringForecast;
-  document.getElementById("hi-temp").innerHTML = hiTemp;
+  document.getElementById("hi-temp").textContent = hiTemp;
 
   return hiTemp;
 }
@@ -38,10 +38,10 @@ function processSoaringForecastPage(text) {
 ///////////////////
 function processAreaForecastPage(text) {
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
-  // const synopsis = text.match(/\.SYNOPSIS([\s\S]*?)\r?\n\r?\n/)?.[1]?.trim();
   const aviation = text.match(/\.AVIATION\.\.\.([\s\S]*?)\n\n/)?.[1]?.replace(/\n+/g, " ").trim() ?? null;
   const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trimStart().split(/\n(?=- )/)
     .map(m => m.replace(/\n(?!- )/g, " ").trim()).join("\n\n") ?? null;
+  
   const areaForecast = `${forecastDate ? forecastDate : "Date error"}
   
   Key Messages:
