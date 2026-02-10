@@ -40,8 +40,9 @@ function processAreaForecastPage(text) {
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
   // const synopsis = text.match(/\.SYNOPSIS([\s\S]*?)\r?\n\r?\n/)?.[1]?.trim();
   const aviation = text.match(/\.AVIATION\.\.\.([\s\S]*?)\n\n/)?.[1]?.replace(/\n+/g, " ").trim() ?? null;
-  const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trimStart().split(/\n(?=- )/)
-    .map(m => m.replace(/\n(?!- )/g, " ").trim()).join("\n\n") ?? null;
+  const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trimStart().split(/\n(?=\s*-)/)
+    .map(m => m.replace(/\n(?!\s*-)/g, " ").trim()).join("\n") ?? null;
+  
   const areaForecast = `${forecastDate ? forecastDate : "Date error"}
   
   Key Messages:
@@ -86,4 +87,5 @@ function processGeneralForecast(data) {
     document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
     period += 2;
   }
+
 }
