@@ -4,8 +4,8 @@
 <head>
   <!-- META -->
   <meta charset="utf-8">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-  <meta name="description" content="Wasatch Wind: local wind and weather tools for paragliding conditions assessment">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wasatch Wind: local wind and weather for soaring conditions assessment">
   <title>Wasatch Wind</title>
 
   <!-- FAVICON -->
@@ -36,11 +36,11 @@
       <div class="display-5 keen-slider" id="marquee">
         <div class="keen-slider__slide number-slide1">
           <div class="text-info">-3 Index</div>
-          <div id="neg3"></div>
+          <div id="negative3"></div>
         </div>
         <div class="keen-slider__slide number-slide2">
           <div class="text-info">Top of Lift</div>
-          <div id="tol"></div>
+          <div id="top-of-lift"></div>
         </div>
         <div class="keen-slider__slide number-slide3">
           <div class="text-info">Temp</div>
@@ -146,7 +146,7 @@
           </div>
 
           <!-- BODY SLIDER > PAGE (1 OF 7) > TODAY: SECTION (4 OF 8): SOUNDING D3.JS CHART -->
-          <div class="collapse mb-4" id="sounding-div">
+          <div class="mb-4" id="sounding-div">
             <div class="display-3 text-info">Morning Sounding Profile</div>
             <div class="bg-dark border rounded-4">
 
@@ -398,27 +398,59 @@
         <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: 3 SECTIONS -->
         <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
 
-          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (1 OF 3): LOOKING EAST -->
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (1 OF 7): LOOKING EAST -->
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
-              <div class="display-3 text-info">East</div>
+              <div class="display-3 text-info">Daybreak looking East</div>
               <img class="rounded-4 w-100" loading="lazy" id="cam-east">
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (2 OF 3): LOOKING WEST -->
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (2 OF 7): LOOKING SOUTH -->
+          <div class="mb-4">
+            <a href="https://horel.chpc.utah.edu/uunet_camera_display.html" target="_blank">
+              <div class="display-3 text-info">U of U looking South</div>
+              <img class="rounded-4 w-100" loading="lazy" id="cam-south">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (3 OF 7): LOOKING SOUTHWEST -->
           <div class="mb-4">
             <a href="https://www.weather.gov/slc/cameras" target="_blank">
-              <div class="display-3 text-info">West</div>
+              <div class="display-3 text-info">Daybreak looking Southwest</div>
+              <img class="rounded-4 w-100" loading="lazy" id="cam-southwest">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (4 OF 7): LOOKING SOUTHWEST 2 -->
+          <div class="mb-4">
+            <a href="https://horel.chpc.utah.edu/uunet_camera_display.html" target="_blank">
+              <div class="display-3 text-info">U of U looking Southwest</div>
+              <img class="rounded-4 w-100" loading="lazy" id="cam-southwest2">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (5 OF 7): LOOKING WEST -->
+          <div class="mb-4">
+            <a href="https://www.weather.gov/slc/cameras" target="_blank">
+              <div class="display-3 text-info">West Valley looking West</div>
               <img class="rounded-4 w-100" loading="lazy" id="cam-west">
             </a>
           </div>
 
-          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (3 OF 3): LOOKING SOUTH -->
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (6 OF 7): LOOKING WEST 2 -->
           <div class="mb-4">
             <a href="https://horel.chpc.utah.edu/uunet_camera_display.html" target="_blank">
-              <div class="display-3 text-info">South</div>
-              <img class="rounded-4 w-100" loading="lazy" id="cam-south">
+              <div class="display-3 text-info">U of U looking West</div>
+              <img class="rounded-4 w-100" loading="lazy" id="cam-west2">
+            </a>
+          </div>
+
+          <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS: SECTION (7 OF 7): LOOKING NORTHWEST -->
+          <div class="mb-4">
+            <a href="https://www.weather.gov/slc/cameras" target="_blank">
+              <div class="display-3 text-info">Sandy looking Northwest</div>
+              <img class="rounded-4 w-100" loading="lazy" id="cam-northwest">
             </a>
           </div>
 
