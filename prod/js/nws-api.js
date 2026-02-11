@@ -4,29 +4,50 @@
 // Soaring Forecast //
 //////////////////////
 function processSoaringForecastPage(text) {
+  if (text.search(/MINUS/)) return soaringForecastWinterFormat(text);
+
   const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
   const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
-  const lcl = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim());
+  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim());
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
-  const odTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
-  const odTimeDisplay = odTime === "None" ? "" : `\n❗OD Time......... ${odTime}`;
+  const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
+  const overdevelopmentDisplay = overdevelopmentTime === "None" ? "" : `\n❗OD Time......... ${overdevelopmentTime}`;
 
   const soaringForecast = `${forecastDate}
-  
-  High Temp......... ${hiTemp}°
-  Height of -3...... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
-  Top of Lift....... ${topOfLift.toLocaleString()}
-  Cloudbase (LCL)... ${lcl.toLocaleString()}
+    
+    High Temp......... ${hiTemp}°
+    Height of -3...... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
+    Top of Lift....... ${topOfLift.toLocaleString()}
+    Cloudbase (LCL)... ${cloudbase.toLocaleString()}
 
-  Max Lift Rate..... ${rateOfLift}
-  Lifted Index...... ${liftedIndex}
-  ${odTimeDisplay}`;
+    Max Lift Rate..... ${rateOfLift}
+    Lifted Index...... ${liftedIndex}
+    ${overdevelopmentDisplay}`;
 
   document.getElementById("soaring-forecast").innerText = soaringForecast;
-  document.getElementById("hi-temp").innerHTML = hiTemp;
+  document.getElementById("hi-temp").textContent = hiTemp;
+
+  return hiTemp;
+}
+
+function soaringForecastWinterFormat(text) {
+  const hiTemp = parseInt(text.match(/\d{2,3}(?=\sDEG)/));
+  const date = String(text.match(/\d{2}\/\d{2}\/\d{2}/));
+  const rateOfLift = parseInt(text.match(/\d{2,4}(?=\sFT\/MIN)/)).toLocaleString();
+  const liftParams = text.match(/\d{4,5}(?=\sFT\sMSL)/g);
+  const soaringForecast = `${date} (Winter Format)
+    
+    High Temp......... ${hiTemp}°
+    Height of -3...... ${parseInt(liftParams[4]).toLocaleString()}
+    Top of Lift....... ${parseInt(liftParams[5]).toLocaleString()}
+    
+    Max Lift Rate..... ${rateOfLift} ft/min`;
+
+  document.getElementById("soaring-forecast").innerText = soaringForecast;
+  document.getElementById("hi-temp").textContent = hiTemp;
 
   return hiTemp;
 }
@@ -89,3 +110,4 @@ function processGeneralForecast(data) {
   }
 
 }
+
