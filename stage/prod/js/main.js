@@ -6,27 +6,27 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build app/page structure immediately before data populates for smooth loading
-let slider = buildNavSlider(), activeNav = 0;
+// Build app/page structure immediately before data fetch response for smooth loading
+let slider = buildNavSlider(), activeNav = 0; // Default activeNav = 0 (Today page)
 navUpdate();
 buildMarquee();
 
-function main(data) {
-  console.log("All data", data)
+// Process fetched data and web-accessed images
+function main(data) { console.log("All data", data)
+  
+  // First handle dependencies 1) Sunset time and 2) Forecast high temp
 
-  // Key dependency: sunset
-  // Sets default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
+  // 1) Sunset time affects default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   navOrder(sunset);
   sunsetVisibilityLogic(sunset);
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
 
-  // Key dependency: hiTemp, soundingData (global for D3 functions)
-  // Needed to process the Morning Sounding Profile component
+  // 2) Forecast high temp needed to build the Morning Sounding Profile
   const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
-  const hiTempOpenMeteo = data.openMeteo.daily.temperature_2m_max[0];
-  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG, Open Meteo as backup
-  soundingData = data.sounding; // Global
+  const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
+  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG, Open Meteo is backup
+  soundingData = data.sounding; // Global variable (due to updating/resetting the sounding profile based on user input)
   processSounding(soundingData, hiTemp);
   document.getElementById("hi-temp").textContent = hiTemp;
 
@@ -42,10 +42,10 @@ function main(data) {
   buildMarqueeSettings();
   buildStationSettings();
 
-  // Display all remaining web-accessed images
+  // Get all remaining web-accessed images
   displayImages();
 
-  // Display all main pages last for smooth appearance/loading
+  // Display nav pages last for smooth loading
   document.getElementById("spinner").style.display = "none"; // Hide the loading spinner
   const pages = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
   pages.forEach(page => {
@@ -72,7 +72,7 @@ function sunsetVisibilityLogic(sunset) {
 
 
 ///////////////////////////////////////////////
-// Display all remaining web accessed images //
+// Display all remaining web-accessed images //
 ///////////////////////////////////////////////
 function displayImages() {
 
@@ -91,11 +91,20 @@ function displayImages() {
   if (!isDay) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
 
   // Display all remaining web-accessed images (Wind Map screenshot, Satellite, Cams)
-  document.getElementById("wind-map").src = "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png";
-  document.getElementById("satellite-gif").src = "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif";
-  document.getElementById("cam-south").src = "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg";
-  document.getElementById("cam-west").src = "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700";
-  document.getElementById("cam-east").src = "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573";
+  const webImages = [
+    { element: "wind-map", url: "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png"},
+    { element: "satellite-gif", url: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif"},
+    { element: "cam-east", url: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573"},
+    { element: "cam-south", url: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg"},
+    { element: "cam-southwest", url: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700"},
+    { element: "cam-southwest2", url: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/ulssb_cam_current.jpg"},
+    { element: "cam-west", url: "https://images-webcams.windy.com/00/1367462800/current/full/1367462800.jpg"},
+    { element: "cam-west2", url: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/wbbw_cam_current.jpg" },
+    { element: "cam-northwest", url: "https://gregglake.com/slc/SLC.jpg"}
+  ];
+  webImages.forEach(({ element, url }) => {
+    document.getElementById(element).src = url;
+  });
 }
 
 
@@ -134,7 +143,7 @@ function buildNavSlider() { // Set up core app structure
   return new KeenSlider("#slider", options);
 }
 
-function navOrder(sunset) { // Determine which navItem (page) is the default activeNav position based on sunset time
+function navOrder(sunset) { // Determine which navItem (page) is the default activeNav position based on sunset time and current hour
   const currentHour = now.getHours();
   const sunsetHour = new Date(sunset).getHours();
 
@@ -184,13 +193,16 @@ function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based 
   return isArray ? colors : colors[0];
 }
 
+function celsiusToF(temp) {
+ return (temp * 9 / 5) + 32;
+}
 
 
 
 ////////////////////////
 // User settings page //
 ////////////////////////
-function buildMarqueeSettings() { // Marquee user settings options (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
+function buildMarqueeSettings() { // Marquee user settings options (Slow, Medium, Fast)
   const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1];
 
   marqueeSpeeds.forEach(speed => {
@@ -202,7 +214,7 @@ function buildMarqueeSettings() { // Marquee user settings options (possible spe
   activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
 }
 
-function marqueeSetSpeed(speed) { // Marquee user settings speed (possible speeds 4000, 1000, 500 / Slow, Medium, Fast)
+function marqueeSetSpeed(speed) { // Marquee speed user selection on the user Settings page (Slow, Medium, Fast)
   localStorage.setItem("marquee", speed);
 
   marqueeSpeeds.forEach(d => {
@@ -213,10 +225,10 @@ function marqueeSetSpeed(speed) { // Marquee user settings speed (possible speed
   const activeElement = document.getElementById(`marquee-${speed}`);
   activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
 
-  buildMarquee(); // Puts new settings into immediate effect
+  buildMarquee(); // Puts user selection/change into immediate effect
 }
 
-function buildStationSettings() { // Build station settings toggle on/off list
+function buildStationSettings() { // Build station settings toggle on/off list on the user Settings page
   Object.entries(stationList).forEach(([stid, station]) => {
     const container = document.getElementById(`${stid}-onoff`);
     container.innerHTML = `
@@ -226,12 +238,12 @@ function buildStationSettings() { // Build station settings toggle on/off list
         <div id="${stid}-off" onclick="stationSetToggle('${stid}', 'off')">Off</div>
       </div>`;
 
-    const state = localStorage.getItem(stid) || "on"; // Default to "on"
+    const state = localStorage.getItem(stid) || "on"; // Default is "on"
     stationSetToggle(stid, state);
   });
 }
 
-function stationSetToggle(stid, state) { // Onclick function to toggle stations settings on/off
+function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
   localStorage.setItem(stid, state)
 
   const mainEl = document.getElementById(`${stid}-main`);
@@ -260,7 +272,7 @@ function d3Update() {
     return;
   };
 
-  if ((userLiftParams.tolTemp * 9 / 5) + 32 < -10 || !userLiftParams.tol) d3OutOfRange(userTemp);
+  if ((userLiftParams.topOfLiftTemp * 9 / 5) + 32 < -10 || !userLiftParams.topOfLift) d3OutOfRange(userTemp);
   else d3Clear(userTemp, userLiftParams);
 };
 
@@ -271,8 +283,8 @@ function d3OutOfRange(userTemp) {
   return;
 };
 
-function d3Clear(temp, params) {
-  if (!temp) temp = hiTemp; // d3Clear can be triggered from HTML without params so set to global defaults if null
+function d3Clear(temp, params) { // d3Clear can be triggered from HTML Onclick() without params so set to global defaults if null
+  if (!temp) temp = hiTemp;
   if (!params) params = liftParams;
 
   document.getElementById("user-temp").value = null;

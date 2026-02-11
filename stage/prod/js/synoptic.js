@@ -122,7 +122,7 @@ function windChartSpeed(stid, speeds, altitude) {
     const speedColor = windSpeedColor(speedToNumber, Math.round(Number(altitude) / 1000));
     if (i === speeds.length - 1 && stid !== "KSLC") el.style.backgroundColor = speedColor;
 
-    el.textContent = speed;
+    el.innerHTML = speed;
   });
 }
 

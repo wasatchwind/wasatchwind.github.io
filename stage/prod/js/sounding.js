@@ -2,71 +2,76 @@
 
 function processSounding(data, hiTemp) {
   if (now.getHours() < 7) return;
-  document.getElementById("sounding-div").style.display = "block";
   liftParams = getLiftParams(data, hiTemp);
-  document.getElementById("neg3").textContent = liftParams.neg3 ? Math.round(liftParams.neg3 * ftPerMeter).toLocaleString() : "--";
-  document.getElementById("tol").textContent = liftParams.tol > 1289 ? Math.round(liftParams.tol * ftPerMeter).toLocaleString() : "--";
+
+  const negative3 = liftParams.negative3 ? Math.round(liftParams.negative3 * ftPerMeter).toLocaleString() : "--";
+  const topOfLift = liftParams.topOfLift > surfaceAltMeters ? Math.round(liftParams.topOfLift * ftPerMeter).toLocaleString() : "--";
+
+  document.getElementById("negative3").textContent = negative3;
+  document.getElementById("top-of-lift").textContent = topOfLift;
 
   buildSoundingChart(data, hiTemp, liftParams);
 }
 
-function getLiftParams(data, temp, position = 0) {
-  const params = { neg3: null, neg3Temp: null, tol: null, tolTemp: null };
+function getLiftParams(data, temp, index = 0) {
+  const params = { negative3: null, negative3Temp: null, topOfLift: null, topOfLiftTemp: null };
   const tempC = (temp - 32) * 5 / 9;
-  const surfaceAlt_m = 1289;
   const dalrSlope = -101.6;
-  const dalrYInt = surfaceAlt_m - dalrSlope * tempC;
+  const dalrYIntercept = surfaceAltMeters - dalrSlope * tempC;
 
-  let foundNeg3 = false, foundTOL = false;
+  let foundNegative3 = false, foundTopOfLift = false;
 
+  // Helper function for when interpolation between data points is necessary
   function interpolate(x1, y1, x2, y2) {
     const slope = (y1 - y2) / (x1 - x2);
-    const yInt = y1 - slope * x1;
-    return { slope, yInt };
+    const yIntercept = y1 - slope * x1;
+    return { slope, yIntercept };
   }
 
-  while (position < data.length && (!foundNeg3 || !foundTOL)) {
-    const { Temp_c, Altitude_m } = data[position];
-    const ti = Temp_c - ((Altitude_m - dalrYInt) / dalrSlope);
+  // Loop through all data until the thermal indices found (or null) for -3 (negative3) and 0 (topOfLift)
+  while (index < data.length && (!foundNegative3 || !foundTopOfLift)) {
+    const { Temp_c, Altitude_m } = data[index];
+    const thermalIndex = Temp_c - ((Altitude_m - dalrYIntercept) / dalrSlope);
 
-    try { // First find -3 thermal index altitude and temp (neg3)
-      if (!foundNeg3 && ti >= -3) {
-        
-        if (position === 0) {
-          params.neg3 = null;
-          params.neg3Temp = null;
+    try {
+      // Find thermal index = -3 (negative3); skip ahead if found
+      if (!foundNegative3 && thermalIndex >= -3) {
+        if (index === 0) {
+          params.negative3 = null;
+          params.negative3Temp = null;
         } else {
-          const { Temp_c: t1, Altitude_m: a1 } = data[position];
-          const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];
+          const { Temp_c: t1, Altitude_m: a1 } = data[index];
+          const { Temp_c: t2, Altitude_m: a2 } = data[index - 1];
 
-          if (t1 !== t2) {
-            const { slope, yInt } = interpolate(t1, a1, t2, a2);
-            const targetX = (yInt - dalrYInt - (3 * dalrSlope)) / (dalrSlope - slope);
-            params.neg3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
-            params.neg3Temp = targetX + 3;
+          if (t1 !== t2) { // Need to interpolate
+            const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
+            const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
+            params.negative3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
+            params.negative3Temp = targetX + 3;
           } else {
-            params.neg3 = (t1 + 3) * dalrSlope + dalrYInt;
-            params.neg3Temp = (params.neg3 - dalrYInt) / dalrSlope;
+            params.negative3 = (t1 + 3) * dalrSlope + dalrYIntercept;
+            params.negative3Temp = (params.negative3 - dalrYIntercept) / dalrSlope;
           }
         }
-        foundNeg3 = true;
+        foundNegative3 = true;
       }
 
-      // Next find 0 thermal index altitude and temp (top of lift)
-      if (foundNeg3 && !foundTOL && ti >= 0) {
-        const { Temp_c: t1, Altitude_m: a1 } = data[position];
-        const { Temp_c: t2, Altitude_m: a2 } = data[position - 1];
+      // Find thermal index = 0 (topOfLift)
+      if (foundNegative3 && !foundTopOfLift && thermalIndex >= 0) {
+        const { Temp_c: t1, Altitude_m: a1 } = data[index];
+        const { Temp_c: t2, Altitude_m: a2 } = data[index - 1];
 
-        if (t1 !== t2) {
-          const { slope, yInt } = interpolate(t1, a1, t2, a2);
-          const targetX = -yInt / slope;
-          params.tol = a1 + (targetX - t1);
-        } else params.tol = t1 * dalrSlope + dalrYInt;
+        if (t1 !== t2) { // Need to interpolate
+          const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
+          const targetX = -yIntercept / slope;
+          params.topOfLift = a1 + (targetX - t1);
+        } else params.topOfLift = t1 * dalrSlope + dalrYIntercept;
 
-        params.tolTemp = (params.tol - dalrYInt) / dalrSlope;
-        foundTOL = true;
+        params.topOfLiftTemp = (params.topOfLift - dalrYIntercept) / dalrSlope;
+        foundTopOfLift = true;
       }
-      position++;
+
+      index++;
     } catch { break; }
   }
   return params;
@@ -177,152 +182,129 @@ function buildSoundingChart(data, hiTemp, liftParams) {
     .attr("y", y(9))
     .text("DALR");
 
-  // Wind barbs section:
-  // Wind barbs constants
-  const numBarbs = 15; // Sync with y-axis tick count
-  const barbAltitudes = y.ticks(numBarbs); // Align barbs with displayed altitudes (every 1,000 ft)
-  const barbAnchorX = x(-20);              // Base barb staff position to the left of the y axis)
-  const shaftLen = 28;                     // Barb staff length (px)
-  const barbSpacing = 7;                   // Spacing between successive symbols along staff (px)
-  const barbLen = 8;                       // length of a full barb (px)
-  const pennantSpacing = barbSpacing * 2;  // How much space a pennant takes
+  ////////////////////////
+  // Wind Barbs Section //
+  ////////////////////////
+  const barbAltitudes = y.ticks(16);       // Ensure a barb for each y tick altitude (every 1,000 ft) e.g. [5, 6, ..., 20]
+  const barbAnchorX = x(-20);              // Barb x coordinate positioning left of the y axis
+  const staffLength = 30;                  // Barb staff length (px)
+  const tineSpacing = 8;                   // Spacing between tines along staff (px)
+  const tineLength = 15;                   // Length of a full tine (px)
 
-  // Find the nearest sounding level (converted to the y-axis units)
-  function nearestLevelForTick(altKft) {
-    if (!data || !data.length) return null;
-    return data.reduce((best, cur) => {
-      const curAltKft = (cur.Altitude_m * ftPerMeter) / 1000;
-      const bestAltKft = (best.Altitude_m * ftPerMeter) / 1000;
-      return (Math.abs(curAltKft - altKft) < Math.abs(bestAltKft - altKft)) ? cur : best;
+  // Helper function to find the nearest sounding level data for each barb altitude
+  function dataAtBarbAltitudes(barbAltitude) {
+    return data.reduce((best, current) => {
+      const currentAlt = (current.Altitude_m * ftPerMeter) / 1000;
+      const bestAlt = (best.Altitude_m * ftPerMeter) / 1000;
+      return (Math.abs(currentAlt - barbAltitude) < Math.abs(bestAlt - barbAltitude)) ? current : best;
     });
   }
 
-  // Draw a circle for calm wind (speed 0)
-  function drawCalm(cx, cy) {
+  // Draw a circle for barb anchor (no barb for calm wind)
+  function drawAnchorCircle(cx, cy) {
     svg.append("circle")
       .attr("cx", cx)
       .attr("cy", cy)
-      .attr("r", 3)
-      .attr("fill", "white")
-      .attr("stroke", "none");
+      .attr("r", 5)
+      .attr("fill", "white");
   }
 
-  // Iterate ticks and draw one barb per tick
-  barbAltitudes.forEach(tickAlt => {
-    const level = nearestLevelForTick(tickAlt);
-    if (!level) return;
-
-    const windDir = +level.Wind_Direction; // Degrees (meteorological)
-    const windSpd = +level.Wind_Speed_kt;  // Knots
-    const yPos = y(tickAlt);               // Pixel y for the tick
-
-    if (!isFinite(windSpd) || windSpd === 0) {
-      drawCalm(barbAnchorX, yPos); // Calm or no speed data
-      return;
-    }
-
-    // Unit vectors:
-    // Shaft unit vector (u) points in the wind direction (meteorological angle)
-    const rad = (windDir % 360) * Math.PI / 180;
-    const ux = Math.sin(rad);      // x component of unit shaft
-    const uy = -Math.cos(rad);     // y component (SVG y axis is downward)
-    // Perpendicular (points on the right side of the shaft)
-    const px = Math.cos(rad);
-    const py = Math.sin(rad);
-
-    // Tip (outer) end of the shaft
-    const tipX = barbAnchorX + shaftLen * ux;
-    const tipY = yPos + shaftLen * uy;
-
-    // Draw the staff (base -> tip)
+  function drawBarbStaff(anchorX, anchorY, tipX, tipY) {
     svg.append("line")
-      .attr("x1", barbAnchorX)
-      .attr("y1", yPos)
+      .attr("x1", anchorX)
+      .attr("y1", anchorY)
       .attr("x2", tipX)
       .attr("y2", tipY)
       .attr("stroke", "white")
-      .attr("stroke-width", 5)
-      .attr("stroke-linecap", "round");
+      .attr("stroke-width", 5);
+  }
 
-    // Draw a circle at the anchor
-    svg.append("circle")
-      .attr("cx", barbAnchorX)
-      .attr("cy", yPos)
-      .attr("r", 5)              // slightly larger than half stroke-width (so it stands out)
-      .attr("fill", "white")    // or "white", or any highlight color
-      .attr("stroke", "none");   // or use stroke if you want a border
+  // Draw barbs at each 1,000' altitude tick
+  barbAltitudes.forEach(barbAltitude => {
+    const dataAtBarbAltitude = dataAtBarbAltitudes(barbAltitude);
+    const windDir = dataAtBarbAltitude.Wind_Direction;
+    const windSpd = dataAtBarbAltitude.Wind_Speed_kt;
+    const yPos = y(barbAltitude);
 
-    // Convert speed to nearest 5 knots (standard)
-    let roundedSpeed = Math.round(windSpd / 5) * 5;
+    drawAnchorCircle(barbAnchorX, yPos);
+    if (windSpd < 1) return; // Only draw circle for calm (no staff)
+    let barbSpeed = Math.round(windSpd / 5) * 5; // Convert speed to nearest 5 knots
 
-    // Create symbol sequence from outer -> inner: pennants (50), full(10), half(5)
-    const symbols = [];
-    while (roundedSpeed >= 50) { symbols.push("pennant"); roundedSpeed -= 50; }
-    while (roundedSpeed >= 10) { symbols.push("full"); roundedSpeed -= 10; }
-    if (roundedSpeed >= 5) symbols.push("half");
+    // Staff unit vector (u) points in the wind direction
+    const rad = (windDir % 360) * Math.PI / 180;
+    const staffX = Math.sin(rad);
+    const staffY = -Math.cos(rad); // D3 SVG y axis is downward
+    const tineX = Math.cos(rad);
+    const tineY = Math.sin(rad);
+    const tipX = barbAnchorX + staffLength * staffX;
+    const tipY = yPos + staffLength * staffY;
 
-    // Draw symbols starting at the tip and moving back along the shaft
-    let offset = 0; // px along the shaft from the tip inward
-    symbols.forEach(sym => {
-      // Position on shaft where this symbol is attached
-      const posX = tipX - offset * ux;
-      const posY = tipY - offset * uy;
+    drawBarbStaff(barbAnchorX, yPos, tipX, tipY);
 
-      if (sym === "pennant") { // pennant = filled triangle
-        // Three points: pos (on shaft), pos + perp, pos - small step along shaft + perp
+    // Create tines sequence array outer to inner
+    const tines = [];
+    if (barbSpeed >= 45) {
+      tines.push("pennant");
+      barbSpeed = 0;
+    }
+    while (barbSpeed >= 10) {
+      tines.push("full");
+      barbSpeed -= 10;
+    }
+    if (barbSpeed >= 5) tines.push("half");
+
+    // Draw tines starting at the tip and moving back along the staff
+    let offset = 0; // px along the staff from the tip inward
+    tines.forEach(tine => {
+      // Position on staff where a tine is attached
+      const posX = tipX - offset * staffX;
+      const posY = tipY - offset * staffY;
+
+      if (tine === "pennant") {
+        // p1: base on staff, p2: length, p3: width
+        const width = 15;
         const p1x = posX;
         const p1y = posY;
-        const p2x = posX + barbLen * px;
-        const p2y = posY + barbLen * py;
-        const p3x = posX - pennantSpacing * ux + barbLen * px;
-        const p3y = posY - pennantSpacing * uy + barbLen * py;
+        const p2x = posX + tineLength * tineX;
+        const p2y = posY + tineLength * tineY;
+        const p3x = tipX - width * staffX;
+        const p3y = tipY - width * staffY;
 
         svg.append("polygon")
           .attr("points", `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`)
-          .attr("fill", "red")
-          .attr("stroke", "none");
-
-        offset += pennantSpacing; // Pennant takes more space
-      } else if (sym === "full") {
-        const endX = posX + barbLen * px;
-        const endY = posY + barbLen * py;
+          .attr("fill", "red");
+        
+      } else {
+        const lengthModifier = tine === "half" ? 0.7 : 1;
+        const endX = posX + tineLength * lengthModifier * tineX;
+        const endY = posY + tineLength * lengthModifier * tineY;
         svg.append("line")
           .attr("x1", posX)
           .attr("y1", posY)
           .attr("x2", endX)
           .attr("y2", endY)
           .attr("stroke", "white")
-          .attr("stroke-width", 5)
-          .attr("stroke-linecap", "round");
-
-        offset += barbSpacing;
-      } else if (sym === "half") {
-        const endX = posX + (barbLen * 0.6) * px;
-        const endY = posY + (barbLen * 0.6) * py;
-        svg.append("line")
-          .attr("x1", posX)
-          .attr("y1", posY)
-          .attr("x2", endX)
-          .attr("y2", endY)
-          .attr("stroke", "white")
-          .attr("stroke-width", 5)
-          .attr("stroke-linecap", "round");
-
-        offset += barbSpacing;
+          .attr("stroke-width", 5);
       }
+
+      offset += tineSpacing;
     });
-  }); // End Wind barbs section
+  }); // End of Wind Barbs Section
 
   drawDALRParams(hiTemp, liftParams);
 }
 
 
 
-//////////////////////////
-// Draw resetable parts //
-//////////////////////////
+/////////////////////////////////
+// Draw User Update Components //
+/////////////////////////////////
 function drawDALRParams(temp, params) { // Dynamic elements based on user temp input
   const dalr = 5.4;
+  const negative3TempF = celsiusToF(params.negative3Temp);
+  const topOfLiftTempF = celsiusToF(params.topOfLiftTemp);
+  const negative3AltFt = params.negative3 * ftPerMeter / 1000;
+  const topOfLiftAltFt = params.topOfLift * ftPerMeter / 1000;
 
   // Legend label top of lift
   svg.append("text")
@@ -330,7 +312,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(19))
-    .text(`Top of Lift: ${params.tol < 1289 ? "--" : Math.round(params.tol * ftPerMeter).toLocaleString()}`);
+    .text(`Top of Lift: ${params.topOfLift < surfaceAltMeters ? "--" : Math.round(params.topOfLift * ftPerMeter).toLocaleString()}`);
 
   // Legend label -3 index
   svg.append("text")
@@ -338,7 +320,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(17))
-    .text(`-3 Index: ${!params.neg3 ? "--" : Math.round(params.neg3 * ftPerMeter).toLocaleString()}`);
+    .text(`-3 Index: ${!params.negative3 ? "--" : Math.round(params.negative3 * ftPerMeter).toLocaleString()}`);
 
   // Legend label max temp
   svg.append("text")
@@ -368,32 +350,32 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("class", "neg3line")
     .attr("stroke", "white")
     .attr("stroke-width", 3)
-    .attr("x1", x((params.neg3Temp * 9 / 5) + 32))
-    .attr("y1", y(params.neg3 * ftPerMeter / 1000))
-    .attr("x2", x((params.neg3Temp * 9 / 5) + 32 - 5.4))
-    .attr("y2", y(params.neg3 * ftPerMeter / 1000));
+    .attr("x1", x(negative3TempF))
+    .attr("y1", y(negative3AltFt))
+    .attr("x2", x(negative3TempF - dalr))
+    .attr("y2", y(negative3AltFt));
 
   // -3 label
   svg.append("g").append("text")
     .attr("class", "liftlabels")
-    .attr("x", x((params.neg3Temp * 9 / 5) + 32 + 2))
-    .attr("y", y(params.neg3 * ftPerMeter / 1000 - 0.3))
+    .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
+    .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
     .text("-3");
 
-  if (params.tol > 1288) {
+  if (params.topOfLift > surfaceAltMeters) {
     // Top of lift point
     svg.append("g").append("circle")
       .attr("class", "tolcircle")
       .attr("fill", "white")
-      .attr("cx", x((params.tolTemp * 9 / 5) + 32))
-      .attr("cy", y(params.tol * ftPerMeter / 1000))
+      .attr("cx", x(topOfLiftTempF))
+      .attr("cy", y(topOfLiftAltFt))
       .attr("r", 6);
 
     // Top of lift label
     svg.append("g").append("text")
       .attr("class", "liftlabels")
-      .attr("x", x((params.tolTemp * 9 / 5) + 32 + 2))
-      .attr("y", y(params.tol * ftPerMeter / 1000 - 0.3))
+      .attr("x", x(topOfLiftTempF + 2)) // Shift label to the right slightly
+      .attr("y", y(topOfLiftAltFt - 0.3)) // Shift label slightly lower to center vertically
       .text("ToL");
   }
 }

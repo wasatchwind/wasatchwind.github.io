@@ -4,7 +4,7 @@
 const ftPerMeter = 3.28084;
 const now = new Date();
 const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
-const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"]; // Nav page headings
+const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"]; // Nav page names
 const marqueeSpeeds = [4000, 1000, 500]; // Slow, Medium, Fast
 const green = "#1E6A4B";
 const yellow = "#9A7B1F";
@@ -40,6 +40,7 @@ const windBarbs = margin.left * 4.5;
 const width = screenWidth - margin.left - margin.right;
 const height = proportionalHeight - margin.top - margin.bottom;
 const surfaceAlt = 4.229;
+const surfaceAltMeters = Math.round(surfaceAlt * 1000 / ftPerMeter);
 const maxAlt = 20;
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right - windBarbs]).domain([-10, 110]);
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt]);
