@@ -4,7 +4,7 @@
 // Soaring Forecast //
 //////////////////////
 function processSoaringForecastPage(text) {
-  if (text.search(/MINUS/)) return soaringForecastWinterFormat(text);
+  if (text.search(/MINUS/) > 0) return soaringForecastWinterFormat(text);
 
   const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
@@ -110,4 +110,5 @@ function processGeneralForecast(data) {
   }
 
 }
+
 
