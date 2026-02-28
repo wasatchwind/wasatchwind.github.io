@@ -180,7 +180,7 @@ function windAloftLongterm(data) {
 
   // Build the HTML DOM container for wind aloft long term
   function buildWindAloftLongtermContainer(altitudes) {
-    const container = document.getElementById("openmeteo-grid-longterm");
+    const container = document.getElementById("wind-aloft-longterm");
 
     altitudes.forEach((alt, index) => {
       const row = document.createElement("div");

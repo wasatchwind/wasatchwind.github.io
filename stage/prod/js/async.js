@@ -3,7 +3,7 @@
 async function fetchData() {
   const data = {};
 
-  // Helper function that assembles API params into a full URL
+  // Helper function to assemble API params into a full URL
   function buildApiUrl(baseUrl, params, repeatKeys = []) {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
@@ -88,7 +88,7 @@ async function fetchData() {
     })
   );
 
-  // Build data from fetch responses
+  // Structure data from fetch responses
   for (const result of results) {
     if (result.status === "fulfilled") data[result.value.name] = result.value.data;
     else console.error(result.response);
@@ -97,4 +97,4 @@ async function fetchData() {
 }
 
 const data = await fetchData();
-main(data);
+main(data); // main.js

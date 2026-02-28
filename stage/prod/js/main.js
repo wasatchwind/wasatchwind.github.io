@@ -6,67 +6,53 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build app/page structure immediately before data fetch response for smooth loading
-let slider = buildNavSlider(), activeNav = 0; // Default activeNav = 0 (Today page)
-navUpdate();
+// Build app/page structure immediately for smooth visual loading
+activeNav = 0;             // Default activeNav (Today page - see global constants)
+slider = buildNavSlider(); // Slider navigation
+navUpdate();               // Set initial activeNav
 buildMarquee();
 
 // Process fetched data and web-accessed images
-function main(data) { console.log("All data", data)
-  
-  // First handle dependencies 1) Sunset time and 2) Forecast high temp
+function main(data) {
+  console.log("All data", data)
 
+  // Handle dependencies first
   // 1) Sunset time affects default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
+  // 2) Wind Map timestamp
+  // 3) Forecast high temp needed to build the Morning Sounding Profile
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
-  navOrder(sunset);
-  sunsetVisibilityLogic(sunset);
-  document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
-
-  // 2) Forecast high temp needed to build the Morning Sounding Profile
-  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
+  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
+  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText); // SRG (Soaring Guidance)
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
-  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG, Open Meteo is backup
-  soundingData = data.sounding; // Global variable (due to updating/resetting the sounding profile based on user input)
-  processSounding(soundingData, hiTemp);
-  document.getElementById("hi-temp").textContent = hiTemp;
+  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Global variable, primary source is SRG, Open Meteo is backup
+  soundingData = data.sounding; // Global variable (for updating/resetting the Morning Sounding Profile based on user input)
 
   // Process remaining fetched data
+  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);
+  processSounding(soundingData, hiTemp);
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24);
-  processAreaForecastPage(data.areaForecast.productText);
   processGeneralForecast(data.generalForecast.properties.periods);
   processSynoptic(data.synopticTimeseries.STATION);
-  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
-  document.getElementById("wind-map-timestamp").textContent = `Wind Map @ ${windMapTimestamp}`;
 
-  // Set up User Settings page
+  // Build User Settings page
   buildMarqueeSettings();
   buildStationSettings();
 
   // Get all remaining web-accessed images
-  displayImages();
+  displayConditionalImages(sunset);
+  displayPersistentImages(windMapTimestamp);
+
+  // Populate sunset & high temp in the marquee and hide the loading spinner
+  document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
+  document.getElementById("hi-temp").textContent = hiTemp;
+  document.getElementById("spinner").style.display = "none";
 
   // Display nav pages last for smooth loading
-  document.getElementById("spinner").style.display = "none"; // Hide the loading spinner
-  const pages = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
-  pages.forEach(page => {
-    const el = document.getElementById(page);
-    el.style.display = "block";
+  const pageIds = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
+  pageIds.forEach(page => {
+    const element = document.getElementById(page);
+    element.style.display = "block";
   });
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Sunset-based visibility logic for Hourly Forecast Chart and Area Forecast Discussion //
-//////////////////////////////////////////////////////////////////////////////////////////
-function sunsetVisibilityLogic(sunset) {
-  const hourlyChartUrl = "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6";
-  const isAfterSunset = now.getHours() >= sunset.getHours() - 1;
-  const displayBlock = isAfterSunset ? "tomorrow" : "today";
-
-  document.getElementById(`hourly-chart-${displayBlock}`).src = hourlyChartUrl;
-  document.getElementById(`hourly-chart-${displayBlock}-div`).style.display = "block";
-  document.getElementById(`area-forecast-${displayBlock}-div`).style.display = "block";
 }
 
 
@@ -74,36 +60,106 @@ function sunsetVisibilityLogic(sunset) {
 ///////////////////////////////////////////////
 // Display all remaining web-accessed images //
 ///////////////////////////////////////////////
-function displayImages() {
-
+function displayConditionalImages(sunset) {
   // Afternoon Surface Wind Forecast
-  const currentHour = now.getHours();
-  if (currentHour < 7) return;
+  if (now.getHours() < 7) return;
 
-  const isDay = currentHour < 19;
-  const displayFactors = isDay ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 }
-  const windEl = document.getElementById(`surface-wind-${displayFactors.day}-img`);
-  const gustEl = document.getElementById(`surface-gust-${displayFactors.day}-img`);
+  const isToday = now.getHours() < sunset.getHours();
+  const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 }
+  const windElement = document.getElementById(`surface-wind-${displayFactors.day}-img`);
+  const gustElement = document.getElementById(`surface-gust-${displayFactors.day}-img`);
 
-  windEl.src = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
-  gustEl.src = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
+  windElement.src = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
+  gustElement.src = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
+  
   document.getElementById(`surface-wind-${displayFactors.day}-div`).style.display = "block";
-  if (!isDay) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
+  if (!isToday) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
+}
 
-  // Display all remaining web-accessed images (Wind Map screenshot, Satellite, Cams)
-  const webImages = [
-    { element: "wind-map", url: "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png"},
-    { element: "satellite-gif", url: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif"},
-    { element: "cam-east", url: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573"},
-    { element: "cam-south", url: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg"},
-    { element: "cam-southwest", url: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700"},
-    { element: "cam-southwest2", url: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/ulssb_cam_current.jpg"},
-    { element: "cam-west", url: "https://images-webcams.windy.com/00/1367462800/current/full/1367462800.jpg"},
-    { element: "cam-west2", url: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/wbbw_cam_current.jpg" },
-    { element: "cam-northwest", url: "https://gregglake.com/slc/SLC.jpg"}
+function displayPersistentImages(windMapTimestamp) {
+  const imagesToDisplay = [
+    {
+      elementId: "wind-map",
+      href: "https://www.weather.gov/wrh/hazards?&zoom=10&scroll_zoom=false&center=40.70,-111.50&obs=true&obs_type=weather&elements=wind,gust&fontsize=4&obs_density=3",
+      isImg: true,
+      isVisible: true,
+      src: "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png",
+      title: `Wind Map @ ${windMapTimestamp.toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase()}`
+    }, {
+      elementId: "satellite-gif",
+      href: "https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw",
+      isImg: true,
+      isVisible: true,
+      src: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif",
+      title: "Satellite Last 4 Hours"
+    }, {
+      elementId: "uhgpga-flying-sites",
+      href: "https://www.uhgpga.org/flying-sites",
+      isImg: true,
+      isVisible: true,
+      src: "prod/images/UHGPGAflyingsites.png",
+      title: "UHGPGA Flying Sites"
+    }, {
+      elementId: "hike-fly",
+      href: "https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11",
+      isImg: true,
+      isVisible: true,
+      src: "prod/images/hikeandfly.png",
+      title: "Hike & Fly Calculator"
+    }, {
+      elementId: "ambrose-pressure-zone-chart",
+      href: null,
+      isImg: true,
+      isVisible: true,
+      src: "prod/images/zonechart.jpg",
+      title: "Zone (Ambrose Pressure Zone)"
+    }, {
+      elementId: "cam-east",
+      href: "https://www.weather.gov/slc/cameras",
+      isImg: true,
+      isVisible: true,
+      src: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573",
+      title: "Daybreak looking East"
+    }, {
+      elementId: "cam-south",
+      href: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/",
+      isImg: true,
+      isVisible: true,
+      src: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg",
+      title: "U of U looking South"
+    }, {
+      elementId: "cam-southwest",
+      href: "https://www.weather.gov/slc/cameras",
+      isImg: true,
+      isVisible: true,
+      src: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700",
+      title: "Daybreak looking Southwest"
+    }, {
+      elementId: "cam-southwest2",
+      href: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/",
+      isImg: true,
+      isVisible: true,
+      src: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/ulssb_cam_current.jpg",
+      title: "U of U looking Southwest"
+    }, {
+      elementId: "cam-west",
+      href: "https://www.weather.gov/slc/cameras",
+      isImg: true,
+      isVisible: true,
+      src: "https://images-webcams.windy.com/00/1367462800/current/full/1367462800.jpg",
+      title: "West Valley looking West"
+    }, {
+      elementId: "cam-west2",
+      href: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/",
+      isImg: true,
+      isVisible: true,
+      src: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/wbbw_cam_current.jpg",
+      title: "U of U looking West"
+    }
   ];
-  webImages.forEach(({ element, url }) => {
-    document.getElementById(element).src = url;
+
+  imagesToDisplay.forEach(image => {
+    standardHtmlComponent(image);
   });
 }
 
@@ -143,14 +199,6 @@ function buildNavSlider() { // Set up core app structure
   return new KeenSlider("#slider", options);
 }
 
-function navOrder(sunset) { // Determine which navItem (page) is the default activeNav position based on sunset time and current hour
-  const currentHour = now.getHours();
-  const sunsetHour = new Date(sunset).getHours();
-
-  if (currentHour >= 14 && currentHour <= sunsetHour - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  else if (currentHour >= sunsetHour - 1) slider.moveToIdx(1, true, { duration: 0 });
-}
-
 function navUpdate() { // Update nav slider/page based on time of day or user input (touch/drag swipe)
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
@@ -166,9 +214,9 @@ window.simulateSwipe = function (direction) { // Update nav slider/page with use
 }
 
 function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
-  const el = document.getElementById(id);
+  const element = document.getElementById(id);
   const toggle = document.getElementById(`${id}-toggle`);
-  const isHidden = el.classList.toggle("collapse");
+  const isHidden = element.classList.toggle("collapse");
 
   toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
 }
@@ -178,23 +226,41 @@ function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hou
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
 }
 
+function standardHtmlComponent(params) { // Build HTML divs by elementId where the basic structure is the same
+  const display = params.isVisible ? "" : "collapse";
+  const link = params.href
+    ? { hrefLine: `<a href="${params.href}" target="_blank">`, closure: "</a>" }
+    : { hrefLine: "", closure: "" };
+
+  const imgOrDiv = params.isImg
+    ? `<img class="rounded-4 w-100" loading="lazy" src="${params.src}">`
+    : `<div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">${params.src}</div>`;
+
+  document.getElementById(`${params.elementId}-div`).innerHTML = `
+    <div class="${display} mb-4" id="${params.elementId}-div">
+      ${link.hrefLine}
+        <div class="display-3 text-info">${params.title}</div>
+        ${imgOrDiv}
+      ${link.closure}
+    </div>`;
+}
+
 function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based on altitude (array returns array, single speed likewise)
   const isArray = Array.isArray(speeds);
   speeds = isArray ? speeds : [speeds];
 
   const thresholds = altitude < 8 ? [10, 15, 20] : [altitude + 4, altitude + 10, altitude + 16];
   const colors = speeds.map(speed => {
-    if (speed <= thresholds[0]) return green;
-    if (speed <= thresholds[1]) return yellow;
-    if (speed <= thresholds[2]) return orange;
-    return red;
+    if (speed <= thresholds[0]) return "#1E6A4B";
+    if (speed <= thresholds[1]) return "#9A7B1F";
+    if (speed <= thresholds[2]) return "#B45309";
+    return "#8B1D2C";
   });
-
   return isArray ? colors : colors[0];
 }
 
 function celsiusToF(temp) {
- return (temp * 9 / 5) + 32;
+  return (temp * 9 / 5) + 32;
 }
 
 

@@ -188,10 +188,10 @@ function getZone(alti, temp, trendChar) {
   const zone = calculateZone(alti[alti.length - 1], temp[temp.length - 1]);
   const altiDiff = Math.round((alti[alti.length - 1] - alti[0]) * 100) / 100;
 
-  if (altiDiff > 0.01) trendChar = "&uarr;&uarr;";
-  else if (altiDiff > 0) trendChar = "&uarr;";
-  else if (altiDiff < -0.01) trendChar = "&darr;&darr;";
-  else if (altiDiff < 0) trendChar = "&darr;";
+  if (altiDiff > 0.01) trendChar = "&nbsp;&nbsp;&uarr;&uarr;";
+  else if (altiDiff > 0) trendChar = "&nbsp;&nbsp;&uarr;";
+  else if (altiDiff < -0.01) trendChar = "&nbsp;&nbsp;&darr;&darr;";
+  else if (altiDiff < 0) trendChar = "&nbsp;&nbsp;&darr;";
   else trendChar = "";
 
   document.getElementById("temp").textContent = Math.round(temp[temp.length - 1]);

@@ -4,8 +4,8 @@ function processSounding(data, hiTemp) {
   if (now.getHours() < 7) return;
   liftParams = getLiftParams(data, hiTemp);
 
-  const negative3 = liftParams.negative3 ? Math.round(liftParams.negative3 * ftPerMeter).toLocaleString() : "--";
-  const topOfLift = liftParams.topOfLift > surfaceAltMeters ? Math.round(liftParams.topOfLift * ftPerMeter).toLocaleString() : "--";
+  const negative3 = liftParams.negative3 ? Math.round(liftParams.negative3 * ftPerMeter).toLocaleString() : "Ø";
+  const topOfLift = liftParams.topOfLift > surfaceAltMeters ? Math.round(liftParams.topOfLift * ftPerMeter).toLocaleString() : "Ø";
 
   document.getElementById("negative3").textContent = negative3;
   document.getElementById("top-of-lift").textContent = topOfLift;
@@ -312,7 +312,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(19))
-    .text(`Top of Lift: ${params.topOfLift < surfaceAltMeters ? "--" : Math.round(params.topOfLift * ftPerMeter).toLocaleString()}`);
+    .text(`Top of Lift: ${params.topOfLift < surfaceAltMeters ? "Ø" : Math.round(params.topOfLift * ftPerMeter).toLocaleString()}`);
 
   // Legend label -3 index
   svg.append("text")
@@ -320,7 +320,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(17))
-    .text(`-3 Index: ${!params.negative3 ? "--" : Math.round(params.negative3 * ftPerMeter).toLocaleString()}`);
+    .text(`-3 Index: ${!params.negative3 ? "Ø" : Math.round(params.negative3 * ftPerMeter).toLocaleString()}`);
 
   // Legend label max temp
   svg.append("text")
@@ -371,7 +371,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
       .attr("cy", y(topOfLiftAltFt))
       .attr("r", 6);
 
-    // Top of lift label
+    // Top of lift label !!!!!!!!!!!!!!!!!!!!!!!Fix TOL labal off chart to the left
     svg.append("g").append("text")
       .attr("class", "liftlabels")
       .attr("x", x(topOfLiftTempF + 2)) // Shift label to the right slightly
