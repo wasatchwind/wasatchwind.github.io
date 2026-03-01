@@ -6,39 +6,42 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build app/page structure immediately for smooth visual loading
-activeNav = 0;             // Default activeNav (Today page - see global constants)
-slider = buildNavSlider(); // Slider navigation
-navUpdate();               // Set initial activeNav
-buildMarquee();
-
 // Process fetched data and web-accessed images
 function main(data) {
   console.log("All data", data)
 
-  // Handle dependencies first
+  // Handle dependencies
   // 1) Sunset time affects default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   // 2) Wind Map timestamp
-  // 3) Forecast high temp needed to build the Morning Sounding Profile
+  // 3) hiTemp: Global variable forecast high temp needed to build the Morning Sounding Profile
+  // 4) soundingData: Global variable (for updating/resetting the Morning Sounding Profile based on user input)
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
-  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText); // SRG (Soaring Guidance)
+  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
-  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Global variable, primary source is SRG, Open Meteo is backup
-  soundingData = data.sounding; // Global variable (for updating/resetting the Morning Sounding Profile based on user input)
+  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
+  soundingData = data.sounding;
+
+  // Build app/page structure for smooth visual loading (default activeNav 0 = Today; see Global constant navItems)
+  buildMarquee();
+  slider = buildNavSlider(0);
+  
+  // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
+  if (now.getHours() >= 14 && now.getHours() <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (now.getHours() >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
 
   // Process remaining fetched data
-  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);
-  processSounding(soundingData, hiTemp);
-  processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24);
-  processGeneralForecast(data.generalForecast.properties.periods);
-  processSynoptic(data.synopticTimeseries.STATION);
+  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);                      // nws-api.js
+  processSounding(soundingData, hiTemp);                                                        // sounding.js
+  processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
+  processGeneralForecast(data.generalForecast.properties.periods);                              // nws-api.js
+  processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
 
   // Build User Settings page
   buildMarqueeSettings();
   buildStationSettings();
 
-  // Get all remaining web-accessed images
+  // Display all remaining web-accessed images
   displayConditionalImages(sunset);
   displayPersistentImages(windMapTimestamp);
 
@@ -60,8 +63,7 @@ function main(data) {
 ///////////////////////////////////////////////
 // Display all remaining web-accessed images //
 ///////////////////////////////////////////////
-function displayConditionalImages(sunset) {
-  // Afternoon Surface Wind Forecast
+function displayConditionalImages(sunset) { // Afternoon Surface Wind Forecast
   if (now.getHours() < 7) return;
 
   const isToday = now.getHours() < sunset.getHours();
@@ -71,12 +73,12 @@ function displayConditionalImages(sunset) {
 
   windElement.src = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
   gustElement.src = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
-  
+
   document.getElementById(`surface-wind-${displayFactors.day}-div`).style.display = "block";
   if (!isToday) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
 }
 
-function displayPersistentImages(windMapTimestamp) {
+function displayPersistentImages(windMapTimestamp) { // Images independent of conditional parameters (sunset, currnet hour)
   const imagesToDisplay = [
     {
       elementId: "wind-map",
@@ -120,6 +122,13 @@ function displayPersistentImages(windMapTimestamp) {
       isVisible: true,
       src: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573",
       title: "Daybreak looking East"
+    }, {
+      elementId: "cam-southeast",
+      href: "https://horel.chpc.utah.edu/data/station_cameras/armstrong_cam/",
+      isImg: true,
+      isVisible: true,
+      src: "https://horel.chpc.utah.edu/data/station_cameras/armstrong_cam/armstrong_cam_current.jpg",
+      title: "West Valley looking Southeast"
     }, {
       elementId: "cam-south",
       href: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/",
@@ -186,20 +195,20 @@ function buildMarquee() { // Set up core app structure
   const marquee = new KeenSlider("#marquee", options);
 }
 
-function buildNavSlider() { // Set up core app structure
+function buildNavSlider(activeNav) { // Set up nav page titles
   const options = {
     loop: true,
     slides: { perView: 1 },
     slideChanged: () => {
       activeNav = slider.track.details.rel;
-      navUpdate();
+      navUpdate(activeNav);
       window.scrollTo(0, 0);
     }
   };
   return new KeenSlider("#slider", options);
 }
 
-function navUpdate() { // Update nav slider/page based on time of day or user input (touch/drag swipe)
+function navUpdate(activeNav) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
 

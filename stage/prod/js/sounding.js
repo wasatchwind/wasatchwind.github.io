@@ -362,8 +362,8 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
     .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
     .text("-3");
 
-  if (params.topOfLift > surfaceAltMeters) {
-    // Top of lift point
+  if (params.topOfLift > surfaceAltMeters && topOfLiftTempF > -10) {
+    // Top of lift point marker
     svg.append("g").append("circle")
       .attr("class", "tolcircle")
       .attr("fill", "white")
@@ -371,7 +371,7 @@ function drawDALRParams(temp, params) { // Dynamic elements based on user temp i
       .attr("cy", y(topOfLiftAltFt))
       .attr("r", 6);
 
-    // Top of lift label !!!!!!!!!!!!!!!!!!!!!!!Fix TOL labal off chart to the left
+    // Top of lift label
     svg.append("g").append("text")
       .attr("class", "liftlabels")
       .attr("x", x(topOfLiftTempF + 2)) // Shift label to the right slightly

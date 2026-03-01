@@ -184,14 +184,14 @@ function windAloftLongterm(data) {
 
     altitudes.forEach((alt, index) => {
       const row = document.createElement("div");
-      row.className = "align-items-center d-flex display-3 justify-content-around";
+      row.className = "d-flex justify-content-around";
       row.id = `wind-aloft-longterm-${alt}k`;
 
       row.innerHTML = `
-        <div class="col">${alt.toLocaleString()},000</div>
-        <img class="col-1" id="wind-aloft-longterm-dir-${alt}k">
-        <div class="col d-flex justify-content-center fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
-        <div class="col" id="wind-aloft-longterm-temp-${alt}k"></div>`;
+        <div class="col-5">${alt},000</div>
+        <img id="wind-aloft-longterm-dir-${alt}k">
+        <div class="col-2 fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
+        <div class="col-4" id="wind-aloft-longterm-temp-${alt}k"></div>`;
 
       container.appendChild(row);
 

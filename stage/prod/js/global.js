@@ -23,7 +23,7 @@ const stationList = {
 };
 
 // Global nav vars
-let slider, activeNav;
+let slider;
 
 // Required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
 let hiTemp, liftParams = {}, soundingData = {};
