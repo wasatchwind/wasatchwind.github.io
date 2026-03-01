@@ -205,6 +205,7 @@ function buildNavSlider(activeNav) { // Set up nav page titles
       window.scrollTo(0, 0);
     }
   };
+  navUpdate(activeNav);
   return new KeenSlider("#slider", options);
 }
 
@@ -371,4 +372,5 @@ function d3Clear(temp, params) { // d3Clear can be triggered from HTML Onclick()
   });
 
   drawDALRParams(temp, params);
+
 };
