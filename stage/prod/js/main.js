@@ -188,7 +188,7 @@ function buildMarquee() { // Set up core app structure
   const animation = { duration: marqueeSpeed, easing: (t) => t };
   const options = {
     loop: true,
-    slides: { perView: 5 },
+    slides: { perView: 4 },
     created(m) { m.moveToIdx(1, true, animation) },
     updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
     animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
@@ -367,4 +367,5 @@ function d3Clear(temp, params) { // If triggered from HTML Onclick() then params
   });
 
   drawDALRParams(temp, params);
+
 };
