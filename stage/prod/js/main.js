@@ -6,6 +6,10 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
+// Build app/page structure for smooth visual loading (default activeNav 0 = Today; see Global constant navItems)
+buildMarquee();
+slider = buildNavSlider(0);
+
 // Process fetched data and web-accessed images
 function main(data) {
   console.log("All data", data)
@@ -22,10 +26,6 @@ function main(data) {
   hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
   soundingData = data.sounding;
 
-  // Build app/page structure for smooth visual loading (default activeNav 0 = Today; see Global constant navItems)
-  buildMarquee();
-  slider = buildNavSlider(0);
-  
   // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
   if (now.getHours() >= 14 && now.getHours() <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
   else if (now.getHours() >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
@@ -52,6 +52,7 @@ function main(data) {
 
   // Display nav pages last for smooth loading
   const pageIds = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
+
   pageIds.forEach(page => {
     const element = document.getElementById(page);
     element.style.display = "block";
@@ -183,11 +184,11 @@ function reload() {
 }
 
 function buildMarquee() { // Set up core app structure
-  const marqueeSpeed = localStorage.getItem("marquee") || 1000;
+  const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1]; // Default is medium speed marqueeSpeeds[1]
   const animation = { duration: marqueeSpeed, easing: (t) => t };
   const options = {
     loop: true,
-    slides: { perView: 4 },
+    slides: { perView: 5 },
     created(m) { m.moveToIdx(1, true, animation) },
     updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
     animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
@@ -195,7 +196,7 @@ function buildMarquee() { // Set up core app structure
   const marquee = new KeenSlider("#marquee", options);
 }
 
-function buildNavSlider(activeNav) { // Set up nav page titles
+function buildNavSlider(activeNav) { // Set up nav swipe/scroll slider
   const options = {
     loop: true,
     slides: { perView: 1 },
@@ -205,7 +206,7 @@ function buildNavSlider(activeNav) { // Set up nav page titles
       window.scrollTo(0, 0);
     }
   };
-  navUpdate(activeNav);
+  navUpdate(activeNav); // Necessary here to ensure initial page titles are displayed on first load
   return new KeenSlider("#slider", options);
 }
 
@@ -259,7 +260,7 @@ function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based 
   const isArray = Array.isArray(speeds);
   speeds = isArray ? speeds : [speeds];
 
-  const thresholds = altitude < 8 ? [10, 15, 20] : [altitude + 4, altitude + 10, altitude + 16];
+  const thresholds = altitude < 8 ? [10, 15, 20] : [altitude + 4, altitude + 10, altitude + 16]; // nonlinear accelerator for alts above 8k
   const colors = speeds.map(speed => {
     if (speed <= thresholds[0]) return "#1E6A4B";
     if (speed <= thresholds[1]) return "#9A7B1F";
@@ -280,34 +281,28 @@ function celsiusToF(temp) {
 ////////////////////////
 function buildMarqueeSettings() { // Marquee user settings options (Slow, Medium, Fast)
   const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1];
-
-  marqueeSpeeds.forEach(speed => {
-    const element = document.getElementById(`marquee-${speed}`);
-    element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
-  });
-
-  const activeElement = document.getElementById(`marquee-${marqueeSpeed}`);
-  activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
+  marqueeSettingUpdate(marqueeSpeed);
 }
 
 function marqueeSetSpeed(speed) { // Marquee speed user selection on the user Settings page (Slow, Medium, Fast)
   localStorage.setItem("marquee", speed);
-
-  marqueeSpeeds.forEach(d => {
-    const element = document.getElementById(`marquee-${d}`);
-    element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
-  });
-
-  const activeElement = document.getElementById(`marquee-${speed}`);
-  activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
-
+  marqueeSettingUpdate(speed);
   buildMarquee(); // Puts user selection/change into immediate effect
 }
 
-function buildStationSettings() { // Build station settings toggle on/off list on the user Settings page
+function marqueeSettingUpdate(speedSet) { // Update user selected marquee speed setting
+  marqueeSpeeds.forEach(speed => {
+    const element = document.getElementById(`marquee-${speed}`);
+    element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
+
+    const activeElement = document.getElementById(`marquee-${speedSet}`);
+    activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
+  });
+}
+
+function buildStationSettings() { // Build station settings toggle on/off list for the user Settings page
   Object.entries(stationList).forEach(([stid, station]) => {
-    const container = document.getElementById(`${stid}-onoff`);
-    container.innerHTML = `
+    document.getElementById(`${stid}-onoff`).innerHTML = `
       <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
         <div class="col-5 display-3 text-info text-start">${station.name}</div>
         <div id="${stid}-on" onclick="stationSetToggle('${stid}', 'on')">On</div>
@@ -322,11 +317,11 @@ function buildStationSettings() { // Build station settings toggle on/off list o
 function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
   localStorage.setItem(stid, state)
 
-  const mainEl = document.getElementById(`${stid}-main`);
+  const mainElement = document.getElementById(`${stid}-main`);
   const on = document.getElementById(`${stid}-on`);
   const off = document.getElementById(`${stid}-off`);
 
-  mainEl.style.display = state === "on" ? "block" : "none";
+  mainElement.style.display = state === "on" ? "block" : "none";
   on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
   off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
 }
@@ -337,9 +332,9 @@ function stationSetToggle(stid, state) { // Onclick function to toggle stations 
 // D3 utilities //
 //////////////////
 function d3Update() {
-  let userLiftParams;
+  let userLiftParams = {};
   document.getElementById("out-of-range").style.display = "none";
-  const userTemp = parseInt(document.getElementById("user-temp").value);
+  const userTemp = Math.round(Number(document.getElementById("user-temp").value));
   if (!userTemp) return;
 
   try { userLiftParams = getLiftParams(soundingData, userTemp); }
@@ -348,7 +343,7 @@ function d3Update() {
     return;
   };
 
-  if ((userLiftParams.topOfLiftTemp * 9 / 5) + 32 < -10 || !userLiftParams.topOfLift) d3OutOfRange(userTemp);
+  if ((celsiusToF(userLiftParams.topOfLiftTemp)) < -10 || !userLiftParams.topOfLift) d3OutOfRange(userTemp);
   else d3Clear(userTemp, userLiftParams);
 };
 
@@ -359,7 +354,7 @@ function d3OutOfRange(userTemp) {
   return;
 };
 
-function d3Clear(temp, params) { // d3Clear can be triggered from HTML Onclick() without params so set to global defaults if null
+function d3Clear(temp, params) { // If triggered from HTML Onclick() then params are null; reset to global defaults
   if (!temp) temp = hiTemp;
   if (!params) params = liftParams;
 
@@ -372,5 +367,4 @@ function d3Clear(temp, params) { // d3Clear can be triggered from HTML Onclick()
   });
 
   drawDALRParams(temp, params);
-
 };

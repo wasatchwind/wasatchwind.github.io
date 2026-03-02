@@ -1,11 +1,12 @@
 // "use strict";
 
-// Global constants
+// Global
 const now = new Date();
 const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
 const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"]; // Nav page names
 const marqueeSpeeds = [4000, 1000, 500]; // Slow, Medium, Fast
 const ftPerMeter = 3.28084;
+let slider; // App nav for swipe/scroll
 
 // stationList used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
 // Can't rely on Synoptic data fetch because stations are sometimes offline
@@ -21,9 +22,6 @@ const stationList = {
   REY: { name: "Reynolds Peak" },
   FPS: { name: "Southside" }
 };
-
-// Global nav vars
-let slider;
 
 // Required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
 let hiTemp, liftParams = {}, soundingData = {};
