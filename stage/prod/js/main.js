@@ -6,39 +6,41 @@
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
 
-// Build app/page structure for smooth visual loading (default activeNav 0 = Today; see Global constant navItems)
-buildMarquee();
-slider = buildNavSlider(0);
-
 // Process fetched data and web-accessed images
 function main(data) {
   console.log("All data", data)
+  MarqueeController.init();
 
   // Handle dependencies
   // 1) Sunset time affects default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
   // 2) Wind Map timestamp
   // 3) hiTemp: Global variable forecast high temp needed to build the Morning Sounding Profile
   // 4) soundingData: Global variable (for updating/resetting the Morning Sounding Profile based on user input)
+  const currentHour = new Date().getHours();
+  const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
+  const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
   const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
-  hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
-  soundingData = data.sounding;
+  global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
+  global.soundingData = data.sounding;
+
+  global.slider = buildNavSlider(0, navItems);
 
   // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
-  if (now.getHours() >= 14 && now.getHours() <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  else if (now.getHours() >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
+  if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
+
 
   // Process remaining fetched data
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);                      // nws-api.js
-  processSounding(soundingData, hiTemp);                                                        // sounding.js
+  processSounding(global.soundingData, global.hiTemp);                                          // sounding.js
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
   processGeneralForecast(data.generalForecast.properties.periods);                              // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
 
   // Build User Settings page
-  buildMarqueeSettings();
   buildStationSettings();
 
   // Display all remaining web-accessed images
@@ -47,10 +49,10 @@ function main(data) {
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
-  document.getElementById("hi-temp").textContent = hiTemp;
+  document.getElementById("hi-temp").textContent = global.hiTemp;
   document.getElementById("spinner").style.display = "none";
 
-  // Display nav pages last for smooth loading
+  // Display marquee and nav pages last for smooth loading
   const pageIds = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
 
   pageIds.forEach(page => {
@@ -61,22 +63,95 @@ function main(data) {
 
 
 
+////////////////////////
+// Marquee Controller //
+////////////////////////
+const MarqueeController = (() => {
+  const speeds = [
+    { label: "Slow", value: 4000 },
+    { label: "Medium", value: 1000 },
+    { label: "Fast", value: 500 }
+  ];
+
+  let currentSpeed = Number(localStorage.getItem("marquee")) || speeds[1].value;
+  const container = document.getElementById("marquee-settings");
+  const options = {
+    loop: true,
+    slides: { perView: 4 },
+    created(m) { m.moveToIdx(1, true, { duration: currentSpeed, easing: t => t }); },
+    updated(m) { m.moveToIdx(m.track.details.abs + 1, true, { duration: currentSpeed, easing: t => t }); },
+    animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, { duration: currentSpeed, easing: t => t }); }
+  };
+
+  const marquee = new KeenSlider("#marquee", options);
+
+  function setSpeed(speed) {
+    currentSpeed = speed;
+    localStorage.setItem("marquee", speed);
+    const abs = marquee.track.details.abs;
+    marquee.moveToIdx(abs + 1, true, { duration: currentSpeed, easing: t => t });
+    updateUI(speed);
+  }
+
+  function updateUI(activeSpeed) {
+    document.querySelectorAll(".marquee-speed").forEach(btn => {
+      btn.className = "marquee-speed bg-dark border fw-normal px-4 rounded-5 py-2";
+    });
+
+    const activeBtn = container.querySelector(`[data-speed="${activeSpeed}"]`);
+    if (activeBtn) activeBtn.className = "marquee-speed bg-success border fw-semibold px-4 rounded-5 py-2";
+  }
+
+  function buildSettingsUI() {
+    container.innerHTML = "";
+
+    speeds.forEach(speed => {
+      const btn = document.createElement("div");
+      btn.textContent = speed.label;
+      btn.dataset.speed = speed.value;
+      btn.className = "marquee-speed bg-dark border fw-normal px-4 rounded-5 py-2";
+      btn.addEventListener("click", () => {
+        setSpeed(speed.value);
+      });
+
+      container.appendChild(btn);
+    });
+
+    updateUI(currentSpeed);
+  }
+
+  return { init: buildSettingsUI, setSpeed };
+})();
+
+
+
 ///////////////////////////////////////////////
 // Display all remaining web-accessed images //
 ///////////////////////////////////////////////
 function displayConditionalImages(sunset) { // Afternoon Surface Wind Forecast
-  if (now.getHours() < 7) return;
+  const currentHour = new Date().getHours();
+  if (currentHour < 7) return;
 
-  const isToday = now.getHours() < sunset.getHours();
+  const isToday = currentHour < sunset.getHours();
   const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 }
-  const windElement = document.getElementById(`surface-wind-${displayFactors.day}-img`);
-  const gustElement = document.getElementById(`surface-gust-${displayFactors.day}-img`);
+  const nextDay = !isToday ? ` ${new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" })}` : "";
+  const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
+  const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
 
-  windElement.src = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
-  gustElement.src = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
-
-  document.getElementById(`surface-wind-${displayFactors.day}-div`).style.display = "block";
-  if (!isToday) document.getElementById("surface-wind-tomorrow-time").textContent = `Afternoon Surface Wind Forecast ${nextDay}`;
+  document.getElementById(`surface-wind-${displayFactors.day}-div`).innerHTML = `
+    <div class="mb-4">
+      <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="display-3 text-info">Afternoon Surface Wind Forecast${nextDay}</div>
+        <div class="d-flex fs-1 justify-content-center text-info">
+          <div class="col-6">Wind</div>
+          <div class="col-6">Gust</div>
+        </div>
+        <div class="d-flex">
+          <img class="rounded-4 col-6 pe-1" loading="lazy" src="${windImg}">
+          <img class="rounded-4 col-6 ps-1" loading="lazy" src="${gustImg}">
+        </div>
+      </a>
+    </div>`
 }
 
 function displayPersistentImages(windMapTimestamp) { // Images independent of conditional parameters (sunset, currnet hour)
@@ -183,34 +258,21 @@ function reload() {
   location.reload();
 }
 
-function buildMarquee() { // Set up core app structure
-  const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1]; // Default is medium speed marqueeSpeeds[1]
-  const animation = { duration: marqueeSpeed, easing: (t) => t };
-  const options = {
-    loop: true,
-    slides: { perView: 4 },
-    created(m) { m.moveToIdx(1, true, animation) },
-    updated(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) },
-    animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, animation) }
-  };
-  const marquee = new KeenSlider("#marquee", options);
-}
-
-function buildNavSlider(activeNav) { // Set up nav swipe/scroll slider
+function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider
   const options = {
     loop: true,
     slides: { perView: 1 },
     slideChanged: () => {
-      activeNav = slider.track.details.rel;
-      navUpdate(activeNav);
+      activeNav = global.slider.track.details.rel;
+      navUpdate(activeNav, navItems);
       window.scrollTo(0, 0);
     }
   };
-  navUpdate(activeNav); // Necessary here to ensure initial page titles are displayed on first load
+  navUpdate(activeNav, navItems); // Necessary here to ensure initial page titles are displayed on first load
   return new KeenSlider("#slider", options);
 }
 
-function navUpdate(activeNav) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
+function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
   const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
   const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
 
@@ -220,8 +282,8 @@ function navUpdate(activeNav) { // Update nav slider/page based on time of day o
 }
 
 window.simulateSwipe = function (direction) { // Update nav slider/page with user input (click)
-  if (direction === "left") slider.prev();
-  else if (direction === "right") slider.next();
+  if (direction === "left") global.slider.prev();
+  else if (direction === "right") global.slider.next();
 }
 
 function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
@@ -279,27 +341,6 @@ function celsiusToF(temp) {
 ////////////////////////
 // User settings page //
 ////////////////////////
-function buildMarqueeSettings() { // Marquee user settings options (Slow, Medium, Fast)
-  const marqueeSpeed = localStorage.getItem("marquee") || marqueeSpeeds[1];
-  marqueeSettingUpdate(marqueeSpeed);
-}
-
-function marqueeSetSpeed(speed) { // Marquee speed user selection on the user Settings page (Slow, Medium, Fast)
-  localStorage.setItem("marquee", speed);
-  marqueeSettingUpdate(speed);
-  buildMarquee(); // Puts user selection/change into immediate effect
-}
-
-function marqueeSettingUpdate(speedSet) { // Update user selected marquee speed setting
-  marqueeSpeeds.forEach(speed => {
-    const element = document.getElementById(`marquee-${speed}`);
-    element.className = "bg-dark border fw-normal px-4 rounded-5 py-2";
-
-    const activeElement = document.getElementById(`marquee-${speedSet}`);
-    activeElement.className = "bg-success border fw-semibold px-4 rounded-5 py-2";
-  });
-}
-
 function buildStationSettings() { // Build station settings toggle on/off list for the user Settings page
   Object.entries(stationList).forEach(([stid, station]) => {
     document.getElementById(`${stid}-onoff`).innerHTML = `
@@ -337,7 +378,7 @@ function d3Update() {
   const userTemp = Math.round(Number(document.getElementById("user-temp").value));
   if (!userTemp) return;
 
-  try { userLiftParams = getLiftParams(soundingData, userTemp); }
+  try { userLiftParams = getLiftParams(global.soundingData, userTemp); }
   catch {
     d3OutOfRange(userTemp);
     return;
@@ -355,8 +396,8 @@ function d3OutOfRange(userTemp) {
 };
 
 function d3Clear(temp, params) { // If triggered from HTML Onclick() then params are null; reset to global defaults
-  if (!temp) temp = hiTemp;
-  if (!params) params = liftParams;
+  if (!temp) temp = global.hiTemp;
+  if (!params) params = global.liftParams;
 
   document.getElementById("user-temp").value = null;
   document.getElementById("out-of-range").style.display = "none";
@@ -367,5 +408,4 @@ function d3Clear(temp, params) { // If triggered from HTML Onclick() then params
   });
 
   drawDALRParams(temp, params);
-
 };

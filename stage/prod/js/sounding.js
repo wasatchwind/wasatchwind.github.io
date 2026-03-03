@@ -1,16 +1,21 @@
 "use strict";
 
 function processSounding(data, hiTemp) {
-  if (now.getHours() < 7) return;
-  liftParams = getLiftParams(data, hiTemp);
+  if (new Date().getHours() < 7) return;
+  const ftPerMeter = 3.28084;
+  // const surfaceAlt = { feet: 4229 };
+  // surfaceAlt.meters = Math.round(surfaceAlt.feet / ftPerMeter);
+  // console.log(surfaceAlt)
 
-  const negative3 = liftParams.negative3 ? Math.round(liftParams.negative3 * ftPerMeter).toLocaleString() : "Ø";
-  const topOfLift = liftParams.topOfLift > surfaceAltMeters ? Math.round(liftParams.topOfLift * ftPerMeter).toLocaleString() : "Ø";
+  global.liftParams = getLiftParams(data, hiTemp);
+
+  const negative3 = global.liftParams.negative3 ? Math.round(global.liftParams.negative3 * ftPerMeter).toLocaleString() : "Ø";
+  const topOfLift = global.liftParams.topOfLift > surfaceAltMeters ? Math.round(global.liftParams.topOfLift * ftPerMeter).toLocaleString() : "Ø";
 
   document.getElementById("negative3").textContent = negative3;
   document.getElementById("top-of-lift").textContent = topOfLift;
 
-  buildSoundingChart(data, hiTemp, liftParams);
+  buildSoundingChart(data, hiTemp, global.liftParams);
 }
 
 function getLiftParams(data, temp, index = 0) {
@@ -18,7 +23,6 @@ function getLiftParams(data, temp, index = 0) {
   const tempC = (temp - 32) * 5 / 9;
   const dalrSlope = -101.6;
   const dalrYIntercept = surfaceAltMeters - dalrSlope * tempC;
-
   let foundNegative3 = false, foundTopOfLift = false;
 
   // Helper function for when interpolation between data points is necessary
@@ -83,6 +87,7 @@ function getLiftParams(data, temp, index = 0) {
 // Build Morning Sounding Profile Chart //
 //////////////////////////////////////////
 function buildSoundingChart(data, hiTemp, liftParams) {
+  const ftPerMeter = 3.28084;
 
   // Set vertical x axis gridlines
   const xAxisGrid = d3.axisTop(x).tickSize(0 - y(4)).ticks(23);
@@ -300,6 +305,7 @@ function buildSoundingChart(data, hiTemp, liftParams) {
 // Draw User Update Components //
 /////////////////////////////////
 function drawDALRParams(temp, params) { // Dynamic elements based on user temp input
+  const ftPerMeter = 3.28084;
   const dalr = 5.4;
   const negative3TempF = celsiusToF(params.negative3Temp);
   const topOfLiftTempF = celsiusToF(params.topOfLiftTemp);

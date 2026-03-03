@@ -1,12 +1,11 @@
-// "use strict";
+"use strict";
 
-// Global
-const now = new Date();
-const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
-const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"]; // Nav page names
-const marqueeSpeeds = [4000, 1000, 500]; // Slow, Medium, Fast
-const ftPerMeter = 3.28084;
-let slider; // App nav for swipe/scroll
+const global = {    // All set in main.js after async fetch
+  slider: null,     // App nav for swipe/scroll
+  hiTemp: Number,   // Global required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
+  liftParams: {},   // Same as hiTemp
+  soundingData: {}  // Same as hiTemp
+};
 
 // stationList used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
 // Can't rely on Synoptic data fetch because stations are sometimes offline
@@ -23,8 +22,8 @@ const stationList = {
   FPS: { name: "Southside" }
 };
 
-// Required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
-let hiTemp, liftParams = {}, soundingData = {};
+// D3.JS
+const ftPerMeter = 3.28084;
 const screenWidth = window.innerWidth;
 const proportionalHeight = screenWidth * 0.67;
 const margin = {
@@ -48,3 +47,6 @@ const svg = d3.select("#skew-t-d3")
   .attr("height", proportionalHeight)
   .append("g")
   .attr("transform", `translate(${margin.left + windBarbs},${margin.top})`);
+
+// FOR TESTING - REMOVE IN PROD
+// const data = 

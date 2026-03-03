@@ -69,6 +69,7 @@ function buildWindAloftForecast(data) {
 
   // Build the HTML DOM containers for the Wind Aloft Forecast component (current 6 and next 6 hours)
   function buildWindAloftContainer(timeframe) {
+    const ftPerMeter = 3.28084;
     const container = document.getElementById(`openmeteo-grid-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
     const slice = timeframe === "current6" ? [0, 6] : [6, 12];
@@ -207,7 +208,7 @@ function windAloftLongterm(data) {
 
     // Format start and end time from UTC
     const formatTime = utc => {
-      const timezoneOffset = now.getTimezoneOffset() / 60;
+      const timezoneOffset = new Date().getTimezoneOffset() / 60;
       const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
 
       if (local24 === 0) return "Midnight";
@@ -220,8 +221,9 @@ function windAloftLongterm(data) {
     };
 
     // Set the formatted start/end time into the heading
-    const headingEl = document.getElementById("wind-aloft-time-longterm");
-    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
+    const headingElement = document.getElementById("wind-aloft-time-longterm");
+    const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
+    headingElement.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
 
     // Normalize the data into an object
     const byAltitude = {};
