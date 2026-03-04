@@ -12,8 +12,10 @@ body {
   text-align: center;
 }
 
-.title-font {
-  font-size: 500%;
+.top-button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .gust-color {
