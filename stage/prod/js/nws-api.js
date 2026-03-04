@@ -50,6 +50,7 @@ function processSoaringForecastPage(text) {
 // Area Forecast //
 ///////////////////
 function processAreaForecastPageAndSunset(text, sunset) {
+  // return;
   const isAfterSunset = new Date().getHours() >= sunset.getHours();
   const displayBlock = isAfterSunset ? "tomorrow" : "today";
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
@@ -124,5 +125,4 @@ function processGeneralForecast(data) {
 
     period += 2;
   }
-
 }

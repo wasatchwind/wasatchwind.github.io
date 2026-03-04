@@ -253,10 +253,25 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
 ///////////////
 // Utilities //
 ///////////////
-function reload() {
-  history.scrollRestoration = "manual";
-  location.reload();
-}
+(() => { // Keep listeners self-contained instead of global
+  const actions = {
+    left: () => global.slider.prev(),
+    right: () => global.slider.next()
+  };
+
+  document.getElementById("reload").addEventListener("click", (e) => { // Reload button listener
+    history.scrollRestoration = "manual";
+    location.reload();
+  });
+
+  document.getElementById("topnav").addEventListener("click", (e) => { // Top nav buttons listener
+    const button = e.target.closest(".top-button");
+    if (!button) return;
+
+    const direction = button.dataset.direction;
+    actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
+  });
+})();
 
 function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider
   const options = {
@@ -279,11 +294,6 @@ function navUpdate(activeNav, navItems) { // Update nav slider/page based on tim
   document.getElementById("topnav-left").textContent = navItems[left];
   document.getElementById("topnav-active").textContent = navItems[activeNav];
   document.getElementById("topnav-right").textContent = navItems[right];
-}
-
-window.simulateSwipe = function (direction) { // Update nav slider/page with user input (click)
-  if (direction === "left") global.slider.prev();
-  else if (direction === "right") global.slider.next();
 }
 
 function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
