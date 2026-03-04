@@ -25,11 +25,13 @@
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
 
       <!-- ROW (1 OF 3): TITLE HEADING -->
-      <div class="align-items-center d-flex justify-content-between">
-        <img height="125px" src="prod/images/pg.gif">
-        <div class="display-1 text-info title-font">Wasatch Wind</div>
-        <img height="125px" onclick="reload()" src="prod/images/refresh.png">
-      </div>
+      <h1 class="align-items-center d-flex justify-content-between">
+        <img src="prod/images/pg.gif" height="125">
+        <div class="display-1 fw-semibold text-info">Wasatch Wind</div>
+        <button id="reload" class="top-button" aria-label="Reload page">
+          <img src="prod/images/refresh.png" height="125">
+        </button>
+      </h1>
 
       <!-- ROW (2 OF 3): MARQUEE/TICKER SLIDER -->
       <div class="display-5 keen-slider" id="marquee">
@@ -61,11 +63,10 @@
           <img id="zone">
         </div>
         <div class="keen-slider__slide number-slide6">
-          <div class="text-info" id="KSLC-time-12"></div>
+          <div class="text-info" id="KSLC-time-12">KSLC</div>
           <div class="d-flex justify-content-center">
             <div id="KSLC-wdir-12"></div>
-            <div>&nbsp;&nbsp;</div>
-            <div id="KSLC-wspd-12"></div>
+            <div class="ms-3" id="KSLC-wspd-12"></div>
             <div class="gust-color fs-1 ms-3" id="KSLC-gust-12"></div>
           </div>
         </div>
@@ -76,12 +77,12 @@
       </div>
 
       <!-- ROW (3 OF 3): NAVIGATION/SWIPE SLIDER PAGE TITLES -->
-      <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
-        <div class="fw-semibold text-warning" onclick="simulateSwipe('left')">&#171;</div>
+      <div class="align-items-end d-flex display-1 justify-content-between text-secondary" id="topnav">
+        <button class="fw-semibold text-warning top-button" data-direction="left" aria-label="Previous">&#171;</button>
         <div class="col display-2" id="topnav-left"></div>
         <div class="col fw-semibold text-white" id="topnav-active"></div>
         <div class="col display-2" id="topnav-right"></div>
-        <div class="fw-semibold text-warning" onclick="simulateSwipe('right')">&#187;</div>
+        <button class="fw-semibold text-warning top-button" data-direction="right" aria-label="Next">&#187;</button>
       </div>
 
     </div> <!-- END STICKY TOP -->
