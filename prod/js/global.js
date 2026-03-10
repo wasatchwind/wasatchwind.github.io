@@ -1,19 +1,14 @@
-// "use strict";
+"use strict";
 
-const ftPerMeter = 3.28084;
-const now = new Date();
-const nextDay = `${new Date(Date.now() + 86400000).toLocaleString("en-us", { weekday: "short" })}`;
-const green = "#1E6A4B";
-const yellow = "#9A7B1F";
-const orange = "#B45309";
-const red = "#8B1D2C";
+const global = {    // All set in main.js after async fetch
+  slider: null,     // App nav for swipe/scroll
+  hiTemp: Number,   // Global required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
+  liftParams: {},   // Same as hiTemp
+  soundingData: {}  // Same as hiTemp
+};
 
-// Nav pages
-const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-let slider, activeNav = 0;
-
-// Used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
-// Can't rely on Synoptic data because stations sometimes go offline
+// stationList used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
+// Can't rely on Synoptic data fetch because stations are sometimes offline
 const stationList = {
   AMB: { name: "Alta Baldy" },
   KSVR: { name: "Airport 2" },
@@ -27,8 +22,8 @@ const stationList = {
   FPS: { name: "Southside" }
 };
 
-// Global required for D3.js Reset/Update: Morning Sounding Profile (visualize other thermal temps)
-let hiTemp, liftParams = {}, soundingData = {};
+// D3.JS
+const ftPerMeter = 3.28084;
 const screenWidth = window.innerWidth;
 const proportionalHeight = screenWidth * 0.67;
 const margin = {
@@ -41,6 +36,7 @@ const windBarbs = margin.left * 4.5;
 const width = screenWidth - margin.left - margin.right;
 const height = proportionalHeight - margin.top - margin.bottom;
 const surfaceAlt = 4.229;
+const surfaceAltMeters = Math.round(surfaceAlt * 1000 / ftPerMeter);
 const maxAlt = 20;
 const x = d3.scaleLinear().range([0, width - margin.left - margin.right - windBarbs]).domain([-10, 110]);
 const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt]);
@@ -51,3 +47,6 @@ const svg = d3.select("#skew-t-d3")
   .attr("height", proportionalHeight)
   .append("g")
   .attr("transform", `translate(${margin.left + windBarbs},${margin.top})`);
+
+// FOR TESTING - REMOVE IN PROD
+// const data = 

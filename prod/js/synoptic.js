@@ -1,16 +1,13 @@
 "use strict";
 
 function processSynoptic(data) {
-
-  // Loop through all stations in the data to build wind charts (sometimes stations are down)
-  data.forEach(station => {
+  data.forEach(station => { // Loop through all stations in the data to build wind charts (sometimes stations are down)
     const readingCount = station.STID === "AMB" ? 6 : 12; // Only 6 historical readings needed for infrequently reporting stations
 
-    // Exclude KSLC in the station build loop since it doesn't have a toggle chart
-    if (station.STID !== "KSLC") {
+    if (station.STID !== "KSLC") { // Exclude KSLC in the station build loop since it doesn't have a toggle chart
       const elevation = parseInt(station.ELEVATION).toLocaleString();
-      const stationMain = document.getElementById(`${station.STID}-main`);
-      stationMain.innerHTML = `
+
+      document.getElementById(`${station.STID}-main`).innerHTML = `
         <div class="align-items-end border-bottom d-flex justify-content-between pb-3" onclick="toggleWindChart('${station.STID}')">
           <div class="d-flex align-items-end">
             <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
@@ -60,13 +57,13 @@ function processSynoptic(data) {
 
 
 
-///////////////////////////////////////
-// Build wind chart for each station //
-///////////////////////////////////////
+/////////////////////////////////////////////
+// Inject wind chart data for each station //
+/////////////////////////////////////////////
 function buildWindChart(stid, data, readingCount, altitude) {
   const requiredKeys = ["date_time", "wind_direction_set_1", "wind_speed_set_1", "wind_gust_set_1"];
 
-  // Ensure station data arrays are the correct length
+  // Ensure station data arrays are the correct length (6 or 12)
   Object.keys(data).forEach(key => {
     if (data[key].length < readingCount) {
       const emptyArray = new Array(readingCount - data[key].length).fill(null);
@@ -94,42 +91,42 @@ function buildWindChart(stid, data, readingCount, altitude) {
 
 function windChartTime(stid, times) {
   times.forEach((time, i) => {
-    const el = document.getElementById(`${stid}-time-${i}`);
+    const element = document.getElementById(`${stid}-time-${i}`);
     time = time.slice(0, -3).toLowerCase();
     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
-    el.innerHTML = time;
+    element.textContent = time;
   });
 }
 
 function windChartDirection(stid, directions) {
   directions.forEach((direction, i) => {
-    const el = document.getElementById(`${stid}-wdir-${i}`);
-    el.innerHTML = direction ? "&#10148;" : "&nbsp;";
-    el.style.transform = `rotate(${direction + 90}deg)`;
+    const element = document.getElementById(`${stid}-wdir-${i}`);
+    element.innerHTML = direction ? "&#10148;" : "&nbsp;";
+    element.style.transform = `rotate(${direction + 90}deg)`;
   });
 }
 
 function windChartSpeed(stid, speeds, altitude) {
   speeds.forEach((speed, i) => {
-    const el = document.getElementById(`${stid}-wspd-${i}`);
+    const element = document.getElementById(`${stid}-wspd-${i}`);
 
     if (speed === "Calm") {
-      if (i === speeds.length - 1) el.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
-      else el.className = "fs-3 fw-normal";
+      if (i === speeds.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
+      else element.className = "fs-3 fw-normal";
     }
 
     const speedToNumber = typeof (speed) === "number" ? speed : 0;
     const speedColor = windSpeedColor(speedToNumber, Math.round(Number(altitude) / 1000));
-    if (i === speeds.length - 1 && stid !== "KSLC") el.style.backgroundColor = speedColor;
+    if (i === speeds.length - 1 && stid !== "KSLC") element.style.backgroundColor = speedColor;
 
-    el.innerHTML = speed;
+    element.innerHTML = speed;
   });
 }
 
 function windChartGust(stid, gust) {
   gust.forEach((gust, i) => {
-    const el = document.getElementById(`${stid}-gust-${i}`);
-    el.innerHTML = gust === "&nbsp;" ? gust : `g${gust}`;
+    const element = document.getElementById(`${stid}-gust-${i}`);
+    element.innerHTML = gust === "&nbsp;" ? gust : `g${gust}`;
   });
 }
 
@@ -157,8 +154,8 @@ function windChartBarHeight(stid, speeds, gusts) {
 function windChartBarColor(stid, speeds, altitude) {
   const barColors = windSpeedColor(speeds, Math.round(Number(altitude) / 1000));
   barColors.forEach((color, i) => {
-    const el = document.getElementById(`${stid}-wbar-${i}`);
-    el.style.backgroundColor = color;
+    const element = document.getElementById(`${stid}-wbar-${i}`);
+    element.style.backgroundColor = color;
   });
 }
 
@@ -188,14 +185,14 @@ function getZone(alti, temp, trendChar) {
   const zone = calculateZone(alti[alti.length - 1], temp[temp.length - 1]);
   const altiDiff = Math.round((alti[alti.length - 1] - alti[0]) * 100) / 100;
 
-  if (altiDiff > 0.01) trendChar = "&uarr;&uarr;";
-  else if (altiDiff > 0) trendChar = "&uarr;";
-  else if (altiDiff < -0.01) trendChar = "&darr;&darr;";
-  else if (altiDiff < 0) trendChar = "&darr;";
+  if (altiDiff > 0.01) trendChar = "&nbsp;&nbsp;&uarr;&uarr;";
+  else if (altiDiff > 0) trendChar = "&nbsp;&nbsp;&uarr;";
+  else if (altiDiff < -0.01) trendChar = "&nbsp;&nbsp;&darr;&darr;";
+  else if (altiDiff < 0) trendChar = "&nbsp;&nbsp;&darr;";
   else trendChar = "";
 
-  document.getElementById("temp").innerHTML = Math.round(temp[temp.length - 1]);
-  document.getElementById("alti").innerHTML = alti[alti.length - 1].toFixed(2);
+  document.getElementById("temp").textContent = Math.round(temp[temp.length - 1]);
+  document.getElementById("alti").textContent = alti[alti.length - 1].toFixed(2);
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").src = `prod/images/zones/zone${zone}.png`;
 }

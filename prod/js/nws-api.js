@@ -4,51 +4,43 @@
 // Soaring Forecast //
 //////////////////////
 function processSoaringForecastPage(text) {
-  if (text.search(/MINUS/) > 0) return soaringForecastWinterFormat(text);
+  const winterFormat = text.search(/MINUS/) > 0 ? true : false;
 
   const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
   const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
-  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim());
+  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim()).toLocaleString();
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
-  const overdevelopmentDisplay = overdevelopmentTime === "None" ? "" : `\n❗OD Time......... ${overdevelopmentTime}`;
+  const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
 
-  const soaringForecast = `${forecastDate}
-    
-    High Temp......... ${hiTemp}°
-    Height of -3...... ${negative3 === "None" ? "None" : Number(negative3).toLocaleString()}
-    Top of Lift....... ${topOfLift.toLocaleString()}
-    Cloudbase (LCL)... ${cloudbase.toLocaleString()}
+  const soaringForecast = winterFormat
+    ? `Format Error<br>
+      <br>
+      Click here to open the Soaring Foreast`
+    : `${forecastDate}<br>
+      <br>
+      High Temp......... ${hiTemp}°<br>
+      Height of -3...... ${negative3 === "None" ? negative3 : Number(negative3).toLocaleString()}<br>
+      Top of Lift....... ${topOfLift.toLocaleString()}<br>
+      Cloudbase (LCL)... ${cloudbase}<br>
+      <br>
+      Max Lift Rate..... ${rateOfLift}<br>
+      Lifted Index...... ${liftedIndex}<br>
+      ${overdevelopmentDisplay}`;
 
-    Max Lift Rate..... ${rateOfLift}
-    Lifted Index...... ${liftedIndex}
-    ${overdevelopmentDisplay}`;
+  const soaringForecastParams = {
+    elementId: "soaring-forecast",
+    href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1",
+    isImg: false,
+    isVisible: true,
+    src: soaringForecast,
+    title: "Soaring Forecast Summary"
+  };
 
-  document.getElementById("soaring-forecast").innerText = soaringForecast;
-  document.getElementById("hi-temp").textContent = hiTemp;
-
-  return hiTemp;
-}
-
-function soaringForecastWinterFormat(text) {
-  const hiTemp = parseInt(text.match(/\d{2,3}(?=\sDEG)/));
-  const date = String(text.match(/\d{2}\/\d{2}\/\d{2}/));
-  const rateOfLift = parseInt(text.match(/\d{2,4}(?=\sFT\/MIN)/)).toLocaleString();
-  const liftParams = text.match(/\d{4,5}(?=\sFT\sMSL)/g);
-  const soaringForecast = `${date} (Winter Format)
-    
-    High Temp......... ${hiTemp}°
-    Height of -3...... ${parseInt(liftParams[4]).toLocaleString()}
-    Top of Lift....... ${parseInt(liftParams[5]).toLocaleString()}
-    
-    Max Lift Rate..... ${rateOfLift} ft/min`;
-
-  document.getElementById("soaring-forecast").innerText = soaringForecast;
-  document.getElementById("hi-temp").textContent = hiTemp;
-
+  standardHtmlComponent(soaringForecastParams);
   return hiTemp;
 }
 
@@ -57,25 +49,50 @@ function soaringForecastWinterFormat(text) {
 ///////////////////
 // Area Forecast //
 ///////////////////
-function processAreaForecastPage(text) {
+function processAreaForecastPageAndSunset(text, sunset) {
+  // return;
+  const isAfterSunset = new Date().getHours() >= sunset.getHours();
+  const displayBlock = isAfterSunset ? "tomorrow" : "today";
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
-  // const synopsis = text.match(/\.SYNOPSIS([\s\S]*?)\r?\n\r?\n/)?.[1]?.trim();
   const aviation = text.match(/\.AVIATION\.\.\.([\s\S]*?)\n\n/)?.[1]?.replace(/\n+/g, " ").trim() ?? null;
-  const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trimStart().split(/\n(?=\s*-)/)
-    .map(m => m.replace(/\n(?!\s*-)/g, " ").trim()).join("\n") ?? null;
-  
-  const areaForecast = `${forecastDate ? forecastDate : "Date error"}
-  
-  Key Messages:
+  const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trim().split(/\n(?=\s*-)/)
+    .map(m => m.replace(/\n(?!\s*-)/g, " ").trim()).join("<br>") ?? null;
 
-  ${keyMessages ? keyMessages : "No key messages"}`;
+  const areaForecast = `${forecastDate ? forecastDate : "Date error"}<br>
+    <br>
+    Key Messages:<br>
+    <br>
+    ${keyMessages ? keyMessages : "No key messages"}`;
 
-  document.getElementById("area-forecast-aviation").innerText = aviation ? aviation : "No aviation details";
-  document.getElementById("area-forecast-today").innerText = areaForecast;
-  document.getElementById("area-forecast-tomorrow").innerText = areaForecast;
+  const componentsToDisplay = [
+    {
+      elementId: "area-forecast-aviation",
+      href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
+      isImg: false,
+      isVisible: true,
+      src: aviation,
+      title: "Aviation Forecast"
+    }, {
+      elementId: `area-forecast-${displayBlock}`,
+      href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
+      isImg: false,
+      isVisible: true,
+      src: areaForecast,
+      title: "Area Forecast Discussion"
+    }, {
+      elementId: `hourly-chart-${displayBlock}`,
+      href: "https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=",
+      isImg: true,
+      isVisible: true,
+      src: "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6",
+      title: "Hourly Forecast Chart"
+    }
+  ];
+
+  componentsToDisplay.forEach(component => {
+    standardHtmlComponent(component);
+  });
 }
-
-
 
 //////////////////////
 // General Forecast //
@@ -95,7 +112,8 @@ function processGeneralForecast(data) {
       document.getElementById("nws-today-div").style.display = "block";
     } else document.getElementById("nws-today-multiday-div").style.display = "block";
 
-    const div = `
+    const container = document.getElementById(`forecast-day${i}${qualifier}`);
+    container.innerHTML = `
       <div class="d-flex">
         <div class="col-3">
           <div class="display-6 text-info">${data[period].name}</div>
@@ -105,10 +123,6 @@ function processGeneralForecast(data) {
       </div>
     ${border}`;
 
-    document.getElementById(`forecast-day${i}${qualifier}`).innerHTML = div;
     period += 2;
   }
-
 }
-
-

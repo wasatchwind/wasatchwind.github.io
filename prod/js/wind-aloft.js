@@ -69,6 +69,7 @@ function buildWindAloftForecast(data) {
 
   // Build the HTML DOM containers for the Wind Aloft Forecast component (current 6 and next 6 hours)
   function buildWindAloftContainer(timeframe) {
+    const ftPerMeter = 3.28084;
     const container = document.getElementById(`openmeteo-grid-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
     const slice = timeframe === "current6" ? [0, 6] : [6, 12];
@@ -180,18 +181,18 @@ function windAloftLongterm(data) {
 
   // Build the HTML DOM container for wind aloft long term
   function buildWindAloftLongtermContainer(altitudes) {
-    const container = document.getElementById("openmeteo-grid-longterm");
+    const container = document.getElementById("wind-aloft-longterm");
 
     altitudes.forEach((alt, index) => {
       const row = document.createElement("div");
-      row.className = "align-items-center d-flex display-3 justify-content-around";
+      row.className = "d-flex justify-content-around";
       row.id = `wind-aloft-longterm-${alt}k`;
 
       row.innerHTML = `
-        <div class="col">${alt.toLocaleString()},000</div>
-        <img class="col-1" id="wind-aloft-longterm-dir-${alt}k">
-        <div class="col d-flex justify-content-center fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
-        <div class="col" id="wind-aloft-longterm-temp-${alt}k"></div>`;
+        <div class="col-5">${alt},000</div>
+        <img id="wind-aloft-longterm-dir-${alt}k">
+        <div class="col-2 fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
+        <div class="col-4" id="wind-aloft-longterm-temp-${alt}k"></div>`;
 
       container.appendChild(row);
 
@@ -207,7 +208,7 @@ function windAloftLongterm(data) {
 
     // Format start and end time from UTC
     const formatTime = utc => {
-      const timezoneOffset = now.getTimezoneOffset() / 60;
+      const timezoneOffset = new Date().getTimezoneOffset() / 60;
       const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
 
       if (local24 === 0) return "Midnight";
@@ -220,8 +221,9 @@ function windAloftLongterm(data) {
     };
 
     // Set the formatted start/end time into the heading
-    const headingEl = document.getElementById("wind-aloft-time-longterm");
-    headingEl.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
+    const headingElement = document.getElementById("wind-aloft-time-longterm");
+    const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
+    headingElement.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
 
     // Normalize the data into an object
     const byAltitude = {};
@@ -244,7 +246,7 @@ function windAloftLongterm(data) {
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
       document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
       document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
-      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).innerHTML = `${temp}&deg;`;
+      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).textContent = `${temp}°`;
     });
   }
 }
