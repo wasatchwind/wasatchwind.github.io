@@ -28,7 +28,7 @@
       <h1 class="align-items-center d-flex justify-content-between">
         <img src="prod/images/pg.gif" height="125">
         <div class="display-1 fw-semibold text-info">Wasatch Wind</div>
-        <button id="reload" class="top-button" aria-label="Reload page">
+        <button id="reload" class="clickable" aria-label="Reload page">
           <img src="prod/images/refresh.png" height="125">
         </button>
       </h1>
@@ -47,7 +47,6 @@
           <div class="text-info">Temp</div>
           <div class="d-flex justify-content-center">
             <div id="temp"></div>
-            <div class="text-info">&nbsp;/&nbsp;</div>
             <div id="hi-temp"></div>
           </div>
         </div>
@@ -78,11 +77,11 @@
 
       <!-- ROW (3 OF 3): NAVIGATION/SWIPE SLIDER PAGE TITLES -->
       <div class="align-items-end d-flex display-1 justify-content-between text-secondary" id="topnav">
-        <button class="fw-semibold text-warning top-button" data-direction="left" aria-label="Previous">&#171;</button>
+        <button class="fw-semibold text-warning clickable" data-direction="left" aria-label="Previous">&#171;</button>
         <div class="col display-2" id="topnav-left"></div>
         <div class="col fw-semibold text-white" id="topnav-active"></div>
         <div class="col display-2" id="topnav-right"></div>
-        <button class="fw-semibold text-warning top-button" data-direction="right" aria-label="Next">&#187;</button>
+        <button class="fw-semibold text-warning clickable" data-direction="right" aria-label="Next">&#187;</button>
       </div>
 
     </div> <!-- END STICKY TOP -->
@@ -111,7 +110,7 @@
               <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
                 <div id="openmeteo-grid-current6"></div>
               </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">Next 6 hours &rarr;</div>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;</div>
             </div>
 
             <!-- NEXT 6 HOURS -->
@@ -119,7 +118,7 @@
               <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
                 <div id="openmeteo-grid-next6"></div>
               </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning" onclick="toggleWindAloft()">&larr; Previous 6 hours</div>
+              <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6 hours</div>
             </div>
 
         </div>
@@ -142,9 +141,10 @@
             <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
             <div class="collapse display-6 text-info" id="out-of-range"></div>
             <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
-              <div onclick="d3Clear()">Reset</div>
+              <!-- <div onclick="d3Clear()">Reset</div> -->
+              <div id="d3-clear">Reset</div>
               <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
-              <div onclick="d3Update()">Enter</div>
+              <div id="d3-update">Enter</div>
             </div>
 
           </div>
@@ -217,25 +217,15 @@
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (1 OF 3): MARQUEE SPEED CONTROL (4000, 1000, or 500)-->
         <div class="border-bottom d-flex justify-content-between py-4">
           <div class="display-3 text-info">Marquee Speed</div>
-          <div id="marquee-settings" class="align-items-center col-7 display-5 d-flex justify-content-around"></div>
+          <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>
         </div>
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (2 OF 3): STATION ON/OFF TOGGLES ALPHABETICAL BY NAME -->
-        <div class="display-3 py-4 text-start">Stations Displayed:</div>
-        <div id="AMB-onoff"></div> <!-- Alta Baldy -->
-        <div id="KSVR-onoff"></div> <!-- Airport 2 -->
-        <div id="BRW-onoff"></div> <!-- Clayton Peak -->
-        <div id="HDP-onoff"></div> <!-- Hidden Peak -->
-        <div id="OGP-onoff"></div> <!-- Odgen Peak -->
-        <div id="UTOLY-onoff"></div> <!-- Olympus Cove -->
-        <div id="UT5-onoff"></div> <!-- Parleys Mouth -->
-        <div id="D6120-onoff"></div> <!-- Pepperwood -->
-        <div id="REY-onoff"></div> <!-- Reynolds Peak -->
-        <div id="FPS-onoff"></div> <!-- Southside -->
+        <div class="display-3 py-4 text-start" id="stations-displayed">Stations Displayed:</div>
 
         <!-- BODY SLIDER > PAGE (3 OF 7) > SETTINGS: SECTION (3 OF 3): SYNOPTIC PLUG/LINK -->
         <div class="d-flex display-6 justify-content-center mt-4">
-          <div class="text-secondary fw-semibold">Weather station data from&nbsp;</div>
+          <div class="text-secondary fw-semibold me-3">Weather station data from</div>
           <a class="text-warning" href="https://synopticdata.com/">Synoptic</a>
         </div>
 
@@ -256,7 +246,7 @@
         <div id="ambrose-pressure-zone-chart-div"></div>
 
         <!-- BODY SLIDER > PAGE (4 OF 7) > MISC: SECTION (4 OF 6): UNITS & MODELS -->
-        <div class="mb-4">
+        <div class="mb-4" id="units">
           <div class="display-3 text-info">Units & Models</div>
           <div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">
             <div class="text-info">Units (unless noted otherwise):</div>
@@ -329,17 +319,7 @@
 
       <!-- CAMS -->
       <!-- BODY SLIDER > PAGE (6 OF 7) > CAMS -->
-      <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page">
-
-        <div id="cam-east-div"></div>
-        <div id="cam-southeast-div"></div>
-        <div id="cam-south-div"></div>
-        <div id="cam-southwest-div"></div>
-        <div id="cam-southwest2-div"></div>
-        <div id="cam-west-div"></div>
-        <div id="cam-west2-div"></div>
-
-      </div> <!-- END BODY SLIDER > PAGE (6 OF 7) > CAMS -->
+      <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page"></div> <!-- END BODY SLIDER > PAGE (6 OF 7) > CAMS -->
       
 
       <!-- NOW -->
@@ -358,18 +338,7 @@
         <div id="wind-map-div"></div>
 
         <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (3 OF 4): WIND STATION CHARTS ALPHABETICAL BY NAME-->
-        <div class="mb-4" id="wind-charts-div">
-          <div id="AMB-main"></div> <!-- Alta Baldy -->
-          <div id="KSVR-main"></div> <!-- Airport 2 -->
-          <div id="BRW-main"></div> <!-- Clayton Peak -->
-          <div id="HDP-main"></div> <!-- Hidden Peak -->
-          <div id="OGP-main"></div> <!-- Ogden Peak -->
-          <div id="UTOLY-main"></div> <!-- Olympus Cove -->
-          <div id="UT5-main"></div> <!-- Parleys Mouth -->
-          <div id="D6120-main"></div> <!-- Pepperwood -->
-          <div id="REY-main"></div> <!-- Reynolds Peak -->
-          <div id="FPS-main"></div> <!-- Southside -->
-        </div>
+        <div class="mb-4" id="wind-charts-div"></div>
 
         <!-- BODY SLIDER > PAGE (7 OF 7) > NOW: SECTION (4 OF 4): SATELLITE GIF -->
         <div id="satellite-gif-div"></div>
