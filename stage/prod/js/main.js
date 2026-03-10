@@ -25,13 +25,11 @@ function main(data) {
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
   global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
   global.soundingData = data.sounding;
-
   global.slider = buildNavSlider(0, navItems);
 
   // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
   if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
   else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
-
 
   // Process remaining fetched data
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);                      // nws-api.js
@@ -43,18 +41,26 @@ function main(data) {
   // Build User Settings page
   buildStationSettings();
 
+  // Set up Cams page container
+  const camNames = ["cam-east", "cam-southeast", "cam-south", "cam-southwest", "cam-southwest2", "cam-west", "cam-west2"];
+  const camContainer = document.getElementById("cams-page");
+  camNames.forEach(cam => {
+    const div = document.createElement("div");
+    div.id = `${cam}-div`;
+    camContainer.appendChild(div)
+  });
+
   // Display all remaining web-accessed images
   displayConditionalImages(sunset);
   displayPersistentImages(windMapTimestamp);
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
-  document.getElementById("hi-temp").textContent = global.hiTemp;
+  document.getElementById("hi-temp").textContent = `${global.hiTemp}`;
   document.getElementById("spinner").style.display = "none";
 
   // Display marquee and nav pages last for smooth loading
   const pageIds = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
-
   pageIds.forEach(page => {
     const element = document.getElementById(page);
     element.style.display = "block";
@@ -265,12 +271,16 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
   });
 
   document.getElementById("topnav").addEventListener("click", (e) => { // Top nav buttons listener
-    const button = e.target.closest(".top-button");
+    const button = e.target.closest(".clickable");
     if (!button) return;
 
     const direction = button.dataset.direction;
     actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
   });
+
+  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
+  document.getElementById("d3-update").addEventListener("click", d3Update);
+  document.getElementById("d3-clear").addEventListener("click", () => d3Clear()); // Function format necessary since params are expected
 })();
 
 function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider
@@ -352,27 +362,32 @@ function celsiusToF(temp) {
 // User settings page //
 ////////////////////////
 function buildStationSettings() { // Build station settings toggle on/off list for the user Settings page
+  const container = document.getElementById("stations-displayed");
+
   Object.entries(stationList).forEach(([stid, station]) => {
-    document.getElementById(`${stid}-onoff`).innerHTML = `
-      <div class="align-items-center border-bottom display-5 d-flex justify-content-around py-4">
-        <div class="col-5 display-3 text-info text-start">${station.name}</div>
-        <div id="${stid}-on" onclick="stationSetToggle('${stid}', 'on')">On</div>
-        <div id="${stid}-off" onclick="stationSetToggle('${stid}', 'off')">Off</div>
-      </div>`;
+    const row = document.createElement("div");
+    row.className = "align-items-center border-bottom display-5 d-flex justify-content-around py-4";
+    row.innerHTML = `
+      <div class="col-5 display-3 text-info text-start">${station.name}</div>
+      <div id="${stid}-on">On</div>
+      <div id="${stid}-off">Off</div>`;
+
+    container.appendChild(row);
 
     const state = localStorage.getItem(stid) || "on"; // Default is "on"
     stationSetToggle(stid, state);
+
+    row.querySelector(`#${stid}-on`).addEventListener("click", () => stationSetToggle(stid, "on"));
+    row.querySelector(`#${stid}-off`).addEventListener("click", () => stationSetToggle(stid, "off"));
   });
 }
 
 function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
   localStorage.setItem(stid, state)
 
-  const mainElement = document.getElementById(`${stid}-main`);
   const on = document.getElementById(`${stid}-on`);
   const off = document.getElementById(`${stid}-off`);
 
-  mainElement.style.display = state === "on" ? "block" : "none";
   on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
   off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
 }

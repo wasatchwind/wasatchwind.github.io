@@ -1,19 +1,23 @@
 "use strict";
 
 function processSynoptic(data) {
-  data.forEach(station => { // Loop through all stations in the data to build wind charts (sometimes stations are down)
-    const readingCount = station.STID === "AMB" ? 6 : 12; // Only 6 historical readings needed for infrequently reporting stations
+  const container = document.getElementById("wind-charts-div");
+  container.innerHTML = "";
 
-    if (station.STID !== "KSLC") { // Exclude KSLC in the station build loop since it doesn't have a toggle chart
+  data.forEach(station => {
+    const readingCount = station.STID === "AMB" ? 6 : 12;
+
+    if (station.STID !== "KSLC") {
       const elevation = parseInt(station.ELEVATION).toLocaleString();
+      const stationDiv = document.createElement("div");
 
-      document.getElementById(`${station.STID}-main`).innerHTML = `
-        <div class="align-items-end border-bottom d-flex justify-content-between pb-3" onclick="toggleWindChart('${station.STID}')">
+      stationDiv.innerHTML = `
+        <div class="align-items-end border-bottom d-flex justify-content-between pb-3 station-header">
           <div class="d-flex align-items-end">
             <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
             <div class="mx-4">
-              <div class="display-6 fw-semibold text-start text-secondary"">${elevation}</div>
-              <div class="display-3 text-info"">${stationList[station.STID].name}</div>
+              <div class="display-6 fw-semibold text-start text-secondary">${elevation}</div>
+              <div class="display-3 text-info">${stationList[station.STID].name}</div>
             </div>
           </div>
           <div class="col-6 d-flex justify-content-between me-2">
@@ -23,6 +27,7 @@ function processSynoptic(data) {
             <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
           </div>
         </div>
+
         <div class="bg-dark rounded-4">
           <div class="collapse" id="${station.STID}">
             <a href="https://www.weather.gov/wrh/timeseries?site=${station.STID}&hours=72" target="_blank">
@@ -30,9 +35,13 @@ function processSynoptic(data) {
             </a>
           </div>
         </div>`;
+
+      container.appendChild(stationDiv);
+      stationDiv.querySelector(".station-header").addEventListener("click", () => toggleWindChart(station.STID));
     }
 
     const chart = document.getElementById(`${station.STID}-chart`);
+
     for (let i = 0; i < readingCount; i++) {
       const div = document.createElement("div");
       div.className = "col px-1";
@@ -46,13 +55,12 @@ function processSynoptic(data) {
 
       chart.appendChild(div);
     }
+
     buildWindChart(station.STID, station.OBSERVATIONS, readingCount, station.ELEVATION);
   });
 
-  // Build KSLC (main station & marquee)
   const kslcData = data.find(station => station.STID === "KSLC");
   getZone(kslcData.OBSERVATIONS.altimeter_set_1, kslcData.OBSERVATIONS.air_temp_set_1);
-  document.getElementById("wind-charts-div").style.display = "block";
 }
 
 
@@ -191,8 +199,8 @@ function getZone(alti, temp, trendChar) {
   else if (altiDiff < 0) trendChar = "&nbsp;&nbsp;&darr;";
   else trendChar = "";
 
-  document.getElementById("temp").textContent = Math.round(temp[temp.length - 1]);
   document.getElementById("alti").textContent = alti[alti.length - 1].toFixed(2);
+  document.getElementById("temp").innerHTML = `${Math.round(temp[temp.length - 1])}` + "&nbsp;/&nbsp;";
   document.getElementById("trend").innerHTML = trendChar;
   document.getElementById("zone").src = `prod/images/zones/zone${zone}.png`;
 }
