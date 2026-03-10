@@ -8,7 +8,6 @@
 
 // Process fetched data and web-accessed images
 function main(data) {
-  console.log("All data", data)
   MarqueeController.init();
 
   // Handle dependencies
@@ -418,4 +417,5 @@ function d3Clear(temp, params) { // If triggered from HTML Onclick() then params
   });
 
   drawDALRParams(temp, params);
+
 };
