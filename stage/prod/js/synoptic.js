@@ -1,62 +1,76 @@
 "use strict";
 
 function processSynoptic(data) {
-  const container = document.getElementById("wind-charts-div");
+  const kslcDiv = {
+    elementId: "KSLC-main",
+    href: "https://www.weather.gov/wrh/timeseries?site=KSLC&hours=72",
+    isVisible: true,
+    title: "KSLC",
+    style: "align-items-end bg-dark d-flex rounded-4",
+    subId: "KSLC-chart"
+  };
+  standardHtmlComponent(kslcDiv);
+
+  const stations = stationList();
+  stations.push({ id: "KSLC" });
+
+  const container = document.getElementById("wind-charts");
   container.innerHTML = "";
 
-  data.forEach(station => {
-    const readingCount = station.STID === "AMB" ? 6 : 12;
+  stations.forEach(station => {
+    const stationData = data.find(d => d.STID === station.id);
+    const readingCount = stationData.STID === "AMB" ? 6 : 12;
 
-    if (station.STID !== "KSLC") {
-      const elevation = parseInt(station.ELEVATION).toLocaleString();
+    if (station.id !== "KSLC") { // KSLC does not have an expandable chart
+      const elevation = parseInt(stationData.ELEVATION).toLocaleString();
       const stationDiv = document.createElement("div");
 
       stationDiv.innerHTML = `
         <div class="align-items-end border-bottom d-flex justify-content-between pb-3 station-header">
           <div class="d-flex align-items-end">
-            <div class="align-self-center display-1 text-warning" id="${station.STID}-toggle">&#43;</div>
+            <div class="align-self-center display-1 text-warning" id="${stationData.STID}-toggle">&#43;</div>
             <div class="mx-4">
               <div class="display-6 fw-semibold text-start text-secondary">${elevation}</div>
-              <div class="display-3 text-info">${stationList[station.STID].name}</div>
+              <div class="display-3 text-info">${station.name}</div>
             </div>
           </div>
           <div class="col-6 d-flex justify-content-between me-2">
-            <div class="align-self-end display-6 fw-semibold text-secondary" id="${station.STID}-time-${readingCount}">No Data</div>
-            <div class="col-2 display-2" id="${station.STID}-wdir-${readingCount}"></div>
-            <div class="col-2 display-4 fw-semibold rounded-4 text-center" id="${station.STID}-wspd-${readingCount}"></div>
-            <div class="col-2 display-6 fw-semibold gust-color" id="${station.STID}-gust-${readingCount}"></div>
+            <div class="align-self-end display-6 fw-semibold text-secondary" id="${stationData.STID}-time-${readingCount}">No Data</div>
+            <div class="col-2 display-2" id="${stationData.STID}-wdir-${readingCount}"></div>
+            <div class="col-2 display-4 fw-semibold rounded-4 text-center" id="${stationData.STID}-wspd-${readingCount}"></div>
+            <div class="col-2 display-6 fw-semibold gust-color" id="${stationData.STID}-gust-${readingCount}"></div>
           </div>
         </div>
 
         <div class="bg-dark rounded-4">
-          <div class="collapse" id="${station.STID}">
-            <a href="https://www.weather.gov/wrh/timeseries?site=${station.STID}&hours=72" target="_blank">
-              <div class="align-items-end d-flex" id="${station.STID}-chart"></div>
+          <div class="collapse" id="${stationData.STID}">
+            <a href="https://www.weather.gov/wrh/timeseries?site=${stationData.STID}&hours=72" target="_blank">
+              <div class="align-items-end d-flex" id="${stationData.STID}-chart"></div>
             </a>
           </div>
         </div>`;
 
       container.appendChild(stationDiv);
-      stationDiv.querySelector(".station-header").addEventListener("click", () => toggleWindChart(station.STID));
+      stationDiv.querySelector(".station-header").addEventListener("click", () => toggleWindChart(stationData.STID));
     }
 
-    const chart = document.getElementById(`${station.STID}-chart`);
+    const chart = document.getElementById(`${stationData.STID}-chart`);
 
     for (let i = 0; i < readingCount; i++) {
       const div = document.createElement("div");
       div.className = "col px-1";
       div.innerHTML = `
-        <div class="gust-color h2" id="${station.STID}-gust-${i}">&nbsp;</div>
-        <div class="gust-bar" id="${station.STID}-gbar-${i}"></div>
-        <div id="${station.STID}-wbar-${i}"></div>
-        <div class="bg-secondary fs-1 fw-bold" id="${station.STID}-wspd-${i}"></div>
-        <div class="display-4" id="${station.STID}-wdir-${i}"></div>
-        <div class="fs-4" id="${station.STID}-time-${i}"></div>`;
+        <div class="gust-color h2" id="${stationData.STID}-gust-${i}">&nbsp;</div>
+        <div class="gust-bar" id="${stationData.STID}-gbar-${i}"></div>
+        <div id="${stationData.STID}-wbar-${i}"></div>
+        <div class="bg-secondary fs-1 fw-bold" id="${stationData.STID}-wspd-${i}"></div>
+        <div class="display-4" id="${stationData.STID}-wdir-${i}"></div>
+        <div class="fs-4" id="${stationData.STID}-time-${i}"></div>`;
 
       chart.appendChild(div);
     }
 
-    buildWindChart(station.STID, station.OBSERVATIONS, readingCount, station.ELEVATION);
+    buildWindChart(stationData.STID, stationData.OBSERVATIONS, readingCount, stationData.ELEVATION);
   });
 
   const kslcData = data.find(station => station.STID === "KSLC");

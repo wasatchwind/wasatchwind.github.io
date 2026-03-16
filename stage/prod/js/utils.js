@@ -7,21 +7,6 @@ const global = {    // All updated in main.js after async fetch
   soundingData: {}  // Same as hiTemp
 };
 
-// stationList used in 2 places: 1) Displaying station wind data and 2) Station on/off toggle in user settings
-// Can't rely on Synoptic data fetch because stations are sometimes offline
-const stationList = {
-  AMB: { name: "Alta Baldy" },
-  KSVR: { name: "Airport 2" },
-  BRW: { name: "Clayton Peak" },
-  HDP: { name: "Hidden Peak" },
-  OGP: { name: "Ogden Peak" },
-  UTOLY: { name: "Olypmus Cove" },
-  UT5: { name: "Parleys Mouth" },
-  D6120: { name: "Pepperwood" },
-  REY: { name: "Reynolds Peak" },
-  FPS: { name: "Southside" }
-};
-
 // D3.JS
 const ftPerMeter = 3.28084;
 const screenWidth = window.innerWidth;
@@ -176,17 +161,19 @@ function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hou
 }
 
 function standardHtmlComponent(params) { // Build HTML divs by elementId where the basic structure is the same
-  const display = params.isVisible ? "" : "collapse";
+  const display = params.isVisible ? "" : "collapse ";
+  const subId = params.subId ? ` id="${params.subId}"` : "";
+  const src = params.src;
+  const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
+  const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
+  const style = params.style ? params.style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
+  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}"${subId}>${content}</div>`;
   const link = params.href
     ? { hrefLine: `<a href="${params.href}" target="_blank">`, closure: "</a>" }
     : { hrefLine: "", closure: "" };
 
-  const imgOrDiv = params.isImg
-    ? `<img class="rounded-4 w-100" loading="lazy" src="${params.src}">`
-    : `<div class="bg-dark border display-6 font-monospace ps-2 rounded-4 text-start">${params.src}</div>`;
-
-  document.getElementById(`${params.elementId}-div`).innerHTML = `
-    <div class="${display} mb-4" id="${params.elementId}-div">
+  document.getElementById(`${params.elementId}`).innerHTML = `
+    <div class="${display} mb-4" id="${params.elementId}">
       ${link.hrefLine}
         <div class="display-3 text-info">${params.title}</div>
         ${imgOrDiv}
@@ -210,6 +197,21 @@ function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based 
 
 function celsiusToF(temp) {
   return (temp * 9 / 5) + 32;
+}
+
+function stationList() { // Used for user settings page and station charts - alphabetical order by name
+  return [
+    { id: "AMB", name: "Alta Baldy" },
+    { id: "KSVR", name: "Airport 2" },
+    { id: "BRW", name: "Clayton Peak" },
+    { id: "HDP", name: "Hidden Peak" },
+    { id: "OGP", name: "Ogden Peak" },
+    { id: "UTOLY", name: "Olypmus Cove" },
+    { id: "UT5", name: "Parleys Mouth" },
+    { id: "D6120", name: "Pepperwood" },
+    { id: "REY", name: "Reynolds Peak" },
+    { id: "FPS", name: "Southside" }
+  ];
 }
 
 

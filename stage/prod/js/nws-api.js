@@ -34,7 +34,6 @@ function processSoaringForecastPage(text) {
   const soaringForecastParams = {
     elementId: "soaring-forecast",
     href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1",
-    isImg: false,
     isVisible: true,
     src: soaringForecast,
     title: "Soaring Forecast Summary"
@@ -68,21 +67,18 @@ function processAreaForecastPageAndSunset(text, sunset) {
     {
       elementId: "area-forecast-aviation",
       href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
-      isImg: false,
       isVisible: true,
       src: aviation,
       title: "Aviation Forecast"
     }, {
       elementId: `area-forecast-${displayBlock}`,
       href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
-      isImg: false,
       isVisible: true,
       src: areaForecast,
       title: "Area Forecast Discussion"
     }, {
       elementId: `hourly-chart-${displayBlock}`,
       href: "https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=",
-      isImg: true,
       isVisible: true,
       src: "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6",
       title: "Hourly Forecast Chart"
@@ -102,6 +98,26 @@ function processGeneralForecast(data) {
   const isDaytime = data[0].isDaytime;
   let period = isDaytime ? 0 : 1;
 
+  const multiDayDiv = `
+    <div class="collapse" id="nws-today-multiday">
+      <div id="forecast-day0"></div>
+    </div>
+    <div id="forecast-day1"></div>
+    <div id="forecast-day2"></div>
+    <div id="forecast-day3"></div>
+    <div id="forecast-day4"></div>`;
+
+  const nwsMultiDay = {
+    elementId: "nws-multiday",
+    href: "https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE",
+    isVisible: true,
+    src: multiDayDiv,
+    style: "bg-dark border rounded-4",
+    title: "Days Ahead"
+  };
+
+  standardHtmlComponent(nwsMultiDay);
+
   for (let i = 0; i < forecastDaysCount; i++) {
     let qualifier = "";
     let border = `<div class="border-bottom"></div>`;
@@ -109,8 +125,17 @@ function processGeneralForecast(data) {
     if (isDaytime && i === 0) {
       qualifier = "-today";
       border = "";
-      document.getElementById("nws-today-div").style.display = "block";
-    } else document.getElementById("nws-today-multiday-div").style.display = "block";
+      const nwsToday = {
+        elementId: "nws-today",
+        href: "https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE",
+        isVisible: true,
+        title: "General Forecast",
+        style: "bg-dark border rounded-4",
+        subId: "forecast-day0-today"
+      };
+
+      standardHtmlComponent(nwsToday);
+    } else document.getElementById("nws-today-multiday").style.display = "block";
 
     const container = document.getElementById(`forecast-day${i}${qualifier}`);
     container.innerHTML = `
