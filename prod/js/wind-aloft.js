@@ -175,78 +175,75 @@ function buildWindAloftForecast(data) {
 ////////////////////////////////////////////////
 function windAloftLongterm(data) {
   const altitudes = [18, 12, 9];
+  const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
 
-  buildWindAloftLongtermContainer(altitudes);
-  injectWindAloftLongTermData(altitudes);
+  // Load long term data (forecast24h) into the container
+  const formatTime = utc => { // Format start and end time from UTC
+    const timezoneOffset = new Date().getTimezoneOffset() / 60;
+    const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
 
-  // Build the HTML DOM container for wind aloft long term
-  function buildWindAloftLongtermContainer(altitudes) {
-    const container = document.getElementById("wind-aloft-longterm");
+    if (local24 === 0) return "Midnight";
+    if (local24 === 12) return "Noon";
 
-    altitudes.forEach((alt, index) => {
-      const row = document.createElement("div");
-      row.className = "d-flex justify-content-around";
-      row.id = `wind-aloft-longterm-${alt}k`;
+    const isPM = local24 >= 12;
+    const hour12 = local24 % 12 || 12;
 
-      row.innerHTML = `
+    return `${hour12} ${isPM ? "pm" : "am"}`;
+  };
+
+  const windAloftLongterm = {
+    elementId: "wind-aloft-longterm",
+    href: "https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low",
+    isVisible: true,
+    style: "border display-3 overflow-hidden rounded-4",
+    subId: "wind-aloft-longterm-rows",
+    title: `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`
+  };
+
+  standardHtmlComponent(windAloftLongterm);
+
+  const container = document.getElementById("wind-aloft-longterm-rows");
+
+  altitudes.forEach((alt, index) => {
+    const row = document.createElement("div");
+    row.className = "d-flex justify-content-around";
+    row.id = `wind-aloft-longterm-${alt}k`;
+
+    row.innerHTML = `
         <div class="col-5">${alt},000</div>
         <img id="wind-aloft-longterm-dir-${alt}k">
         <div class="col-2 fw-semibold" id="wind-aloft-longterm-speed-${alt}k"></div>
         <div class="col-4" id="wind-aloft-longterm-temp-${alt}k"></div>`;
 
-      container.appendChild(row);
+    container.appendChild(row);
 
-      // Insert border after first 2 rows but not the third/final row
-      if (index < altitudes.length - 1) {
-        container.appendChild(document.createElement("div")).className = "border border-dark";
-      }
-    });
-  }
+    // Insert border after first 2 rows but not the third/final row
+    if (index < altitudes.length - 1) {
+      container.appendChild(document.createElement("div")).className = "border border-dark";
+    }
+  });
 
-  // Load long term data (forecast24h) into the container
-  function injectWindAloftLongTermData(altitudes) {
-
-    // Format start and end time from UTC
-    const formatTime = utc => {
-      const timezoneOffset = new Date().getTimezoneOffset() / 60;
-      const local24 = (((utc - timezoneOffset) % 24) + 24) % 24;
-
-      if (local24 === 0) return "Midnight";
-      if (local24 === 12) return "Noon";
-
-      const isPM = local24 >= 12;
-      const hour12 = local24 % 12 || 12;
-
-      return `${hour12} ${isPM ? "pm" : "am"}`;
+  // Normalize the data into an object
+  const byAltitude = {};
+  altitudes.forEach(alt => {
+    byAltitude[alt] = {
+      speed: data.windspeed[`altitude${alt}k`],
+      dir: data.winddirection[`altitude${alt}k`],
+      temp: data.temperature[`altitude${alt}k`]
     };
+  });
 
-    // Set the formatted start/end time into the heading
-    const headingElement = document.getElementById("wind-aloft-time-longterm");
-    const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
-    headingElement.textContent = `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`;
+  // Render
+  altitudes.forEach(alt => {
+    const { speed, dir, temp } = byAltitude[alt];
 
-    // Normalize the data into an object
-    const byAltitude = {};
-    altitudes.forEach(alt => {
-      byAltitude[alt] = {
-        speed: data.windspeed[`altitude${alt}k`],
-        dir: data.winddirection[`altitude${alt}k`],
-        temp: data.temperature[`altitude${alt}k`]
-      };
-    });
+    const row = document.getElementById(`wind-aloft-longterm-${alt}k`);
+    const barb = speed < 0.5 ? "calm" : Math.min(50, Math.floor(speed / 5) * 5);
 
-    // Render
-    altitudes.forEach(alt => {
-      const { speed, dir, temp } = byAltitude[alt];
-
-      const row = document.getElementById(`wind-aloft-longterm-${alt}k`);
-      const barb = speed < 0.5 ? "calm" : Math.min(50, Math.floor(speed / 5) * 5);
-
-      row.style.backgroundColor = windSpeedColor(Math.round(speed), alt);
-      document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
-      document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
-      document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
-      document.getElementById(`wind-aloft-longterm-temp-${alt}k`).textContent = `${temp}°`;
-    });
-  }
+    row.style.backgroundColor = windSpeedColor(Math.round(speed), alt);
+    document.getElementById(`wind-aloft-longterm-dir-${alt}k`).src = `prod/images/barbs/barb${barb}.png`;
+    document.getElementById(`wind-aloft-longterm-dir-${alt}k`).style.transform = `rotate(${dir}deg)`;
+    document.getElementById(`wind-aloft-longterm-speed-${alt}k`).textContent = Math.round(speed);
+    document.getElementById(`wind-aloft-longterm-temp-${alt}k`).textContent = `${temp}°`;
+  });
 }

@@ -1,6 +1,7 @@
 "use strict";
 
 function processSounding(data, hiTemp) {
+  return;
   if (new Date().getHours() < 7) return;
   const ftPerMeter = 3.28084;
   // const surfaceAlt = { feet: 4229 };
