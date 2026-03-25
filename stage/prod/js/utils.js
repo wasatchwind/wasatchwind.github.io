@@ -39,6 +39,8 @@ const svg = d3.select("#skew-t-d3")
 // Marquee Controller //
 ////////////////////////
 const MarqueeController = (() => {
+  marqueeHtmlComponent();
+  marqueeSettingsComponent();
   const speeds = [
     { label: "Slow", value: 4000 },
     { label: "Medium", value: 1000 },
@@ -158,6 +160,40 @@ function toggleWindChart(id) { // Wind chart toggle expand/collapse for each sta
 function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hours
   document.getElementById("wind-aloft-current6").classList.toggle("collapse");
   document.getElementById("wind-aloft-next6").classList.toggle("collapse");
+}
+
+function marqueeHtmlComponent() {
+  const marqueeDiv = document.getElementById("marquee")
+  const tickers = [
+    { topRow: "-3 Index", bottomRow: `<div id="negative3"></div>` },
+    { topRow: "Top of Lift", bottomRow: `<div id="top-of-lift"></div>` },
+    { topRow: "Temp", bottomRow: `<div class="d-flex justify-content-center"><div id="temp"></div><div id="hi-temp"></div></div>` },
+    { topRow: "Pressure", bottomRow: `<div class="d-flex justify-content-center"><div id="alti"></div><div id="trend"></div></div>` },
+    { topRow: "Zone", bottomRow: `<img id="zone">` },
+    { id: "KSLC-time-12", bottomRow: `<div class="d-flex justify-content-center"><div id="KSLC-wdir-12"></div><div class="ms-3" id="KSLC-wspd-12"></div><div class="gust-color fs-1 ms-3" id="KSLC-gust-12"></div></div>` },
+    { topRow: "Sunset", bottomRow: `<div id="sunset"></div>` },
+  ];
+
+  tickers.forEach((ticker, i) => {
+    const div = document.createElement("div");
+    div.className = `keen-slider__slide number-slide${i + 1}`;
+    div.innerHTML = `
+      <div class="text-info" id="${ticker.id}">${ticker.topRow}</div>
+      ${ticker.bottomRow}`;
+
+    marqueeDiv.appendChild(div);
+  });
+}
+
+function marqueeSettingsComponent() {
+  const marqueeSettingsDiv = document.getElementById("marquee-speed");
+  const div = document.createElement("div");
+  div.className = "border-bottom d-flex justify-content-between py-4";
+  div.innerHTML = `
+    <div class="display-3 text-info">Marquee Speed</div>
+    <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>`;
+
+  marqueeSettingsDiv.appendChild(div);
 }
 
 function standardHtmlComponent(params) { // Build HTML divs by elementId where the basic structure is the same

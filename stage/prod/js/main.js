@@ -5,6 +5,8 @@
 // 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
 // 3) NWS API: https://www.weather.gov/documentation/services-web-api
 // 4) Keen Slider: https://keen-slider.io/docs
+// 5) Sounding Data UWYO Inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
+// 6) Sounding Data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
 
 // Process fetched data and web-accessed images
 function main(data) {
@@ -24,7 +26,10 @@ function main(data) {
   const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
   global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
-  global.soundingData = data.sounding;
+
+  // if data.sounding isn't updated set global.soundingData w/ soaring forecast - earlysounding(data.soaringForecast.productText)
+  global.soundingData = data.sounding;//earlySounding(data.soaringForecast.productText);//data.sounding;
+
   global.slider = buildNavSlider(0, navItems);
 
   // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
@@ -125,7 +130,7 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
       src: "prod/images/hikeandfly.png",
       title: "Hike & Fly Calculator"
     }, {
-      elementId: "ambrose-pressure-zone-chart",
+      elementId: "pressure-zone-chart",
       isVisible: true,
       src: "prod/images/zonechart.jpg",
       title: "Zone (Ambrose Pressure Zone)"
@@ -204,6 +209,8 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
 ////////////////////////
 function buildStationSettings() { // Build station settings toggle on/off list for the user Settings page
   const container = document.getElementById("stations-displayed");
+  container.className = "display-3 py-4 text-start";
+  container.innerHTML = "Display Station Charts:";
   const stations = stationList();
 
   stations.forEach(station => {

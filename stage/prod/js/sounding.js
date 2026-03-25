@@ -1,7 +1,9 @@
 "use strict";
 
 function processSounding(data, hiTemp) {
-  if (new Date().getHours() < 7) return;
+  // console.log(data)
+  if (new Date().getHours() < 12) return;
+  document.getElementById("sounding").style.display = "block";
   const ftPerMeter = 3.28084;
   // const surfaceAlt = { feet: 4229 };
   // surfaceAlt.meters = Math.round(surfaceAlt.feet / ftPerMeter);
@@ -47,7 +49,7 @@ function getLiftParams(data, temp, index = 0) {
           const { Temp_c: t1, Altitude_m: a1 } = data[index];
           const { Temp_c: t2, Altitude_m: a2 } = data[index - 1];
 
-          if (t1 !== t2) { // Need to interpolate
+          if (t1 !== t2) { // Interpolatation required
             const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
             const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
             params.negative3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
@@ -65,7 +67,7 @@ function getLiftParams(data, temp, index = 0) {
         const { Temp_c: t1, Altitude_m: a1 } = data[index];
         const { Temp_c: t2, Altitude_m: a2 } = data[index - 1];
 
-        if (t1 !== t2) { // Need to interpolate
+        if (t1 !== t2) { // Interpolatation required
           const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
           const targetX = -yIntercept / slope;
           params.topOfLift = a1 + (targetX - t1);

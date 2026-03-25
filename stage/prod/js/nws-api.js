@@ -40,7 +40,26 @@ function processSoaringForecastPage(text) {
   };
 
   standardHtmlComponent(soaringForecastParams);
+
   return hiTemp;
+}
+
+function earlySounding(text) {
+  const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/);
+  const rows = table[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
+  const result = rows.map(line => {
+    const parts = line.split(/\s+/);
+
+    return {
+      Altitude_m: Math.round(Number(parts[0] / 3.28084)),
+      Temp_c: Number(parts[1]),
+      Dewpoint_c: -10,
+      Wind_Direction: Number(parts[3]),
+      Wind_Speed_kt: Number(parts[4])
+    };
+  });
+
+  return result.sort((a, b) => a.Altitude_m - b.Altitude_m);
 }
 
 
