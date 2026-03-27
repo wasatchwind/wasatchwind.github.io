@@ -37,8 +37,9 @@ function main(data) {
   else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
 
   // Process remaining fetched data
-  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);                      // nws-api.js
-  processSounding(global.soundingData, global.hiTemp);                                          // sounding.js
+  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);  
+  const test = typeof data.sounding1 === "object" ? data.sounding1[0] : data.sounding1;                    // nws-api.js
+  processSounding(global.soundingData, global.hiTemp, test);                                          // sounding.js
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
   processGeneralForecast(data.generalForecast.properties.periods);                              // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
