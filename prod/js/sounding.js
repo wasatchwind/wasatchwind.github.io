@@ -1,9 +1,10 @@
 "use strict";
 
 function processSounding(data, hiTemp) {
+  return;
   // console.log(data)
   if (new Date().getHours() < 12) return;
-  // document.getElementById("sounding").style.display = "block";
+  document.getElementById("sounding").style.display = "block";
   const ftPerMeter = 3.28084;
   // const surfaceAlt = { feet: 4229 };
   // surfaceAlt.meters = Math.round(surfaceAlt.feet / ftPerMeter);
