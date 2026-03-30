@@ -39,7 +39,6 @@ const dataSources = [
   { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", etag: true },
   { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app" },
   { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json" },
-  { name: "sounding1", url: "https://storage.googleapis.com/wasatch-wind-static/raob1.json" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png" },
   { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams) }
 ];

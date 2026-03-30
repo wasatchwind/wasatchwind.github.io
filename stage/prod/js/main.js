@@ -28,7 +28,7 @@ function main(data) {
   global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
 
   // if data.sounding isn't updated set global.soundingData w/ soaring forecast - earlysounding(data.soaringForecast.productText)
-  global.soundingData = data.sounding;//earlySounding(data.soaringForecast.productText);//data.sounding;
+  global.soundingData = data.sounding//earlySounding(data.soaringForecast.productText);//data.sounding;
 
   global.slider = buildNavSlider(0, navItems);
 
@@ -41,7 +41,7 @@ function main(data) {
   const test = typeof data.sounding1 === "object" ? data.sounding1[0] : data.sounding1;                    // nws-api.js
   processSounding(global.soundingData, global.hiTemp, test);                                          // sounding.js
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
-  processGeneralForecast(data.generalForecast.properties.periods);                              // nws-api.js
+  processGeneralForecast(data.generalForecast.properties.periods);                        // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
 
   buildStationSettings(); // Build User Settings page
