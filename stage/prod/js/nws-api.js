@@ -8,9 +8,9 @@ function processSoaringForecastPage(text) {
 
   const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
-  const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
-  const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
-  const negative3 = text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim();
+  const nwsTopOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
+  const hiTempSoaringForecast = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
+  const nwsNegative3 = Number(text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim());
   const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim()).toLocaleString();
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
@@ -22,9 +22,9 @@ function processSoaringForecastPage(text) {
       Click here to open the Soaring Foreast`
     : `${forecastDate}<br>
       <br>
-      High Temp......... ${hiTemp}°<br>
-      Height of -3...... ${negative3 === "None" ? negative3 : Number(negative3).toLocaleString()}<br>
-      Top of Lift....... ${topOfLift.toLocaleString()}<br>
+      High Temp......... ${hiTempSoaringForecast}°<br>
+      Height of -3...... ${nwsNegative3.toLocaleString()}<br>
+      Top of Lift....... ${nwsTopOfLift.toLocaleString()}<br>
       Cloudbase (LCL)... ${cloudbase}<br>
       <br>
       Max Lift Rate..... ${rateOfLift}<br>
@@ -40,26 +40,24 @@ function processSoaringForecastPage(text) {
   };
 
   standardHtmlComponent(soaringForecastParams);
-
-  return hiTemp;
+  return { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift };
 }
 
-function earlySounding(text) {
+function nwsSounding(text) {
   const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/);
   const rows = table[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
-  const result = rows.map(line => {
+  const nwsData = rows.map(line => {
     const parts = line.split(/\s+/);
-
     return {
-      Altitude_m: Math.round(Number(parts[0] / 3.28084)),
+      Altitude_ft: Number(parts[0]),
+      Thermal_Index: Number(parts[10]),
       Temp_c: Number(parts[1]),
-      Dewpoint_c: -10,
       Wind_Direction: Number(parts[3]),
       Wind_Speed_kt: Number(parts[4])
-    };
+    }
   });
 
-  return result.sort((a, b) => a.Altitude_m - b.Altitude_m);
+  return nwsData.sort((a, b) => a.Altitude_ft - b.Altitude_ft);
 }
 
 
