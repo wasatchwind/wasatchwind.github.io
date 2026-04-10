@@ -229,7 +229,7 @@ function buildSoundingChart(data, hiTemp, liftParams, useNwsSounding) {
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(9))
-    .text("DALR");
+    .text(!useNwsSounding ? "DALR" : "Lapse");
 
   ////////////////////////
   // Wind Barbs Section //
