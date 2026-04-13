@@ -192,7 +192,7 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
       elementId: "learn-paragliding",
       href: "https://utahparagliding.com/",
       isVisible: true,
-      src: "prod/images/utahparagliding.png",
+      src: "prod/images/utahparagliding.jpg",
       title: "Learn Paragliding (My Alma Mater)"
     }
   ];
