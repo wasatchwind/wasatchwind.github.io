@@ -1,6 +1,7 @@
 "use strict";
 
 function processSounding(nwsData, soundingData, hiTemp, nwsNegative3, nwsTopOfLift) {
+  console.log("Process Sounding Data")
   let useNwsSounding = true;
   const formatttedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
   console.log(soundingData["date"], formattedDate, soundingData["date"] === formattedDate);
