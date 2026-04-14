@@ -4,6 +4,7 @@ function processSounding(nwsData, soundingData, hiTemp, nwsNegative3, nwsTopOfLi
   let useNwsSounding = true;
   const formatttedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
   if (soundingData["date"] === formatttedDate) {
+    console.log("raob data exists");
     useNwsSounding = false;
     Object.assign(document.getElementById("sounding-link"), { href: "https://climate.cod.edu/data/raob/KSLC/skewt/", target: "_blank" });
     // Check skew t image sources here: https://www.weather.gov/upperair/SkewTViewing (link above broken)
