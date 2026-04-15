@@ -1,5 +1,5 @@
 "use strict";
-localStorage.clear();
+console.log(localStorage());
 const openMeteoHourlyParams = () => {
   const params = [];
   const hourlyConfig = {
