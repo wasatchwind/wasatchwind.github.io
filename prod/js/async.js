@@ -1,5 +1,5 @@
 "use strict";
-// console.log(localStorage)
+
 const openMeteoHourlyParams = () => {
   const params = [];
   const hourlyConfig = {
@@ -30,17 +30,17 @@ const openMeteoParams = {
   hourly: openMeteoHourlyParams()
 };
 
-const dataSources = [
-  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", etag: true },
-  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", etag: true },
-  { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", etag: true },
-  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", etag: true },
-  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", etag: true },
-  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", etag: true },
-  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app" },
-  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json" },
-  { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png" },
-  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams) }
+const dataSources = [ // Divide ttl by 1000, 60 to get mins
+  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", etag: true, ttl: 2700000 }, // 45m
+  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", etag: true, ttl: 2700000 }, // 45m
+  { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", etag: true, ttl: 21600000 }, // 6h
+  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", etag: true, ttl: 900000 }, // 15m
+  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", etag: true, ttl: 900000 }, // 15m
+  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", etag: true, ttl: 900000 }, // 15m
+  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", ttl: 0 },
+  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", ttl: 2700000 }, // 45m
+  { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", ttl: 0 },
+  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), ttl: 300000 } // 5m
 ];
 
 function buildApiUrl(baseUrl, params) {
@@ -49,23 +49,37 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
+
+
+////////////////////
+// Fetch function //
+////////////////////
 async function fetchWithCache(source) {
   const cached = JSON.parse(localStorage.getItem(source.name) || "null");
-  if (cached && Date.now() - cached.timestamp < 10000) return cached.data;
+  const isFresh = cached && source.ttl && (Date.now() - cached.timestamp < source.ttl);
+  if (isFresh) return cached.data;
 
   const headers = {};
   if (source.etag && cached?.etag) headers["If-None-Match"] = cached.etag;
+
   try {
     const res = await fetch(source.url, { headers });
-    if (res.status === 304 && cached) return cached.data;
+    if (res.status === 304 && cached) {
+      cached.timestamp = Date.now();
+      localStorage.setItem(source.name, JSON.stringify(cached));
+      return cached.data;
+    }
+
     const data = await res.json();
     const etag = res.headers.get("etag");
     localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+
     return data;
   } catch (error) {
     console.error(`API error: ${source.name}`, error);
     if (cached) return cached.data;
-    return { error: true, message: error.message };
+
+    return { error: true };
   }
 }
 
@@ -83,5 +97,5 @@ async function fetchData() {
   return data;
 }
 
-const data = await fetchData();
+// const data = await fetchData();
 main(data);

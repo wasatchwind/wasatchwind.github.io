@@ -23,13 +23,9 @@ function main(data) {
   const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
   const sunset = new Date(data.openMeteo.daily.sunset[0]);
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
-  const hiTempSoaringForecast = processSoaringForecastPage(data.soaringForecast.productText);
+  const { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift } = processSoaringForecastPage(data.soaringForecast.productText);
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
   global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
-
-  // if data.sounding isn't updated set global.soundingData w/ soaring forecast - earlysounding(data.soaringForecast.productText)
-  global.soundingData = data.sounding;//earlySounding(data.soaringForecast.productText);//data.sounding;
-
   global.slider = buildNavSlider(0, navItems);
 
   // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
@@ -37,11 +33,11 @@ function main(data) {
   else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
 
   // Process remaining fetched data
-  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);                      // nws-api.js
-  processSounding(global.soundingData, global.hiTemp);                                          // sounding.js
+  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
-  processGeneralForecast(data.generalForecast.properties.periods);                              // nws-api.js
+  processGeneralForecast(data.generalForecast.properties.periods);                        // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
+  if (currentHour > 6) processSounding(data.soaringForecast.productText, data.sounding, global.hiTemp, nwsNegative3, nwsTopOfLift); // sounding.js
 
   buildStationSettings(); // Build User Settings page
   buildMiscPageItems();   // Build Misc page
@@ -56,8 +52,8 @@ function main(data) {
   });
 
   // Display all remaining web-accessed images
-  displayConditionalImages(sunset);
-  displayPersistentImages(windMapTimestamp);
+  // displayConditionalImages(sunset);
+  // displayPersistentImages(windMapTimestamp);
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
