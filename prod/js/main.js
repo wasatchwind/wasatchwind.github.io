@@ -52,8 +52,8 @@ function main(data) {
   });
 
   // Display all remaining web-accessed images
-  // displayConditionalImages(sunset);
-  // displayPersistentImages(windMapTimestamp);
+  displayConditionalImages(sunset);
+  displayPersistentImages(windMapTimestamp);
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
