@@ -97,5 +97,5 @@ async function fetchData() {
   return data;
 }
 
-// const data = await fetchData();
+const data = await fetchData();
 main(data);
