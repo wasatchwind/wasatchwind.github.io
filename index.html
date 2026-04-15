@@ -53,104 +53,112 @@
       <!-- PAGE 1: TODAY > 8 SECTIONS ########################################################################################### -->
       <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
 
-        <div id="surface-wind-today"></div> <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="surface-wind-today"></div>
+        <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
 
         <!-- SECTION 2: WIND ALOFT FORECAST -->
         <div class="mb-4">
-            <div class="display-3 text-info">Wind Aloft Forecast</div>
+          <div class="display-3 text-info">Wind Aloft Forecast</div>
 
-            <div class="bg-dark border rounded-4" id="wind-aloft-current6">
-              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div id="openmeteo-grid-current6"></div>
-              </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;</div>
+          <div class="bg-dark border rounded-4" id="wind-aloft-current6">
+            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+              <div id="openmeteo-grid-current6"></div>
+            </a>
+            <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;
             </div>
+          </div>
 
-            <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
-              <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-                <div id="openmeteo-grid-next6"></div>
-              </a>
-              <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6 hours</div>
-            </div>
+          <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
+            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+              <div id="openmeteo-grid-next6"></div>
+            </a>
+            <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6
+              hours</div>
+          </div>
         </div>
 
         <div id="hourly-chart-today"></div> <!-- SECTION 3: 48 HOUR FORECAST CHART (CONDITIONALLY DISPLAYED) -->
 
         <!-- SECTION 4: SOUNDING D3.JS CHART -->
-        <div class="mb-4">
-          <div class="display-3 text-info">KSLC Sounding Profile Noon</div>
-          <div class="display-5 fw-semibold text-info">Temporarily under maintenance</div>
-          <div class="collapse bg-dark border rounded-4" id="sounding">
+        <div class="collapse mb-4" id="sounding-main">
+          <div class="display-3 text-info" id="sounding-source"></div>
+          <div class="bg-dark border rounded-4">
 
-            <a href="https://climate.cod.edu/data/raob/KSLC/skewt/" target="_blank">
+            <a id="sounding-link">
               <div class="w-100" id="skew-t-d3"></div>
             </a>
 
-            <div class="display-6 fw-semibold text-secondary">DALR: Dry Adiabatic Lapse Rate (-5.4&deg; F / 1,000 ft)</div>
-            <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
-            
-            <div class="collapse display-6 text-info" id="out-of-range"></div>
-            <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
-              <div class="clickable" id="d3-clear">Reset</div>
-              <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110"
-                placeholder="&deg; F" id="user-temp">
-              <div class="clickable" id="d3-update">Enter</div>
+            <div class="collapse" id="other-temps">
+              <div class="display-6 fw-semibold text-secondary">DALR: Dry Adiabatic Lapse Rate (-5.4&deg; F / 1,000 ft)
+              </div>
+              <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
+
+              <div class="collapse display-6 text-info" id="out-of-range"></div>
+              <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
+                <div class="clickable" id="d3-clear">Reset</div>
+                <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number"
+                  min="0" max="110" placeholder="&deg; F" id="user-temp">
+                <div class="clickable" id="d3-update">Enter</div>
+              </div>
             </div>
 
           </div>
         </div>
 
-        <div id="soaring-forecast"></div>       <!-- SECTION 5: NWS SOARING FORECAST SUMMARY -->
+        <div id="soaring-forecast"></div> <!-- SECTION 5: NWS SOARING FORECAST SUMMARY -->
         <div id="area-forecast-aviation"></div> <!-- SECTION 6: AREA FORECAST DISCUSSION - AVIATION -->
-        <div id="area-forecast-today"></div>    <!-- SECTION 7: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
-        <div id="nws-today"></div>              <!-- SECTION 8: NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="area-forecast-today"></div>
+        <!-- SECTION 7: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
+        <div id="nws-today"></div> <!-- SECTION 8: NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
 
       </div>
 
       <!-- PAGE 2: TOMORROW > 5 SECTIONS ######################################################################################## -->
       <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
-        <div id="surface-wind-tomorrow"></div>  <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
-        <div id="wind-aloft-longterm"></div>    <!-- SECTION 2: WIND ALOFT LONG TERM (24 HR) -->
-        <div id="hourly-chart-tomorrow"></div>  <!-- SECTION 3: 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
-        <div id="area-forecast-tomorrow"></div> <!-- SECTION 4: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
-        <div id="nws-multiday"></div>           <!-- SECTION 5: NWS MULTI-DAY FORECAST -->
+        <div id="surface-wind-tomorrow"></div>
+        <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="wind-aloft-longterm"></div> <!-- SECTION 2: WIND ALOFT LONG TERM (24 HR) -->
+        <div id="hourly-chart-tomorrow"></div> <!-- SECTION 3: 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+        <div id="area-forecast-tomorrow"></div>
+        <!-- SECTION 4: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
+        <div id="nws-multiday"></div> <!-- SECTION 5: NWS MULTI-DAY FORECAST -->
       </div>
 
       <!-- PAGE 3: SETTINGS > 3 SECTIONS ######################################################################################## -->
       <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
-        <div id="marquee-speed"></div>          <!-- SECTION 1: MARQUEE SPEED CONTROL -->
-        <div id="stations-displayed"></div>     <!-- SECTION 2: STATION ON/OFF TOGGLES -->
+        <div id="marquee-speed"></div> <!-- SECTION 1: MARQUEE SPEED CONTROL -->
+        <div id="stations-displayed"></div> <!-- SECTION 2: STATION ON/OFF TOGGLES -->
       </div>
 
       <!-- PAGE 4: MISC > 6 SECTIONS ############################################################################################ -->
       <div class="collapse keen-slider__slide number-slide4 pe-2" id="misc-page">
-        <div id="uhgpga-flying-sites"></div>    <!-- SECTION 1: UHGPGA FLYING SITES -->
-        <div id="hike-fly"></div>               <!-- SECTION 2: HIKE & FLY CALCULATOR -->
-        <div id="pressure-zone-chart"></div>    <!-- SECTION 3: AMBROSE PRESSURE ZONE -->
-        <div id="units"></div>                  <!-- SECTION 4: UNITS & MODELS -->
-        <div id="about"></div>                  <!-- SECTION 5: ABOUT -->
-        <div id="learn-paragliding"></div>      <!-- SECTION 6: LEARN TO PARAGLIDE -->
+        <div id="uhgpga-flying-sites"></div> <!-- SECTION 1: UHGPGA FLYING SITES -->
+        <div id="hike-fly"></div> <!-- SECTION 2: HIKE & FLY CALCULATOR -->
+        <div id="pressure-zone-chart"></div> <!-- SECTION 3: AMBROSE PRESSURE ZONE -->
+        <div id="units"></div> <!-- SECTION 4: UNITS & MODELS -->
+        <div id="about"></div> <!-- SECTION 5: ABOUT -->
+        <div id="learn-paragliding"></div> <!-- SECTION 6: LEARN TO PARAGLIDE -->
       </div>
-      
+
       <!-- PAGE 5: GPS > 2 SECTIONS ############################################################################################# -->
       <div class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
-        <div id="livetrack24"></div>            <!-- SECTION 1: LIVETRACK24 -->
-        <div id="xcfind"></div>                 <!-- SECTION 2: XCFIND -->
+        <div id="livetrack24"></div> <!-- SECTION 1: LIVETRACK24 -->
+        <div id="xcfind"></div> <!-- SECTION 2: XCFIND -->
       </div>
 
       <!-- PAGE 6: CAMS ######################################################################################################### -->
       <div class="collapse keen-slider__slide number-slide6 pe-2" id="cams-page"></div>
-      
+
       <!-- PAGE 7: NOW > 4 SECTIONS ############################################################################################# -->
       <div class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
-        <div id="KSLC-main"></div>              <!-- SECTION 1: KSLC CHART -->
-        <div id="wind-map"></div>               <!-- SECTION 2: WIND MAP SCREEN SHOT -->
-        <div id="wind-charts"></div>            <!-- SECTION 3: WIND STATION CHARTS -->
-        <div id="satellite-gif"></div>          <!-- SECTION 4: SATELLITE GIF -->
+        <div id="KSLC-main"></div> <!-- SECTION 1: KSLC CHART -->
+        <div id="wind-map"></div> <!-- SECTION 2: WIND MAP SCREEN SHOT -->
+        <div id="wind-charts"></div> <!-- SECTION 3: WIND STATION CHARTS -->
+        <div id="satellite-gif"></div> <!-- SECTION 4: SATELLITE GIF -->
       </div>
-      
+
     </div> <!-- END SLIDER PAGES -->
-  </div>   <!-- END BODY CONTAINER -->
+  </div> <!-- END BODY CONTAINER -->
 
   <!-- JAVASCRIPT -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
