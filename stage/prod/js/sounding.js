@@ -3,14 +3,14 @@
 function processSounding(nwsData, soundingData, hiTemp, nwsNegative3, nwsTopOfLift) {
   let useNwsSounding = true;
   const formatttedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
-  if (soundingData[0] === formatttedDate) {
+  if (soundingData["date"] === formatttedDate) {
     useNwsSounding = false;
     Object.assign(document.getElementById("sounding-link"), { href: "https://climate.cod.edu/data/raob/KSLC/skewt/", target: "_blank" });
     // Check skew t image sources here: https://www.weather.gov/upperair/SkewTViewing (link above broken)
     // Also possible: https://weather.rap.ucar.edu/upper/displayUpper.php?img=KSLC.png&endDate=-1&endTime=-1&duration=0
     document.getElementById("sounding-source").textContent = "KSLC Sounding @ Noon";
     document.getElementById("other-temps").style.display = "block";
-    global.soundingData = soundingData.slice(1); // Slice removes the date/time element
+    global.soundingData = soundingData["observations"].slice(1); // Slice removes the date/time element
     global.liftParams = getLiftParams(global.soundingData, hiTemp);
   } else {
     Object.assign(document.getElementById("sounding-link"), { href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1", target: "_blank" });

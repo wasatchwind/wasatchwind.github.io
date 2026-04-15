@@ -1,5 +1,5 @@
 "use strict";
-// console.log(localStorage)
+
 const openMeteoHourlyParams = () => {
   const params = [];
   const hourlyConfig = {
@@ -31,14 +31,14 @@ const openMeteoParams = {
 };
 
 const dataSources = [
-  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", etag: true },
+  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", etag: true, },
   { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", etag: true },
   { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", etag: true },
   { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", etag: true },
   { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", etag: true },
   { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", etag: true },
-  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app" },
-  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json" },
+  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", },
+  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png" },
   { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams) }
 ];
