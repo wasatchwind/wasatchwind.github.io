@@ -3,7 +3,7 @@
 function processSounding(nwsData, soundingData, hiTemp, nwsNegative3, nwsTopOfLift) {
   let useNwsSounding = true;
   const formatttedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
-  console.log(formattedDate, soundingData["date"], formattedDate === soundingData["date"];
+  console.log(formattedDate, soundingData["date"], formattedDate === soundingData["date"]);
   if (soundingData["date"] === formatttedDate) {
     useNwsSounding = false;
     Object.assign(document.getElementById("sounding-link"), { href: "https://climate.cod.edu/data/raob/KSLC/skewt/", target: "_blank" });
