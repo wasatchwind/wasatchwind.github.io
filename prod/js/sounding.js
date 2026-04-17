@@ -396,22 +396,24 @@ function drawDALRParams(temp, params, useNwsSounding) { // Dynamic elements base
       .attr("y2", y(surfaceAlt));
   }
 
-  // -3 index line
-  svg.append("g").append("line")
-    .attr("class", "neg3line")
-    .attr("stroke", "white")
-    .attr("stroke-width", 3)
-    .attr("x1", x(negative3TempF))
-    .attr("y1", y(negative3AltFt))
-    .attr("x2", x(negative3TempF - dalr))
-    .attr("y2", y(negative3AltFt));
-
-  // -3 label
-  svg.append("g").append("text")
-    .attr("class", "liftlabels")
-    .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
-    .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
-    .text("-3");
+  if (negative3TempF > x(-10)) {
+    // -3 index line
+    svg.append("g").append("line")
+      .attr("class", "neg3line")
+      .attr("stroke", "white")
+      .attr("stroke-width", 3)
+      .attr("x1", x(negative3TempF))
+      .attr("y1", y(negative3AltFt))
+      .attr("x2", x(negative3TempF - dalr))
+      .attr("y2", y(negative3AltFt));
+  
+    // -3 label
+    svg.append("g").append("text")
+      .attr("class", "liftlabels")
+      .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
+      .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
+      .text("-3");
+  }
 
   if (params.topOfLift > surfaceAltMeters && topOfLiftTempF > -10) {
     // Top of lift point marker
