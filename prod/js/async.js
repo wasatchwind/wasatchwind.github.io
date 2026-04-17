@@ -38,7 +38,7 @@ const dataSources = [ // Divide ttl by 1000, 60 to get mins
   { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", etag: true, ttl: 900000 }, // 15m
   { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", etag: true, ttl: 900000 }, // 15m
   { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", ttl: 0 },
-  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", ttl: 2700000 }, // 45m
+  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", ttl: 900000 }, // 15m
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", ttl: 0 },
   { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), ttl: 300000 } // 5m
 ];
