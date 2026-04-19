@@ -4,60 +4,44 @@
 // Soaring Forecast //
 //////////////////////
 function processSoaringForecastPage(text) {
-  const winterFormat = text.search(/MINUS/) > 0 ? true : false;
-
   const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
   const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
   const nwsTopOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
   const hiTempSoaringForecast = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
-  const nwsNegative3 = Number(text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim());
+  const nwsNegative3Literal = Number(text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim());
+  const nwsNegative3 = !Number.isNaN(nwsNegative3Literal) ? nwsNegative3Literal : "None";
   const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim()).toLocaleString();
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
 
-  const soaringForecast = winterFormat
-    ? `Format Error<br>
-      <br>
-      Click here to open the Soaring Foreast`
-    : `${forecastDate}<br>
-      <br>
-      High Temp......... ${hiTempSoaringForecast}°<br>
-      Height of -3...... ${nwsNegative3.toLocaleString()}<br>
-      Top of Lift....... ${nwsTopOfLift.toLocaleString()}<br>
-      Cloudbase (LCL)... ${cloudbase}<br>
-      <br>
-      Max Lift Rate..... ${rateOfLift}<br>
-      Lifted Index...... ${liftedIndex}<br>
-      ${overdevelopmentDisplay}`;
+  const soaringForecast = `
+    <div class="text-info">${forecastDate}</div><br>
+    High Temp......... ${hiTempSoaringForecast}°<br>
+    <br>
+    Negative 3 Index.. ${nwsNegative3.toLocaleString()}<br>
+    Top of Lift....... ${nwsTopOfLift.toLocaleString()}<br>
+    Cloudbase (LCL)... ${cloudbase}<br>
+    <br>
+    Max Lift Rate..... ${rateOfLift}<br>
+    Lifted Index...... ${liftedIndex}<br>
+    ${overdevelopmentDisplay}`;
 
-  const soaringForecastParams = {
-    elementId: "soaring-forecast",
-    href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1",
-    isVisible: true,
-    src: soaringForecast,
-    title: "Soaring Forecast Summary"
-  };
+  document.getElementById("soaring-forecast").innerHTML = `
+    <div class="mb-4">
+      <div class="display-3 text-info">Soaring Forecast Summary</div>
+      <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
+        <div class="bg-dark border rounded-4">
+          <div class="w-100" id="nws-sounding-chart"></div>
+          <div class="display-6 fw-semibold mb-4 text-info" id="model-lapse"></div>
+          <div class="border-top display-6 font-monospace ps-2 text-start" id="soaring-summary"></div>
+        </div>
+      </a>
+    </div>`;
+  
+  document.getElementById("soaring-summary").innerHTML = soaringForecast;
 
-  standardHtmlComponent(soaringForecastParams);
   return { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift };
-}
-
-function nwsSounding(text) {
-  const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/);
-  const rows = table[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
-  const nwsData = rows.map(line => {
-    const parts = line.split(/\s+/);
-    return {
-      Altitude_ft: Number(parts[0]),
-      Thermal_Index: Number(parts[10]),
-      Temp_c: Number(parts[1]),
-      Wind_Direction: Number(parts[3]),
-      Wind_Speed_kt: Number(parts[4])
-    }
-  });
-
-  return nwsData.sort((a, b) => a.Altitude_ft - b.Altitude_ft);
 }
 
 
@@ -66,7 +50,7 @@ function nwsSounding(text) {
 // Area Forecast //
 ///////////////////
 function processAreaForecastPageAndSunset(text, sunset) {
-  // return;
+  // return; // TESTING
   const isAfterSunset = new Date().getHours() >= sunset.getHours();
   const displayBlock = isAfterSunset ? "tomorrow" : "today";
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
