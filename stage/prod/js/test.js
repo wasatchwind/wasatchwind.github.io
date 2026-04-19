@@ -1,96 +1,37 @@
 "use strict";
 
-function processSounding(soaringText, soundingData, hiTemp, nwsNegative3, nwsTopOfLift) {
-  const nwsSoundingData = getNwsSoundingData(soaringText);
-  const getAdjustedTempF = (point) => celsiusToF(point.Temp_c - point.Thermal_Index);
-  const t1 = getAdjustedTempF(nwsSoundingData[0]); // 5,000 ft
-  const t2 = getAdjustedTempF(nwsSoundingData[10]); // 20,000 ft
-  const lapse = Math.round(((t2 - t1) / 15) * 10) / 10; // Divide by 15 (height diff per 1,000 ft.) and round to tenths place
+function processSounding(soundingData, hiTemp) {
+  document.getElementById("sounding").innerHTML = `
+    <div class="mb-4">
+      <div class="display-3 text-info">KSLC Radiosonde</div>
+      <div class="fs-1 text-info">Typically avaialable sometime after noon daily</div>
+      <div class="bg-dark border rounded-4">
+        <a href="https://weather.rap.ucar.edu/upper/displayUpper.php?img=KSLC.png&endDate=-1&endTime=-1&duration=0" target="_blank">
+          <div class="w-100" id="sounding-chart"></div>
+          <div class="display-6 fw-semibold mb-4 text-info">DALR: Dry Adiabatic Lapse Rate -5.4° F / 1,000 ft</div>
+        </a>
+        <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
+        <div class="collapse display-6 text-info" id="out-of-range"></div>
+        <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
+          <div class="clickable" id="d3-clear">Reset</div>
+          <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
+          <div class="clickable" id="d3-update">Enter</div>
+      </div>
+    </div>`;
 
-  document.getElementById("model-lapse").textContent = `Model Lapse Rate ${lapse}° F / 1,000 ft`;
-  const nwsLiftParams = getNwsLiftParams(nwsSoundingData, nwsNegative3, nwsTopOfLift);
+  soundingData = soundingData["observations"].slice(1); // Slice removes the date/time element
 
-  document.getElementById("negative3").textContent = nwsNegative3.toLocaleString();
-  document.getElementById("top-of-lift").textContent = nwsTopOfLift.toLocaleString();
+  const soundingLiftParams = getSoundingLiftParams(soundingData, hiTemp);
+  const negative3 = soundingLiftParams.negative3 ? Math.round(soundingLiftParams.negative3).toLocaleString() : "Ø";
+  const topOfLift = soundingLiftParams.topOfLift > 4229 ? Math.round(soundingLiftParams.topOfLift).toLocaleString() : "Ø";
 
-  buildSoundingChart("#nws-sounding-chart", nwsSoundingData, hiTemp, nwsLiftParams);
+  document.getElementById("negative3").textContent = negative3;
+  document.getElementById("top-of-lift").textContent = topOfLift;
 
-  const formattedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
-  if (soundingData["date"] === formattedDate) {
-    // For href: Check skew t image sources here: https://www.weather.gov/upperair/SkewTViewing
+  document.getElementById("d3-update").addEventListener("click", d3Update);
+  document.getElementById("d3-clear").addEventListener("click", () => d3Clear()); // Function format necessary since params are expected
 
-    // build HTML DOM
-    document.getElementById("sounding").innerHTML = `
-      <div class="mb-4">
-        <div class="display-3 text-info">KSLC Radiosonde</div>
-        <div class="fs-1 text-info">Typically avaialable sometime after noon daily</div>
-        <div class="bg-dark border rounded-4">
-          <a href="https://weather.rap.ucar.edu/upper/displayUpper.php?img=KSLC.png&endDate=-1&endTime=-1&duration=0" target="_blank">
-            <div class="w-100" id="sounding-chart"></div>
-            <div class="display-6 fw-semibold mb-4 text-info">DALR: Dry Adiabatic Lapse Rate -5.4° F / 1,000 ft</div>
-          </a>
-          <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
-          <div class="collapse display-6 text-info" id="out-of-range"></div>
-          <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
-            <div class="clickable" id="d3-clear">Reset</div>
-            <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
-            <div class="clickable" id="d3-update">Enter</div>
-        </div>
-      </div>`;
-
-    soundingData = soundingData["observations"].slice(1); // Slice removes the date/time element
-
-    const soundingLiftParams = getSoundingLiftParams(soundingData, hiTemp);
-    const negative3 = soundingLiftParams.negative3 ? Math.round(soundingLiftParams.negative3).toLocaleString() : "Ø";
-    const topOfLift = soundingLiftParams.topOfLift > 4229 ? Math.round(soundingLiftParams.topOfLift).toLocaleString() : "Ø";
-
-    document.getElementById("negative3").textContent = negative3;
-    document.getElementById("top-of-lift").textContent = topOfLift;
-
-    const chart = buildSoundingChart("#sounding-chart", soundingData, hiTemp, soundingLiftParams);
-
-    document.getElementById("d3-update").addEventListener("click", () => {
-      const newTemp = +document.getElementById("user-temp").value;
-      chart.update(newTemp);
-    });
-
-    document.getElementById("d3-clear").addEventListener("click", () => { chart.reset() });
-  }
-}
-
-function getNwsSoundingData(text) {
-  const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/);
-  const rows = table[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
-  const nwsData = rows.map(line => {
-    const parts = line.split(/\s+/);
-    return {
-      Altitude_ft: Number(parts[0]),
-      Thermal_Index: Number(parts[10]),
-      Temp_c: Number(parts[1]),
-      Wind_Direction: Number(parts[3]),
-      Wind_Speed_kt: Number(parts[4])
-    }
-  });
-  return nwsData.sort((a, b) => a.Altitude_ft - b.Altitude_ft);
-}
-
-function getNwsLiftParams(data, nwsNegative3, nwsTopOfLift) {
-  const tempAtNeg3 = getTempAtAltitude(data, nwsNegative3) + 3;
-  const tempAtTopOfLift = getTempAtAltitude(data, nwsTopOfLift);
-
-  function getTempAtAltitude(data, targetAlt) {
-    for (let i = 0; i < data.length - 1; i++) {
-      const a = data[i];
-      const b = data[i + 1];
-
-      if (targetAlt >= a.Altitude_ft && targetAlt <= b.Altitude_ft) {
-        return a.Temp_c +
-          ((targetAlt - a.Altitude_ft) * (b.Temp_c - a.Temp_c)) /
-          (b.Altitude_ft - a.Altitude_ft);
-      }
-    }
-  }
-  return { negative3: nwsNegative3, negative3Temp: tempAtNeg3, topOfLift: nwsTopOfLift, topOfLiftTemp: tempAtTopOfLift }
+  buildSoundingChart("#sounding-chart", soundingData, hiTemp, soundingLiftParams);
 }
 
 function getSoundingLiftParams(data, tempF) {
@@ -160,7 +101,6 @@ function getSoundingLiftParams(data, tempF) {
 
 function buildSoundingChart(id, data, hiTemp, liftParams) {
   const kslcSounding = data.length > 14 ? true : false;
-
   const ftPerMeter = 3.28084;
   const screenWidth = window.innerWidth;
   const proportionalHeight = screenWidth * 0.67;
@@ -297,115 +237,6 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .attr("y", y(9))
     .text(kslcSounding ? "DALR" : "Lapse");
 
-  ////////////////////////
-  // Wind Barbs Section //
-  ////////////////////////
-  const barbAltitudes = y.ticks(16);       // Ensure a barb for each y tick altitude (every 1,000 ft) e.g. [5, 6, ..., 20]
-  const barbAnchorX = x(-20);              // Barb x coordinate positioning left of the y axis
-  const staffLength = 30;                  // Barb staff length (px)
-  const tineSpacing = 8;                   // Spacing between tines along staff (px)
-  const tineLength = 15;                   // Length of a full tine (px)
-
-  // Helper function to find the nearest sounding level data for each barb altitude
-  function dataAtBarbAltitudes(barbAltitude) {
-    return data.reduce((best, current) => {
-      const currentAlt = current.Altitude_ft / 1000;
-      const bestAlt = best.Altitude_ft / 1000;
-      return (Math.abs(currentAlt - barbAltitude) < Math.abs(bestAlt - barbAltitude)) ? current : best;
-    });
-  }
-
-  // Draw a circle for barb anchor (no barb for calm wind)
-  function drawAnchorCircle(cx, cy) {
-    svg.append("circle")
-      .attr("cx", cx)
-      .attr("cy", cy)
-      .attr("r", 5)
-      .attr("fill", "white");
-  }
-
-  function drawBarbStaff(anchorX, anchorY, tipX, tipY) {
-    svg.append("line")
-      .attr("x1", anchorX)
-      .attr("y1", anchorY)
-      .attr("x2", tipX)
-      .attr("y2", tipY)
-      .attr("stroke", "white")
-      .attr("stroke-width", 5);
-  }
-
-  // Draw barbs at each 1,000' altitude tick
-  barbAltitudes.forEach(barbAltitude => {
-    const dataAtBarbAltitude = dataAtBarbAltitudes(barbAltitude);
-    const windDir = dataAtBarbAltitude.Wind_Direction;
-    const windSpd = dataAtBarbAltitude.Wind_Speed_kt;
-    const yPos = y(barbAltitude);
-
-    drawAnchorCircle(barbAnchorX, yPos);
-    if (windSpd < 1) return; // Only draw circle for calm (no staff)
-    let barbSpeed = Math.round(windSpd / 5) * 5; // Convert speed to nearest 5 knots
-
-    // Staff unit vector (u) points in the wind direction
-    const rad = (windDir % 360) * Math.PI / 180;
-    const staffX = Math.sin(rad);
-    const staffY = -Math.cos(rad); // D3 SVG y axis is downward
-    const tineX = Math.cos(rad);
-    const tineY = Math.sin(rad);
-    const tipX = barbAnchorX + staffLength * staffX;
-    const tipY = yPos + staffLength * staffY;
-
-    drawBarbStaff(barbAnchorX, yPos, tipX, tipY);
-
-    // Create tines sequence array outer to inner
-    const tines = [];
-    if (barbSpeed >= 45) {
-      tines.push("pennant");
-      barbSpeed = 0;
-    }
-    while (barbSpeed >= 10) {
-      tines.push("full");
-      barbSpeed -= 10;
-    }
-    if (barbSpeed >= 5) tines.push("half");
-
-    // Draw tines starting at the tip and moving back along the staff
-    let offset = 0; // px along the staff from the tip inward
-    tines.forEach(tine => {
-      // Position on staff where a tine is attached
-      const posX = tipX - offset * staffX;
-      const posY = tipY - offset * staffY;
-
-      if (tine === "pennant") {
-        // p1: base on staff, p2: length, p3: width
-        const width = 15;
-        const p1x = posX;
-        const p1y = posY;
-        const p2x = posX + tineLength * tineX;
-        const p2y = posY + tineLength * tineY;
-        const p3x = tipX - width * staffX;
-        const p3y = tipY - width * staffY;
-
-        svg.append("polygon")
-          .attr("points", `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} `)
-          .attr("fill", "red");
-
-      } else {
-        const lengthModifier = tine === "half" ? 0.7 : 1;
-        const endX = posX + tineLength * lengthModifier * tineX;
-        const endY = posY + tineLength * lengthModifier * tineY;
-        svg.append("line")
-          .attr("x1", posX)
-          .attr("y1", posY)
-          .attr("x2", endX)
-          .attr("y2", endY)
-          .attr("stroke", "white")
-          .attr("stroke-width", 5);
-      }
-
-      offset += tineSpacing;
-    });
-  }); // End of Wind Barbs Section
-
   const dalr = 5.4;
   const negative3TempF = celsiusToF(liftParams.negative3Temp);
   const topOfLiftTempF = celsiusToF(liftParams.topOfLiftTemp);
@@ -453,7 +284,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("y2", y(surfaceAlt));
   }
 
-  if (negative3AltFt && negative3TempF > x(-10)) { // Only draw -3 line/label marker if there's a -3 value and it's on the chart
+  if (negative3AltFt) { // Only draw -3 line/label marker if there's a -3 value
     // -3 index line
     svg.append("g").append("line")
       .attr("class", "neg3line")

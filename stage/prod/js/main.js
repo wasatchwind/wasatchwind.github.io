@@ -1,46 +1,43 @@
 "use strict";
 
 // Data source documentation:
-// 1) Open Meteo API: https://open-meteo.com/en/docs/gfs-api
-// 2) Synoptic API: https://docs.synopticdata.com/services/weather-api
-// 3) NWS API: https://www.weather.gov/documentation/services-web-api
-// 4) Keen Slider: https://keen-slider.io/docs
-// 5) Sounding Data UWYO Inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
-// 6) Sounding Data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
+// Open Meteo API: https://open-meteo.com/en/docs/gfs-api
+// Synoptic API: https://docs.synopticdata.com/services/weather-api
+// NWS API: https://www.weather.gov/documentation/services-web-api
+// Sounding Data UWYO Inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
+// Sounding Data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
+// Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
+// Keen Slider: https://keen-slider.io/docs
 
-// Process fetched data and web-accessed images
 function main(data) {
   console.log("All data", data)
-  MarqueeController.init();
+  MarqueeController.init(); // Set up marquee ticker
 
-  // Handle dependencies
-  // 1) Sunset time affects default nav order & when/where some components appear (Hourly Forecast Chart, Area Forecast Discussion)
-  // 2) Wind Map timestamp
-  // 3) hiTemp: Global variable forecast high temp needed to build the Morning Sounding Profile
-  // 4) soundingData: Global variable (for updating/resetting the Morning Sounding Profile based on user input)
+  // Process data in prioritized order:
+  // Sunset needed for nav order (2pm to sunset: Now, after sunset: Tomorrow) & for Hourly Forecast Chart & Area Forecast Discussion locations
+  const sunset = new Date(data.openMeteo.daily.sunset[0]);
   const currentHour = new Date().getHours();
   const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
   const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-  const sunset = new Date(data.openMeteo.daily.sunset[0]);
-  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
-  const { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift } = processSoaringForecastPage(data.soaringForecast.productText);
-  const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
-  global.hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo; // Primary source is SRG with Open Meteo for backup
   global.slider = buildNavSlider(0, navItems);
-
-  // Update activeNav: 2pm - sunset = Now; after sunset = Tomorrow
   if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
   else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
+  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset); // nws-api.js
+  if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
 
-  // Process remaining fetched data
-  processAreaForecastPageAndSunset(data.areaForecast.productText, sunset);
+  // Forecast high temp (global for resetting sounding) needed for sounding profile (ideally from soaring forecast with open meteo as backup)
+  const { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift } = processSoaringForecastPage(data.soaringForecast.productText); // new-api.js
+  const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
+  const hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo;
+  if (currentHour > 6) processSounding(data.soaringForecast.productText, data.sounding, hiTemp, nwsNegative3, nwsTopOfLift); // sounding.js
+
+  // Process remaining data
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24); // wind-aloft.js
-  processGeneralForecast(data.generalForecast.properties.periods);                        // nws-api.js
-  processSynoptic(data.synopticTimeseries.STATION);                                             // synoptic.js
-  if (currentHour > 6) processSounding(data.soaringForecast.productText, data.sounding, global.hiTemp, nwsNegative3, nwsTopOfLift); // sounding.js
+  processGeneralForecast(data.generalForecast.properties.periods); // nws-api.js
+  processSynoptic(data.synopticTimeseries.STATION); // synoptic.js
 
-  buildStationSettings(); // Build User Settings page
-  buildMiscPageItems();   // Build Misc page
+  buildStationSettings(); // main.js, Build User Settings page
+  buildMiscPageItems(); // main.js, Build Misc page
 
   // Set up Cams page container
   const camNames = ["cam-east", "cam-southeast", "cam-south", "cam-southwest", "cam-southwest2", "cam-west", "cam-west2"];
@@ -51,16 +48,15 @@ function main(data) {
     camContainer.appendChild(div)
   });
 
-  // Display all remaining web-accessed images
-  displayConditionalImages(sunset);
-  displayPersistentImages(windMapTimestamp);
+  const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
+  displayPersistentImages(windMapTimestamp); // main.js, must follow Cams container setup since images are persistent TESTING
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
-  document.getElementById("hi-temp").textContent = `${global.hiTemp}`;
+  document.getElementById("hi-temp").textContent = `${hiTemp}`;
   document.getElementById("spinner").style.display = "none";
 
-  // Display marquee and nav pages last for smooth loading
+  // Unhide main app nav pages last for smooth visual loading
   const pageIds = ["today-page", "tomorrow-page", "settings-page", "misc-page", "gps-page", "cams-page", "now-page"];
   pageIds.forEach(page => {
     const element = document.getElementById(page);
@@ -70,16 +66,13 @@ function main(data) {
 
 
 
-///////////////////////////////////////////////
-// Display all remaining web-accessed images //
-///////////////////////////////////////////////
-function displayConditionalImages(sunset) { // Afternoon Surface Wind Forecast
-  const currentHour = new Date().getHours();
-  if (currentHour < 7) return;
-
+/////////////////////////////////
+// Display web-accessed images //
+/////////////////////////////////
+function displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay) { // Conditionally located afternoon surface wind images
   const isToday = currentHour < sunset.getHours();
-  const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 }
-  const nextDay = !isToday ? ` ${new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" })}` : "";
+  nextDay = isToday ? "" : ` ${nextDay}`;
+  const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
   const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
   const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
 
@@ -192,10 +185,7 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
       title: "Learn Paragliding (My Alma Mater)"
     }
   ];
-
-  imagesToDisplay.forEach(image => {
-    standardHtmlComponent(image);
-  });
+  imagesToDisplay.forEach(image => { standardHtmlComponent(image) });
 }
 
 
@@ -251,7 +241,6 @@ function stationSetToggle(stid, state) { // Onclick function to toggle stations 
 // Misc. page itmes //
 //////////////////////
 function buildMiscPageItems() {
-  // return;
   const unitsContent = `
     <div class="text-info">Units (unless noted otherwise):</div>
     <div class="ms-4">
@@ -296,8 +285,5 @@ function buildMiscPageItems() {
       title: "About"
     }
   ];
-
-  miscSections.forEach(section => {
-    standardHtmlComponent(section);
-  });
+  miscSections.forEach(section => { standardHtmlComponent(section) });
 }
