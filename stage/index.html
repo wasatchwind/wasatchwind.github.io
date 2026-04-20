@@ -23,32 +23,17 @@
 
     <!-- STICKY TOP: 3 ROWS ##################################################################################################### -->
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
-
-      <!-- ROW 1: TITLE HEADING -->
-      <h1 class="align-items-center d-flex justify-content-between">
-        <img src="prod/images/pg.gif" height="125">
-        <div class="display-1 fw-semibold text-info">Wasatch Wind</div>
-        <button id="reload" class="clickable" aria-label="Reload page">
-          <img src="prod/images/refresh.png" height="125">
-        </button>
-      </h1>
-
-      <!-- ROW 2: MARQUEE/TICKER SLIDER -->
-      <div class="display-5 keen-slider" id="marquee"></div>
-
-      <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
-      <div class="align-items-end d-flex display-1 justify-content-between text-secondary" id="topnav">
-        <button class="fw-semibold text-warning clickable" data-direction="left" aria-label="Previous">&#171;</button>
-        <div class="col display-2" id="topnav-left"></div>
-        <div class="col fw-semibold text-white" id="topnav-active"></div>
-        <div class="col display-2" id="topnav-right"></div>
-        <button class="fw-semibold text-warning clickable" data-direction="right" aria-label="Next">&#187;</button>
-      </div>
-      
+      <div id="title-heading"></div>                         <!-- ROW 1: TITLE HEADING -->
+      <div class="display-5 keen-slider" id="marquee"></div> <!-- ROW 2: MARQUEE/TICKER SLIDER -->
+      <div id="topnav"></div>                                <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
     </div>
 
-    <!-- LOADING SPINNER & BODY SLIDER: 7 PAGES ################################################################################# -->
-    <img class="spinner w-25" id="spinner" src="prod/images/spinner.gif">
+    <!-- LOADING SPINNER/PROGRESS & BODY SLIDER: 7 PAGES ################################################################################# -->
+    <div class="fs-1" id="spinner">
+      <img class="mb-4 spinner w-25" src="prod/images/spinner.gif">
+      <div id="progress"></div>
+    </div>
+    
     <div class="keen-slider" id="slider">
 
       <!-- PAGE 1: TODAY > 8 SECTIONS ########################################################################################### -->
