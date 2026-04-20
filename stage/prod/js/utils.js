@@ -87,8 +87,6 @@ const MarqueeController = (() => {
     const direction = button.dataset.direction;
     actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
   });
-
-  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
 })();
 
 function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider

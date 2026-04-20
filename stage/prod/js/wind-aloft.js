@@ -81,6 +81,8 @@ function buildWindAloftForecast(data) {
       </div>
     </div>`;
 
+  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
+
   buildWindAloftContainer("current6");
   buildWindAloftContainer("next6");
 

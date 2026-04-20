@@ -68,6 +68,23 @@ async function fetchWithCache(source) {
   }
 }
 
+async function fetchData() {
+  const results = await Promise.allSettled(dataSources.map(fetchWithCache));
+  const data = {};
+  results.forEach((result, i) => {
+    const name = dataSources[i].name;
+    if (result.status === "fulfilled") data[name] = result.value;
+    else {
+      console.error(`Fetch failed: ${name}`, result.reason);
+      data[name] = { error: true };
+    }
+  });
+  return data;
+}
+
+const data = await fetchData();
+main(data);
+
 // async function fetchData() {
 //   const priority = dataSources.slice(0, 5);
 //   const secondary = dataSources.slice(5);
@@ -87,20 +104,3 @@ async function fetchWithCache(source) {
 
 //   return data;
 // }
-
-async function fetchData() {
-  const results = await Promise.allSettled(dataSources.map(fetchWithCache));
-  const data = {};
-  results.forEach((result, i) => {
-    const name = dataSources[i].name;
-    if (result.status === "fulfilled") data[name] = result.value;
-    else {
-      console.error(`Fetch failed: ${name}`, result.reason);
-      data[name] = { error: true };
-    }
-  });
-  return data;
-}
-
-const data = await fetchData();
-main(data);
