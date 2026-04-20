@@ -20,9 +20,9 @@ function main(data) {
   const currentHour = new Date().getHours();
   const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
   const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-  global.slider = buildNavSlider(0, navItems);
-  if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
+  slider = buildNavSlider(0, navItems);
+  if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (currentHour >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset); // nws-api.js
   if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
 

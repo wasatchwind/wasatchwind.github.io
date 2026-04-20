@@ -69,7 +69,14 @@ async function fetchWithCache(source) {
 }
 
 async function fetchData() {
-  const results = await Promise.allSettled(dataSources.map(fetchWithCache));
+  let completed = 0;
+  const results = await Promise.allSettled(dataSources.map(async (source) => {
+    const result = await fetchWithCache(source);
+    completed++;
+    document.getElementById("progress").textContent = `Loaded ${completed} of ${dataSources.length}`;
+    return result;
+  }));
+
   const data = {};
   results.forEach((result, i) => {
     const name = dataSources[i].name;
