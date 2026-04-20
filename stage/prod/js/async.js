@@ -82,25 +82,5 @@ async function fetchData() {
   return data;
 }
 
-const data = await fetchData();
+// const data = await fetchData();
 main(data);
-
-// async function fetchData() {
-//   const priority = dataSources.slice(0, 5);
-//   const secondary = dataSources.slice(5);
-
-//   const first = await Promise.allSettled(priority.map(fetchWithCache));
-//   const second = await Promise.allSettled(secondary.map(fetchWithCache));
-
-//   const results = [...first, ...second];
-
-//   const data = {};
-//   results.forEach((result, i) => {
-//     const name = dataSources[i].name;
-//     data[name] = result.status === "fulfilled"
-//       ? result.value
-//       : { error: true };
-//   });
-
-//   return data;
-// }

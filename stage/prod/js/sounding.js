@@ -528,15 +528,17 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("x", x(topOfLiftTempF + 2))
       .attr("y", y(topOfLiftAltFt - 0.3));
 
-    neg3Line.style("display", null)
-      .attr("x1", x(negative3TempF))
-      .attr("y1", y(negative3AltFt))
-      .attr("x2", x(negative3TempF - dalr))
-      .attr("y2", y(negative3AltFt));
+    if (neg3Line) {
+      neg3Line.style("display", null)
+        .attr("x1", x(negative3TempF))
+        .attr("y1", y(negative3AltFt))
+        .attr("x2", x(negative3TempF - dalr))
+        .attr("y2", y(negative3AltFt));
 
-    neg3Label.style("display", null)
-      .attr("x", x(negative3TempF + 2))
-      .attr("y", y(negative3AltFt - 0.3));
+      neg3Label.style("display", null)
+        .attr("x", x(negative3TempF + 2))
+        .attr("y", y(negative3AltFt - 0.3));
+    }
 
     tolLegend.text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
     neg3Legend.text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);

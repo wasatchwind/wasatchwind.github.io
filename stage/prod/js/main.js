@@ -24,7 +24,7 @@ function main(data) {
   if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
   else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset); // nws-api.js
-  if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
+  // if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
 
   // Forecast high temp (global for resetting sounding) needed for sounding profile (ideally from soaring forecast with open meteo as backup)
   const { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift } = processSoaringForecastPage(data.soaringForecast.productText); // new-api.js
@@ -50,7 +50,7 @@ function main(data) {
   });
 
   const windMapTimestamp = new Date(data.windMapScreenshotMetadata.timeCreated);
-  displayPersistentImages(windMapTimestamp); // main.js, must follow Cams container setup since images are persistent TESTING
+  // displayPersistentImages(windMapTimestamp); // main.js, must follow Cams container setup since images are persistent TESTING
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
   document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3);
