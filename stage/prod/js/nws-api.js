@@ -14,7 +14,8 @@ function processSoaringForecastPage(text) {
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
-
+  const formattedDate = new Date(forecastDate.split(",")[1]).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  
   const soaringForecast = `
     ${forecastDate}</div><br>
     <br>
@@ -30,7 +31,7 @@ function processSoaringForecastPage(text) {
 
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
-      <div class="display-3 text-info">Soaring Forecast Summary</div>
+      <div class="display-3 text-info">Soaring Forecast Summary ${formattedDate}</div>
       <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
         <div class="bg-dark border rounded-4">
           <div class="w-100" id="nws-sounding-chart"></div>
@@ -51,7 +52,7 @@ function processSoaringForecastPage(text) {
 // Area Forecast //
 ///////////////////
 function processAreaForecastPageAndSunset(text, sunset) {
-  // return; // TESTING
+  return; // TESTING
   const isAfterSunset = new Date().getHours() >= sunset.getHours();
   const displayBlock = isAfterSunset ? "tomorrow" : "today";
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();

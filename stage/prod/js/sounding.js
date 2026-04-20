@@ -21,8 +21,8 @@ function processSounding(soaringText, soundingData, hiTemp, nwsNegative3, nwsTop
     // build HTML DOM
     document.getElementById("sounding").innerHTML = `
       <div class="mb-4">
-        <div class="display-3 text-info">KSLC Radiosonde</div>
-        <div class="fs-1 text-info">Typically avaialable sometime after noon daily</div>
+        <div class="display-3 text-info">KSLC Radiosonde ${new Date().toLocaleString("en-US", { month: "short", day: "numeric" })}</div>
+        <div class="fs-1 text-info">Typically avaialable sometime after 12pm daily</div>
         <div class="bg-dark border rounded-4">
           <a href="https://weather.rap.ucar.edu/upper/displayUpper.php?img=KSLC.png&endDate=-1&endTime=-1&duration=0" target="_blank">
             <div class="w-100" id="sounding-chart"></div>
