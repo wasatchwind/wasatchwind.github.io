@@ -215,48 +215,5 @@ function stationList() { // Used for user settings page and station charts - alp
   ];
 }
 
-
-
-//////////////////
-// D3 Utilities //
-//////////////////
-function d3Update() {
-  let userLiftParams = {};
-  document.getElementById("out-of-range").style.display = "none";
-  const userTemp = Math.round(Number(document.getElementById("user-temp").value));
-  if (!userTemp) return;
-
-  try { userLiftParams = getLiftParams(global.soundingData, userTemp); }
-  catch {
-    d3OutOfRange(userTemp);
-    return;
-  };
-
-  if ((celsiusToF(userLiftParams.topOfLiftTemp)) < -10 || !userLiftParams.topOfLift) d3OutOfRange(userTemp);
-  else d3Clear(userTemp, userLiftParams);
-}
-
-function d3OutOfRange(userTemp) {
-  document.getElementById("out-of-range").textContent = `Error: parameters out of range for ${userTemp}°`;
-  document.getElementById("out-of-range").style.display = "block";
-  document.getElementById("user-temp").value = null;
-  return;
-}
-
-function d3Clear(temp, params) { // If triggered from HTML Onclick() then params are null; reset to global defaults
-  if (!temp) temp = global.hiTemp;
-  if (!params) params = global.liftParams;
-
-  document.getElementById("user-temp").value = null;
-  document.getElementById("out-of-range").style.display = "none";
-
-  const chartElements = ["line.dalrline", "line.neg3line", "text.liftlabels", "text.liftheights", "text.white", "circle.tolcircle"];
-  chartElements.forEach(element => {
-    svg.selectAll(element).remove();
-  });
-
-  drawDALRParams(temp, params);
-}
-
 // FOR TESTING - REMOVE IN PROD
 // const data = 

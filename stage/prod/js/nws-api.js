@@ -16,7 +16,8 @@ function processSoaringForecastPage(text) {
   const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
 
   const soaringForecast = `
-    <div class="text-info">${forecastDate}</div><br>
+    ${forecastDate}</div><br>
+    <br>
     High Temp......... ${hiTempSoaringForecast}°<br>
     <br>
     Negative 3 Index.. ${nwsNegative3.toLocaleString()}<br>

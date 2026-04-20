@@ -8,6 +8,7 @@
 // Sounding Data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
 // Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
 // Keen Slider: https://keen-slider.io/docs
+// Radiosonde image sources: https://www.weather.gov/upperair/SkewTViewing
 
 function main(data) {
   console.log("All data", data)
@@ -70,7 +71,7 @@ function main(data) {
 // Display web-accessed images //
 /////////////////////////////////
 function displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay) { // Conditionally located afternoon surface wind images
-  const isToday = currentHour < sunset.getHours();
+  const isToday = currentHour < sunset.getHours() - 1;
   nextDay = isToday ? "" : ` ${nextDay}`;
   const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
   const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
