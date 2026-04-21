@@ -23,67 +23,29 @@
 
     <!-- STICKY TOP: 3 ROWS ##################################################################################################### -->
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
-
-      <!-- ROW 1: TITLE HEADING -->
-      <h1 class="align-items-center d-flex justify-content-between">
-        <img src="prod/images/pg.gif" height="125">
-        <div class="display-1 fw-semibold text-info">Wasatch Wind</div>
-        <button id="reload" class="clickable" aria-label="Reload page">
-          <img src="prod/images/refresh.png" height="125">
-        </button>
-      </h1>
-
+      <div id="title-heading"></div>                         <!-- ROW 1: TITLE HEADING -->
       <div class="display-5 keen-slider" id="marquee"></div> <!-- ROW 2: MARQUEE/TICKER SLIDER -->
-
-      <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
-      <div class="align-items-end d-flex display-1 justify-content-between text-secondary" id="topnav">
-        <button class="fw-semibold text-warning clickable" data-direction="left" aria-label="Previous">&#171;</button>
-        <div class="col display-2" id="topnav-left"></div>
-        <div class="col fw-semibold text-white" id="topnav-active"></div>
-        <div class="col display-2" id="topnav-right"></div>
-        <button class="fw-semibold text-warning clickable" data-direction="right" aria-label="Next">&#187;</button>
-      </div>
-
+      <div id="topnav"></div>                                <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
     </div>
 
-    <!-- LOADING SPINNER & BODY SLIDER: 7 PAGES ################################################################################# -->
-    <img class="spinner w-25" id="spinner" src="prod/images/spinner.gif">
+    <!-- LOADING SPINNER/PROGRESS & BODY SLIDER: 7 PAGES ################################################################################# -->
+    <div id="spinner">
+      <img class="mb-4 spinner w-25" src="prod/images/spinner.gif">
+      <div class="display-4" id="progress"></div>
+    </div>
+    
     <div class="keen-slider" id="slider">
 
       <!-- PAGE 1: TODAY > 8 SECTIONS ########################################################################################### -->
       <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
-
-        <div id="surface-wind-today"></div>
-        <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
-
-        <!-- SECTION 2: WIND ALOFT FORECAST -->
-        <div class="mb-4">
-          <div class="display-3 text-info">Wind Aloft Forecast</div>
-
-          <div class="bg-dark border rounded-4" id="wind-aloft-current6">
-            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-              <div id="openmeteo-grid-current6"></div>
-            </a>
-            <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;
-            </div>
-          </div>
-
-          <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
-            <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-              <div id="openmeteo-grid-next6"></div>
-            </a>
-            <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6
-              hours</div>
-          </div>
-        </div>
-
+        <div id="surface-wind-today"></div>     <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="wind-aloft"></div>             <!-- SECTION 2: WIND ALOFT FORECAST -->
         <div id="hourly-chart-today"></div>     <!-- SECTION 3: 48 HOUR FORECAST CHART (CONDITIONALLY DISPLAYED) -->
         <div id="sounding"></div>               <!-- SECTION 4: D3.JS SOUNDING DATA CHART -->
         <div id="soaring-forecast"></div>       <!-- SECTION 5: NWS SOARING FORECAST SUMMARY -->
         <div id="area-forecast-aviation"></div> <!-- SECTION 6: AREA FORECAST DISCUSSION - AVIATION -->
         <div id="area-forecast-today"></div>    <!-- SECTION 7: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
         <div id="nws-today"></div>              <!-- SECTION 8: NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
-
       </div>
 
       <!-- PAGE 2: TOMORROW > 5 SECTIONS ######################################################################################## -->
