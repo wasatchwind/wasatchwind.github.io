@@ -17,23 +17,22 @@ function processSounding(soaringText, soundingData, hiTemp, nwsNegative3, nwsTop
 
   const formattedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA for needed format yyyy-mm-dd
   if (soundingData["date"] === formattedDate) {
-    // For href: Check skew t image sources here: https://www.weather.gov/upperair/SkewTViewing
 
     // build HTML DOM
     document.getElementById("sounding").innerHTML = `
       <div class="mb-4">
-        <div class="display-3 text-info">KSLC Radiosonde</div>
-        <div class="fs-1 text-info">Typically avaialable sometime after noon daily</div>
+        <div class="display-3 text-info">KSLC Radiosonde ${new Date().toLocaleString("en-US", { month: "short", day: "numeric" })}</div>
+        <div class="fs-1 text-info">Typically avaialable sometime after 12pm daily</div>
         <div class="bg-dark border rounded-4">
           <a href="https://weather.rap.ucar.edu/upper/displayUpper.php?img=KSLC.png&endDate=-1&endTime=-1&duration=0" target="_blank">
             <div class="w-100" id="sounding-chart"></div>
             <div class="display-6 fw-semibold mb-4 text-info">DALR: Dry Adiabatic Lapse Rate -5.4° F / 1,000 ft</div>
           </a>
-          <div class="border-top border-2 display-4 my-4 text-info">Visualize Other Thermal Temps:</div>
-          <div class="collapse display-6 text-info" id="out-of-range"></div>
+          <div class="border-top border-2 display-4 my-4">Visualize Other Thermal Temps:</div>
+          <div class="collapse display-6 fw-semibold text-danger" id="out-of-range"></div>
           <div class="d-flex display-3 fw-semibold justify-content-around py-3 text-warning border-bottom">
             <div class="clickable" id="d3-clear">Reset</div>
-            <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="110" placeholder="&deg; F" id="user-temp">
+            <input class="bg-dark border border-2 border-warning rounded-4 text-center text-warning" type="number" min="0" max="109" placeholder="&deg; F" id="user-temp">
             <div class="clickable" id="d3-update">Enter</div>
         </div>
       </div>`;
@@ -160,6 +159,9 @@ function getSoundingLiftParams(data, tempF) {
 
 function buildSoundingChart(id, data, hiTemp, liftParams) {
   const kslcSounding = data.length > 14 ? true : false;
+  let dalrLine, neg3Line, neg3Label, tolCircle, tolLabel;
+  const initialTemp = hiTemp;
+  let currentTemp = hiTemp;
 
   const ftPerMeter = 3.28084;
   const screenWidth = window.innerWidth;
@@ -413,7 +415,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   const topOfLiftAltFt = liftParams.topOfLift / 1000;
 
   // Legend label top of lift
-  svg.append("text")
+  const tolLegend = svg.append("text")
     .attr("class", "white")
     .attr("text-anchor", "end")
     .attr("x", x(113))
@@ -421,7 +423,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
 
   // Legend label -3 index
-  svg.append("text")
+  const neg3Legend = svg.append("text")
     .attr("class", "white")
     .attr("text-anchor", "end")
     .attr("x", x(113))
@@ -429,7 +431,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);
 
   // Legend label max temp
-  svg.append("text")
+  const hiTempLegend = svg.append("text")
     .attr("class", "white")
     .attr("text-anchor", "end")
     .attr("x", x(113))
@@ -438,24 +440,15 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 
   // Max temp DALR line
   if (kslcSounding) {
-    svg.append("g").append("line")
+    dalrLine = svg.append("g").append("line")
       .attr("class", "dalrline")
       .attr("stroke", "var(--bs-info)")
       .attr("stroke-width", 3)
-      .attr("x1", function () {
-        if (x(hiTemp - (maxAlt - surfaceAlt) * dalr) > x(-10)) return x(hiTemp - (maxAlt - surfaceAlt) * dalr)
-        else return x(-10)
-      })
-      .attr("x2", x(hiTemp))
-      .attr("y1", function () {
-        if (x(hiTemp - (maxAlt - surfaceAlt) * dalr) < x(-10)) return y(-1 / dalr * (-10 - hiTemp) + surfaceAlt)
-      })
-      .attr("y2", y(surfaceAlt));
   }
 
   if (negative3AltFt && negative3TempF > x(-10)) { // Only draw -3 line/label marker if there's a -3 value and it's on the chart
     // -3 index line
-    svg.append("g").append("line")
+    neg3Line = svg.append("g").append("line")
       .attr("class", "neg3line")
       .attr("stroke", "white")
       .attr("stroke-width", 3)
@@ -465,16 +458,27 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("y2", y(negative3AltFt));
 
     // -3 label
-    svg.append("g").append("text")
+    neg3Label = svg.append("g").append("text")
       .attr("class", "liftlabels")
       .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
       .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
+      .text("-3");
+  } else { // Still need to create a neg3 line/label in case default doesn't have it but user input lines do
+    // -3 index line
+    neg3Line = svg.append("g").append("line")
+      .attr("class", "neg3line")
+      .attr("stroke", "white")
+      .attr("stroke-width", 3)
+
+    // -3 label
+    neg3Label = svg.append("g").append("text")
+      .attr("class", "liftlabels")
       .text("-3");
   }
 
   if (liftParams.topOfLift > surfaceAltMeters && topOfLiftTempF > -10) {
     // Top of lift point marker
-    svg.append("g").append("circle")
+    tolCircle = svg.append("g").append("circle")
       .attr("class", "tolcircle")
       .attr("fill", "white")
       .attr("cx", x(topOfLiftTempF))
@@ -482,98 +486,72 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("r", 6);
 
     // Top of lift label
-    svg.append("g").append("text")
+    tolLabel = svg.append("g").append("text")
       .attr("class", "liftlabels")
       .attr("x", x(topOfLiftTempF + 2)) // Shift label to the right slightly
       .attr("y", y(topOfLiftAltFt - 0.3)) // Shift label slightly lower to center vertically
       .text("ToL");
   }
+
+  if (kslcSounding) drawUserInput(currentTemp);
+
+  return {
+    update(newTemp) {
+      currentTemp = newTemp;
+      document.getElementById("user-temp").value = null;
+      document.getElementById("out-of-range").style.display = "none";
+      drawUserInput(currentTemp);
+    },
+    reset() {
+      currentTemp = initialTemp;
+      document.getElementById("user-temp").value = null;
+      document.getElementById("out-of-range").style.display = "none";
+      drawUserInput(currentTemp);
+    }
+  };
+
+  function drawUserInput(temp) {
+    const liftParams = getSoundingLiftParams(data, temp);
+    if (!liftParams.topOfLift && !liftParams.negative3) {
+      document.getElementById("out-of-range").textContent = `${temp}° out of range`;
+      document.getElementById("out-of-range").style.display = "block";
+      document.getElementById("user-temp").value = null;
+      return;
+    }
+
+    const negative3TempF = celsiusToF(liftParams.negative3Temp);
+    const topOfLiftTempF = celsiusToF(liftParams.topOfLiftTemp);
+    const negative3AltFt = liftParams.negative3 / 1000;
+    const topOfLiftAltFt = liftParams.topOfLift / 1000;
+
+    dalrLine
+      .attr("x1", function () { if (x(temp - (maxAlt - surfaceAlt) * dalr) > x(-10)) return x(temp - (maxAlt - surfaceAlt) * dalr) })
+      .attr("x2", x(temp))
+      .attr("y1", function () { if (x(temp - (maxAlt - surfaceAlt) * dalr) < x(-10)) return y(-1 / dalr * (-10 - temp) + surfaceAlt) })
+      .attr("y2", y(surfaceAlt));
+
+    tolCircle.style("display", null)
+      .attr("cx", x(topOfLiftTempF))
+      .attr("cy", y(topOfLiftAltFt));
+
+    tolLabel.style("display", null)
+      .attr("x", x(topOfLiftTempF + 2))
+      .attr("y", y(topOfLiftAltFt - 0.3));
+
+    // if (neg3Line) {
+    neg3Line.style("display", null)
+      .attr("x1", x(negative3TempF))
+      .attr("y1", y(negative3AltFt))
+      .attr("x2", x(negative3TempF - dalr))
+      .attr("y2", y(negative3AltFt));
+
+    neg3Label.style("display", null)
+      .attr("x", x(negative3TempF + 2))
+      .attr("y", y(negative3AltFt - 0.3));
+    // }
+
+    tolLegend.text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
+    neg3Legend.text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);
+    hiTempLegend.text(`@${temp}°`);
+  }
 }
-
-
-
-/////////////////////////////////
-// Draw User Update Components //
-/////////////////////////////////
-// function drawDALRParams(temp, params, useNwsSounding) { // Dynamic elements based on user temp input
-//   const dalr = 5.4;
-//   const negative3TempF = celsiusToF(params.negative3Temp);
-//   const topOfLiftTempF = celsiusToF(params.topOfLiftTemp);
-//   const negative3AltFt = params.negative3 / 1000;
-//   const topOfLiftAltFt = params.topOfLift / 1000;
-
-//   // Legend label top of lift
-//   svg.append("text")
-//     .attr("class", "white")
-//     .attr("text-anchor", "end")
-//     .attr("x", x(113))
-//     .attr("y", y(19))
-//     .text(`Top of Lift: ${params.topOfLift < surfaceAltMeters ? "Ø" : Math.round(params.topOfLift).toLocaleString()} `);
-
-//   // Legend label -3 index
-//   svg.append("text")
-//     .attr("class", "white")
-//     .attr("text-anchor", "end")
-//     .attr("x", x(113))
-//     .attr("y", y(17))
-//     .text(`- 3 Index: ${!params.negative3 ? "Ø" : Math.round(params.negative3).toLocaleString()} `);
-
-//   // Legend label max temp
-//   svg.append("text")
-//     .attr("class", "white")
-//     .attr("text-anchor", "end")
-//     .attr("x", x(113))
-//     .attr("y", y(15))
-//     .text(`@${temp}°`);
-
-//   // Max temp DALR line
-//   if (!useNwsSounding) {
-//     svg.append("g").append("line")
-//       .attr("class", "dalrline")
-//       .attr("stroke", "var(--bs-info)")
-//       .attr("stroke-width", 3)
-//       .attr("x1", function () {
-//         if (x(temp - (maxAlt - surfaceAlt) * dalr) > x(-10)) return x(temp - (maxAlt - surfaceAlt) * dalr)
-//         else return x(-10)
-//       })
-//       .attr("x2", x(temp))
-//       .attr("y1", function () {
-//         if (x(temp - (maxAlt - surfaceAlt) * dalr) < x(-10)) return y(-1 / dalr * (-10 - temp) + surfaceAlt)
-//       })
-//       .attr("y2", y(surfaceAlt));
-//   }
-
-//   // -3 index line
-//   svg.append("g").append("line")
-//     .attr("class", "neg3line")
-//     .attr("stroke", "white")
-//     .attr("stroke-width", 3)
-//     .attr("x1", x(negative3TempF))
-//     .attr("y1", y(negative3AltFt))
-//     .attr("x2", x(negative3TempF - dalr))
-//     .attr("y2", y(negative3AltFt));
-
-//   // -3 label
-//   svg.append("g").append("text")
-//     .attr("class", "liftlabels")
-//     .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
-//     .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
-//     .text("-3");
-
-//   if (params.topOfLift > surfaceAltMeters && topOfLiftTempF > -10) {
-//     // Top of lift point marker
-//     svg.append("g").append("circle")
-//       .attr("class", "tolcircle")
-//       .attr("fill", "white")
-//       .attr("cx", x(topOfLiftTempF))
-//       .attr("cy", y(topOfLiftAltFt))
-//       .attr("r", 6);
-
-//     // Top of lift label
-//     svg.append("g").append("text")
-//       .attr("class", "liftlabels")
-//       .attr("x", x(topOfLiftTempF + 2)) // Shift label to the right slightly
-//       .attr("y", y(topOfLiftAltFt - 0.3)) // Shift label slightly lower to center vertically
-//       .text("ToL");
-//   }
-// }

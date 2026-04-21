@@ -14,9 +14,11 @@ function processSoaringForecastPage(text) {
   const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
   const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
   const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
-
+  const formattedDate = new Date(forecastDate.split(",")[1]).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  
   const soaringForecast = `
-    <div class="text-info">${forecastDate}</div><br>
+    ${forecastDate}</div><br>
+    <br>
     High Temp......... ${hiTempSoaringForecast}°<br>
     <br>
     Negative 3 Index.. ${nwsNegative3.toLocaleString()}<br>
@@ -29,7 +31,7 @@ function processSoaringForecastPage(text) {
 
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
-      <div class="display-3 text-info">Soaring Forecast Summary</div>
+      <div class="display-3 text-info">Soaring Forecast Summary ${formattedDate}</div>
       <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
         <div class="bg-dark border rounded-4">
           <div class="w-100" id="nws-sounding-chart"></div>

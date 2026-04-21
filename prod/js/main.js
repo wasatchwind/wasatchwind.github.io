@@ -8,6 +8,7 @@
 // Sounding Data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
 // Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
 // Keen Slider: https://keen-slider.io/docs
+// Radiosonde image sources: https://www.weather.gov/upperair/SkewTViewing
 
 function main(data) {
   console.log("All data", data)
@@ -19,9 +20,9 @@ function main(data) {
   const currentHour = new Date().getHours();
   const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
   const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-  global.slider = buildNavSlider(0, navItems);
-  if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) global.slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
-  else if (currentHour >= sunset.getHours() - 1) global.slider.moveToIdx(1, true, { duration: 0 });
+  slider = buildNavSlider(0, navItems);
+  if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
+  else if (currentHour >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset); // nws-api.js
   if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
 
@@ -70,7 +71,7 @@ function main(data) {
 // Display web-accessed images //
 /////////////////////////////////
 function displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay) { // Conditionally located afternoon surface wind images
-  const isToday = currentHour < sunset.getHours();
+  const isToday = currentHour < sunset.getHours() - 1;
   nextDay = isToday ? "" : ` ${nextDay}`;
   const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
   const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;

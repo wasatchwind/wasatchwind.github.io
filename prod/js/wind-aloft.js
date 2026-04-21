@@ -64,6 +64,25 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAl
 // Main Wind Aloft Forecast component //
 ////////////////////////////////////////
 function buildWindAloftForecast(data) {
+  document.getElementById("wind-aloft").innerHTML = `
+    <div class="mb-4">
+      <div class="display-3 text-info">Wind Aloft Forecast</div>
+      <div class="bg-dark border rounded-4" id="wind-aloft-current6">
+        <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+          <div id="openmeteo-grid-current6"></div>
+        </a>
+        <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;</div>
+      </div>
+      <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
+        <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
+          <div id="openmeteo-grid-next6"></div>
+        </a>
+        <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6 hours</div>
+      </div>
+    </div>`;
+
+  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
+
   buildWindAloftContainer("current6");
   buildWindAloftContainer("next6");
 

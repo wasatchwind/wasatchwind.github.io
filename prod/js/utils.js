@@ -1,6 +1,49 @@
 "use strict";
 
-const global = {}; // Used for page slider navigation
+let slider; // Global, used for page slider navigation
+
+// IIFE to build sticky top HTML DOM with associated controls
+(() => {
+  // Title heading (row 1) - includes reload function
+  document.getElementById("title-heading").innerHTML = `
+    <h1 class="align-items-center d-flex justify-content-between">
+      <img src="prod/images/pg.gif" height="125">
+      <div class="display-1 fw-semibold text-info">Wasatch Wind</div>
+      <button id="reload" class="clickable" aria-label="Reload page">
+        <img src="prod/images/refresh.png" height="125">
+      </button>
+    </h1>`;
+
+  document.getElementById("reload").addEventListener("click", (e) => { // Reload button listener
+    history.scrollRestoration = "manual";
+    location.reload();
+  });
+
+  // Top navigation (row 3) - includes swipe & click listeners
+  document.getElementById("topnav").innerHTML = `
+    <div class="align-items-end d-flex display-1 justify-content-between text-secondary">
+      <button class="fw-semibold text-warning clickable" data-direction="left" aria-label="Previous">&#171;</button>
+      <div class="col display-2" id="topnav-left"></div>
+      <div class="col fw-semibold text-white" id="topnav-active"></div>
+      <div class="col display-2" id="topnav-right"></div>
+      <button class="fw-semibold text-warning clickable" data-direction="right" aria-label="Next">&#187;</button>
+    </div>`;
+
+  const actions = {
+    left: () => slider.prev(),
+    right: () => slider.next()
+  };
+
+  document.getElementById("topnav").addEventListener("click", (e) => {
+    const button = e.target.closest(".clickable");
+    if (!button) return;
+
+    const direction = button.dataset.direction;
+    actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
+  });
+})();
+
+
 
 ////////////////////////
 // Marquee Controller //
@@ -69,34 +112,12 @@ const MarqueeController = (() => {
 ///////////////
 // Utilities //
 ///////////////
-(() => { // Keep listeners self-contained instead of global
-  const actions = {
-    left: () => global.slider.prev(),
-    right: () => global.slider.next()
-  };
-
-  document.getElementById("reload").addEventListener("click", (e) => { // Reload button listener
-    history.scrollRestoration = "manual";
-    location.reload();
-  });
-
-  document.getElementById("topnav").addEventListener("click", (e) => { // Top nav buttons listener
-    const button = e.target.closest(".clickable");
-    if (!button) return;
-
-    const direction = button.dataset.direction;
-    actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
-  });
-
-  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
-})();
-
 function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider
   const options = {
     loop: true,
     slides: { perView: 1 },
     slideChanged: () => {
-      activeNav = global.slider.track.details.rel;
+      activeNav = slider.track.details.rel;
       navUpdate(activeNav, navItems);
       window.scrollTo(0, 0);
     }
@@ -213,49 +234,6 @@ function stationList() { // Used for user settings page and station charts - alp
     { id: "REY", name: "Reynolds Peak" },
     { id: "FPS", name: "Southside" }
   ];
-}
-
-
-
-//////////////////
-// D3 Utilities //
-//////////////////
-function d3Update() {
-  let userLiftParams = {};
-  document.getElementById("out-of-range").style.display = "none";
-  const userTemp = Math.round(Number(document.getElementById("user-temp").value));
-  if (!userTemp) return;
-
-  try { userLiftParams = getLiftParams(global.soundingData, userTemp); }
-  catch {
-    d3OutOfRange(userTemp);
-    return;
-  };
-
-  if ((celsiusToF(userLiftParams.topOfLiftTemp)) < -10 || !userLiftParams.topOfLift) d3OutOfRange(userTemp);
-  else d3Clear(userTemp, userLiftParams);
-}
-
-function d3OutOfRange(userTemp) {
-  document.getElementById("out-of-range").textContent = `Error: parameters out of range for ${userTemp}°`;
-  document.getElementById("out-of-range").style.display = "block";
-  document.getElementById("user-temp").value = null;
-  return;
-}
-
-function d3Clear(temp, params) { // If triggered from HTML Onclick() then params are null; reset to global defaults
-  if (!temp) temp = global.hiTemp;
-  if (!params) params = global.liftParams;
-
-  document.getElementById("user-temp").value = null;
-  document.getElementById("out-of-range").style.display = "none";
-
-  const chartElements = ["line.dalrline", "line.neg3line", "text.liftlabels", "text.liftheights", "text.white", "circle.tolcircle"];
-  chartElements.forEach(element => {
-    svg.selectAll(element).remove();
-  });
-
-  drawDALRParams(temp, params);
 }
 
 // FOR TESTING - REMOVE IN PROD
