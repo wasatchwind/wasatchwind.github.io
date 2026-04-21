@@ -73,7 +73,7 @@ async function fetchData() {
   const results = await Promise.allSettled(dataSources.map(async (source) => {
     const result = await fetchWithCache(source);
     completed++;
-    document.getElementById("progress").textContent = `Loaded ${completed} of ${dataSources.length}`;
+    document.getElementById("progress").textContent = `Loading... ${completed * 10}%`;
     return result;
   }));
 
@@ -90,4 +90,5 @@ async function fetchData() {
 }
 
 const data = await fetchData();
+console.log("All data", data);
 main(data);

@@ -1,8 +1,9 @@
 "use strict";
 
-let slider; // Global, used for page slider navigation
-
-// IIFE to build sticky top HTML DOM with associated controls
+///////////////////////////////////
+// HTML DOM contructor utilities //
+///////////////////////////////////
+// IIFE to immediately build sticky top HTML DOM with associated controls
 (() => {
   // Title heading (row 1) - includes reload function
   document.getElementById("title-heading").innerHTML = `
@@ -14,7 +15,8 @@ let slider; // Global, used for page slider navigation
       </button>
     </h1>`;
 
-  document.getElementById("reload").addEventListener("click", (e) => { // Reload button listener
+  // Reload button listener
+  document.getElementById("reload").addEventListener("click", (e) => {
     history.scrollRestoration = "manual";
     location.reload();
   });
@@ -28,29 +30,73 @@ let slider; // Global, used for page slider navigation
       <div class="col display-2" id="topnav-right"></div>
       <button class="fw-semibold text-warning clickable" data-direction="right" aria-label="Next">&#187;</button>
     </div>`;
-
-  const actions = {
-    left: () => slider.prev(),
-    right: () => slider.next()
-  };
-
-  document.getElementById("topnav").addEventListener("click", (e) => {
-    const button = e.target.closest(".clickable");
-    if (!button) return;
-
-    const direction = button.dataset.direction;
-    actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
-  });
 })();
 
+// Use a standard template to build similar component divs by elementId (used for many components)
+// params Options:
+// {
+//   elementId: String (required)
+//   title: String (required)
+//   href: String (optional: 1) url link, 2) undefined)
+//   src: String (optional: 1) source text, 2) HTML subdivs, 3) web image url, 4) hosted image path, 5) undefined)
+//   style: String (optional: 1) style override, 2) style override with subdiv id, 3) undefined (default style))
+// }
+function standardHtmlComponent({ elementId, title, href, src, style }) {
+  style = style ? style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
+  const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
+  const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
+  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}">${content}</div>`;
+  const link = href
+    ? { hrefLine: `<a href="${href}" target="_blank">`, closure: "</a>" }
+    : { hrefLine: "", closure: "" };
+
+  document.getElementById(`${elementId}`).innerHTML = `
+    <div class="mb-4">
+      ${link.hrefLine}
+        <div class="display-3 text-info">${title}</div>
+        ${imgOrDiv}
+      ${link.closure}
+    </div>`;
+}
 
 
-////////////////////////
-// Marquee Controller //
-////////////////////////
+/////////////////////////////////////////////////////////
+// Marquee (all code: component, controller, settings) //
+/////////////////////////////////////////////////////////
 const MarqueeController = (() => {
-  marqueeHtmlComponent();
-  marqueeSettingsComponent();
+
+  // DOM Setup - Marquee slider/ticker
+  const marqueeDiv = document.getElementById("marquee");
+  marqueeDiv.className = "display-5 keen-slider";
+
+  const row = (content) => `<div class="d-flex justify-content-center">${content}</div>`; // Reusable class
+  const tickers = [
+    { topRow: "-3 Index", bottomRow: `<div id="negative3"></div>` },
+    { topRow: "Top of Lift", bottomRow: `<div id="top-of-lift"></div>` },
+    { topRow: "Temp", bottomRow: row(`<div id="temp"></div><div id="hi-temp"></div>`) },
+    { topRow: "Pressure", bottomRow: row(`<div id="alti"></div><div id="trend"></div>`) },
+    { topRow: "Zone", bottomRow: `<img id="zone">` },
+    { topRow: "KSLC", id: "KSLC-time-12", bottomRow: row(`<div id="KSLC-wdir-12"></div><div class="ms-3" id="KSLC-wspd-12"></div><div class="gust-color fs-1 ms-3" id="KSLC-gust-12"></div>`) },
+    { topRow: "Sunset", bottomRow: `<div id="sunset"></div>` },
+  ];
+
+  marqueeDiv.innerHTML = tickers.map((t, i) => `
+    <div class="keen-slider__slide number-slide${i + 1}">
+      <div class="text-info" ${t.id ? `id="${t.id}"` : ""}>${t.topRow}</div>
+      ${t.bottomRow}
+    </div>`).join("");
+
+  // DOM Setup - Marquee speed settings
+  const marqueeSettingsDiv = document.getElementById("marquee-speed");
+  marqueeSettingsDiv.innerHTML = `
+    <div class="border-bottom d-flex justify-content-between py-4">
+      <div class="display-3 text-info">Marquee Speed</div>
+      <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>
+    </div>`;
+
+  const marqueeSettingsSpeeds = document.getElementById("marquee-settings");
+
+  // Create the Marquee
   const speeds = [
     { label: "Slow", value: 4000 },
     { label: "Medium", value: 1000 },
@@ -58,155 +104,61 @@ const MarqueeController = (() => {
   ];
 
   let currentSpeed = Number(localStorage.getItem("marquee")) || speeds[1].value;
-  const container = document.getElementById("marquee-settings");
+
+  const animate = (m) => m.moveToIdx(m.track.details.abs + 1, true, { duration: currentSpeed, easing: t => t });
   const options = {
     loop: true,
     slides: { perView: 4 },
-    created(m) { m.moveToIdx(1, true, { duration: currentSpeed, easing: t => t }); },
-    updated(m) { m.moveToIdx(m.track.details.abs + 1, true, { duration: currentSpeed, easing: t => t }); },
-    animationEnded(m) { m.moveToIdx(m.track.details.abs + 1, true, { duration: currentSpeed, easing: t => t }); }
+    created: (m) => animate(m),
+    updated: animate,
+    animationEnded: animate
   };
-
   const marquee = new KeenSlider("#marquee", options);
 
+  // Function to build the Marquee speed options on the user settings page
+  function buildSettingsUI() {
+    const baseBtnClass = "marquee-speed border px-4 rounded-5 py-2";
+    marqueeSettingsSpeeds.innerHTML = speeds.map(s => `
+    <div 
+      class="${baseBtnClass} bg-dark fw-normal"
+      data-speed="${s.value}">
+      ${s.label}
+    </div>`).join("");
+
+    marqueeSettingsSpeeds.addEventListener("click", (e) => {
+      const btn = e.target.closest(".marquee-speed");
+      if (!btn) return;
+      setSpeed(+btn.dataset.speed);
+    });
+
+    setSpeed(currentSpeed);
+  }
+
+  // Function to set the Marquee speed based on user selection or default
   function setSpeed(speed) {
     currentSpeed = speed;
     localStorage.setItem("marquee", speed);
-    const abs = marquee.track.details.abs;
-    marquee.moveToIdx(abs + 1, true, { duration: currentSpeed, easing: t => t });
-    updateUI(speed);
-  }
+    animate(marquee);
 
-  function updateUI(activeSpeed) {
-    document.querySelectorAll(".marquee-speed").forEach(btn => {
-      btn.className = "marquee-speed bg-dark border fw-normal px-4 rounded-5 py-2";
+    marqueeSettingsSpeeds.querySelectorAll(".marquee-speed").forEach(btn => {
+      btn.classList.toggle("bg-success", btn.dataset.speed == speed);
+      btn.classList.toggle("fw-semibold", btn.dataset.speed == speed);
+      btn.classList.toggle("bg-dark", btn.dataset.speed != speed);
+      btn.classList.toggle("fw-normal", btn.dataset.speed != speed);
     });
-
-    const activeBtn = container.querySelector(`[data-speed="${activeSpeed}"]`);
-    if (activeBtn) activeBtn.className = "marquee-speed bg-success border fw-semibold px-4 rounded-5 py-2";
   }
 
-  function buildSettingsUI() {
-    container.innerHTML = "";
-
-    speeds.forEach(speed => {
-      const btn = document.createElement("div");
-      btn.textContent = speed.label;
-      btn.dataset.speed = speed.value;
-      btn.className = "marquee-speed bg-dark border fw-normal px-4 rounded-5 py-2";
-      btn.addEventListener("click", () => {
-        setSpeed(speed.value);
-      });
-
-      container.appendChild(btn);
-    });
-
-    updateUI(currentSpeed);
-  }
-
-  return { init: buildSettingsUI, setSpeed };
+  return { init: buildSettingsUI, setSpeed }; // Initialized with MarqueeController.init(); on main.js in main()
 })();
 
 
-
-///////////////
-// Utilities //
-///////////////
-function buildNavSlider(activeNav, navItems) { // Set up nav swipe/scroll slider
-  const options = {
-    loop: true,
-    slides: { perView: 1 },
-    slideChanged: () => {
-      activeNav = slider.track.details.rel;
-      navUpdate(activeNav, navItems);
-      window.scrollTo(0, 0);
-    }
-  };
-  navUpdate(activeNav, navItems); // Necessary here to ensure initial page titles are displayed on first load
-  return new KeenSlider("#slider", options);
-}
-
-function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
-  const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
-  const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
-
-  document.getElementById("topnav-left").textContent = navItems[left];
-  document.getElementById("topnav-active").textContent = navItems[activeNav];
-  document.getElementById("topnav-right").textContent = navItems[right];
-}
-
-function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
-  const element = document.getElementById(id);
-  const toggle = document.getElementById(`${id}-toggle`);
-  const isHidden = element.classList.toggle("collapse");
-
-  toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
-}
-
-function toggleWindAloft() { // Wind Aloft Forecast toggle Next 6/Previous 6 hours
-  document.getElementById("wind-aloft-current6").classList.toggle("collapse");
-  document.getElementById("wind-aloft-next6").classList.toggle("collapse");
-}
-
-function marqueeHtmlComponent() {
-  const marqueeDiv = document.getElementById("marquee")
-  const tickers = [
-    { topRow: "-3 Index", bottomRow: `<div id="negative3"></div>` },
-    { topRow: "Top of Lift", bottomRow: `<div id="top-of-lift"></div>` },
-    { topRow: "Temp", bottomRow: `<div class="d-flex justify-content-center"><div id="temp"></div><div id="hi-temp"></div></div>` },
-    { topRow: "Pressure", bottomRow: `<div class="d-flex justify-content-center"><div id="alti"></div><div id="trend"></div></div>` },
-    { topRow: "Zone", bottomRow: `<img id="zone">` },
-    { topRow: "KSLC", id: "KSLC-time-12", bottomRow: `<div class="d-flex justify-content-center"><div id="KSLC-wdir-12"></div><div class="ms-3" id="KSLC-wspd-12"></div><div class="gust-color fs-1 ms-3" id="KSLC-gust-12"></div></div>` },
-    { topRow: "Sunset", bottomRow: `<div id="sunset"></div>` },
-  ];
-
-  tickers.forEach((ticker, i) => {
-    const div = document.createElement("div");
-    div.className = `keen-slider__slide number-slide${i + 1}`;
-    div.innerHTML = `
-      <div class="text-info" id="${ticker.id}">${ticker.topRow}</div>
-      ${ticker.bottomRow}`;
-
-    marqueeDiv.appendChild(div);
-  });
-}
-
-function marqueeSettingsComponent() {
-  const marqueeSettingsDiv = document.getElementById("marquee-speed");
-  const div = document.createElement("div");
-  div.className = "border-bottom d-flex justify-content-between py-4";
-  div.innerHTML = `
-    <div class="display-3 text-info">Marquee Speed</div>
-    <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>`;
-
-  marqueeSettingsDiv.appendChild(div);
-}
-
-function standardHtmlComponent(params) { // Build HTML divs by elementId where the basic structure is the same
-  const display = params.isVisible ? "" : "collapse ";
-  const subId = params.subId ? ` id="${params.subId}"` : "";
-  const src = params.src;
-  const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
-  const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
-  const style = params.style ? params.style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
-  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}"${subId}>${content}</div>`;
-  const link = params.href
-    ? { hrefLine: `<a href="${params.href}" target="_blank">`, closure: "</a>" }
-    : { hrefLine: "", closure: "" };
-
-  document.getElementById(`${params.elementId}`).innerHTML = `
-    <div class="${display} mb-4" id="${params.elementId}">
-      ${link.hrefLine}
-        <div class="display-3 text-info">${params.title}</div>
-        ${imgOrDiv}
-      ${link.closure}
-    </div>`;
-}
-
-function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based on altitude (array returns array, single speed likewise)
+///////////////////////////////////////////////
+// Wind speed color & station list utilities //
+///////////////////////////////////////////////
+// Returns wind speed color/s based on altitude (array returns array, single speed likewise): synoptic.js & wind-aloft.js
+function windSpeedColor(speeds, altitude) {
   const isArray = Array.isArray(speeds);
   speeds = isArray ? speeds : [speeds];
-
   const thresholds = altitude < 8 ? [10, 15, 20] : [altitude + 4, altitude + 10, altitude + 16]; // nonlinear accelerator for alts above 8k
   const colors = speeds.map(speed => {
     if (speed <= thresholds[0]) return "#1E6A4B";
@@ -217,24 +169,26 @@ function windSpeedColor(speeds, altitude) { // Returns wind speed color/s based 
   return isArray ? colors : colors[0];
 }
 
-function celsiusToF(temp) {
-  return (temp * 9 / 5) + 32;
-}
-
-function stationList() { // Used for user settings page and station charts - alphabetical order by name
+// Used for user settings page (main.js) and station wind charts (synoptic.js), alphabetical order by name, id matched to Synoptic station id
+function stationList() {
   return [
-    { id: "AMB", name: "Alta Baldy" },
-    { id: "KSVR", name: "Airport 2" },
-    { id: "BRW", name: "Clayton Peak" },
-    { id: "HDP", name: "Hidden Peak" },
-    { id: "OGP", name: "Ogden Peak" },
-    { id: "UTOLY", name: "Olypmus Cove" },
-    { id: "UT5", name: "Parleys Mouth" },
-    { id: "D6120", name: "Pepperwood" },
-    { id: "REY", name: "Reynolds Peak" },
-    { id: "FPS", name: "Southside" }
+    { name: "Alta Baldy", id: "AMB" },
+    { name: "Airport 2", id: "KSVR" },
+    { name: "Clayton Peak", id: "BRW" },
+    { name: "Hidden Peak", id: "HDP" },
+    { name: "Ogden Peak", id: "OGP" },
+    { name: "Olypmus Cove", id: "UTOLY" },
+    { name: "Parleys Mouth", id: "UT5" },
+    { name: "Pepperwood", id: "D6120" },
+    { name: "Reynolds Peak", id: "REY" },
+    { name: "Southside", id: "FPS" }
   ];
 }
+
+
+
+
+
 
 // FOR TESTING - REMOVE IN PROD
 // const data = 

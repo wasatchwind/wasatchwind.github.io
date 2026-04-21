@@ -4,10 +4,8 @@ function processSynoptic(data) {
   const kslcDiv = {
     elementId: "KSLC-main",
     href: "https://www.weather.gov/wrh/timeseries?site=KSLC&hours=72",
-    isVisible: true,
     title: "KSLC",
-    style: "align-items-end bg-dark d-flex rounded-4",
-    subId: "KSLC-chart"
+    style: `align-items-end bg-dark d-flex rounded-4" id="KSLC-chart`
   };
   standardHtmlComponent(kslcDiv);
 
@@ -68,6 +66,14 @@ function processSynoptic(data) {
         <div class="fs-4" id="${stationData.STID}-time-${i}"></div>`;
 
       chart.appendChild(div);
+    }
+
+    function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
+      const element = document.getElementById(id);
+      const toggle = document.getElementById(`${id}-toggle`);
+      const isHidden = element.classList.toggle("collapse");
+
+      toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
     }
 
     buildWindChart(stationData.STID, stationData.OBSERVATIONS, readingCount, stationData.ELEVATION);

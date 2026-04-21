@@ -64,30 +64,44 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAl
 // Main Wind Aloft Forecast component //
 ////////////////////////////////////////
 function buildWindAloftForecast(data) {
-  document.getElementById("wind-aloft").innerHTML = `
-    <div class="mb-4">
-      <div class="display-3 text-info">Wind Aloft Forecast</div>
-      <div class="bg-dark border rounded-4" id="wind-aloft-current6">
-        <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-          <div id="openmeteo-grid-current6"></div>
-        </a>
-        <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">Next 6 hours &rarr;</div>
-      </div>
-      <div class="bg-dark border collapse rounded-4" id="wind-aloft-next6">
-        <a href="https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low" target="_blank">
-          <div id="openmeteo-grid-next6"></div>
-        </a>
-        <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">&larr; Previous 6 hours</div>
+  const windAloftUrl = "https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low";
+
+  const buildWindAloftSection = ({ id, gridId, label }) => `
+    <div class="bg-dark border ${id.includes("next") ? "collapse" : ""} rounded-4" id="${id}">
+      <a href="${windAloftUrl}" target="_blank">
+        <div id="${gridId}"></div>
+      </a>
+      <div class="display-3 fw-semibold mt-4 pt-4 text-warning clickable wind-aloft-toggle">
+        ${label}
       </div>
     </div>`;
 
-  document.querySelectorAll(".wind-aloft-toggle").forEach(e => e.addEventListener("click", toggleWindAloft));
+  document.getElementById("wind-aloft").innerHTML = `
+    <div class="mb-4">
+      <div class="display-3 text-info">Wind Aloft Forecast</div>
+      ${buildWindAloftSection({ id: "wind-aloft-current6", gridId: "openmeteo-grid-current6", label: "Next 6 hours →" })}
+      ${buildWindAloftSection({ id: "wind-aloft-next6", gridId: "openmeteo-grid-next6", label: "← Previous 6 hours" })}
+    </div>`;
 
-  buildWindAloftContainer("current6");
-  buildWindAloftContainer("next6");
+  const windAloftContainer = document.getElementById("wind-aloft");
+  const currentEl = document.getElementById("wind-aloft-current6");
+  const nextEl = document.getElementById("wind-aloft-next6");
 
-  // Build the HTML DOM containers for the Wind Aloft Forecast component (current 6 and next 6 hours)
-  function buildWindAloftContainer(timeframe) {
+  windAloftContainer.addEventListener("click", (e) => {
+    if (!e.target.closest(".wind-aloft-toggle")) return;
+    toggleWindAloftView();
+  });
+
+  function toggleWindAloftView() {
+    currentEl.classList.toggle("collapse");
+    nextEl.classList.toggle("collapse");
+  }
+
+  populateWindAloftData("current6");
+  populateWindAloftData("next6");
+
+  // Populate the current6 and next6 hour Wind Aloft Forecast views
+  function populateWindAloftData(timeframe) {
     const ftPerMeter = 3.28084;
     const container = document.getElementById(`openmeteo-grid-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
@@ -95,7 +109,7 @@ function buildWindAloftForecast(data) {
     const pressureLevels = [625, 700, 750, 775, 800, 825, 850, 875];
     const rowCount = pressureLevels.length + 4 // Surface + NWS 9, 12, 18 (4)
 
-    // Calculate the mean geopotential altitude for current 6 and next 6 hours
+    // Calculate the mean geopotential altitude for current6 and next6
     const geopotentialMeans = pressureLevels.map(hPa => {
       const key = `geopotential_height_${hPa}hPa`;
       const cohort = data[key].slice(...slice);
@@ -213,9 +227,7 @@ function windAloftLongterm(data) {
   const windAloftLongterm = {
     elementId: "wind-aloft-longterm",
     href: "https://aviationweather.gov/data/windtemp/?region=slc&fcst=24&level=low",
-    isVisible: true,
-    style: "border display-3 overflow-hidden rounded-4",
-    subId: "wind-aloft-longterm-rows",
+    style: `border display-3 overflow-hidden rounded-4" id="wind-aloft-longterm-rows`,
     title: `Wind Aloft ${formatTime(data.starttime)} - ${formatTime(data.endtime)} ${nextDay}`
   };
 

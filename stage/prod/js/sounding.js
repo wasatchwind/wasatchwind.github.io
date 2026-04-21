@@ -463,7 +463,17 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("x", x(negative3TempF + 2)) // Shift label to the right slightly
       .attr("y", y(negative3AltFt - 0.3)) // Shift label slightly lower to center vertically
       .text("-3");
+  } else { // Still need to create a neg3 line/label in case default doesn't have it but user input lines do
+    // -3 index line
+    neg3Line = svg.append("g").append("line")
+      .attr("class", "neg3line")
+      .attr("stroke", "white")
+      .attr("stroke-width", 3)
 
+    // -3 label
+    neg3Label = svg.append("g").append("text")
+      .attr("class", "liftlabels")
+      .text("-3");
   }
 
   if (liftParams.topOfLift > surfaceAltMeters && topOfLiftTempF > -10) {
@@ -528,20 +538,24 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("x", x(topOfLiftTempF + 2))
       .attr("y", y(topOfLiftAltFt - 0.3));
 
-    if (neg3Line) {
-      neg3Line.style("display", null)
-        .attr("x1", x(negative3TempF))
-        .attr("y1", y(negative3AltFt))
-        .attr("x2", x(negative3TempF - dalr))
-        .attr("y2", y(negative3AltFt));
+    // if (neg3Line) {
+    neg3Line.style("display", null)
+      .attr("x1", x(negative3TempF))
+      .attr("y1", y(negative3AltFt))
+      .attr("x2", x(negative3TempF - dalr))
+      .attr("y2", y(negative3AltFt));
 
-      neg3Label.style("display", null)
-        .attr("x", x(negative3TempF + 2))
-        .attr("y", y(negative3AltFt - 0.3));
-    }
+    neg3Label.style("display", null)
+      .attr("x", x(negative3TempF + 2))
+      .attr("y", y(negative3AltFt - 0.3));
+    // }
 
     tolLegend.text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
     neg3Legend.text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);
     hiTempLegend.text(`@${temp}°`);
   }
+}
+
+function celsiusToF(temp) {
+  return (temp * 9 / 5) + 32;
 }
