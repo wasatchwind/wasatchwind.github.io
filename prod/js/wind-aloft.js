@@ -76,11 +76,17 @@ function buildWindAloftForecast(data) {
       </div>
     </div>`;
 
+  const formatTime = (time) => { return new Date(time).toLocaleTimeString([], { hour: "numeric", hour12: true }).toLowerCase() }
+  const ranges = [
+    `${formatTime(data.time[0])} - ${formatTime(data.time[5])}`,
+    `${formatTime(data.time[6])} - ${formatTime(data.time[11])}`
+  ];
+
   document.getElementById("wind-aloft").innerHTML = `
     <div class="mb-4">
       <div class="display-3 text-info">Wind Aloft Forecast</div>
-      ${buildWindAloftSection({ id: "wind-aloft-current6", gridId: "openmeteo-grid-current6", label: "Next 6 hours →" })}
-      ${buildWindAloftSection({ id: "wind-aloft-next6", gridId: "openmeteo-grid-next6", label: "← Previous 6 hours" })}
+      ${buildWindAloftSection({ id: "wind-aloft-current6", gridId: "openmeteo-grid-current6", label: `${ranges[1]} &#187;` })}
+      ${buildWindAloftSection({ id: "wind-aloft-next6", gridId: "openmeteo-grid-next6", label: `&#171; ${ranges[0]}` })}
     </div>`;
 
   const windAloftContainer = document.getElementById("wind-aloft");
@@ -172,10 +178,7 @@ function buildWindAloftForecast(data) {
         }
 
         // Time row
-        else {
-          const time = new Date(data.time[startIndex + (col - 1)]);
-          cell.textContent = time.toLocaleTimeString([], { hour: "numeric", hour12: true }).toLowerCase();
-        }
+        else cell.textContent = formatTime(data.time[startIndex + (col - 1)]);
 
         rowEl.appendChild(cell);
       }
