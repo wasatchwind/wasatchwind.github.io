@@ -11,8 +11,7 @@
 // Radiosonde image sources: https://www.weather.gov/upperair/SkewTViewing
 
 function main(data) {
-  console.log("All data", data)
-  MarqueeController.init(); // Set up marquee ticker
+  MarqueeController.init(); // Set up marquee slider/ticker
 
   // Process data in prioritized order:
   // Sunset needed for nav order (2pm to sunset: Now, after sunset: Tomorrow) & for Hourly Forecast Chart & Area Forecast Discussion locations
@@ -20,9 +19,23 @@ function main(data) {
   const currentHour = new Date().getHours();
   const nextDay = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString("en-US", { weekday: "short" });
   const navItems = ["Today", `${nextDay}+`, "Settings", "Misc.", "GPS", "Cams", "Now"];
-  slider = buildNavSlider(0, navItems);
+  const slider = buildNavSlider(0, navItems);
   if (currentHour >= 14 && currentHour <= sunset.getHours() - 1) slider.moveToIdx(navItems.length - 1, true, { duration: 0 });
   else if (currentHour >= sunset.getHours() - 1) slider.moveToIdx(1, true, { duration: 0 });
+
+  const actions = {
+    left: () => slider.prev(),
+    right: () => slider.next()
+  };
+
+  document.getElementById("topnav").addEventListener("click", (e) => {
+    const button = e.target.closest(".clickable");
+    if (!button) return;
+
+    const direction = button.dataset.direction;
+    actions[direction]?.(); // Optional Chaining Operator (function called only if direction is "left" or "right")
+  });
+
   processAreaForecastPageAndSunset(data.areaForecast.productText, sunset); // nws-api.js
   if (currentHour > 6) displayAfternoonSurfaceWindImages(currentHour, sunset, nextDay); // main.js TESTING
 
@@ -65,6 +78,29 @@ function main(data) {
   });
 }
 
+function buildNavSlider(initialNav, navItems) { // Set up nav swipe/scroll slider
+  const options = {
+    loop: true,
+    slides: { perView: 1 },
+    slideChanged: (slider) => {
+      navUpdate(slider.track.details.rel, navItems);
+      window.scrollTo(0, 0);
+    }
+  };
+  const slider = new KeenSlider("#slider", options);
+  navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
+  return slider;
+
+  function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
+    const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
+    const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
+
+    document.getElementById("topnav-left").textContent = navItems[left];
+    document.getElementById("topnav-active").textContent = navItems[activeNav];
+    document.getElementById("topnav-right").textContent = navItems[right];
+  }
+}
+
 
 
 /////////////////////////////////
@@ -98,90 +134,75 @@ function displayPersistentImages(windMapTimestamp) { // Images independent of co
     {
       elementId: "wind-map",
       href: "https://www.weather.gov/wrh/hazards?&zoom=10&scroll_zoom=false&center=40.70,-111.50&obs=true&obs_type=weather&elements=wind,gust&fontsize=4&obs_density=3",
-      isVisible: true,
       src: "https://storage.googleapis.com/wasatch-wind-static/wind-map-save.png",
       title: `Wind Map @ ${windMapTimestamp.toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase()}`
     }, {
       elementId: "satellite-gif",
       href: "https://www.star.nesdis.noaa.gov/goes/sector.php?sat=G17&sector=psw",
-      isVisible: true,
       src: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/psw/13/GOES18-PSW-13-600x600.gif",
       title: "Satellite Last 4 Hours"
     }, {
       elementId: "uhgpga-flying-sites",
       href: "https://www.uhgpga.org/flying-sites",
-      isVisible: true,
       src: "prod/images/UHGPGAflyingsites.png",
       title: "UHGPGA Flying Sites"
     }, {
       elementId: "hike-fly",
       href: "https://www.hikeandfly.org/?lat=40.62020704520565&lng=-111.90364837646486&zoom=11",
-      isVisible: true,
       src: "prod/images/hikeandfly.png",
       title: "Hike & Fly Calculator"
     }, {
       elementId: "pressure-zone-chart",
-      isVisible: true,
       src: "prod/images/zonechart.jpg",
       title: "Zone (Ambrose Pressure Zone)"
     }, {
       elementId: "cam-east",
       href: "https://www.weather.gov/slc/cameras",
-      isVisible: true,
       src: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347464441&shareID=17137573",
       title: "Daybreak looking East"
     }, {
       elementId: "cam-southeast",
       href: "https://horel.chpc.utah.edu/data/station_cameras/armstrong_cam/",
-      isVisible: true,
       src: "https://horel.chpc.utah.edu/data/station_cameras/armstrong_cam/armstrong_cam_current.jpg",
       title: "West Valley looking Southeast"
     }, {
       elementId: "cam-south",
       href: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/",
-      isVisible: true,
       src: "https://horel.chpc.utah.edu/data/station_cameras/wbbs_cam/wbbs_cam_current.jpg",
       title: "U of U looking South"
     }, {
       elementId: "cam-southwest",
       href: "https://www.weather.gov/slc/cameras",
-      isVisible: true,
       src: "https://cameraftpapi.drivehq.com/api/Camera/GetLastCameraImage.aspx?parentID=347695945&shareID=17138700",
       title: "Daybreak looking Southwest"
     }, {
       elementId: "cam-southwest2",
       href: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/",
-      isVisible: true,
       src: "https://horel.chpc.utah.edu/data/station_cameras/ulssb_cam/ulssb_cam_current.jpg",
       title: "U of U looking Southwest"
     }, {
       elementId: "cam-west",
       href: "https://www.weather.gov/slc/cameras",
-      isVisible: true,
       src: "https://images-webcams.windy.com/00/1367462800/current/full/1367462800.jpg",
       title: "West Valley looking West"
     }, {
       elementId: "cam-west2",
       href: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/",
-      isVisible: true,
       src: "https://horel.chpc.utah.edu/data/station_cameras/wbbw_cam/wbbw_cam_current.jpg",
       title: "U of U looking West"
     }, {
       elementId: "livetrack24",
       href: "https://www.livetrack24.com/tracks/country/us",
-      isVisible: true,
       src: "prod/images/livetrack24.png",
       title: "LiveTrack24"
     }, {
       elementId: "xcfind",
       href: "https://xcfind.paraglide.us/map.html?id=15",
-      isVisible: true,
       src: "prod/images/xcfind.png",
       title: "XCFind"
     }, {
       elementId: "learn-paragliding",
       href: "https://utahparagliding.com/",
-      isVisible: true,
       src: "prod/images/utahparagliding.jpg",
       title: "Learn Paragliding (My Alma Mater)"
     }
@@ -234,8 +255,9 @@ function stationSetToggle(stid, state) { // Onclick function to toggle stations 
 
   on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
   off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-}
 
+  document.getElementById(`${stid}-main`).style.display = state === "off" ? "none" : "";
+}
 
 
 //////////////////////
@@ -276,12 +298,10 @@ function buildMiscPageItems() {
   const miscSections = [
     {
       elementId: "units",
-      isVisible: true,
       src: unitsContent,
       title: "Units & Models"
     }, {
       elementId: "about",
-      isVisible: true,
       src: aboutContent,
       title: "About"
     }

@@ -4,10 +4,8 @@ function processSynoptic(data) {
   const kslcDiv = {
     elementId: "KSLC-main",
     href: "https://www.weather.gov/wrh/timeseries?site=KSLC&hours=72",
-    isVisible: true,
     title: "KSLC",
-    style: "align-items-end bg-dark d-flex rounded-4",
-    subId: "KSLC-chart"
+    style: `align-items-end bg-dark d-flex rounded-4" id="KSLC-chart`
   };
   standardHtmlComponent(kslcDiv);
 
@@ -24,6 +22,7 @@ function processSynoptic(data) {
     if (station.id !== "KSLC") { // KSLC does not have an expandable chart
       const elevation = parseInt(stationData.ELEVATION).toLocaleString();
       const stationDiv = document.createElement("div");
+      stationDiv.id = `${station.id}-main`;
 
       stationDiv.innerHTML = `
         <div class="align-items-end border-bottom d-flex justify-content-between pb-3 station-header">
@@ -70,13 +69,20 @@ function processSynoptic(data) {
       chart.appendChild(div);
     }
 
+    function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
+      const element = document.getElementById(id);
+      const toggle = document.getElementById(`${id}-toggle`);
+      const isHidden = element.classList.toggle("collapse");
+
+      toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
+    }
+
     buildWindChart(stationData.STID, stationData.OBSERVATIONS, readingCount, stationData.ELEVATION);
   });
 
   const kslcData = data.find(station => station.STID === "KSLC");
   getZone(kslcData.OBSERVATIONS.altimeter_set_1, kslcData.OBSERVATIONS.air_temp_set_1);
 }
-
 
 
 /////////////////////////////////////////////

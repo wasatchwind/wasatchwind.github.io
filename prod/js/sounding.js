@@ -555,3 +555,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     hiTempLegend.text(`@${temp}°`);
   }
 }
+
+function celsiusToF(temp) {
+  return (temp * 9 / 5) + 32;
+}

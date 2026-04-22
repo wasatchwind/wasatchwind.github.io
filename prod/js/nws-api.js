@@ -70,19 +70,16 @@ function processAreaForecastPageAndSunset(text, sunset) {
     {
       elementId: "area-forecast-aviation",
       href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
-      isVisible: true,
       src: aviation,
       title: "Aviation Forecast"
     }, {
       elementId: `area-forecast-${displayBlock}`,
       href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
-      isVisible: true,
       src: areaForecast,
       title: "Area Forecast Discussion"
     }, {
       elementId: `hourly-chart-${displayBlock}`,
       href: "https://forecast.weather.gov/MapClick.php?w0=t&w3=sfcwind&w3u=1&w4=sky&w5=pop&w7=rain&w9=snow&w13u=0&w16u=1&w17u=1&AheadHour=0&Submit=Submit&FcstType=graphical&textField1=40.7603&textField2=-111.8882&site=all&unit=0&dd=&bw=",
-      isVisible: true,
       src: "https://forecast.weather.gov/meteograms/Plotter.php?lat=40.7603&lon=-111.8882&wfo=SLC&zcode=UTZ105&gset=30&gdiff=10&unit=0&tinfo=MY7&ahour=0&pcmd=10001110100000000000000000000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6",
       title: "KSLC Hourly Forecast Chart"
     }
@@ -113,7 +110,6 @@ function processGeneralForecast(data) {
   const nwsMultiDay = {
     elementId: "nws-multiday",
     href: "https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE",
-    isVisible: true,
     src: multiDayDiv,
     style: "bg-dark border rounded-4",
     title: "Days Ahead"
@@ -131,10 +127,8 @@ function processGeneralForecast(data) {
       const nwsToday = {
         elementId: "nws-today",
         href: "https://forecast.weather.gov/MapClick.php?lon=-111.965&lat=40.765#.YwOWZHbMJhE",
-        isVisible: true,
         title: "General Forecast",
-        style: "bg-dark border rounded-4",
-        subId: "forecast-day0-today"
+        style: `bg-dark border rounded-4" id="forecast-day0-today`
       };
 
       standardHtmlComponent(nwsToday);
