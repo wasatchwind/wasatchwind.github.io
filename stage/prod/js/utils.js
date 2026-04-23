@@ -270,7 +270,7 @@ function buildNavSlider(initialNav, navItems) {
     }
   };
   const slider = new KeenSlider("#slider", options);
-  navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
+  slider.moveToIdx(initialNav, true, { duration: 0 });
   return slider;
 
   function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
