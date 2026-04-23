@@ -22,6 +22,7 @@ function processSynoptic(data) {
     if (station.id !== "KSLC") { // KSLC does not have an expandable chart
       const elevation = parseInt(stationData.ELEVATION).toLocaleString();
       const stationDiv = document.createElement("div");
+      stationDiv.id = `${station.id}-main`;
 
       stationDiv.innerHTML = `
         <div class="align-items-end border-bottom d-flex justify-content-between pb-3 station-header">
@@ -82,7 +83,6 @@ function processSynoptic(data) {
   const kslcData = data.find(station => station.STID === "KSLC");
   getZone(kslcData.OBSERVATIONS.altimeter_set_1, kslcData.OBSERVATIONS.air_temp_set_1);
 }
-
 
 
 /////////////////////////////////////////////
