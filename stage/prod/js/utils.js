@@ -270,6 +270,7 @@ function buildNavSlider(initialNav, navItems) {
     }
   };
   const slider = new KeenSlider("#slider", options);
+  navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
   slider.moveToIdx(initialNav, true, { duration: 0 });
   return slider;
 
