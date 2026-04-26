@@ -84,7 +84,6 @@ function processSynoptic(data) {
   getZone(kslcData.OBSERVATIONS.altimeter_set_1, kslcData.OBSERVATIONS.air_temp_set_1);
 }
 
-
 /////////////////////////////////////////////
 // Inject wind chart data for each station //
 /////////////////////////////////////////////

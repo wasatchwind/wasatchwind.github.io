@@ -1,6 +1,16 @@
 "use strict";
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+// Table of contents
+// 1. DOM: IIFE build sticky top
+// 2. DOM: Marquee (+ all other marquee code)
+// 3. DOM: Afternoon surface wind images
+// 4. DOM: Settings > stations & Misc. pages
+// 5. DOM: Display all standard web-accessed and hosted images
+// 6. DOM: Function to create many standard DOM components
+// 7. Create navigation slider
+// 8. Functions for wind speed color & list of stations
+
+// 1. ///////////////////////////////////////////////////////////////////////////////////////////////
 // IIFE to immediately build HTML DOM for sticky top (title/heading, top navigation) and cams page //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 (() => {
@@ -40,33 +50,7 @@
   });
 })();
 
-// Use a standard template to build similar component divs by elementId (used for many components)
-// params Options:
-// {
-//   elementId: String (required)
-//   title: String (required)
-//   href: String (optional: 1) url link, 2) undefined)
-//   src: String (optional: 1) source text, 2) HTML subdivs, 3) web image url, 4) hosted image path, 5) undefined)
-//   style: String (optional: 1) style override, 2) style override with subdiv id, 3) undefined (default style))
-// }
-function standardHtmlComponent({ elementId, title, href, src, style }) {
-  style = style ? style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
-  const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
-  const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
-  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}">${content}</div>`;
-  const link = href ? { hrefLine: `<a href="${href}" target="_blank">`, closure: "</a>" } : { hrefLine: "", closure: "" };
-
-  document.getElementById(`${elementId}`).innerHTML = `
-    <div class="mb-4">
-      ${link.hrefLine}
-        <div class="display-3 text-info">${title}</div>
-        ${imgOrDiv}
-      ${link.closure}
-    </div>`;
-}
-
-
-///////////////////////////////////////////////////////
+// 2. /////////////////////////////////////////////////
 // Marquee: HTML DOM, controller, and user settings) //
 ///////////////////////////////////////////////////////
 const MarqueeController = (() => {
@@ -157,15 +141,40 @@ const MarqueeController = (() => {
   return { init: buildSettingsUI, setSpeed }; // Initialized with MarqueeController.init(); on main.js in main()
 })();
 
+// 3. /////////////////////////////
+// Afternoon surface wind images //
+///////////////////////////////////
+function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { // Conditionally located afternoon surface wind images
+  const isToday = currentHour < sunsetHour - 1;
+  nextDay = isToday ? "" : ` ${nextDay}`;
+  const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
+  const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
+  const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
 
-//////////////////////////////////////////////////////////////////
-// User settings page station toggle HTML DOM & toggle controls //
-//////////////////////////////////////////////////////////////////
-(function buildStationSettings() { // Build station settings toggle on/off list for the user Settings page
+  document.getElementById(`surface-wind-${displayFactors.day}`).innerHTML = `
+    <div class="mb-4">
+      <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
+        <div class="display-3 text-info">Afternoon Surface Wind Forecast${nextDay}</div>
+        <div class="d-flex fs-1 justify-content-center text-info">
+          <div class="col-6">Wind</div>
+          <div class="col-6">Gust</div>
+        </div>
+        <div class="d-flex">
+          <img class="rounded-4 col-6 pe-1" loading="lazy" src="${windImg}">
+          <img class="rounded-4 col-6 ps-1" loading="lazy" src="${gustImg}">
+        </div>
+      </a>
+    </div>`;
+}
+
+// 4. /////////////////////////////////////////
+// Settings page (station list) & Misc. page //
+///////////////////////////////////////////////
+(function buildStationSettings() { // IIFE to build station settings toggle on/off list for the user Settings page
+  const stations = stationList();
   const container = document.getElementById("stations-displayed");
   container.className = "display-3 py-4 text-start";
   container.innerHTML = "Display Station Charts:";
-  const stations = stationList();
 
   stations.forEach(station => {
     const row = document.createElement("div");
@@ -195,22 +204,15 @@ const MarqueeController = (() => {
 
 function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
   localStorage.setItem(stid, state)
-
   const on = document.getElementById(`${stid}-on`);
   const off = document.getElementById(`${stid}-off`);
-
   on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
   off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-
   const el = document.getElementById(`${stid}-main`);
   if (el) el.style.display = state === "off" ? "none" : "";
 }
 
-
-//////////////////////
-// Misc. page itmes //
-//////////////////////
-(function buildMiscPageItems() {
+(function buildMiscPageItems() { // IIFE to build standard DOM components for the Misc. page
   const unitsContent = `
     <div class="text-info">Units (unless noted otherwise):</div>
     <div class="ms-4">
@@ -256,63 +258,7 @@ function stationSetToggle(stid, state) { // Onclick function to toggle stations 
   miscSections.forEach(section => { standardHtmlComponent(section) });
 })();
 
-
-////////////////////////////////////////////////
-// Set up page navigation swipe/scroll slider //
-////////////////////////////////////////////////
-function buildNavSlider(initialNav, navItems) {
-  const options = {
-    loop: true,
-    slides: { perView: 1 },
-    slideChanged: (slider) => {
-      navUpdate(slider.track.details.rel, navItems);
-      window.scrollTo(0, 0);
-    }
-  };
-  const slider = new KeenSlider("#slider", options);
-  navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
-  slider.moveToIdx(initialNav, true, { duration: 0 });
-  return slider;
-
-  function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
-    const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
-    const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
-
-    document.getElementById("topnav-left").textContent = navItems[left];
-    document.getElementById("topnav-active").textContent = navItems[activeNav];
-    document.getElementById("topnav-right").textContent = navItems[right];
-  }
-}
-
-
-/////////////////////////////////
-// Display web-accessed images //
-/////////////////////////////////
-function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { // Conditionally located afternoon surface wind images
-  const isToday = currentHour < sunsetHour - 1;
-  nextDay = isToday ? "" : ` ${nextDay}`;
-  const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
-  const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
-  const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
-
-  document.getElementById(`surface-wind-${displayFactors.day}`).innerHTML = `
-    <div class="mb-4">
-      <a href="https://graphical.weather.gov/sectors/slc.php#tabs" target="_blank">
-        <div class="display-3 text-info">Afternoon Surface Wind Forecast${nextDay}</div>
-        <div class="d-flex fs-1 justify-content-center text-info">
-          <div class="col-6">Wind</div>
-          <div class="col-6">Gust</div>
-        </div>
-        <div class="d-flex">
-          <img class="rounded-4 col-6 pe-1" loading="lazy" src="${windImg}">
-          <img class="rounded-4 col-6 ps-1" loading="lazy" src="${gustImg}">
-        </div>
-      </a>
-    </div>`;
-}
-
-
-/////////////////////////////////////////////////////////////////////////////
+// 5. ///////////////////////////////////////////////////////////////////////
 // Display web-based and hosted images that aren't conditionally displayed //
 /////////////////////////////////////////////////////////////////////////////
 function displayPersistentImages(windMapTime) { // Images independent of conditional parameters (sunset, currnet hour)
@@ -396,8 +342,62 @@ function displayPersistentImages(windMapTime) { // Images independent of conditi
   imagesToDisplay.forEach(image => { standardHtmlComponent(image) });
 }
 
+// 6. //////////////////////////////////////////////////
+// Function for creating many standard DOM components //
+////////////////////////////////////////////////////////
+// Input params options:
+// {
+//   elementId: String (required)
+//   title: String (required)
+//   href: String (optional: 1) url link, 2) undefined)
+//   src: String (optional: 1) source text, 2) HTML subdivs, 3) web image url, 4) hosted image path, 5) undefined)
+//   style: String (optional: 1) style override, 2) style override with subdiv id, 3) undefined (default style))
+// }
+function standardHtmlComponent({ elementId, title, href, src, style }) {
+  style = style ? style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
+  const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
+  const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
+  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}">${content}</div>`;
+  const link = href ? { hrefLine: `<a href="${href}" target="_blank">`, closure: "</a>" } : { hrefLine: "", closure: "" };
 
-///////////////////////////////////////////////
+  document.getElementById(`${elementId}`).innerHTML = `
+    <div class="mb-4">
+      ${link.hrefLine}
+        <div class="display-3 text-info">${title}</div>
+        ${imgOrDiv}
+      ${link.closure}
+    </div>`;
+}
+
+// 7. //////////////////////////////////////////
+// Set up page navigation swipe/scroll slider //
+////////////////////////////////////////////////
+function buildNavSlider(initialNav, navItems) {
+  const options = {
+    loop: true,
+    slides: { perView: 1 },
+    slideChanged: (slider) => {
+      navUpdate(slider.track.details.rel, navItems);
+      window.scrollTo(0, 0);
+    }
+  };
+  const slider = new KeenSlider("#slider", options);
+  navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
+  slider.moveToIdx(initialNav, true, { duration: 0 });
+  return slider;
+
+  function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)
+    const left = activeNav === 0 ? navItems.length - 1 : activeNav - 1;
+    const right = activeNav === navItems.length - 1 ? 0 : activeNav + 1;
+
+    document.getElementById("topnav-left").textContent = navItems[left];
+    document.getElementById("topnav-active").textContent = navItems[activeNav];
+    document.getElementById("topnav-right").textContent = navItems[right];
+  }
+}
+
+
+// 8. /////////////////////////////////////////
 // Wind speed color & station list utilities //
 ///////////////////////////////////////////////
 // Returns wind speed color/s based on altitude (array returns array, single speed likewise): synoptic.js & wind-aloft.js
@@ -429,11 +429,3 @@ function stationList() {
     { name: "Southside", id: "FPS" }
   ];
 }
-
-
-
-
-
-
-// FOR TESTING - REMOVE IN PROD
-// const data = 

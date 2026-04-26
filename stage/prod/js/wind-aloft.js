@@ -58,8 +58,6 @@ function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAl
   }
 }
 
-
-
 ////////////////////////////////////////
 // Main Wind Aloft Forecast component //
 ////////////////////////////////////////
@@ -203,8 +201,6 @@ function buildWindAloftForecast(data) {
     }
   }
 }
-
-
 
 ////////////////////////////////////////////////
 // Wind Aloft Longterm (NWS 24 hour forecast) //
