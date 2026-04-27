@@ -111,7 +111,7 @@ a:any-link {
   touch-action: pan-x pan-y pinch-zoom !important;
 }
 
-/* D3.JS (Morning Sounding Profile) */
+/* D3.JS (Sounding Profile) */
 .svg-container {
   display: inline-block;
   position: relative;
@@ -127,61 +127,14 @@ a:any-link {
   left: 0;
 }
 
-.gridticks {
-  color: lightgray;
-  opacity: 0.5;
-}
-
-.svgbg {
-  fill: #212529;
-}
-
-.xAxis {
-  font-size: 180%;
-}
-
-.yAxis {
-  font-size: 180%;
-}
-
-.white {
+.legend-label-upper {
   fill: white;
   font-size: calc(1.475rem + 2.7vw);
   font-weight: 500;
   line-height: 1.2;
 }
 
-.dewpoint {
-  fill: #20c997;
+.legend-label-lower {
   font-size: 3.5vw;
   font-weight: 500;
-}
-
-.temp {
-  fill: #fd7e14;
-  font-size: 3.5vw;
-  font-weight: 500;
-}
-
-.dalr {
-  fill: #0dcaf0;
-  font-size: 3.5vw;
-  font-weight: 500;
-}
-
-.dalrlabel {
-  fill: #6c757d;
-  font-size: calc(1.325rem + 0.9vw);
-  font-weight: 500;
-}
-
-.liftlabels {
-  fill: white;
-  font-size: 200%;
-}
-
-.liftheights {
-  fill: white;
-  font-size: 210%;
-  font-weight: bold;
 }
