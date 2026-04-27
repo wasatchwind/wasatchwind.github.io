@@ -90,5 +90,4 @@ async function fetchData() {
 }
 
 const data = await fetchData();
-console.log(data);
 main(data);
