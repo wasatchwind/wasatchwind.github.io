@@ -29,7 +29,7 @@ function processSounding(soaringText, kslcSoundingData, hiTemp, srgNegative3, sr
 
   // Process KSLC Radiosonde sounding chart if data datestamp (format yyyy-mm-dd) matches today
   const formattedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA format yyyy-mm-dd
-  if (kslcSoundingData["date"] === formattedDate) return;
+  if (kslcSoundingData["date"] !== formattedDate) return;
 
   // Build DOM for KSLC sounding chart
   document.getElementById("kslc-sounding").innerHTML = `
