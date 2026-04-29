@@ -16,6 +16,7 @@ function processSounding(soaringText, kslcSoundingData, hiTemp, srgNegative3, sr
   const tempF20k = getAdjustedTempF(srgSoundingData.find(d => d.Altitude_ft === 20000)); // Top of chart lapse point
   const srgLapse = Math.round(((tempF20k - tempF5k) / 15) * 100) / 100; // Calculate SRG lapse °F/1k' (x2-x1)/(y2-y1) and round to hundredths
   const srgLiftParams = getSrgLiftParams(srgSoundingData, srgNegative3, srgTopOfLift);
+  console.log(srgLiftParams);
 
   document.getElementById("negative3").textContent = srgNegative3.toLocaleString(); // Marquee -3 Index
   document.getElementById("top-of-lift").textContent = srgTopOfLift.toLocaleString(); // Marquee Top of Lift
