@@ -35,9 +35,9 @@ function main(data) {
   });
 
   // Determine forecast high temp from soaring forecast (Open Meteo as backup)
-  const { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift } = processSoaringForecastPage(data.soaringForecast.productText); // nws-api.js
+  const { srgHiTemp, srgSoundingData } = processSoaringForecastPage(data.soaringForecast.productText); // nws-api.js
   const hiTempOpenMeteo = Math.round(data.openMeteo.daily.temperature_2m_max[0]);
-  const hiTemp = hiTempSoaringForecast ? hiTempSoaringForecast : hiTempOpenMeteo;
+  const hiTemp = srgHiTemp ? srgHiTemp : hiTempOpenMeteo;
   const windMapTime = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Functions to process remaining data
@@ -48,7 +48,7 @@ function main(data) {
   displayPersistentImages(windMapTime);                                                                   // utils.js
   if (currentHour > 6) {
     displayAfternoonSurfaceWindImages(currentHour, sunsetHour, tomorrowDay);                              // utils.js
-    processSounding(data.soaringForecast.productText, data.sounding, hiTemp, nwsNegative3, nwsTopOfLift); // sounding.js
+    processSounding(srgSoundingData, data.sounding, hiTemp);                                              // sounding.js
   }
 
   // Populate sunset & high temp in the marquee and hide the loading spinner

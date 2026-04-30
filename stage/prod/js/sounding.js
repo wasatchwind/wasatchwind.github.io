@@ -3,25 +3,31 @@
 //////////////////////////////////////////////////////////////////////
 // Process 2 charts: KSLC Radiosonde and NWS Soaring Guidance (SRG) //
 //////////////////////////////////////////////////////////////////////
-function processSounding(soaringText, kslcSoundingData, hiTemp, srgNegative3, srgTopOfLift) {
+function processSounding(srgSoundingData, kslcSoundingData, hiTemp) {
+  const negative3El = document.getElementById("negative3");
+  const topOfLiftEl = document.getElementById("top-of-lift");
+  const modelLapseEl = document.getElementById("model-lapse");
 
   ////////////////////////////////
   // Process SRG sounding chart //
   ////////////////////////////////
 
-  const getAdjustedTempF = (altitude) => celsiusToF(altitude.Temp_c - altitude.Thermal_Index); // Convert SRG lapse temps Celsius to Fahrenheit
+  const srgLiftParams = srgSoundingData.srgLiftParams;
+  const srgObservations = srgSoundingData.observations;
+  let temp5k, temp20k;
+  for (let i = 0; i < srgObservations.length; i++) { // One pass of array
+    const d = srgObservations[i];
+    if (d.Altitude_k_ft === 5) temp5k = d.Air_Temp_f - d.Thermal_Index_f;
+    else if (d.Altitude_k_ft === 20) temp20k = d.Air_Temp_f - d.Thermal_Index_f;
+    if (temp5k && temp20k) break;
+  }
+  const srgLapse = Math.round((temp20k - temp5k) / 15 * 100) / 100; // Calculate SRG lapse °F/1k' (x2-x1)/(y2-y1) and round to hundredths
+  // const srgLiftParams = getSrgLiftParams(srgSoundingData, srgNegative3, srgTopOfLift);
+  negative3El.textContent = srgLiftParams.negative3AltFt.toLocaleString(); // Marquee -3 Index
+  topOfLiftEl.textContent = srgLiftParams.topOfLiftAltFt.toLocaleString(); // Marquee Top of Lift
+  modelLapseEl.textContent = `Model Lapse Rate ${srgLapse}° F / 1,000 ft`; // SRG sounding footer
 
-  const srgSoundingData = getSrgSoundingData(soaringText);
-  const tempF5k = getAdjustedTempF(srgSoundingData.find(d => d.Altitude_ft === 5000)); // Bottom of chart lapse point
-  const tempF20k = getAdjustedTempF(srgSoundingData.find(d => d.Altitude_ft === 20000)); // Top of chart lapse point
-  const srgLapse = Math.round(((tempF20k - tempF5k) / 15) * 100) / 100; // Calculate SRG lapse °F/1k' (x2-x1)/(y2-y1) and round to hundredths
-  const srgLiftParams = getSrgLiftParams(srgSoundingData, srgNegative3, srgTopOfLift);
-
-  document.getElementById("negative3").textContent = srgNegative3.toLocaleString(); // Marquee -3 Index
-  document.getElementById("top-of-lift").textContent = srgTopOfLift.toLocaleString(); // Marquee Top of Lift
-  document.getElementById("model-lapse").textContent = `Model Lapse Rate ${srgLapse}° F / 1,000 ft`; // SRG sounding footer
-
-  buildSoundingChart("#srg-sounding-chart", srgSoundingData, hiTemp, srgLiftParams);
+  buildSoundingChart("#srg-sounding-chart", srgObservations, hiTemp, srgLiftParams);
 
   ////////////////////////////////////////////
   // Process KSLC radiosonde sounding chart //
@@ -50,62 +56,36 @@ function processSounding(soaringText, kslcSoundingData, hiTemp, srgNegative3, sr
       </div>
     </div>`;
 
-  kslcSoundingData = kslcSoundingData["observations"].slice(1); // Remove first element (date) to leave only observations
+  kslcSoundingData = kslcSoundingData.observations;
 
   const surfaceAltFt = 4229;
   const kslcSoundingLiftParams = getKslcSoundingLiftParams(kslcSoundingData, hiTemp);
-  const negative3 = kslcSoundingLiftParams.negative3 ? Math.round(kslcSoundingLiftParams.negative3).toLocaleString() : "Ø";
-  const topOfLift = kslcSoundingLiftParams.topOfLift > surfaceAltFt ? Math.round(kslcSoundingLiftParams.topOfLift).toLocaleString() : "Ø";
+  const negative3 = kslcSoundingLiftParams.negative3AltFt ? Math.round(kslcSoundingLiftParams.negative3AltFt).toLocaleString() : "Ø";
+  const topOfLift = kslcSoundingLiftParams.topOfLiftAltFt > surfaceAltFt ? Math.round(kslcSoundingLiftParams.topOfLiftAltFt).toLocaleString() : "Ø";
 
   // KSLC sounding overwrites SRG sounding Marquee data for -3 Index and Top of Lift
-  document.getElementById("negative3").textContent = negative3;
-  document.getElementById("top-of-lift").textContent = topOfLift;
+  negative3El.textContent = negative3;
+  topOfLiftEl.textContent = topOfLift;
+
+  // Convert altitude to chart format (4,229 => 4.229) and adds new keys for temp conversion of air temp and dewpoint
+  kslcSoundingData = kslcSoundingData.map(d => ({
+    ...d,
+    Altitude_k_ft: d.Altitude_ft / 1000,
+    Air_Temp_f: celsiusToF(d.Temp_c),
+    Dewpoint_f: celsiusToF(d.Dewpoint_c)
+  }));
 
   // "chart" stores returned functions that allow KSLC sounding chart updates and reset from user input
   const chart = buildSoundingChart("#kslc-sounding-chart", kslcSoundingData, hiTemp, kslcSoundingLiftParams);
 
   // Listeners for KSLC sounding chart user input
+  const userTempInputEl = document.getElementById("user-temp");
   document.getElementById("d3-clear").addEventListener("click", () => { chart.reset() });
-  document.getElementById("d3-update").addEventListener("click", () => { chart.update(Number(document.getElementById("user-temp").value)) });
+  document.getElementById("d3-update").addEventListener("click", () => { chart.update(Number(userTempInputEl.value)) });
 }
 
 // Function to convert Celsius to Fahrenheit
-function celsiusToF(temp) { return (temp * 9 / 5) + 32 }
-
-//////////////////////////////////////////////////////////////////////////////////
-// SRG functions to get sounding data and lift params before building the chart //
-//////////////////////////////////////////////////////////////////////////////////
-function getSrgSoundingData(text) { // Extracts SRG model forecast table via RegEx to formatted sounding data
-  const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/);
-  const rows = table[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
-  const nwsData = rows.map(line => {
-    const parts = line.split(/\s+/);
-    return {
-      Altitude_ft: Number(parts[0]),
-      Thermal_Index: Number(parts[10]),
-      Temp_c: Number(parts[1]),
-      Wind_Direction: Number(parts[3]),
-      Wind_Speed_kt: Number(parts[4])
-    }
-  });
-  // Reverse the data order so that lowest altitude is first since SRG chart lists altitude in descending order
-  return nwsData.sort((a, b) => a.Altitude_ft - b.Altitude_ft);
-}
-
-function getSrgLiftParams(data, srgNegative3, srgTopOfLift) {
-  const tempAtNeg3 = getTempAtAltitude(data, srgNegative3) + 3; // Find where the temp difference is 3° C
-  const tempAtTopOfLift = getTempAtAltitude(data, srgTopOfLift); // Find where the temp difference is 0° C
-
-  function getTempAtAltitude(data, targetAlt) {
-    for (let i = 0; i < data.length - 1; i++) {
-      const a = data[i];
-      const b = data[i + 1];
-      const tempFound = targetAlt >= a.Altitude_ft && targetAlt <= b.Altitude_ft;
-      if (tempFound) return a.Temp_c + ((targetAlt - a.Altitude_ft) * (b.Temp_c - a.Temp_c)) / (b.Altitude_ft - a.Altitude_ft);
-    }
-  }
-  return { negative3: srgNegative3, negative3Temp: tempAtNeg3, topOfLift: srgTopOfLift, topOfLiftTemp: tempAtTopOfLift }
-}
+function celsiusToF(temp) { return Math.round((temp * 9 / 5 + 32) * 10) / 10 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Get KSLC sounding chart lift params before building the chart - Also used for user input lift params //
@@ -114,7 +94,7 @@ function getKslcSoundingLiftParams(data, tempF) {
   let index = 0, foundNegative3 = false, foundTopOfLift = false;
   const surfaceAltFt = 4229;
   const tempC = (tempF - 32) * 5 / 9; // Convert input tempF to °C since source data is °C and Thermal Index is °C
-  const params = { negative3: null, negative3Temp: null, topOfLift: null, topOfLiftTemp: null };
+  const params = { negative3AltFt: null, negative3TempF: null, topOfLiftAltFt: null, topOfLiftTempF: null };
   const lapseDegC = -3 // 3 °C / 1,000 ft === -5.4 °F / 1,000 ft
   const dalrSlope = 1000 / lapseDegC; // Slope = (y2 - y1)/(x2 - x1) e.g. (6000-5000)/(0-3) = -333.333 using ft & °C
   const dalrYIntercept = surfaceAltFt - dalrSlope * tempC; // y=mx+b => b=y-mx
@@ -136,8 +116,8 @@ function getKslcSoundingLiftParams(data, tempF) {
       // Find thermal index = -3 (negative3); skip ahead if found
       if (!foundNegative3 && thermalIndex >= -3) {
         if (index === 0) {
-          params.negative3 = null;
-          params.negative3Temp = null;
+          params.negative3AltFt = null;
+          params.negative3TempF = null;
         } else {
           const { Temp_c: t1, Altitude_ft: a1 } = data[index];
           const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
@@ -145,11 +125,11 @@ function getKslcSoundingLiftParams(data, tempF) {
           if (t1 !== t2) { // Interpolatation required
             const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
             const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
-            params.negative3 = a1 + (targetX - t1) * (a2 - a1) / (t2 - t1);
-            params.negative3Temp = targetX + 3;
+            params.negative3AltFt = Math.round(a1 + (targetX - t1) * (a2 - a1) / (t2 - t1));
+            params.negative3TempF = celsiusToF(targetX + 3);
           } else {
-            params.negative3 = (t1 + 3) * dalrSlope + dalrYIntercept;
-            params.negative3Temp = (params.negative3 - dalrYIntercept) / dalrSlope;
+            params.negative3AltFt = Math.round((t1 + 3) * dalrSlope + dalrYIntercept);
+            params.negative3TempF = celsiusToF((params.negative3AltFt - dalrYIntercept) / dalrSlope);
           }
         }
         foundNegative3 = true;
@@ -163,11 +143,11 @@ function getKslcSoundingLiftParams(data, tempF) {
         if (t1 !== t2) { // Interpolatation required
           const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
           const targetX = -yIntercept / slope;
-          params.topOfLift = a1 + (targetX - t1);
-        } else params.topOfLift = t1 * dalrSlope + dalrYIntercept;
+          params.topOfLiftAltFt = Math.round(a1 + targetX - t1);
+        } else params.topOfLiftAltFt = Math.round(t1 * dalrSlope + dalrYIntercept);
 
-        params.topOfLiftTemp = (params.topOfLift - dalrYIntercept) / dalrSlope;
-        foundTopOfLift = true;
+        params.topOfLiftTempF = celsiusToF((params.topOfLiftAltFt - dalrYIntercept) / dalrSlope);
+        foundTopOfLiftAltFt = true;
       }
 
       index++;
@@ -182,9 +162,7 @@ function getKslcSoundingLiftParams(data, tempF) {
 function buildSoundingChart(id, data, hiTemp, liftParams) {
 
   // Set up chart x/y grid and SVG
-  const isKslcSounding = data.length > 14 ? true : false; // SRG data always has length 14
-  const dalrDegF = 5.4;
-  const ftPerMeter = 3.28084;
+  const isKslcSounding = data.length > 14; // SRG data always has length 14
   const screenWidth = window.innerWidth;
   const proportionalHeight = screenWidth * 0.67;
   const margin = {
@@ -197,12 +175,14 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   const width = screenWidth - margin.left - margin.right;
   const height = proportionalHeight - margin.top - margin.bottom;
   const surfaceAlt = isKslcSounding ? 4.229 : 5; // Formatted for chart grid KSLC bottom: 4,229 ft., SRG bottom: 5,000 ft.
-  const surfaceAltMeters = Math.round(surfaceAlt * 1000 / ftPerMeter);
   const maxAlt = 20;
+  const dalrDegF = 5.4;
   const xMin = -10;
   const xMax = 110;
   const x = d3.scaleLinear().range([0, width - margin.left - margin.right - windBarbs]).domain([xMin, xMax]);
   const y = d3.scaleLinear().range([height, 0]).domain([surfaceAlt, maxAlt]);
+  const xMinGrid = x(xMin);
+  const xDalr = x(hiTemp - (maxAlt - surfaceAlt) * dalrDegF);
   const svg = d3.select(id) // Either #srg-sounding-chart or #kslc-sounding-chart
     .append("svg")
     .attr("fill", "#212529")
@@ -211,21 +191,19 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .append("g")
     .attr("transform", `translate(${margin.left + windBarbs}, ${margin.top})`);
 
-  // Format lift params to °F and chart grid (4.229 for altitude 4,229)
-  const negative3TempF = celsiusToF(liftParams.negative3Temp);
-  const topOfLiftTempF = celsiusToF(liftParams.topOfLiftTemp);
-  const negative3AltFt = liftParams.negative3 / 1000;
-  const topOfLiftAltFt = liftParams.topOfLift / 1000;
+  // Format lift params for chart grid (4.229 for altitude 4,229)
+  const negative3AltFt = liftParams.negative3AltFt / 1000;
+  const topOfLiftAltFt = liftParams.topOfLiftAltFt / 1000;
 
   // Variables required for updating and resetting the KSLC chart w/ user temp input
   let currentTemp = hiTemp;
   const initialTemp = hiTemp;
   const userInputChartElements = {
-    dalrLine: svg.append("g").append("line").attr("class", "dalrline").attr("stroke", "var(--bs-info)").attr("stroke-width", 3),
-    neg3Line: svg.append("g").append("line").attr("class", "neg3line").attr("stroke", "white").attr("stroke-width", 3),
-    neg3Label: svg.append("g").append("text").attr("fill", "white").attr("font-size", "200%").text("-3"),
-    tolCircle: svg.append("g").append("circle").attr("class", "tolcircle").attr("fill", "white").attr("r", 6),
-    tolLabel: svg.append("g").append("text").attr("fill", "white").attr("font-size", "200%").text("ToL"),
+    dalrLine: svg.append("line").attr("class", "dalrline").attr("stroke", "var(--bs-info)").attr("stroke-width", 3),
+    neg3Line: svg.append("line").attr("class", "neg3line").attr("stroke", "white").attr("stroke-width", 3),
+    neg3Label: svg.append("text").attr("fill", "white").attr("font-size", "200%").text("-3"),
+    tolCircle: svg.append("circle").attr("class", "tolcircle").attr("fill", "white").attr("r", 8),
+    tolLabel: svg.append("text").attr("fill", "white").attr("font-size", "200%").text("ToL"),
   }
 
   ///////////////////////////////////////////////////
@@ -260,20 +238,20 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 
   // Plot air temp line
   const tempLine = d3.line()
-    .x(d => x(celsiusToF(d.Temp_c)))
-    .y(d => y(d.Altitude_ft / 1000));
+    .x(d => x(d.Air_Temp_f))
+    .y(d => y(d.Altitude_k_ft));
 
   svg.append("path").datum(data)
     .attr("d", tempLine)
     .attr("fill", "none")
     .attr("stroke", "var(--bs-orange)")
-    .attr("stroke-width", 4);
+    .attr("stroke-width", 3);
 
   // Plot dewpoint line and DALR line if KSLC sounding; otherwise only plot SRG lapse line
   if (isKslcSounding) {
     const dewpointLine = d3.line()
-      .x(d => x(celsiusToF(d.Dewpoint_c)))
-      .y(d => y(d.Altitude_ft / 1000));
+      .x(d => x(d.Dewpoint_f))
+      .y(d => y(d.Altitude_k_ft));
 
     svg.append("path").datum(data)
       .attr("d", dewpointLine)
@@ -282,14 +260,14 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("stroke-width", 3);
 
     userInputChartElements.dalrLine
-      .attr("x1", function () { if (x(hiTemp - (maxAlt - surfaceAlt) * dalrDegF) > x(xMin)) return x(hiTemp - (maxAlt - surfaceAlt) * dalrDegF) })
+      .attr("x1", function () { if (xDalr > xMinGrid) return xDalr })
       .attr("x2", x(hiTemp))
-      .attr("y1", function () { if (x(hiTemp - (maxAlt - surfaceAlt) * dalrDegF) < x(xMin)) return y(-1 / dalrDegF * (xMin - hiTemp) + surfaceAlt) })
+      .attr("y1", function () { if (xDalr < xMinGrid) return y(-1 / dalrDegF * (xMin - hiTemp) + surfaceAlt) })
       .attr("y2", y(surfaceAlt));
   } else {
     const srgLapseLine = d3.line()
-      .x(d => x(celsiusToF(d.Temp_c - d.Thermal_Index)))
-      .y(d => y(d.Altitude_ft / 1000));
+      .x(d => x(d.Lapse_Temp_f))
+      .y(d => y(d.Altitude_k_ft));
 
     svg.append("path").datum(data)
       .attr("d", srgLapseLine)
@@ -298,22 +276,16 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("stroke-width", 3);
   }
 
-  // Draw blank rectangle to cover any lines that extend left of chart
-  svg.append("g").append("rect")
-    .attr("height", y(2))
-    .attr("width", x(15))
-    .attr("x", x(-35))
-    .attr("y", y(22));
-
-  // Draw blank polygon to cover area above and right of chart grid
-  const p1 = `M ${x(xMin)} ${0 - margin.top}, `; // Top left start point M
-  const p2 = `L ${width} ${0 - margin.top}, `; // Top right corner
-  const p3 = `L ${width} ${y(surfaceAlt)}, `; // Bottom right corner
-  const p4 = `L ${x(xMax)} ${y(surfaceAlt)}, `; // Bottom right edge of grid
-  const p5 = `L ${x(25)} 0`; // Top right edge of grid
-  const p6 = `L ${x(xMin)} 0`; // Top left edge of grid
-  const p7 = `L ${x(xMin)} ${0 - margin.top}`; // Back to start point
-  const polygon = p1 + p2 + p3 + p4 + p5 + p6 + p7;
+  // Polygon to overdraw any lines that extend above or left of chart grid clockwise from top left
+  const polygon = `
+    M ${0 - width} ${0 - margin.top}
+    L ${width} ${0 - margin.top}
+    L ${width} ${y(surfaceAlt)}
+    L ${x(xMax)} ${y(surfaceAlt)}
+    L ${x(25)} 0
+    L ${x(-10)} 0
+    L ${x(-10)} ${y(surfaceAlt)}
+    L ${0 - width} ${y(surfaceAlt)}`
   svg.append("path").attr("d", polygon);
 
   // Draw x axis
@@ -329,7 +301,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .style("font-size", "200%");
 
   // Draw slanted border line on right side of grid
-  svg.append("g").append("line")
+  svg.append("line")
     .attr("stroke", "lightgray")
     .attr("x1", x(xMax))
     .attr("y1", y(surfaceAlt))
@@ -345,14 +317,14 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(19))
-    .text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
+    .text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? "Ø" : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
 
   const neg3Legend = svg.append("text") // -3 Index
     .attr("class", "legend-label-upper")
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(17))
-    .text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);
+    .text(`- 3 Index: ${!liftParams.negative3AltFt || liftParams.negative3AltFt === "None" ? "Ø" : Math.round(liftParams.negative3AltFt).toLocaleString()} `);
 
   const hiTempLegend = svg.append("text") // Max surface air temp
     .attr("class", "legend-label-upper")
@@ -395,42 +367,46 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   // Draw -3 Index and Top of Lift (ToL) markers //
   /////////////////////////////////////////////////
 
-  const markerShift = { "x": 2, "y": 0.3}
-  if (negative3TempF > x(xMin)) { // Only draw -3 Index marker if it's on the chart
+  const markerShift = { "x": 2, "y": 0.3 }
+  if (liftParams.negative3TempF > xMin) { // Only draw -3 Index marker if it's on the chart
     userInputChartElements.neg3Line.style("display", null)
-      .attr("x1", x(negative3TempF))
+      .attr("x1", x(liftParams.negative3TempF))
       .attr("y1", y(negative3AltFt))
-      .attr("x2", x(negative3TempF - dalrDegF))
+      .attr("x2", x(liftParams.negative3TempF - dalrDegF))
       .attr("y2", y(negative3AltFt));
 
     userInputChartElements.neg3Label.style("display", null)
-      .attr("x", x(negative3TempF + markerShift.x))
+      .attr("x", x(liftParams.negative3TempF + markerShift.x))
       .attr("y", y(negative3AltFt - markerShift.y));
   }
 
-  if (liftParams.topOfLift > surfaceAltMeters && topOfLiftTempF > x(xMin)) { // Only draw ToL marker if it's on the chart
+  if (topOfLiftAltFt > surfaceAlt && liftParams.topOfLiftTempF > xMin) { // Only draw ToL marker if it's on the chart
     userInputChartElements.tolCircle.style("display", null)
-      .attr("cx", x(topOfLiftTempF))
-      .attr("cy", y(topOfLiftAltFt));
+      .attr("cx", x(liftParams.topOfLiftTempF))
+      .attr("cy", y(topOfLiftAltFt))
+      .raise(); // Bring to front relative to other items
 
     userInputChartElements.tolLabel.style("display", null) // Top of lift label
-      .attr("x", x(topOfLiftTempF + markerShift.x))
+      .attr("x", x(liftParams.topOfLiftTempF + markerShift.x))
       .attr("y", y(topOfLiftAltFt - markerShift.y));
   }
 
   drawWindBarbs(data, svg, x, y); // Draw wind barbs left of the chart
 
+  const userTempInputEl = document.getElementById("user-temp");
+  const outOfRangeEl = document.getElementById("out-of-range");
+
   return { // Stores details in "chart" to enable user input and reset without global variables
     update(newTemp) {
       currentTemp = newTemp;
-      document.getElementById("user-temp").value = null;
-      document.getElementById("out-of-range").style.display = "none";
+      userTempInputEl.value = null;
+      outOfRangeEl.style.display = "none";
       drawUserInput(currentTemp);
     },
     reset() {
       currentTemp = initialTemp;
-      document.getElementById("user-temp").value = null;
-      document.getElementById("out-of-range").style.display = "none";
+      userTempInputEl.value = null;
+      outOfRangeEl.style.display = "none";
       drawUserInput(currentTemp);
     }
   };
@@ -441,44 +417,42 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 
   function drawUserInput(temp) {
     const liftParams = getKslcSoundingLiftParams(data, temp);
-    if (!liftParams.topOfLift && !liftParams.negative3) {
-      document.getElementById("out-of-range").textContent = `${temp}° out of range`;
-      document.getElementById("out-of-range").style.display = "block";
-      document.getElementById("user-temp").value = null;
+    if (!liftParams.topOfLiftAltFt && !liftParams.negative3AltFt) {
+      outOfRangeEl.textContent = `${temp}° out of range`;
+      outOfRangeEl.style.display = "block";
+      userTempInputEl.value = null;
       return;
     }
 
-    const negative3TempF = celsiusToF(liftParams.negative3Temp);
-    const topOfLiftTempF = celsiusToF(liftParams.topOfLiftTemp);
-    const negative3AltFt = liftParams.negative3 / 1000;
-    const topOfLiftAltFt = liftParams.topOfLift / 1000;
+    const negative3AltFt = liftParams.negative3AltFt / 1000;
+    const topOfLiftAltFt = liftParams.topOfLiftAltFt / 1000;
 
     userInputChartElements.dalrLine
-      .attr("x1", function () { if (x(temp - (maxAlt - surfaceAlt) * dalrDegF) > x(xMin)) return x(temp - (maxAlt - surfaceAlt) * dalrDegF) })
+      .attr("x1", function () { if (xDalr > xMinGrid) return xDalr })
       .attr("x2", x(temp))
-      .attr("y1", function () { if (x(temp - (maxAlt - surfaceAlt) * dalrDegF) < x(xMin)) return y(-1 / dalrDegF * (xMin - temp) + surfaceAlt) })
+      .attr("y1", function () { if (xDalr < xMinGrid) return y(-1 / dalrDegF * (xMin - temp) + surfaceAlt) })
       .attr("y2", y(surfaceAlt));
 
     userInputChartElements.tolCircle
-      .attr("cx", x(topOfLiftTempF))
+      .attr("cx", x(liftParams.topOfLiftTempF))
       .attr("cy", y(topOfLiftAltFt));
 
     userInputChartElements.tolLabel
-      .attr("x", x(topOfLiftTempF + markerShift.x))
+      .attr("x", x(liftParams.topOfLiftTempF + markerShift.x))
       .attr("y", y(topOfLiftAltFt - markerShift.y));
 
     userInputChartElements.neg3Line
-      .attr("x1", x(negative3TempF))
+      .attr("x1", x(liftParams.negative3TempF))
       .attr("y1", y(negative3AltFt))
-      .attr("x2", x(negative3TempF - dalrDegF))
+      .attr("x2", x(liftParams.negative3TempF - dalrDegF))
       .attr("y2", y(negative3AltFt));
 
     userInputChartElements.neg3Label
-      .attr("x", x(negative3TempF + markerShift.x))
+      .attr("x", x(liftParams.negative3TempF + markerShift.x))
       .attr("y", y(negative3AltFt - markerShift.y));
 
-    tolLegend.text(`Top of Lift: ${liftParams.topOfLift < surfaceAltMeters ? "Ø" : Math.round(liftParams.topOfLift).toLocaleString()} `);
-    neg3Legend.text(`- 3 Index: ${!liftParams.negative3 || liftParams.negative3 === "None" ? "Ø" : Math.round(liftParams.negative3).toLocaleString()} `);
+    tolLegend.text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? "Ø" : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
+    neg3Legend.text(`- 3 Index: ${!liftParams.negative3AltFt || liftParams.negative3AltFt === "None" ? "Ø" : Math.round(liftParams.negative3AltFt).toLocaleString()} `);
     hiTempLegend.text(`@${temp}°`);
   }
 } // End of buildSoundingChart() function
@@ -496,8 +470,8 @@ function drawWindBarbs(data, svg, x, y) {
   // Helper function to find the nearest sounding level data for each barb altitude
   function dataAtBarbAltitudes(barbAltitude) {
     return data.reduce((best, current) => {
-      const currentAlt = current.Altitude_ft / 1000;
-      const bestAlt = best.Altitude_ft / 1000;
+      const currentAlt = current.altK;
+      const bestAlt = best.altK;
       return (Math.abs(currentAlt - barbAltitude) < Math.abs(bestAlt - barbAltitude)) ? current : best;
     });
   }

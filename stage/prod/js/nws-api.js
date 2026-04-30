@@ -4,17 +4,18 @@
 // Soaring Guidance for SLC (SRG) //
 ////////////////////////////////////
 function processSoaringForecastPage(text) {
-  const forecastDate = text.match(/^(.*\b\d{3,4}(?:\sAM|PM)\b.*)$/m)?.[1]?.trim();
-  const formattedDate = new Date(forecastDate.split(",")[1]).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  const rateOfLift = text.match(/Maximum rate of lift.*?(\d{1,4}\s*ft\/min.*)$/m)?.[1]?.trim();
-  const nwsTopOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)?.[1]?.trim());
-  const hiTempSoaringForecast = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)?.[1]?.trim());
-  const nwsNegative3Literal = Number(text.match(/Height of the -3 thermal index.*?(\d{4,5}|None)\b/m)?.[1]?.trim());
-  const nwsNegative3 = !Number.isNaN(nwsNegative3Literal) ? nwsNegative3Literal : "None";
-  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)?.[1]?.trim()).toLocaleString();
-  const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)?.[1];
-  const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|None)/m)?.[1]?.trim();
-  const overdevelopmentDisplay = !overdevelopmentTime || overdevelopmentTime === "None" ? "" : `<br>❗OD Time......... ${overdevelopmentTime}`;
+  const forecastDate = text.match(/^.*AM\sMDT.*$/m)[0]; // Match all lines that contain string "AM MDT" (should only be one)
+  const datePart = forecastDate.split(",")[1]; // Split by comma e.g. "629 AM MDT Wednesday, April 29, 2026"
+  const formattedDate = new Date(datePart).toLocaleDateString("en-US", { month: "short", day: "numeric" }); // e.g. Jan 1
+  const rateOfLift = text.match(/\d{3,4}\sft\/min.*$/m)[0];
+  const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)[1]);
+  const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
+  const negative3Literal = text.match(/Height of the -3 thermal index.*?(\d{4,5}|[A-Za-z].*)\b/m)[1]; // Sometimes text instead of number
+  const negative3 = negative3Literal.match(/^\d+$/) ? Number(negative3Literal) : negative3Literal; // If string is all digits convert to number
+  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)[1]);
+  const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)[1];
+  const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|[A-Za-z].*)/m)[1];
+  const overdevelopmentDisplay = overdevelopmentTime.match(/^\d+$/) ? `<br>❗OD Time......... ${overdevelopmentTime}` : "";
 
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
@@ -31,18 +32,67 @@ function processSoaringForecastPage(text) {
   const soaringForecast = `
     ${forecastDate}</div><br>
     <br>
-    High Temp......... ${hiTempSoaringForecast}°<br>
+    High Temp......... ${hiTemp}°<br>
     <br>
-    Negative 3 Index.. ${nwsNegative3.toLocaleString()}<br>
-    Top of Lift....... ${nwsTopOfLift.toLocaleString()}<br>
-    Cloudbase (LCL)... ${cloudbase}<br>
+    Negative 3 Index.. ${negative3.toLocaleString()}<br>
+    Top of Lift....... ${topOfLift.toLocaleString()}<br>
+    Cloudbase (LCL)... ${cloudbase.toLocaleString()}<br>
     <br>
     Max Lift Rate..... ${rateOfLift}<br>
     Lifted Index...... ${liftedIndex}<br>
     ${overdevelopmentDisplay}`;
 
   document.getElementById("soaring-summary").innerHTML = soaringForecast;
-  return { hiTempSoaringForecast, nwsNegative3, nwsTopOfLift };
+
+  const observations = getSrgSoundingData();
+  const srgSoundingData = {
+    observations: observations,
+    srgLiftParams: {
+      negative3AltFt: negative3,
+      negative3TempF: getTempAtAltitude(negative3, 5.4),
+      topOfLiftAltFt: topOfLift,
+      topOfLiftTempF: getTempAtAltitude(topOfLift, 0)
+    }
+  };
+
+  return { hiTemp, srgSoundingData };
+
+  // Helper function to extract SRG model forecast table via RegEx into formatted sounding data
+  function getSrgSoundingData() {
+    const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/)[1]; // Only need [1] since [0] is the header row info
+    const rows = table.split("\n").map(line => line.trim()).filter(line => line && /^\d{4,5}\s/.test(line));
+    const nwsData = rows.map(line => {
+      const parts = line.split(/\s+/);
+      const altitude = Number(parts[0]);
+      const tempC = Number(parts[1]);
+      const windDir = Number(parts[3]);
+      const windSpeed = Number(parts[4]);
+      const thermalIndexC = Number(parts[10]);
+      return {
+        Air_Temp_f: celsiusToF(tempC),
+        Altitude_k_ft: altitude / 1000, // Format for sounding chart grid (4,229 => 4.229)
+        Lapse_Temp_f: celsiusToF(tempC - thermalIndexC),
+        Wind_Direction: windDir,
+        Wind_Speed_kt: windSpeed // Knots
+      };
+    });
+    return nwsData.reverse(); // Reverse data order so lowest altitude is first since SRG chart uses descending order altitudes
+  }
+
+  // Helper function to get temperatures for lift params -3 Index and Top of Lift
+  function getTempAtAltitude(altitude, thermalIndex) {
+    altitude /= 1000; // Convert target altitudes to chart grid (4,229 => 4.229)
+    for (let i = 0; i < observations.length - 1; i++) {
+      const a = observations[i];
+      const b = observations[i + 1];
+      const tempFound = altitude >= a.Altitude_k_ft && altitude <= b.Altitude_k_ft;
+      if (tempFound) {
+        const numerator = (altitude - a.Altitude_k_ft) * (b.Air_Temp_f - a.Air_Temp_f);
+        const denominator = b.Altitude_k_ft - a.Altitude_k_ft
+        return Math.round((a.Air_Temp_f + numerator / denominator + thermalIndex) * 100) / 100;
+      }
+    }
+  }
 }
 
 ////////////////////////////////////////////

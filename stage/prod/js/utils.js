@@ -59,7 +59,7 @@ const MarqueeController = (() => {
   const marqueeDiv = document.getElementById("marquee");
   marqueeDiv.className = "display-5 keen-slider";
 
-  const row = (content) => `<div class="d-flex justify-content-center">${content}</div>`; // Reusable class
+  const row = (content) => `<div class="d-flex justify-content-center">${content}</div>`; // Reused class
   const tickers = [
     { topRow: "-3 Index", bottomRow: `<div id="negative3"></div>` },
     { topRow: "Top of Lift", bottomRow: `<div id="top-of-lift"></div>` },
@@ -137,7 +137,6 @@ const MarqueeController = (() => {
       btn.classList.toggle("fw-normal", btn.dataset.speed != speed);
     });
   }
-
   return { init: buildSettingsUI, setSpeed }; // Initialized with MarqueeController.init(); on main.js in main()
 })();
 
@@ -429,3 +428,11 @@ function stationList() {
     { name: "Southside", id: "FPS" }
   ];
 }
+
+
+
+
+
+
+// FOR TESTING - REMOVE IN PROD
+// const data = 

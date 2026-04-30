@@ -50,13 +50,14 @@ function buildApiUrl(baseUrl, params) {
 }
 
 async function fetchWithCache(source) {
-  const cached = JSON.parse(localStorage.getItem(source.name) || "null");
-  const headers = {};
-  if (cached?.etag) headers["If-None-Match"] = cached.etag;
+  const raw = localStorage.getItem(source.name);
+  const cached = raw ? JSON.parse(localStorage.getItem(source.name)) : null;
+  const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
 
   try {
     const res = await fetch(source.url, { headers, cache: "no-store" });
-    if (res.status === 304 && cached) return cached.data;
+    const isFreshCache = cached && (Date.now() - cached.timestamp < 60000); // Cache < 10 mins old
+    if (res.status === 304 && isFreshCache) return cached.data; // ETag 304 = data hasn't changed, but verify in case of stale API
     const data = await res.json();
     const etag = res.headers.get("etag");
     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
@@ -70,12 +71,14 @@ async function fetchWithCache(source) {
 
 async function fetchData() {
   let completed = 0;
-  const results = await Promise.allSettled(dataSources.map(async (source) => {
-    const result = await fetchWithCache(source);
-    completed++;
-    document.getElementById("progress").textContent = `Loading... ${completed * 10}%`;
-    return result;
-  }));
+  const progressEl = document.getElementById("progress");
+  const results = await Promise.allSettled(dataSources.map((source) =>
+    fetchWithCache(source).then((result) => {
+      completed++;
+      progressEl.textContent = `Loading... ${completed * 10}%`; // Works as long as there are exactly 10 data sources to fetch
+      return result;
+    })
+  ));
 
   const data = {};
   results.forEach((result, i) => {
