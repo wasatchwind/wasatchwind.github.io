@@ -177,19 +177,32 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
 
   stations.forEach(station => {
     const row = document.createElement("div");
-    row.className = "align-items-center border-bottom display-5 d-flex justify-content-around py-4";
+    row.className = "border-bottom d-flex justify-content-around py-4";
     row.innerHTML = `
-      <div class="col-6 display-3 text-info text-start">${station.name}</div>
-      <div id="${station.id}-on">On</div>
-      <div id="${station.id}-off">Off</div>`;
+      <div class="col-5 text-info text-start">${station.name}</div>
+      <div id="${station.id}-toggle" class="align-items-center border clickable col-2 display-5 d-flex justify-content-center rounded-5 text-white"></div>`;
 
     container.appendChild(row);
 
-    const state = localStorage.getItem(station.id) || "on"; // Default is "on"
-    stationSetToggle(station.id, state);
+    const toggleEl = row.querySelector(`#${station.id}-toggle`);
+    let state = localStorage.getItem(station.id) || "on"; // Default is "on"
 
-    row.querySelector(`#${station.id}-on`).addEventListener("click", () => stationSetToggle(station.id, "on"));
-    row.querySelector(`#${station.id}-off`).addEventListener("click", () => stationSetToggle(station.id, "off"));
+    updateToggleUI(toggleEl, state);
+
+    toggleEl.addEventListener("click", () => {
+      state = state === "on" ? "off" : "on";
+      localStorage.setItem(station.id, state);
+      updateToggleUI(toggleEl, state);
+      stationSetToggle(station.id, state);
+    });
+
+    function updateToggleUI(el, state) {
+      el.textContent = state === "on" ? "On" : "Off";
+      el.classList.remove("bg-success", "bg-danger", "fw-semibold");
+      el.classList.add(state === "on" ? "bg-success" : "bg-danger");
+      el.classList.toggle("fw-semibold", state === "on");
+      el.classList.toggle("fw-normal", state !== "on");
+    }
   });
 
   const synopticLink = document.createElement("div");
@@ -201,14 +214,16 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
   container.appendChild(synopticLink);
 })();
 
-function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
-  localStorage.setItem(stid, state)
-  const on = document.getElementById(`${stid}-on`);
-  const off = document.getElementById(`${stid}-off`);
-  on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-  off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-  const el = document.getElementById(`${stid}-main`);
-  if (el) el.style.display = state === "off" ? "none" : "";
+function stationSetToggle(id, state) {
+  const el = document.getElementById(`${id}-toggle`);
+  localStorage.setItem(id, state);
+  el.textContent = state === "on" ? "On" : "Off";
+  el.classList.remove("bg-success", "bg-danger");
+  el.classList.add(state === "on" ? "bg-success" : "bg-danger");
+
+  // visibility logic
+  const stationEl = document.getElementById(`${id}-main`);
+  if (stationEl) stationEl.style.display = state === "off" ? "none" : "";
 }
 
 (function buildMiscPageItems() { // IIFE to build standard DOM components for the Misc. page

@@ -4,9 +4,11 @@
 // Soaring Guidance for SLC (SRG) //
 ////////////////////////////////////
 function processSoaringForecastPage(text) {
+  const formattedToday = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" });
   const forecastDate = text.match(/^.*AM\sMDT.*$/m)[0]; // Match all lines that contain string "AM MDT" (should only be one)
   const datePart = forecastDate.split(",")[1]; // Split by comma e.g. "629 AM MDT Wednesday, April 29, 2026"
   const formattedDate = new Date(datePart).toLocaleDateString("en-US", { month: "short", day: "numeric" }); // e.g. Jan 1
+  const dateColor = formattedToday === formattedDate ? "" : "text-danger";
   const rateOfLift = text.match(/\d{3,4}\sft\/min.*$/m)[0];
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)[1]);
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
@@ -19,7 +21,10 @@ function processSoaringForecastPage(text) {
 
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
-      <div class="display-3 text-info">Soaring Forecast Summary ${formattedDate}</div>
+      <div class="display-3 d-flex justify-content-center text-info">
+        <div>Soaring Forecast Summary</div>
+        <div class="${dateColor}">&nbsp;${formattedDate}</div>
+      </div>
       <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
         <div class="bg-dark border rounded-4">
           <div class="w-100" id="srg-sounding-chart"></div>
@@ -105,7 +110,13 @@ function processAreaForecastPageAndHourlyChart(text, isAfterSunset) {
   const keyMessages = text.match(/\.KEY MESSAGES\.\.\.\n([\s\S]*?)\n&&/)?.[1]?.trim().split(/\n(?=\s*-)/)
     .map(m => m.replace(/\n(?!\s*-)/g, " ").trim()).join("<br>") ?? null;
 
-  const areaForecast = `${forecastDate ? forecastDate : "Date error"}<br>
+  const aviationForecast = `
+    ${forecastDate ? forecastDate : "Date error"}<br>
+    <br>
+    ${aviation}`;
+  
+  const areaForecast = `
+    ${forecastDate ? forecastDate : "Date error"}<br>
     <br>
     Key Messages:<br>
     <br>
@@ -115,7 +126,7 @@ function processAreaForecastPageAndHourlyChart(text, isAfterSunset) {
     {
       elementId: "area-forecast-aviation",
       href: "https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=AFD&format=txt&version=1&glossary=1",
-      src: aviation,
+      src: aviationForecast,
       title: "Aviation Forecast"
     }, {
       elementId: `area-forecast-${displayBlock}`, // Conditional visibility logic
