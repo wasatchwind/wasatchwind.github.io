@@ -180,7 +180,7 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
     row.innerHTML = `
       <div class="col-5 text-info text-start">${station.name}</div>
       <div class="form-check form-switch">
-        <input class="form-check-input custom-switch" type="checkbox" id="${station.id}-toggle">
+        <input class="form-check-input" type="checkbox" id="${station.id}-toggle">
       </div>`;
 
     container.appendChild(row);
@@ -194,8 +194,15 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
       localStorage.setItem(station.id, newState);
       stationSetToggle(station.id, newState);
     });
-
   });
+
+  const synopticLink = document.createElement("div");
+  synopticLink.innerHTML = `
+    <div class="d-flex display-6 justify-content-center mt-4">
+      <div class="text-secondary fw-semibold me-3">Weather station data from</div>
+      <a class="text-warning" href="https://synopticdata.com/">Synoptic</a>
+    </div>`;
+  container.appendChild(synopticLink);
 })();
 
 function stationSetToggle(id, state) {
@@ -205,14 +212,6 @@ function stationSetToggle(id, state) {
   const stationEl = document.getElementById(`${id}-main`);
   if (stationEl) stationEl.style.display = state === "off" ? "none" : "";
 }
-
-// const synopticLink = document.createElement("div");
-// synopticLink.innerHTML = `
-//   <div class="d-flex display-6 justify-content-center mt-4">
-//     <div class="text-secondary fw-semibold me-3">Weather station data from</div>
-//     <a class="text-warning" href="https://synopticdata.com/">Synoptic</a>
-//   </div>`;
-// container.appendChild(synopticLink);
 
 (function buildMiscPageItems() { // IIFE to build standard DOM components for the Misc. page
   const unitsContent = `
