@@ -140,9 +140,12 @@ a:any-link {
 }
 
 /* USER SETTINGS STATION TOGGLES */
+.form-switch .form-check-input {
+  transform: scale(1.2);
+}
+
 .form-check-input {
   background-color: var(--bs-dark);
-  /* border-color: white; */
 }
 
 .form-check-input:checked {
