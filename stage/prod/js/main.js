@@ -42,12 +42,12 @@ function main(data) {
 
   // Functions to process remaining data
   processWindAloft(data.openMeteo.hourly, data.windAloft6, data.windAloft12, data.windAloft24);           // wind-aloft.js
-  // processAreaForecastPageAndHourlyChart(data.areaForecast.productText, isAfterSunset);                    // nws-api.js
+  processAreaForecastPageAndHourlyChart(data.areaForecast.productText, isAfterSunset);                    // nws-api.js
   processGeneralForecast(data.generalForecast.properties.periods);                                        // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                                       // synoptic.js
-  // displayPersistentImages(windMapTime);                                                                   // utils.js
+  displayPersistentImages(windMapTime);                                                                   // utils.js
   if (currentHour > 6) {
-    // displayAfternoonSurfaceWindImages(currentHour, sunsetHour, tomorrowDay);                              // utils.js
+    displayAfternoonSurfaceWindImages(currentHour, sunsetHour, tomorrowDay);                              // utils.js
     processSounding(srgSoundingData, data.sounding, hiTemp);                                              // sounding.js
   }
 
