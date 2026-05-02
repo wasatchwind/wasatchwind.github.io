@@ -138,3 +138,20 @@ a:any-link {
   font-size: 3.5vw;
   font-weight: 500;
 }
+
+/* USER SETTINGS STATION TOGGLES */
+.form-check-input.custom-switch {
+  background-color: var(--bs-dark);
+  border-color: white;
+  background-image: none;
+}
+
+.form-check-input.custom-switch:checked {
+  background-color: var(--bs-success);
+  background-image: none;
+}
+
+.form-check-input.custom-switch::after {
+  background-color: #fff;
+  box-shadow: none;
+}
