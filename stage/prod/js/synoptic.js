@@ -51,6 +51,9 @@ function processSynoptic(data) {
 
       container.appendChild(stationDiv);
       stationDiv.querySelector(".station-header").addEventListener("click", () => toggleWindChart(stationData.STID));
+      
+      const stationIsVisible = localStorage.getItem(station.id) || "on"; // Default is "on"
+      stationDiv.style.display = stationIsVisible === "off" ? "none" : "";
     }
 
     const chart = document.getElementById(`${stationData.STID}-chart`);

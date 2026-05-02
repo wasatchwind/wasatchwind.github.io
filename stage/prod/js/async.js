@@ -92,7 +92,7 @@ async function fetchData() {
   return data;
 }
 
-const data = await fetchData();
+// const data = await fetchData();
 console.log(data);
 main(data);
 
