@@ -176,9 +176,9 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
 
   stationList().forEach(station => {
     const row = document.createElement("div");
-    row.className = "border-bottom d-flex justify-content-around py-4";
+    row.className = "border-bottom d-flex justify-content-between py-4";
     row.innerHTML = `
-      <div class="col-5 text-info text-start">${station.name}</div>
+      <div class="ms-5 ps-5 text-info text-start">${station.name}</div>
       <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" id="${station.id}-toggle">
       </div>`;
@@ -384,8 +384,8 @@ function buildNavSlider(initialNav, navItems) {
   };
   const slider = new KeenSlider("#slider", options);
   navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
-  // slider.moveToIdx(2, true, { duration: 0 });
-  slider.moveToIdx(initialNav, true, { duration: 0 });
+  slider.moveToIdx(2, true, { duration: 0 });
+  // slider.moveToIdx(initialNav, true, { duration: 0 });
   return slider;
 
   function navUpdate(activeNav, navItems) { // Update nav slider/page based on time of day or user input (touch/drag swipe)

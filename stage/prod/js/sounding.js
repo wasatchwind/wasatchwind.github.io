@@ -1,5 +1,7 @@
 "use strict";
 
+const { constant } = require("async");
+
 //////////////////////////////////////////////////////////////////////
 // Process 2 charts: KSLC Radiosonde and NWS Soaring Guidance (SRG) //
 //////////////////////////////////////////////////////////////////////
@@ -17,12 +19,11 @@ function processSounding(srgSoundingData, kslcSoundingData, hiTemp) {
   let temp5k, temp20k;
   for (let i = 0; i < srgObservations.length; i++) { // One pass of array
     const d = srgObservations[i];
-    if (d.Altitude_k_ft === 5) temp5k = d.Air_Temp_f - d.Thermal_Index_f;
-    else if (d.Altitude_k_ft === 20) temp20k = d.Air_Temp_f - d.Thermal_Index_f;
+    if (d.Altitude_k_ft === 5) temp5k = d.Lapse_Temp_f;
+    else if (d.Altitude_k_ft === 20) temp20k = d.Lapse_Temp_f;
     if (temp5k && temp20k) break;
   }
   const srgLapse = Math.round((temp20k - temp5k) / 15 * 100) / 100; // Calculate SRG lapse °F/1k' (x2-x1)/(y2-y1) and round to hundredths
-  // const srgLiftParams = getSrgLiftParams(srgSoundingData, srgNegative3, srgTopOfLift);
   negative3El.textContent = srgLiftParams.negative3AltFt.toLocaleString(); // Marquee -3 Index
   topOfLiftEl.textContent = srgLiftParams.topOfLiftAltFt.toLocaleString(); // Marquee Top of Lift
   modelLapseEl.textContent = `Model Lapse Rate ${srgLapse}° F / 1,000 ft`; // SRG sounding footer
@@ -380,7 +381,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("y", y(negative3AltFt - markerShift.y));
   }
 
-  if (topOfLiftAltFt > surfaceAlt && liftParams.topOfLiftTempF > xMin) { // Only draw ToL marker if it's on the chart
+  if (topOfLiftAltFt > surfaceAlt && topOfLiftAltFt <= 20 && liftParams.topOfLiftTempF > xMin) { // Only draw ToL marker if it's on the chart
     userInputChartElements.tolCircle.style("display", null)
       .attr("cx", x(liftParams.topOfLiftTempF))
       .attr("cy", y(topOfLiftAltFt))
