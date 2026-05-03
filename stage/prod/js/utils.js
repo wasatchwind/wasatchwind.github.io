@@ -81,7 +81,7 @@ const MarqueeController = (() => {
   marqueeSettingsDiv.innerHTML = `
     <div class="border-bottom d-flex justify-content-between py-4">
       <div class="display-3 text-info">Marquee Speed</div>
-      <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>
+      <div class="align-items-center col-7 display-4 d-flex justify-content-around" id="marquee-settings"></div>
     </div>`;
 
   const marqueeSettingsSpeeds = document.getElementById("marquee-settings");
