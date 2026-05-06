@@ -469,8 +469,8 @@ function drawWindBarbs(data, svg, x, y) {
   // Helper function to find the nearest sounding level data for each barb altitude
   function dataAtBarbAltitudes(barbAltitude) {
     return data.reduce((best, current) => {
-      const currentAlt = current.altK;
-      const bestAlt = best.altK;
+      const currentAlt = current.Altitude_k_ft;
+      const bestAlt = best.Altitude_k_ft;
       return (Math.abs(currentAlt - barbAltitude) < Math.abs(bestAlt - barbAltitude)) ? current : best;
     });
   }
