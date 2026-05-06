@@ -107,7 +107,7 @@ const MarqueeController = (() => {
 
   // Function to build the Marquee speed options on the user settings page
   function buildSettingsUI() {
-    const baseBtnClass = "marquee-speed border p-4 rounded-5";
+    const baseBtnClass = "marquee-speed border px-4 py-2 rounded-5";
     marqueeSettingsSpeeds.innerHTML = speeds.map(s => `
     <div 
       class="${baseBtnClass} bg-dark fw-normal"
