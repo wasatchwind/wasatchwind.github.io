@@ -84,7 +84,7 @@ async function fetchData() {
       progressEl.textContent = `Loading ${source.displayName}...`; // Show what's starting
       return fetchWithCache(source).then((result) => {
         completed++;
-        progressEl.textContent = `Loaded ${source.displayName} now ${completed * 10}%`;
+        progressEl.textContent = `Loaded ${source.displayName} (${completed}/10)`;
         return result;
       });
     })
