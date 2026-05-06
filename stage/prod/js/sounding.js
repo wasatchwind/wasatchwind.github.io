@@ -461,7 +461,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 ////////////////////////////////////////////////
 function drawWindBarbs(data, svg, x, y) {
   const barbAltitudes = y.ticks(16);       // Ensure a barb for each y tick altitude (every 1,000 ft) e.g. [5, 6, ..., 20]
-  const barbAnchorX = x(-20);              // Barb x coordinate positioning left of the y axis
+  const barbAnchorX = x(-22);              // Barb x coordinate positioning left of the y axis
   const staffLength = 30;                  // Barb staff length (px)
   const tineSpacing = 8;                   // Spacing between tines along staff (px)
   const tineLength = 15;                   // Length of a full tine (px)

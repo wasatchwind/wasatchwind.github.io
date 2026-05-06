@@ -31,16 +31,16 @@ const openMeteoParams = {
 };
 
 const dataSources = [
-  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest" },
-  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast" },
-  { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest" },
-  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest" },
-  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest" },
-  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest" },
-  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app" },
-  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json" },
-  { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png" },
-  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams) }
+  { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", displayName: "AFD" },
+  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
+  { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", displayName: "SRG" },
+  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", displayName: "Wind Aloft 6h" },
+  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", displayName: "Wind Aloft 12h" },
+  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", displayName: "Wind Aloft 24h" },
+  { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", displayName: "Stations" },
+  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "KSLC Sounding" },
+  { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
+  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
 ];
 
 function buildApiUrl(baseUrl, params) {
@@ -56,9 +56,16 @@ async function fetchWithCache(source) {
 
   try {
     const res = await fetch(source.url, { headers, cache: "no-store" });
-    const isFreshCache = cached && (Date.now() - cached.timestamp < 60000); // Cache < 10 mins old
-    if (res.status === 304 && isFreshCache) return cached.data; // ETag 304 = data hasn't changed, but verify in case of stale API
-    const data = await res.json();
+    const isFreshCache = cached && (Date.now() - cached.timestamp < 60000); // Cache < 1 minute old
+    if (res.status === 304) { // ETag 304 = data hasn't changed, but verify in case of stale API
+      if (cached) return cached.data;
+      return { error: true }
+    }
+    let data;
+    try {
+      const text = await res.text();
+      data = text ? JSON.parse(text) : null;
+    } catch (e) { throw new Error(`Invalid JSON response from ${source.name}`) }
     const etag = res.headers.get("etag");
     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
     return data;
@@ -72,13 +79,16 @@ async function fetchWithCache(source) {
 async function fetchData() {
   let completed = 0;
   const progressEl = document.getElementById("progress");
-  const results = await Promise.allSettled(dataSources.map((source) =>
-    fetchWithCache(source).then((result) => {
-      completed++;
-      progressEl.textContent = `Loading... ${completed * 10}%`; // Works as long as there are exactly 10 data sources to fetch
-      return result;
+  const results = await Promise.allSettled(
+    dataSources.map((source) => {
+      progressEl.textContent = `Loading ${source.displayName}...`; // Show what's starting
+      return fetchWithCache(source).then((result) => {
+        completed++;
+        progressEl.textContent = `Loaded ${source.displayName} now ${completed * 10}%`;
+        return result;
+      });
     })
-  ));
+  );
 
   const data = {};
   results.forEach((result, i) => {
