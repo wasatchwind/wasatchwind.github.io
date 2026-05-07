@@ -38,7 +38,7 @@ const dataSources = [
   { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", displayName: "Wind Aloft 12h" },
   { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", displayName: "Wind Aloft 24h" },
   { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", displayName: "Stations" },
-  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "KSLC Sounding" },
+  { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "Sounding" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
   { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
 ];
@@ -50,14 +50,12 @@ function buildApiUrl(baseUrl, params) {
 }
 
 async function fetchWithCache(source) {
-  const raw = localStorage.getItem(source.name);
-  const cached = raw ? JSON.parse(localStorage.getItem(source.name)) : null;
+  const hasLocalStorage = localStorage.getItem(source.name);
+  const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
-
   try {
     const res = await fetch(source.url, { headers, cache: "no-store" });
-    const isFreshCache = cached && (Date.now() - cached.timestamp < 60000); // Cache < 1 minute old
-    if (res.status === 304) { // ETag 304 = data hasn't changed, but verify in case of stale API
+    if (res.status === 304) { // ETag 304: data hasn't changed
       if (cached) return cached.data;
       return { error: true }
     }
@@ -65,7 +63,7 @@ async function fetchWithCache(source) {
     try {
       const text = await res.text();
       data = text ? JSON.parse(text) : null;
-    } catch (e) { throw new Error(`Invalid JSON response from ${source.name}`) }
+    } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
     const etag = res.headers.get("etag");
     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
     return data;
@@ -76,17 +74,34 @@ async function fetchWithCache(source) {
   }
 }
 
-async function fetchData() {
-  let completed = 0;
+function renderLoadingStatus(statusMap) {
   const progressEl = document.getElementById("progress");
+  progressEl.innerHTML = Object.entries(statusMap).map(([displayName, status]) => {
+    return `
+      <div class="d-flex justify-content-center my-2">
+        <div class="col-5 text-end">${displayName}</div>
+        <div class="mx-4">|</div>
+        <div class="col-5 text-start">${status}</div>
+      </div>`;
+  }).join("");
+}
+
+async function fetchData() {
+  const statusMap = {};
+  dataSources.forEach((source) => { statusMap[source.displayName] = "loading..." });
+  renderLoadingStatus(statusMap);
   const results = await Promise.allSettled(
-    dataSources.map((source) => {
-      progressEl.textContent = `Loading ${source.displayName}...`; // Show what's starting
-      return fetchWithCache(source).then((result) => {
-        completed++;
-        progressEl.textContent = `Loaded ${source.displayName} (${completed}/10)`;
+    dataSources.map(async (source) => {
+      try {
+        const result = await fetchWithCache(source);
+        statusMap[source.displayName] = "100%";
+        renderLoadingStatus(statusMap);
         return result;
-      });
+      } catch (error) {
+        statusMap[source.displayName] = "error";
+        renderLoadingStatus(statusMap);
+        throw error;
+      }
     })
   );
 

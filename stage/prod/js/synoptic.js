@@ -221,6 +221,7 @@ function getZone(alti, temp, trendChar) {
   else if (altiDiff < 0) trendChar = "&nbsp;&nbsp;&darr;";
   else trendChar = "";
 
+  if (!alti[alti.length - 1]) return;
   document.getElementById("alti").textContent = alti[alti.length - 1].toFixed(2);
   document.getElementById("temp").innerHTML = `${Math.round(temp[temp.length - 1])}` + "&nbsp;/&nbsp;";
   document.getElementById("trend").innerHTML = trendChar;
