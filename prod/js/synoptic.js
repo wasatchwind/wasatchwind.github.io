@@ -17,6 +17,7 @@ function processSynoptic(data) {
 
   stations.forEach(station => {
     const stationData = data.find(d => d.STID === station.id);
+    if (!stationData) return;
     const readingCount = stationData.STID === "AMB" ? 6 : 12;
 
     if (station.id !== "KSLC") { // KSLC does not have an expandable chart
