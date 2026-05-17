@@ -104,7 +104,6 @@ async function fetchData() {
       }
     })
   );
-
   const data = {};
   results.forEach((result, i) => {
     const name = dataSources[i].name;

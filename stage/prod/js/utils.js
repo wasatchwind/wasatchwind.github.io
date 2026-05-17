@@ -222,10 +222,10 @@ function stationSetToggle(id, state) {
       <div>• Temperature... &deg;F</div>
     </div>
     <br>
-    <div class="text-info">Wind Aloft Forecast Models:</div>
+    <div class="text-info">Wind Aloft Models:</div>
     <div>
       <div>• Pressure levels are hybrid GFS + HRRR</div>
-      <div>• 9k, 12k, 18k are NWS Aviation Weather Center NAM</div>
+      <div>• 9k, 12k, 18k are NAM</div>
     </div>`;
 
   const aboutContent = `
