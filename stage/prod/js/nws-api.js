@@ -21,8 +21,8 @@ function processSoaringForecastPage(text) {
 
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
-      <div class="display-3 justify-content-center text-info">
-        <div>Soaring Forecast Summary @ KSLC</div>
+      <div class="display-3 d-flex justify-content-center text-info">
+        <div>Soaring Forecast @ KSLC</div>
         <div class="${dateColor}">&nbsp;${formattedDate}</div>
       </div>
       <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
