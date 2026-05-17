@@ -9,7 +9,7 @@ function processSoaringForecastPage(text) {
   const datePart = forecastDate.split(",")[1]; // Split by comma e.g. "629 AM MDT Wednesday, April 29, 2026"
   const formattedDate = new Date(datePart).toLocaleDateString("en-US", { month: "short", day: "numeric" }); // e.g. Jan 1
   const dateColor = formattedToday === formattedDate ? "" : "text-danger";
-  const rateOfLift = text.match(/\d{3,4}\sft\/min.*$/m)[0];
+  const rateOfLift = text.match(/\d{1,4}\sft\/min.*$/m)[0];
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)[1]);
   const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
   const negative3Literal = text.match(/Height of the -3 thermal index.*?(\d{4,5}|[A-Za-z].*)\b/m)[1]; // Sometimes text instead of number
