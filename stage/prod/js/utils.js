@@ -147,8 +147,8 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
   const isToday = currentHour < sunsetHour - 1;
   nextDay = isToday ? "" : ` ${nextDay}`;
   const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
-  const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
-  const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
+  const windImg = `https://graphical.weather.gov/GraphicalNDFD.php?timezone=MDT&sector=SLC&element=windspd&n=${displayFactors.graph}`;
+  const gustImg = `https://graphical.weather.gov/GraphicalNDFD.php?timezone=MDT&sector=SLC&element=windgust&n=${displayFactors.graph}`;
 
   document.getElementById(`surface-wind-${displayFactors.day}`).innerHTML = `
     <div class="mb-4">
