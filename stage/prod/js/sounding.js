@@ -60,7 +60,8 @@ function processSounding(srgSoundingData, kslcSoundingData, hiTemp) {
   const surfaceAltFt = 4229;
   const kslcSoundingLiftParams = getKslcSoundingLiftParams(kslcSoundingData, hiTemp);
   const negative3 = kslcSoundingLiftParams.negative3AltFt ? Math.round(kslcSoundingLiftParams.negative3AltFt).toLocaleString() : "Ø";
-  const topOfLift = kslcSoundingLiftParams.topOfLiftAltFt > surfaceAltFt ? Math.round(kslcSoundingLiftParams.topOfLiftAltFt).toLocaleString() : "Ø";
+  const tol = kslcSoundingLiftParams.negative3AltFt && !kslcSoundingLiftParams.topOfLiftAltFt ? ">20k" : "Ø";
+  const topOfLift = kslcSoundingLiftParams.topOfLiftAltFt < surfaceAltFt ? tol : Math.round(kslcSoundingLiftParams.topOfLiftAltFt).toLocaleString();
 
   // KSLC sounding overwrites SRG sounding Marquee data for -3 Index and Top of Lift
   negative3El.textContent = negative3;
@@ -311,12 +312,13 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   // Draw legend labels in upper right area of chart //
   /////////////////////////////////////////////////////
 
+  const tol = liftParams.negative3AltFt && !liftParams.topOfLiftAltFt ? ">20k" : "Ø";
   const tolLegend = svg.append("text") // Top of Lift
     .attr("class", "legend-label-upper")
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(19))
-    .text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? "Ø" : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
+    .text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? tol : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
 
   const neg3Legend = svg.append("text") // -3 Index
     .attr("class", "legend-label-upper")
@@ -450,7 +452,8 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
       .attr("x", x(liftParams.negative3TempF + markerShift.x))
       .attr("y", y(negative3AltFt - markerShift.y));
 
-    tolLegend.text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? "Ø" : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
+    const tol = liftParams.negative3AltFt && !liftParams.topOfLiftAltFt ? ">20k" : "Ø";
+    tolLegend.text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? tol : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
     neg3Legend.text(`- 3 Index: ${!liftParams.negative3AltFt || liftParams.negative3AltFt === "None" ? "Ø" : Math.round(liftParams.negative3AltFt).toLocaleString()} `);
     hiTempLegend.text(`@${temp}°`);
   }

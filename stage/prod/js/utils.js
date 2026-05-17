@@ -215,41 +215,46 @@ function stationSetToggle(id, state) {
 
 (function buildMiscPageItems() { // IIFE to build standard DOM components for the Misc. page
   const unitsContent = `
-    <div class="text-info">Units (unless noted otherwise):</div>
-    <div class="ms-4">
-      <div>Wind speed.... mph</div>
-      <div>Altitude...... feet</div>
-      <div>Temperature... &deg;F</div>
+    <div class="text-info">Units:</div>
+    <div>
+      <div>• Wind Speed.... mph (sounding chart barbs are knots)</div>
+      <div>• Altitude...... Feet</div>
+      <div>• Temperature... &deg;F</div>
     </div>
     <br>
-    <div>The Wind Aloft Forecast uses a GFS + HRRR hybrid model except for 9k, 12k, and 18k which use NWS/NOAA Aviation Weather Center</div>`;
+    <div class="text-info">Wind Aloft Forecast Models:</div>
+    <div>
+      <div>• Pressure levels are hybrid GFS + HRRR</div>
+      <div>• 9k, 12k, 18k are NWS Aviation Weather Center NAM</div>
+    </div>`;
 
   const aboutContent = `
-    <div>I am Matt Hanson, a local paraglider pilot flying since 2014, and created Wasatch Wind to assist with flying
-      conditions assessment. The information provided is generalized and not intended to influence a decision to fly.</div>
+    <div>Wasatch Wind was created by Matt Hanson, a local paraglider pilot flying since 2014, to assist with weather
+      conditions assessment. Wasatch Wind is generalized and not intended to influence flying decisions.</div>
     <br>
-    <div>Feedback is welcome!</div>
     <div class="d-flex">
-      <div>My email:&nbsp;</div>
+      <div>Feedback? Email me:&nbsp;</div>
       <div class="fw-semibold text-warning">matthansonx@gmail.com</div>
     </div>
     <br>
     <div>Wasatch Wind is free! I maintain it as a hobby but it takes time - donations are welcome!</div>
     <br>
-    <div class="d-flex justify-content-center">
-      <div class="d-flex">
-        <div>Venmo:&nbsp;</div>
-        <div class="fw-semibold text-warning">@matt-hansonx</div>
+    <a href="https://venmo.com/u/Matt-Hansonx" target="_blank">
+      <div class="d-flex justify-content-center">
+        <div class="d-flex">
+          <div>Venmo:&nbsp;</div>
+          <div class="fw-semibold text-warning">@matt-hansonx</div>
+        </div>
       </div>
-    </div>
-    <br>
-    <img height="450px" class="d-block mx-auto rounded-4" src="prod/images/venmo.jpg">`;
+      <br>
+      <img height="450px" class="d-block mx-auto rounded-4" src="prod/images/venmo.jpg">
+    </a>`;
 
   const miscSections = [
     {
       elementId: "units",
       src: unitsContent,
-      title: "Units & Models"
+      title: "Units & Forecast Models"
     }, {
       elementId: "about",
       src: aboutContent,

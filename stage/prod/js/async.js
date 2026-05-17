@@ -32,14 +32,14 @@ const openMeteoParams = {
 
 const dataSources = [
   { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", displayName: "AFD" },
-  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
   { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", displayName: "SRG" },
-  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", displayName: "Wind Aloft 6h" },
-  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", displayName: "Wind Aloft 12h" },
-  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", displayName: "Wind Aloft 24h" },
   { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", displayName: "Stations" },
   { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "Sounding" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
+  { name: "windAloft6", url: "https://api.weather.gov/products/types/FD1/locations/US1/latest", displayName: "Wind Aloft 6h" },
+  { name: "windAloft12", url: "https://api.weather.gov/products/types/FD3/locations/US3/latest", displayName: "Wind Aloft 12h" },
+  { name: "windAloft24", url: "https://api.weather.gov/products/types/FD5/locations/US5/latest", displayName: "Wind Aloft 24h" },
+  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
   { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
 ];
 
@@ -88,7 +88,7 @@ function renderLoadingStatus(statusMap) {
 
 async function fetchData() {
   const statusMap = {};
-  dataSources.forEach((source) => { statusMap[source.displayName] = "loading..." });
+  dataSources.forEach((source) => { statusMap[source.displayName] = "Fetching..." });
   renderLoadingStatus(statusMap);
   const results = await Promise.allSettled(
     dataSources.map(async (source) => {
