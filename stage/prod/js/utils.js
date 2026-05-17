@@ -217,7 +217,7 @@ function stationSetToggle(id, state) {
   const unitsContent = `
     <div class="text-info">Units:</div>
     <div>
-      <div>• Wind Speed.... mph (sounding chart barbs are knots)</div>
+      <div>• Wind Speed.... mph</div>
       <div>• Altitude...... Feet</div>
       <div>• Temperature... &deg;F</div>
     </div>
