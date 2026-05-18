@@ -28,7 +28,7 @@ body {
 }
 
 .spinner {
-  margin-top: 250px;
+  margin-top: 150px;
 }
 
 a:any-link {
@@ -137,4 +137,22 @@ a:any-link {
 .legend-label-lower {
   font-size: 3.5vw;
   font-weight: 500;
+}
+
+/* USER SETTINGS STATION TOGGLES */
+.form-switch .form-check-input {
+  transform: scale(1.2);
+}
+
+.form-check-input {
+  background-color: var(--bs-dark);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-success);
+  border-color: white;
+}
+
+.form-switch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e") !important;
 }
