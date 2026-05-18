@@ -82,7 +82,7 @@ function buildWindAloftForecast(data) {
 
   document.getElementById("wind-aloft").innerHTML = `
     <div class="mb-4">
-      <div class="display-3 text-info">Wind Aloft Forecast</div>
+      <div class="display-3 text-info">Wind Aloft Forecast @ KSLC</div>
       ${buildWindAloftSection({ id: "wind-aloft-current6", gridId: "openmeteo-grid-current6", label: `${ranges[1]} &#187;` })}
       ${buildWindAloftSection({ id: "wind-aloft-next6", gridId: "openmeteo-grid-next6", label: `&#171; ${ranges[0]}` })}
     </div>`;

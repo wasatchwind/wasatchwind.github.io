@@ -59,7 +59,7 @@ const MarqueeController = (() => {
   const marqueeDiv = document.getElementById("marquee");
   marqueeDiv.className = "display-5 keen-slider";
 
-  const row = (content) => `<div class="d-flex justify-content-center">${content}</div>`; // Reusable class
+  const row = (content) => `<div class="d-flex justify-content-center">${content}</div>`; // Reused class
   const tickers = [
     { topRow: "-3 Index", bottomRow: `<div id="negative3"></div>` },
     { topRow: "Top of Lift", bottomRow: `<div id="top-of-lift"></div>` },
@@ -81,7 +81,7 @@ const MarqueeController = (() => {
   marqueeSettingsDiv.innerHTML = `
     <div class="border-bottom d-flex justify-content-between py-4">
       <div class="display-3 text-info">Marquee Speed</div>
-      <div class="align-items-center col-7 display-5 d-flex justify-content-around" id="marquee-settings"></div>
+      <div class="align-items-center col-7 display-4 d-flex justify-content-around" id="marquee-settings"></div>
     </div>`;
 
   const marqueeSettingsSpeeds = document.getElementById("marquee-settings");
@@ -107,7 +107,7 @@ const MarqueeController = (() => {
 
   // Function to build the Marquee speed options on the user settings page
   function buildSettingsUI() {
-    const baseBtnClass = "marquee-speed border px-4 rounded-5 py-2";
+    const baseBtnClass = "marquee-speed border px-4 py-2 rounded-5";
     marqueeSettingsSpeeds.innerHTML = speeds.map(s => `
     <div 
       class="${baseBtnClass} bg-dark fw-normal"
@@ -137,7 +137,6 @@ const MarqueeController = (() => {
       btn.classList.toggle("fw-normal", btn.dataset.speed != speed);
     });
   }
-
   return { init: buildSettingsUI, setSpeed }; // Initialized with MarqueeController.init(); on main.js in main()
 })();
 
@@ -148,8 +147,8 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
   const isToday = currentHour < sunsetHour - 1;
   nextDay = isToday ? "" : ` ${nextDay}`;
   const displayFactors = isToday ? { day: "today", graph: 4 } : { day: "tomorrow", graph: 8 };
-  const windImg = `https://graphical.weather.gov/images/SLC/WindSpd${displayFactors.graph}_utah.png`;
-  const gustImg = `https://graphical.weather.gov/images/SLC/WindGust${displayFactors.graph}_utah.png`;
+  const windImg = `https://graphical.weather.gov/GraphicalNDFD.php?timezone=MDT&sector=SLC&element=windspd&n=${displayFactors.graph}`;
+  const gustImg = `https://graphical.weather.gov/GraphicalNDFD.php?timezone=MDT&sector=SLC&element=windgust&n=${displayFactors.graph}`;
 
   document.getElementById(`surface-wind-${displayFactors.day}`).innerHTML = `
     <div class="mb-4">
@@ -171,26 +170,30 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
 // Settings page (station list) & Misc. page //
 ///////////////////////////////////////////////
 (function buildStationSettings() { // IIFE to build station settings toggle on/off list for the user Settings page
-  const stations = stationList();
   const container = document.getElementById("stations-displayed");
   container.className = "display-3 py-4 text-start";
   container.innerHTML = "Display Station Charts:";
 
-  stations.forEach(station => {
+  stationList().forEach(station => {
     const row = document.createElement("div");
-    row.className = "align-items-center border-bottom display-5 d-flex justify-content-around py-4";
+    row.className = "border-bottom d-flex justify-content-between py-4";
     row.innerHTML = `
-      <div class="col-6 display-3 text-info text-start">${station.name}</div>
-      <div id="${station.id}-on">On</div>
-      <div id="${station.id}-off">Off</div>`;
+      <div class="ms-5 ps-5 text-info text-start">${station.name}</div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="${station.id}-toggle">
+      </div>`;
 
     container.appendChild(row);
 
-    const state = localStorage.getItem(station.id) || "on"; // Default is "on"
-    stationSetToggle(station.id, state);
+    const toggleEl = row.querySelector(`#${station.id}-toggle`);
+    let state = localStorage.getItem(station.id) || "on"; // Default is "on"
+    toggleEl.checked = state === "on";
 
-    row.querySelector(`#${station.id}-on`).addEventListener("click", () => stationSetToggle(station.id, "on"));
-    row.querySelector(`#${station.id}-off`).addEventListener("click", () => stationSetToggle(station.id, "off"));
+    toggleEl.addEventListener("change", () => {
+      const newState = toggleEl.checked ? "on" : "off";
+      localStorage.setItem(station.id, newState);
+      stationSetToggle(station.id, newState);
+    });
   });
 
   const synopticLink = document.createElement("div");
@@ -202,53 +205,56 @@ function displayAfternoonSurfaceWindImages(currentHour, sunsetHour, nextDay) { /
   container.appendChild(synopticLink);
 })();
 
-function stationSetToggle(stid, state) { // Onclick function to toggle stations on/off on the user Settings page
-  localStorage.setItem(stid, state)
-  const on = document.getElementById(`${stid}-on`);
-  const off = document.getElementById(`${stid}-off`);
-  on.className = state === "on" ? "bg-success border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-  off.className = state === "off" ? "bg-danger border fw-semibold px-4 rounded-5 py-2" : "bg-dark border fw-normal px-4 rounded-5 py-2";
-  const el = document.getElementById(`${stid}-main`);
-  if (el) el.style.display = state === "off" ? "none" : "";
+function stationSetToggle(id, state) {
+  localStorage.setItem(id, state);
+
+  // visibility logic
+  const stationEl = document.getElementById(`${id}-main`);
+  if (stationEl) stationEl.style.display = state === "off" ? "none" : "";
 }
 
 (function buildMiscPageItems() { // IIFE to build standard DOM components for the Misc. page
   const unitsContent = `
-    <div class="text-info">Units (unless noted otherwise):</div>
-    <div class="ms-4">
-      <div>Wind speed.... mph</div>
-      <div>Altitude...... feet</div>
-      <div>Temperature... &deg;F</div>
+    <div class="text-info">Units:</div>
+    <div>
+      <div>• Wind Speed.... mph</div>
+      <div>• Altitude...... Feet</div>
+      <div>• Temperature... &deg;F</div>
     </div>
     <br>
-    <div>The Wind Aloft Forecast uses a GFS + HRRR hybrid model except for 9k, 12k, and 18k which use NWS/NOAA Aviation Weather Center</div>`;
+    <div class="text-info">Wind Aloft Models:</div>
+    <div>
+      <div>• Pressure levels are hybrid GFS + HRRR</div>
+      <div>• 9k, 12k, 18k are NAM</div>
+    </div>`;
 
   const aboutContent = `
-    <div>I am Matt Hanson, a local paraglider pilot flying since 2014, and created Wasatch Wind to assist with flying
-      conditions assessment. The information provided is generalized and not intended to influence a decision to fly.</div>
+    <div>Wasatch Wind was created by Matt Hanson, a local paraglider pilot flying since 2014, to assist with weather
+      conditions assessment. Wasatch Wind is generalized and not intended to influence flying decisions.</div>
     <br>
-    <div>Feedback is welcome!</div>
     <div class="d-flex">
-      <div>My email:&nbsp;</div>
+      <div>Feedback? Email me:&nbsp;</div>
       <div class="fw-semibold text-warning">matthansonx@gmail.com</div>
     </div>
     <br>
     <div>Wasatch Wind is free! I maintain it as a hobby but it takes time - donations are welcome!</div>
     <br>
-    <div class="d-flex justify-content-center">
-      <div class="d-flex">
-        <div>Venmo:&nbsp;</div>
-        <div class="fw-semibold text-warning">@matt-hansonx</div>
+    <a href="https://venmo.com/u/Matt-Hansonx" target="_blank">
+      <div class="d-flex justify-content-center">
+        <div class="d-flex">
+          <div>Venmo:&nbsp;</div>
+          <div class="fw-semibold text-warning">@matt-hansonx</div>
+        </div>
       </div>
-    </div>
-    <br>
-    <img height="450px" class="d-block mx-auto rounded-4" src="prod/images/venmo.jpg">`;
+      <br>
+      <img height="450px" class="d-block mx-auto rounded-4" src="prod/images/venmo.jpg">
+    </a>`;
 
   const miscSections = [
     {
       elementId: "units",
       src: unitsContent,
-      title: "Units & Models"
+      title: "Units & Forecast Models"
     }, {
       elementId: "about",
       src: aboutContent,
@@ -383,6 +389,7 @@ function buildNavSlider(initialNav, navItems) {
   };
   const slider = new KeenSlider("#slider", options);
   navUpdate(initialNav, navItems); // Necessary here to ensure initial page titles are displayed on initial load
+  // slider.moveToIdx(2, true, { duration: 0 });
   slider.moveToIdx(initialNav, true, { duration: 0 });
   return slider;
 
