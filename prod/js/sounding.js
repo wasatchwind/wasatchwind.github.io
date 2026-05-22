@@ -34,7 +34,7 @@ function processSounding(srgSoundingData, kslcSoundingData, hiTemp) {
 
   // Process KSLC Radiosonde sounding chart if data datestamp (format yyyy-mm-dd) matches today
   const formattedDate = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "2-digit", day: "2-digit" }); // fr-CA format yyyy-mm-dd
-  if (kslcSoundingData["date"] !== formattedDate) return;
+  if (kslcSoundingData["date"] === formattedDate) return;
 
   // Build DOM for KSLC sounding chart
   document.getElementById("kslc-sounding").innerHTML = `
@@ -91,7 +91,7 @@ function celsiusToF(temp) { return Math.round((temp * 9 / 5 + 32) * 10) / 10 }
 // Get KSLC sounding chart lift params before building the chart - Also used for user input lift params //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function getKslcSoundingLiftParams(data, tempF) {
-  let index = 0, foundNegative3 = false, foundTopOfLift = false;
+  let index = 1, foundTopOfLift = false;
   const surfaceAltFt = 4229;
   const tempC = (tempF - 32) * 5 / 9; // Convert input tempF to °C since source data is °C and Thermal Index is °C
   const params = { negative3AltFt: null, negative3TempF: null, topOfLiftAltFt: null, topOfLiftTempF: null };
@@ -107,39 +107,28 @@ function getKslcSoundingLiftParams(data, tempF) {
   }
 
   // Loop through all data until the thermal indices found (or null) for -3 (negative3) and 0 (topOfLift)
-  while (index < data.length && (!foundNegative3 || !foundTopOfLift)) {
+  while (index < data.length && !foundTopOfLift) {
     const { Altitude_ft, Temp_c } = data[index];
     const dalrTempC = (Altitude_ft - dalrYIntercept) / dalrSlope // y=mx+b => x=(y-b)/m
     const thermalIndex = Temp_c - dalrTempC;
 
     try {
-      // Find thermal index = -3 (negative3); skip ahead if found
-      if (!foundNegative3 && thermalIndex >= -3) {
-        if (index === 0) {
-          params.negative3AltFt = null;
-          params.negative3TempF = null;
-        } else {
-          const { Temp_c: t1, Altitude_ft: a1 } = data[index];
-          const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
+      const { Temp_c: t1, Altitude_ft: a1 } = data[index];
+      const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
 
-          if (t1 !== t2) { // Interpolatation required
-            const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
-            const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
-            params.negative3AltFt = Math.round(a1 + (targetX - t1) * (a2 - a1) / (t2 - t1));
-            params.negative3TempF = celsiusToF(targetX + 3);
-          } else {
-            params.negative3AltFt = Math.round((t1 + 3) * dalrSlope + dalrYIntercept);
-            params.negative3TempF = celsiusToF((params.negative3AltFt - dalrYIntercept) / dalrSlope);
-          }
+      if (Math.abs(thermalIndex) >= 3) {
+        if (t1 !== t2) { // Interpolatation required
+          const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
+          const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
+          params.negative3AltFt = Math.round(a1 + (targetX - t1) * (a2 - a1) / (t2 - t1));
+          params.negative3TempF = celsiusToF(targetX + 3);
+        } else {
+          params.negative3AltFt = Math.round((t1 + 3) * dalrSlope + dalrYIntercept);
+          params.negative3TempF = celsiusToF((params.negative3AltFt - dalrYIntercept) / dalrSlope);
         }
-        foundNegative3 = true;
       }
 
-      // Find thermal index = 0 (topOfLift)
-      if (foundNegative3 && !foundTopOfLift && thermalIndex >= 0) {
-        const { Temp_c: t1, Altitude_ft: a1 } = data[index];
-        const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
-
+      if (!foundTopOfLift && thermalIndex >= 0) {
         if (t1 !== t2) { // Interpolatation required
           const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
           const targetX = -yIntercept / slope;
@@ -417,8 +406,10 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   function drawUserInput(temp) {
+    const surfaceTemp = celsiusToF(data[0].Temp_c)
     const liftParams = getKslcSoundingLiftParams(data, temp);
-    if (!liftParams.topOfLiftAltFt && !liftParams.negative3AltFt) {
+
+    if (temp < surfaceTemp || liftParams.negative3AltFt > 20000) {
       outOfRangeEl.textContent = `${temp}° out of range`;
       outOfRangeEl.style.display = "block";
       userTempInputEl.value = null;
