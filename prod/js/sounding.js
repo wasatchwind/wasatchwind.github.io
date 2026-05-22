@@ -116,6 +116,9 @@ function getKslcSoundingLiftParams(data, tempF) {
       const { Temp_c: t1, Altitude_ft: a1 } = data[index];
       const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
 
+      // Sometimes the roab ground (actual) temp is less than 3° C difference from the DALR forecast high ground temp and the raob temp
+      // diverges from DALR near the surface. When this happens, a false/lower -3 index occurs when the divergence becomes more than 3° C.
+      // To account for this case, the -3 index check will continue even if found until the true/higher -3 index is found.
       if (Math.abs(thermalIndex) >= 3) {
         if (t1 !== t2) { // Interpolatation required
           const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
