@@ -123,7 +123,7 @@ function buildWindChart(stid, data, readingCount, altitude) {
 function windChartTime(stid, times) {
   times.forEach((time, i) => {
     const element = document.getElementById(`${stid}-time-${i}`);
-    time = time.slice(0, -3).toLowerCase();
+    time = time ? time.slice(0, -3).toLowerCase() : "";
     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
     element.textContent = time;
   });
