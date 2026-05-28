@@ -421,6 +421,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 
     const negative3AltFt = liftParams.negative3AltFt / 1000;
     const topOfLiftAltFt = liftParams.topOfLiftAltFt / 1000;
+    const xDalr = x(temp - (maxAlt - surfaceAlt) * dalrDegF);
 
     userInputChartElements.dalrLine
       .attr("x1", function () { if (xDalr > xMinGrid) return xDalr })
