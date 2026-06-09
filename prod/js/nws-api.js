@@ -11,7 +11,7 @@ function processSoaringForecastPage(text) {
   const dateColor = formattedToday === formattedDate ? "" : "text-danger";
   const rateOfLift = text.match(/\d{1,4}\sft\/min.*$/m)[0];
   const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)[1]);
-  const hiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
+  const srgHiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
   const negative3Literal = text.match(/Height of the -3 thermal index.*?(\d{4,5}|[A-Za-z].*)\b/m)[1]; // Sometimes text instead of number
   const negative3 = negative3Literal.match(/^\d+$/) ? Number(negative3Literal) : negative3Literal; // If string is all digits convert to number
   const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)[1]);
@@ -37,7 +37,7 @@ function processSoaringForecastPage(text) {
   const soaringForecast = `
     ${forecastDate}</div><br>
     <br>
-    High Temp......... ${hiTemp}°<br>
+    High Temp......... ${srgHiTemp}°<br>
     <br>
     Negative 3 Index.. ${negative3.toLocaleString()}<br>
     Top of Lift....... ${topOfLift.toLocaleString()}<br>
@@ -60,7 +60,7 @@ function processSoaringForecastPage(text) {
     }
   };
 
-  return { hiTemp, srgSoundingData };
+  return { srgHiTemp, srgSoundingData };
 
   // Helper function to extract SRG model forecast table via RegEx into formatted sounding data
   function getSrgSoundingData() {
