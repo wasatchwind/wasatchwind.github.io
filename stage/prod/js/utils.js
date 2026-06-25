@@ -436,11 +436,3 @@ function stationList() {
     { name: "Southside", id: "FPS" }
   ];
 }
-
-
-
-
-
-
-// FOR TESTING - REMOVE IN PROD
-// const data = 

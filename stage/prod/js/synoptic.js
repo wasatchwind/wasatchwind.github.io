@@ -17,7 +17,20 @@ function processSynoptic(data) {
 
   stations.forEach(station => {
     const stationData = data.find(d => d.STID === station.id);
-    if (!stationData) return;
+    if (!stationData) {
+      const stationDiv = document.createElement("div");
+      stationDiv.id = `${station.id}-main`;
+      stationDiv.innerHTML = `
+      <div class="border-bottom d-flex justify-content-between">
+        <div class="d-flex">
+          <div class="align-self-center display-5">&#9940;</div>
+          <div class="display-3 text-info mx-4">${station.name}</div>
+        </div>
+        <div class="align-self-center display-5 fw-semibold text-end text-secondary">No data</div>
+      </div>`;
+      container.appendChild(stationDiv);
+      return;
+    }
     const readingCount = stationData.STID === "AMB" ? 6 : 12;
 
     if (station.id !== "KSLC") { // KSLC does not have an expandable chart
@@ -123,7 +136,7 @@ function buildWindChart(stid, data, readingCount, altitude) {
 function windChartTime(stid, times) {
   times.forEach((time, i) => {
     const element = document.getElementById(`${stid}-time-${i}`);
-    time = time.slice(0, -3).toLowerCase();
+    time = time ? time.slice(0, -3).toLowerCase() : "";
     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
     element.textContent = time;
   });

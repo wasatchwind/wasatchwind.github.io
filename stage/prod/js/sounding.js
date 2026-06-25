@@ -91,12 +91,12 @@ function celsiusToF(temp) { return Math.round((temp * 9 / 5 + 32) * 10) / 10 }
 // Get KSLC sounding chart lift params before building the chart - Also used for user input lift params //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function getKslcSoundingLiftParams(data, tempF) {
-  let index = 0, foundNegative3 = false, foundTopOfLift = false;
+  let index = 1, foundTopOfLift = false;
   const surfaceAltFt = 4229;
   const tempC = (tempF - 32) * 5 / 9; // Convert input tempF to °C since source data is °C and Thermal Index is °C
   const params = { negative3AltFt: null, negative3TempF: null, topOfLiftAltFt: null, topOfLiftTempF: null };
   const lapseDegC = -3 // 3 °C / 1,000 ft === -5.4 °F / 1,000 ft
-  const dalrSlope = 1000 / lapseDegC; // Slope = (y2 - y1)/(x2 - x1) e.g. (6000-5000)/(0-3) = -333.333 using ft & °C
+  const dalrSlope = 1000 / lapseDegC; // Slope = (y2 - y1)/(x2 - x1) e.g. (6000-5000)/(0-3) = -333.333 using 1k ft & °C
   const dalrYIntercept = surfaceAltFt - dalrSlope * tempC; // y=mx+b => b=y-mx
 
   // Helper function for when interpolation between data points is necessary
@@ -107,39 +107,31 @@ function getKslcSoundingLiftParams(data, tempF) {
   }
 
   // Loop through all data until the thermal indices found (or null) for -3 (negative3) and 0 (topOfLift)
-  while (index < data.length && (!foundNegative3 || !foundTopOfLift)) {
+  while (index < data.length && !foundTopOfLift) {
     const { Altitude_ft, Temp_c } = data[index];
     const dalrTempC = (Altitude_ft - dalrYIntercept) / dalrSlope // y=mx+b => x=(y-b)/m
     const thermalIndex = Temp_c - dalrTempC;
 
     try {
-      // Find thermal index = -3 (negative3); skip ahead if found
-      if (!foundNegative3 && thermalIndex >= -3) {
-        if (index === 0) {
-          params.negative3AltFt = null;
-          params.negative3TempF = null;
-        } else {
-          const { Temp_c: t1, Altitude_ft: a1 } = data[index];
-          const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
+      const { Temp_c: t1, Altitude_ft: a1 } = data[index];
+      const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
 
-          if (t1 !== t2) { // Interpolatation required
-            const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
-            const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
-            params.negative3AltFt = Math.round(a1 + (targetX - t1) * (a2 - a1) / (t2 - t1));
-            params.negative3TempF = celsiusToF(targetX + 3);
-          } else {
-            params.negative3AltFt = Math.round((t1 + 3) * dalrSlope + dalrYIntercept);
-            params.negative3TempF = celsiusToF((params.negative3AltFt - dalrYIntercept) / dalrSlope);
-          }
+      // Sometimes the roab ground (actual) temp is less than 3° C difference from the DALR forecast high ground temp and the raob temp
+      // diverges from DALR near the surface. When this happens, a false/lower -3 index occurs when the divergence becomes more than 3° C.
+      // To account for this case, the -3 index check will continue even if found until the true/higher -3 index is found.
+      if (Math.abs(thermalIndex) >= 3) {
+        if (t1 !== t2) { // Interpolatation required
+          const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
+          const targetX = (yIntercept - dalrYIntercept - (3 * dalrSlope)) / (dalrSlope - slope);
+          params.negative3AltFt = Math.round(a1 + (targetX - t1) * (a2 - a1) / (t2 - t1));
+          params.negative3TempF = celsiusToF(targetX + 3);
+        } else {
+          params.negative3AltFt = Math.round((t1 + 3) * dalrSlope + dalrYIntercept);
+          params.negative3TempF = celsiusToF((params.negative3AltFt - dalrYIntercept) / dalrSlope);
         }
-        foundNegative3 = true;
       }
 
-      // Find thermal index = 0 (topOfLift)
-      if (foundNegative3 && !foundTopOfLift && thermalIndex >= 0) {
-        const { Temp_c: t1, Altitude_ft: a1 } = data[index];
-        const { Temp_c: t2, Altitude_ft: a2 } = data[index - 1];
-
+      if (!foundTopOfLift && thermalIndex >= 0) {
         if (t1 !== t2) { // Interpolatation required
           const { slope, yIntercept } = interpolate(t1, a1, t2, a2);
           const targetX = -yIntercept / slope;
@@ -147,7 +139,7 @@ function getKslcSoundingLiftParams(data, tempF) {
         } else params.topOfLiftAltFt = Math.round(t1 * dalrSlope + dalrYIntercept);
 
         params.topOfLiftTempF = celsiusToF((params.topOfLiftAltFt - dalrYIntercept) / dalrSlope);
-        foundTopOfLiftAltFt = true;
+        foundTopOfLift = true;
       }
 
       index++;
@@ -325,7 +317,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(17))
-    .text(`- 3 Index: ${!liftParams.negative3AltFt || liftParams.negative3AltFt === "None" ? "Ø" : Math.round(liftParams.negative3AltFt).toLocaleString()} `);
+    .text(`-3 Index: ${!liftParams.negative3AltFt || liftParams.negative3AltFt === "None" ? "Ø" : Math.round(liftParams.negative3AltFt).toLocaleString()} `);
 
   const hiTempLegend = svg.append("text") // Max surface air temp
     .attr("class", "legend-label-upper")
@@ -417,8 +409,10 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   function drawUserInput(temp) {
+    const surfaceTemp = celsiusToF(data[0].Temp_c)
     const liftParams = getKslcSoundingLiftParams(data, temp);
-    if (!liftParams.topOfLiftAltFt && !liftParams.negative3AltFt) {
+
+    if (temp < surfaceTemp || liftParams.negative3AltFt > 20000) {
       outOfRangeEl.textContent = `${temp}° out of range`;
       outOfRangeEl.style.display = "block";
       userTempInputEl.value = null;
@@ -427,6 +421,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
 
     const negative3AltFt = liftParams.negative3AltFt / 1000;
     const topOfLiftAltFt = liftParams.topOfLiftAltFt / 1000;
+    const xDalr = x(temp - (maxAlt - surfaceAlt) * dalrDegF);
 
     userInputChartElements.dalrLine
       .attr("x1", function () { if (xDalr > xMinGrid) return xDalr })
