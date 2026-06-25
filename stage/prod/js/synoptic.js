@@ -27,7 +27,7 @@ function processSynoptic(data) {
             <div class="align-self-center display-5">&#9940;</div>
             <div class="display-3 text-info mx-4">${station.name}</div>
           </div>
-          <div class="align-self-center display-5 fw-semibold text-end text-secondary">Offline</div>
+          <div class="align-self-center display-5 fw-semibold me-5 text-end text-secondary">Offline</div>
         </div>
       </a>`;
       container.appendChild(stationDiv);
