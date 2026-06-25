@@ -21,13 +21,15 @@ function processSynoptic(data) {
       const stationDiv = document.createElement("div");
       stationDiv.id = `${station.id}-main`;
       stationDiv.innerHTML = `
-      <div class="border-bottom d-flex justify-content-between">
-        <div class="d-flex">
-          <div class="align-self-center display-5">&#9940;</div>
-          <div class="display-3 text-info mx-4">${station.name}</div>
+      <a href="https://www.weather.gov/wrh/timeseries?site=${station.id}&hours=72" target="_blank">
+        <div class="border-bottom d-flex justify-content-between pb-3 mt-3">
+          <div class="d-flex">
+            <div class="align-self-center display-5">&#9940;</div>
+            <div class="display-3 text-info mx-4">${station.name}</div>
+          </div>
+          <div class="align-self-center display-5 fw-semibold text-end text-secondary">Offline</div>
         </div>
-        <div class="align-self-center display-5 fw-semibold text-end text-secondary">No data</div>
-      </div>`;
+      </a>`;
       container.appendChild(stationDiv);
       return;
     }
