@@ -43,7 +43,7 @@ function processSynoptic(data) {
       stationDiv.innerHTML = `
         <div class="align-items-end border-bottom d-flex justify-content-between pb-3 station-header">
           <div class="d-flex align-items-end">
-            <div class="align-self-center display-1 text-warning" id="${stationData.STID}-toggle">&#43;</div>
+            <div class="align-self-center display-1 text-warning" id="${stationData.STID}-expand-toggle">+</div>
             <div class="mx-4">
               <div class="display-6 fw-semibold text-start text-secondary">${elevation}</div>
               <div class="display-3 text-info">${station.name}</div>
@@ -67,7 +67,7 @@ function processSynoptic(data) {
 
       container.appendChild(stationDiv);
       stationDiv.querySelector(".station-header").addEventListener("click", () => toggleWindChart(stationData.STID));
-      
+
       const stationIsVisible = localStorage.getItem(station.id) || "on"; // Default is "on"
       stationDiv.style.display = stationIsVisible === "off" ? "none" : "";
     }
@@ -90,7 +90,8 @@ function processSynoptic(data) {
 
     function toggleWindChart(id) { // Wind chart toggle expand/collapse for each station (Now page)
       const element = document.getElementById(id);
-      const toggle = document.getElementById(`${id}-toggle`);
+      const toggle = document.getElementById(`${id}-expand-toggle`);
+
       const isHidden = element.classList.toggle("collapse");
 
       toggle.textContent = isHidden ? "+" : "−"; // Use minus sign instead of hyphen for spacing consistency
