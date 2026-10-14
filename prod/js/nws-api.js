@@ -142,7 +142,7 @@ function processAreaForecastPageAndHourlyChart(text, isAfterSunset) {
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
   const parsedText = text.split("&&").map(section => section.trim());
   const aviation = parsedText.find(element => element.startsWith(".AVIATION")).split(/AVIATION./)[1].match(/^[\s\S]*?(?=\n\s*\nREST\b)/m)[0] ?? null;
-  const keySection = parsedText[0].startsWith(".KEY") ? 0 : 1;
+  const keySection = parsedText[0].includes(".KEY MESSAGES") ? 0 : 1;
   const keyMessages = parsedText[keySection].split(/KEY MESSAGES.+\n/)[1].trim().split(/\n(?=\s*-)/).map(m => m.replace(/\n(?!\s*-)/g, " ")).join("<br>") ?? null;
 
   const aviationForecast = `
