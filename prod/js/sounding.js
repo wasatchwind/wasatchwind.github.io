@@ -4,6 +4,7 @@
 // Process 2 charts: KSLC Radiosonde and NWS Soaring Guidance (SRG) //
 //////////////////////////////////////////////////////////////////////
 function processSounding(srgSoundingData, kslcSoundingData, hiTemp) {
+  if (srgSoundingData.observations.length === 0) return;
   const negative3El = document.getElementById("negative3");
   const topOfLiftEl = document.getElementById("top-of-lift");
   const modelLapseEl = document.getElementById("model-lapse");
@@ -96,7 +97,7 @@ function getKslcSoundingLiftParams(data, tempF) {
   const tempC = (tempF - 32) * 5 / 9; // Convert input tempF to °C since source data is °C and Thermal Index is °C
   const params = { negative3AltFt: null, negative3TempF: null, topOfLiftAltFt: null, topOfLiftTempF: null };
   const lapseDegC = -3 // 3 °C / 1,000 ft === -5.4 °F / 1,000 ft
-  const dalrSlope = 1000 / lapseDegC; // Slope = (y2 - y1)/(x2 - x1) e.g. (6000-5000)/(0-3) = -333.333 using ft & °C
+  const dalrSlope = 1000 / lapseDegC; // Slope = (y2 - y1)/(x2 - x1) e.g. (6000-5000)/(0-3) = -333.333 using 1k ft & °C
   const dalrYIntercept = surfaceAltFt - dalrSlope * tempC; // y=mx+b => b=y-mx
 
   // Helper function for when interpolation between data points is necessary
@@ -139,7 +140,7 @@ function getKslcSoundingLiftParams(data, tempF) {
         } else params.topOfLiftAltFt = Math.round(t1 * dalrSlope + dalrYIntercept);
 
         params.topOfLiftTempF = celsiusToF((params.topOfLiftAltFt - dalrYIntercept) / dalrSlope);
-        foundTopOfLiftAltFt = true;
+        foundTopOfLift = true;
       }
 
       index++;

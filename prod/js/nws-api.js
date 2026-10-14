@@ -4,21 +4,61 @@
 // Soaring Guidance for SLC (SRG) //
 ////////////////////////////////////
 function processSoaringForecastPage(text) {
-  const formattedToday = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  const forecastDate = text.match(/^.*AM\sMDT.*$/m)[0]; // Match all lines that contain string "AM MDT" (should only be one)
-  const datePart = forecastDate.split(",")[1]; // Split by comma e.g. "629 AM MDT Wednesday, April 29, 2026"
-  const formattedDate = new Date(datePart).toLocaleDateString("en-US", { month: "short", day: "numeric" }); // e.g. Jan 1
-  const dateColor = formattedToday === formattedDate ? "" : "text-danger";
-  const rateOfLift = text.match(/\d{1,4}\sft\/min.*$/m)[0];
-  const topOfLift = Number(text.match(/Maximum height of thermals.*?(\d{4,5})\b/m)[1]);
-  const srgHiTemp = Number(text.match(/Forecast maximum temperature.*?(\d{2,3}\.\d)/m)[1]);
-  const negative3Literal = text.match(/Height of the -3 thermal index.*?(\d{4,5}|[A-Za-z].*)\b/m)[1]; // Sometimes text instead of number
-  const negative3 = negative3Literal.match(/^\d+$/) ? Number(negative3Literal) : negative3Literal; // If string is all digits convert to number
-  const cloudbase = Number(text.match(/Lifted condensation level.*?(\d{4,5})\b/m)[1]);
-  const liftedIndex = text.match(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/m)[1];
-  const overdevelopmentTime = text.match(/Time of overdevelopment.*?(\d{4}|[A-Za-z].*)/m)[1];
-  const overdevelopmentDisplay = overdevelopmentTime.match(/^\d+$/) ? `<br>❗OD Time......... ${overdevelopmentTime}` : "";
+  // let forecastDate;
+  const isNewFormat = /National Weather Service/i.test(text);
 
+  // Helper function
+  const firstMatch = (regex, group = 1) => {
+    const match = text.match(regex);
+    return match ? match[group] : null;
+  };
+
+  // Helper function
+  const numberMatch = (regex) => {
+    const value = firstMatch(regex);
+    return value === null ? null : Number(value.replace(/,/g, ""));
+  };
+
+  // Helper functions
+  const formatDate = (date) => date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  function forecastDateText(text) { return text.match(/^\s*\d{3,4}\s+[AP]M\s+MDT.*$/m)?.[0] ?? ""; }
+
+  const dateMatch = text.match(/\b([A-Z][a-z]+ \d{1,2}, \d{4})\b/) || text.match(/DATE\.\.\.\s*(\d{2})\/(\d{2})\/(\d{2})/);
+  const forecastDate = dateMatch[1].includes(",") ? new Date(dateMatch[1]) : new Date(2000 + Number(dateMatch[3]), Number(dateMatch[1]) - 1, Number(dateMatch[2]));
+  const formattedToday = formatDate(new Date());
+  const formattedDate = formatDate(forecastDate);
+  const dateColor = formattedToday === formattedDate ? "" : "text-danger";
+  const rateOfLift = firstMatch(/(?:maximum rate of lift|maximum lift).*?(\d{1,4}\s*ft\/min)/i);
+  const topOfLift = numberMatch(/(?:Maximum height of thermals|top of the lift).*?([\d,]{4,5})/i);
+  const srgHiTemp = numberMatch(/(?:Forecast maximum temperature|slc max temperature).*?(\d{2,3}(?:\.\d)?)/i);
+  const negative3Literal = firstMatch(/(?:height of the -3 thermal index|height of the -3 index).*?([\d,]+|[A-Za-z][^\r\n]*)/i);
+  const negative3 = /^\d[\d,]*$/.test(negative3Literal || "") ? Number(negative3Literal.replace(/,/g, "")) : negative3Literal;
+
+  // New format only
+  const cloudbase = isNewFormat ? numberMatch(/Lifted condensation level.*?([\d,]{4,5})\b/i) : null;
+  const liftedIndex = isNewFormat ? firstMatch(/Lifted index.*?([+-]?\d+(?:\.\d+)?)/i) : null;
+  const overdevelopmentTime = isNewFormat ? firstMatch(/Time of overdevelopment.*?(\d{4}|[A-Za-z][^\r\n]*)/i) : null;
+  const overdevelopmentDisplay = overdevelopmentTime && /^\d+$/.test(overdevelopmentTime) ? `<br>❗OD Time......... ${overdevelopmentTime}` : "";
+  const observations = isNewFormat ? getSrgSoundingData(text) : [];
+
+  const srgSoundingData = {
+    observations,
+    srgLiftParams: {
+      negative3AltFt: negative3,
+      negative3TempF:
+        observations.length && typeof negative3 === "number"
+          ? getTempAtAltitude(observations, negative3, 5.4)
+          : undefined,
+
+      topOfLiftAltFt: topOfLift,
+      topOfLiftTempF:
+        observations.length
+          ? getTempAtAltitude(observations, topOfLift, 0)
+          : undefined
+    }
+  };
+  
+  // HTML display
   document.getElementById("soaring-forecast").innerHTML = `
     <div class="mb-4">
       <div class="display-3 d-flex justify-content-center text-info">
@@ -28,76 +68,70 @@ function processSoaringForecastPage(text) {
       <a href="https://forecast.weather.gov/product.php?site=NWS&issuedby=SLC&product=SRG&format=CI&version=1&glossary=1" target="_blank">
         <div class="bg-dark border rounded-4">
           <div class="w-100" id="srg-sounding-chart"></div>
-          <div class="display-6 fw-semibold mb-4 text-info" id="model-lapse"></div>
-          <div class="border-top display-6 font-monospace ps-2 text-start" id="soaring-summary"></div>
+          <div class="border-bottom display-6 fw-semibold mb-4 text-info" id="model-lapse"></div>
+          <div class="display-6 font-monospace ps-2 text-start" id="soaring-summary"></div>
         </div>
       </a>
     </div>`;
-
+  
   const soaringForecast = `
-    ${forecastDate}</div><br>
-    <br>
-    High Temp......... ${srgHiTemp}°<br>
-    <br>
-    Negative 3 Index.. ${negative3.toLocaleString()}<br>
-    Top of Lift....... ${topOfLift.toLocaleString()}<br>
-    Cloudbase (LCL)... ${cloudbase.toLocaleString()}<br>
-    <br>
-    Max Lift Rate..... ${rateOfLift}<br>
-    Lifted Index...... ${liftedIndex}<br>
+    ${isNewFormat ? forecastDateText(text) : `${formattedDate}`}<br><br>
+    High Temp......... ${srgHiTemp}°<br><br>
+    Negative 3 Index.. ${typeof negative3 === "number" ? negative3.toLocaleString() : negative3}<br>
+    Top of Lift....... ${topOfLift?.toLocaleString() ?? "N/A"}<br>
+    ${cloudbase !== null ? `Cloudbase (LCL)... ${cloudbase.toLocaleString()}<br><br>` : ""}
+    Max Lift Rate..... ${rateOfLift ?? "N/A"}<br>
+    ${liftedIndex !== null ? `Lifted Index...... ${liftedIndex}<br>` : ""}
     ${overdevelopmentDisplay}`;
 
   document.getElementById("soaring-summary").innerHTML = soaringForecast;
 
-  const observations = getSrgSoundingData();
-  const srgSoundingData = {
-    observations: observations,
-    srgLiftParams: {
-      negative3AltFt: negative3,
-      negative3TempF: getTempAtAltitude(negative3, 5.4),
-      topOfLiftAltFt: topOfLift,
-      topOfLiftTempF: getTempAtAltitude(topOfLift, 0)
-    }
-  };
-
   return { srgHiTemp, srgSoundingData };
+}
 
-  // Helper function to extract SRG model forecast table via RegEx into formatted sounding data
-  function getSrgSoundingData() {
-    const table = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}([\s\S]*?)\n\s*\n/)[1]; // Only need [1] since [0] is the header row info
-    const rows = table.split("\n").map(line => line.trim()).filter(line => line && /^\d{4,5}\s/.test(line));
-    const nwsData = rows.map(line => {
-      const parts = line.split(/\s+/);
-      const altitude = Number(parts[0]);
-      const tempC = Number(parts[1]);
-      const windDir = Number(parts[3]);
-      const windSpeed = Number(parts[4]);
-      const thermalIndexC = Number(parts[10]);
-      return {
-        Air_Temp_f: celsiusToF(tempC),
-        Altitude_k_ft: altitude / 1000, // Format for sounding chart grid (4,229 => 4.229)
-        Lapse_Temp_f: celsiusToF(tempC - thermalIndexC),
-        Wind_Direction: windDir,
-        Wind_Speed_kt: windSpeed // Knots
-      };
-    });
-    return nwsData.reverse(); // Reverse data order so lowest altitude is first since SRG chart uses descending order altitudes
-  }
+// Parse the new-format sounding/model table
+function getSrgSoundingData(text) {
+  const tableMatch = text.match(/Height\s+Temperature\s+Wind[\s\S]*?-{5,}\s*([\s\S]*?)\n\s*[-]{3,}/i);
+  if (!tableMatch) return [];
 
-  // Helper function to get temperatures for lift params -3 Index and Top of Lift
-  function getTempAtAltitude(altitude, thermalIndex) {
-    altitude /= 1000; // Convert target altitudes to chart grid (4,229 => 4.229)
-    for (let i = 0; i < observations.length - 1; i++) {
-      const a = observations[i];
-      const b = observations[i + 1];
-      const tempFound = altitude >= a.Altitude_k_ft && altitude <= b.Altitude_k_ft;
-      if (tempFound) {
-        const numerator = (altitude - a.Altitude_k_ft) * (b.Air_Temp_f - a.Air_Temp_f);
-        const denominator = b.Altitude_k_ft - a.Altitude_k_ft
-        return Math.round((a.Air_Temp_f + numerator / denominator + thermalIndex) * 100) / 100;
-      }
+  const rows = tableMatch[1].split("\n").map(line => line.trim()).filter(line => /^\d{4,5}\s/.test(line));
+
+  return rows.map(line => {
+    const parts = line.split(/\s+/);
+    const altitude = Number(parts[0]);
+    const tempC = Number(parts[1]);
+    const windDir = Number(parts[3]);
+    const windSpeed = Number(parts[4]);
+    const thermalIndexC = Number(parts[10]);
+
+    return {
+      Air_Temp_f: celsiusToF(tempC),
+      Altitude_k_ft: altitude / 1000,
+      Lapse_Temp_f: celsiusToF(tempC - thermalIndexC),
+      Wind_Direction: windDir,
+      Wind_Speed_kt: windSpeed
+    };
+  }).reverse();
+}
+
+// Interpolate temperature at a given altitude
+function getTempAtAltitude(observations, altitude, thermalIndex) {
+  if (!observations.length || typeof altitude !== "number") return undefined;
+  const targetAltitude = altitude / 1000;
+
+  for (let i = 0; i < observations.length - 1; i++) {
+    const a = observations[i];
+    const b = observations[i + 1];
+
+    if (targetAltitude >= a.Altitude_k_ft && targetAltitude <= b.Altitude_k_ft) {
+      const fraction = (targetAltitude - a.Altitude_k_ft) / (b.Altitude_k_ft - a.Altitude_k_ft);
+      const temperature = a.Air_Temp_f + fraction * (b.Air_Temp_f - a.Air_Temp_f);
+
+      return Math.round((temperature + thermalIndex) * 100) / 100;
     }
   }
+
+  return undefined;
 }
 
 ////////////////////////////////////////////
@@ -108,14 +142,14 @@ function processAreaForecastPageAndHourlyChart(text, isAfterSunset) {
   const forecastDate = text.match(/^\s*(\d{1,4}\s+(?:AM|PM)\s+.*?\d{4})\s*$/m)?.[1]?.trim();
   const parsedText = text.split("&&").map(section => section.trim());
   const aviation = parsedText.find(element => element.startsWith(".AVIATION")).split(/AVIATION./)[1].match(/^[\s\S]*?(?=\n\s*\nREST\b)/m)[0] ?? null;
-  // const aviation = parsedText.find(element => element.startsWith(".AVIATION")).split(/AVIATION.+\n/)[1].match(/^[\s\S]*?(?=\n\s*\nREST\b)/m)[0] ?? null;
-  const keyMessages = parsedText[0].split(/KEY MESSAGES.+\n/)[1].trim().split(/\n(?=\s*-)/).map(m => m.replace(/\n(?!\s*-)/g, " ")).join("<br>") ?? null;
-  
+  const keySection = parsedText[0].startsWith(".KEY") ? 0 : 1;
+  const keyMessages = parsedText[keySection].split(/KEY MESSAGES.+\n/)[1].trim().split(/\n(?=\s*-)/).map(m => m.replace(/\n(?!\s*-)/g, " ")).join("<br>") ?? null;
+
   const aviationForecast = `
     ${forecastDate ? forecastDate : "Date error"}<br>
     <br>
     ${aviation}`;
-  
+
   const areaForecast = `
     ${forecastDate ? forecastDate : "Date error"}<br>
     <br>
