@@ -158,7 +158,7 @@ function windChartSpeed(stid, speeds, altitude) {
     const element = document.getElementById(`${stid}-wspd-${i}`);
 
     if (speed === "Calm") {
-      if (i === speeds.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
+      if (i === speeds.length - 1) element.className = stid === "KSLC" ? "" : "align-self-end col-2 fs-2 fw-semibold px-1 py-3 rounded-4 text-center";
       else element.className = "fs-3 fw-normal";
     }
 
