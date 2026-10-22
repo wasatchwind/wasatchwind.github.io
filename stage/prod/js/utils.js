@@ -360,10 +360,18 @@ function displayPersistentImages(windMapTime) { // Images independent of conditi
 //   style: String (optional: 1) style override, 2) style override with subdiv id, 3) undefined (default style))
 // }
 function standardHtmlComponent({ elementId, title, href, src, style }) {
-  style = style ? style : "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
+  style = style || "bg-dark border display-6 font-monospace ps-2 rounded-4 text-start";
   const isImgSrc = src?.startsWith("http") || src?.startsWith("prod");
   const [content, imgSrc] = isImgSrc ? ["", src] : [src ?? "", null];
-  const imgOrDiv = imgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}">${content}</div>`;
+
+  // Add a unique query parameter to encourage a fresh image fetch (helps cache bust on iPhones using Chrome)
+  const freshImgSrc = imgSrc ? (() => {
+    const url = new URL(imgSrc, document.baseURI);
+    url.searchParams.set("_cb", Date.now().toString());
+    return url.href;
+  })() : null;
+  
+  const imgOrDiv = freshImgSrc ? `<img class="rounded-4 w-100" loading="lazy" src="${imgSrc}">` : `<div class="${style}">${content}</div>`;
   const link = href ? { hrefLine: `<a href="${href}" target="_blank">`, closure: "</a>" } : { hrefLine: "", closure: "" };
 
   document.getElementById(`${elementId}`).innerHTML = `
