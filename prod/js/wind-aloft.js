@@ -1,6 +1,10 @@
 "use strict";
 
 function processWindAloft(openMeteo, windAloft6, windAloft12, windAloft24) {
+  if (!windAloft6?.productText || !windAloft12?.productText || !windAloft24?.productText) {
+    buildWindAloftForecast(openMeteo);
+    return;
+  }
   windAloft6 = parseWindAloft(windAloft6.productText);
   windAloft12 = parseWindAloft(windAloft12.productText);
   windAloft24 = parseWindAloft(windAloft24.productText);
@@ -168,8 +172,8 @@ function buildWindAloftForecast(data) {
 
           const hourIndex = startIndex + (col - 1);
           const rowConfig = windAloftRows[rowIndex];
-          const speed = data[rowConfig.speed][hourIndex];
-          const direction = data[rowConfig.dir][hourIndex];
+          const speed = data[rowConfig.speed]?.[hourIndex] ?? 0;
+          const direction = data[rowConfig.dir]?.[hourIndex] ?? 0;
           const altitude = Math.round(Number(row.label.replace(/,/, "")) / 1000);
 
           populateWindCell(cell, speed, direction, altitude);
