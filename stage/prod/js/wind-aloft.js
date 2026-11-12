@@ -1,72 +1,15 @@
 "use strict";
 
-function processWindAloft(openMeteo, windAloft6, windAloft12, windAloft24) {
-  if (!windAloft6?.productText || !windAloft12?.productText || !windAloft24?.productText) {
-    buildWindAloftForecast(openMeteo);
-    return;
-  }
-  windAloft6 = parseWindAloft(windAloft6.productText);
-  windAloft12 = parseWindAloft(windAloft12.productText);
-  windAloft24 = parseWindAloft(windAloft24.productText);
-  injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAloft24);
-  windAloftLongterm(windAloft24);
+function processWindAloft(openMeteo) {
+  // windAloftLongterm(windAloft24);
   buildWindAloftForecast(openMeteo);
-}
-
-function parseWindAloft(text) {
-  const timeframe = text.match(/FOR USE\s+(\d{2})00-(\d{2})00Z/);
-  const starttime = Number(timeframe[1]);
-  const endtime = Number(timeframe[2]);
-  const slc = text.match(/^SLC.*$/m)?.[0];
-  const alts = ["altitude9k", "altitude12k", "altitude18k"];
-  const windspeed = {};
-  const winddirection = {};
-  const temperature = {};
-  const data = slc.slice(17, 41);
-
-  for (let i = 0; i < alts.length; i++) {
-    const block = data.slice(i * 8, i * 8 + 7);
-    const dir = parseInt(block.slice(0, 2), 10) * 10;
-    winddirection[alts[i]] = dir === 990 ? null : dir;
-    windspeed[alts[i]] = Math.round(parseInt(block.slice(2, 4)) * 1.15078);
-    temperature[alts[i]] = Math.round(parseInt(block.slice(4, 7)) * 9 / 5 + 32);
-  }
-
-  return { starttime, endtime, windspeed, winddirection, temperature };
-}
-
-// Function to assimilate the NWS Wind Aloft data (windAloft) into the primary data source (openMeteo)
-function injectWindAloftIntoOpenMeteo(openMeteo, windAloft6, windAloft12, windAloft24) {
-  const altitudes = ["9k", "12k", "18k"];
-  const fields = ["winddirection", "windspeed"];
-
-  function isHourInRange(hour, start, end) {
-    if (start < end) return hour >= start && hour < end;
-    else return hour >= start || hour < end;
-  }
-
-  // Helper function to select the correct forecast (UTC) for a given local time
-  function forecastSelector(utcHour) {
-    if (isHourInRange(utcHour, windAloft6.starttime, windAloft6.endtime)) return windAloft6;
-    if (isHourInRange(utcHour, windAloft12.starttime, windAloft12.endtime)) return windAloft12;
-    return windAloft24;
-  }
-
-  for (const alt of altitudes) {
-    for (const field of fields) {
-      openMeteo[`${field}_${alt.replace("k", "000")}`] = openMeteo.time.map(t => {
-        const forecast = forecastSelector(new Date(t).getUTCHours());
-        return forecast[field][`altitude${alt}`];
-      });
-    }
-  }
 }
 
 ////////////////////////////////////////
 // Main Wind Aloft Forecast component //
 ////////////////////////////////////////
 function buildWindAloftForecast(data) {
-  const windAloftUrl = "https://aviationweather.gov/data/windtemp/?region=slc&fcst=06&level=low";
+  const windAloftUrl = "https://aviationweather.gov/gfa/#winds";
 
   const buildWindAloftSection = ({ id, gridId, label }) => `
     <div class="bg-dark border ${id.includes("next") ? "collapse" : ""} rounded-4" id="${id}">
@@ -114,8 +57,8 @@ function buildWindAloftForecast(data) {
     const container = document.getElementById(`openmeteo-grid-${timeframe}`);
     const startIndex = timeframe === "current6" ? 0 : 6;
     const slice = timeframe === "current6" ? [0, 6] : [6, 12];
-    const pressureLevels = [625, 700, 750, 775, 800, 825, 850, 875];
-    const rowCount = pressureLevels.length + 4 // Surface + NWS 9, 12, 18 (4)
+    const pressureLevels = [550, 650, 675, 700, 725, 750, 775, 800, 825, 850, 875];
+    const rowCount = pressureLevels.length + 1 // Pressure Levels + Surface
 
     // Calculate the mean geopotential altitude for current6 and next6
     const geopotentialMeans = pressureLevels.map(hPa => {
@@ -126,19 +69,12 @@ function buildWindAloftForecast(data) {
     });
 
     const labels = [
-      { label: "18,000", sub: "NWS" },
-      { label: geopotentialMeans[0], sub: `${pressureLevels[0]} hPa` },
-      { label: "12,000", sub: "NWS" },
-      { label: geopotentialMeans[1], sub: `${pressureLevels[1]} hPa` },
-      { label: "9,000", sub: "NWS" },
-      { label: geopotentialMeans[2], sub: `${pressureLevels[2]} hPa` },
-      { label: geopotentialMeans[3], sub: `${pressureLevels[3]} hPa` },
-      { label: geopotentialMeans[4], sub: `${pressureLevels[4]} hPa` },
-      { label: geopotentialMeans[5], sub: `${pressureLevels[5]} hPa` },
-      { label: geopotentialMeans[6], sub: `${pressureLevels[6]} hPa` },
-      { label: geopotentialMeans[7], sub: `${pressureLevels[7]} hPa` },
+      ...pressureLevels.map((hPa, index) => ({
+        label: geopotentialMeans[index],
+        sub: `${hPa} hPa`
+      })),
       { label: "4,260", sub: "Surface" },
-      { label: "", sub: "" } // Time row is empty in column 1 of the grid
+      { label: "", sub: "" } // Time row
     ];
 
     // Build rows
@@ -149,6 +85,7 @@ function buildWindAloftForecast(data) {
       for (let col = 0; col < 7; col++) {
         const cell = document.createElement("div");
         cell.className = "display-5 wind-aloft-cell";
+        if (col === 0) cell.style.cssText = "min-width: 140px; width: 140px;";
 
         // Column 1: Labels
         if (col === 0) cell.innerHTML = `<div>${row.label}</div>${`<div class="display-6 fw-semibold fs-2 text-secondary">${row.sub}</div>`}`;
@@ -156,18 +93,14 @@ function buildWindAloftForecast(data) {
         // Data cells
         else if (rowIndex < rowCount) {
           const windAloftRows = [
-            { speed: "windspeed_18000", dir: "winddirection_18000" },
-            { speed: `windspeed_${pressureLevels[0]}hPa`, dir: `winddirection_${pressureLevels[0]}hPa` },
-            { speed: "windspeed_12000", dir: "winddirection_12000" },
-            { speed: `windspeed_${pressureLevels[1]}hPa`, dir: `winddirection_${pressureLevels[1]}hPa` },
-            { speed: "windspeed_9000", dir: "winddirection_9000" },
-            { speed: `windspeed_${pressureLevels[2]}hPa`, dir: `winddirection_${pressureLevels[2]}hPa` },
-            { speed: `windspeed_${pressureLevels[3]}hPa`, dir: `winddirection_${pressureLevels[3]}hPa` },
-            { speed: `windspeed_${pressureLevels[4]}hPa`, dir: `winddirection_${pressureLevels[4]}hPa` },
-            { speed: `windspeed_${pressureLevels[5]}hPa`, dir: `winddirection_${pressureLevels[5]}hPa` },
-            { speed: `windspeed_${pressureLevels[6]}hPa`, dir: `winddirection_${pressureLevels[6]}hPa` },
-            { speed: `windspeed_${pressureLevels[7]}hPa`, dir: `winddirection_${pressureLevels[7]}hPa` },
-            { speed: "wind_speed_10m", dir: "wind_direction_10m" }
+            ...pressureLevels.map(hPa => ({
+              speed: `windspeed_${hPa}hPa`,
+              dir: `winddirection_${hPa}hPa`
+            })),
+            {
+              speed: "wind_speed_10m",
+              dir: "wind_direction_10m"
+            }
           ];
 
           const hourIndex = startIndex + (col - 1);
