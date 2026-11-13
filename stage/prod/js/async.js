@@ -183,15 +183,34 @@ async function fetchData() {
         // const result = await fetchWithCache(source);
 
 
+        // const result = await fetchWithCache(source, (stage) => {
+        //   statusMap[source.displayName] = stage;
+        //   renderLoadingStatus(statusMap);
+        // });
+
+
+        // statusMap[source.displayName] = "100%";
+        // renderLoadingStatus(statusMap);
+        // return result;
+
+        let hadError = false;
+
         const result = await fetchWithCache(source, (stage) => {
+          if (stage.startsWith("ERROR:") || stage.startsWith("TIMEOUT")) {
+            hadError = true;
+          }
+
           statusMap[source.displayName] = stage;
           renderLoadingStatus(statusMap);
         });
 
+        statusMap[source.displayName] = hadError
+          ? "FAILED - fallback/error returned"
+          : "100%";
 
-        statusMap[source.displayName] = "100%";
         renderLoadingStatus(statusMap);
         return result;
+
       } catch (error) {
         statusMap[source.displayName] = "error";
         renderLoadingStatus(statusMap);
@@ -208,6 +227,10 @@ async function fetchData() {
       data[name] = { error: true };
     }
   });
+
+  statusMap["Application"] = "All requests settled - preparing main()";
+  renderLoadingStatus(statusMap);
+
   return data;
 }
 
