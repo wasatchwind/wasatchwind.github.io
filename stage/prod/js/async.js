@@ -43,6 +43,7 @@ const dataSources = [
 function buildApiUrl(baseUrl, params) {
   const url = new URL(baseUrl);
   url.search = new URLSearchParams(Object.entries(params).map(([k, v]) => [k, Array.isArray(v) ? v.join(",") : v]));
+  console.log(url.toString())
   return url.toString();
 }
 
@@ -91,10 +92,29 @@ async function fetchWithCache(source, onStage) {
 
     onStage("Request started");
 
-    const res = await fetch(source.url, {
-      headers,
-      cache: "no-store"
-    });
+    // const res = await fetch(source.url, {
+    //   headers,
+    //   cache: "no-store"
+    // });
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      onStage("TIMEOUT - request aborted after 15 seconds");
+      controller.abort();
+    }, 15000);
+
+    let res;
+
+    try {
+      res = await fetch(source.url, {
+        headers,
+        cache: "no-store",
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     onStage(`Response received: HTTP ${res.status}`);
 
@@ -130,7 +150,8 @@ async function fetchWithCache(source, onStage) {
   } catch (error) {
     console.error(`Diagnostic error: ${source.name}`, error);
 
-    onStage(`ERROR: ${error.message}`);
+    // onStage(`ERROR: ${error.message}`);
+    onStage(`ERROR: ${error.name} - ${error.message || "No message"}`);
 
     if (cached) return cached.data;
     return { error: true };
