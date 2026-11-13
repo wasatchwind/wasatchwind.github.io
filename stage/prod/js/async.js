@@ -124,5 +124,4 @@ main(data);
 // Sounding data UWYO inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
 // Sounding data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
 // Sounding image sources: https://www.weather.gov/upperair/SkewTViewing
-// Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
 // Keen Slider: https://keen-slider.io/docs
