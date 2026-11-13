@@ -15,7 +15,13 @@
   <!-- CSS & BOOTSTRAP -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  <link href="prod/css/main.css" rel="stylesheet">
+
+  <script>
+    const APP_VERSION = "3.0.1";
+    document.write(`<link href="prod/css/main.css?v=${APP_VERSION}" rel="stylesheet">`);
+  </script>
+
+  <link href="prod/css/main.css?v=3.0.1" rel="stylesheet">
 </head>
 
 <body>
@@ -24,8 +30,8 @@
     <!-- STICKY TOP: 3 ROWS ##################################################################################################### -->
     <div class="bg-black border-bottom border-secondary border-4 pb-2 sticky-top">
       <div id="title-heading"></div> <!-- ROW 1: TITLE HEADING -->
-      <div id="marquee"></div>       <!-- ROW 2: MARQUEE/TICKER SLIDER -->
-      <div id="topnav"></div>        <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
+      <div id="marquee"></div> <!-- ROW 2: MARQUEE/TICKER SLIDER -->
+      <div id="topnav"></div> <!-- ROW 3: NAVIGATION/SWIPE SLIDER & PAGE TITLES -->
     </div>
 
     <!-- LOADING SPINNER/PROGRESS & BODY SLIDER: 7 PAGES ################################################################################# -->
@@ -33,50 +39,54 @@
       <img class="mb-4 spinner w-25" src="prod/images/spinner.gif">
       <div class="display-4" id="progress"></div>
     </div>
-    
+
     <div class="keen-slider" id="slider">
 
       <!-- PAGE 1: TODAY > 8 SECTIONS ########################################################################################### -->
       <div class="collapse keen-slider__slide number-slide1 pe-2" id="today-page">
-        <div id="surface-wind-today"></div>     <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
-        <div id="wind-aloft"></div>             <!-- SECTION 2: WIND ALOFT FORECAST -->
-        <div id="hourly-chart-today"></div>     <!-- SECTION 3: 48 HOUR FORECAST CHART (CONDITIONALLY DISPLAYED) -->
-        <div id="kslc-sounding"></div>          <!-- SECTION 4: D3.JS SOUNDING DATA CHART -->
-        <div id="soaring-forecast"></div>       <!-- SECTION 5: NWS SOARING GUIDANCE (SRG) SOUNDING & SUMMARY -->
+        <div id="surface-wind-today"></div>
+        <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="wind-aloft"></div> <!-- SECTION 2: WIND ALOFT FORECAST -->
+        <div id="hourly-chart-today"></div> <!-- SECTION 3: 48 HOUR FORECAST CHART (CONDITIONALLY DISPLAYED) -->
+        <div id="kslc-sounding"></div> <!-- SECTION 4: D3.JS SOUNDING DATA CHART -->
+        <div id="soaring-forecast"></div> <!-- SECTION 5: NWS SOARING GUIDANCE (SRG) SOUNDING & SUMMARY -->
         <div id="area-forecast-aviation"></div> <!-- SECTION 6: AREA FORECAST DISCUSSION - AVIATION -->
-        <div id="area-forecast-today"></div>    <!-- SECTION 7: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
-        <div id="nws-today"></div>              <!-- SECTION 8: NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="area-forecast-today"></div>
+        <!-- SECTION 7: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
+        <div id="nws-today"></div> <!-- SECTION 8: NWS TODAY/THIS AFTERNOON FORECAST (CONDITIONALLY DISPLAYED) -->
       </div>
 
       <!-- PAGE 2: TOMORROW > 5 SECTIONS ######################################################################################## -->
       <div class="collapse keen-slider__slide number-slide2 pe-2" id="tomorrow-page">
-        <div id="surface-wind-tomorrow"></div>  <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
-        <div id="wind-aloft-longterm"></div>    <!-- SECTION 2: WIND ALOFT LONG TERM (24 HR) -->
-        <div id="hourly-chart-tomorrow"></div>  <!-- SECTION 3: 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
-        <div id="area-forecast-tomorrow"></div> <!-- SECTION 4: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
-        <div id="nws-multiday"></div>           <!-- SECTION 5: NWS MULTI-DAY FORECAST -->
+        <div id="surface-wind-tomorrow"></div>
+        <!-- SECTION 1: GRAPHICAL SURFACE WIND FORECAST (CONDITIONALLY DISPLAYED) -->
+        <div id="wind-aloft-longterm"></div> <!-- SECTION 2: WIND ALOFT LONG TERM (24 HR) -->
+        <div id="hourly-chart-tomorrow"></div> <!-- SECTION 3: 48 HOUR CHART (CONDITIONALLY DISPLAYED) -->
+        <div id="area-forecast-tomorrow"></div>
+        <!-- SECTION 4: AREA FORECAST DISCUSSION - KEY MESSAGES (CONDITIONALLY DISPLAYED) -->
+        <div id="nws-multiday"></div> <!-- SECTION 5: NWS MULTI-DAY FORECAST -->
       </div>
 
       <!-- PAGE 3: SETTINGS > 3 SECTIONS ######################################################################################## -->
       <div class="collapse keen-slider__slide number-slide3 pe-2" id="settings-page">
-        <div id="marquee-speed"></div>      <!-- SECTION 1: MARQUEE SPEED CONTROL -->
+        <div id="marquee-speed"></div> <!-- SECTION 1: MARQUEE SPEED CONTROL -->
         <div id="stations-displayed"></div> <!-- SECTION 2: STATION ON/OFF TOGGLES -->
       </div>
 
       <!-- PAGE 4: MISC > 6 SECTIONS ############################################################################################ -->
       <div class="collapse keen-slider__slide number-slide4 pe-2" id="misc.-page">
         <div id="uhgpga-flying-sites"></div> <!-- SECTION 1: UHGPGA FLYING SITES -->
-        <div id="hike-fly"></div>            <!-- SECTION 2: HIKE & FLY CALCULATOR -->
+        <div id="hike-fly"></div> <!-- SECTION 2: HIKE & FLY CALCULATOR -->
         <div id="pressure-zone-chart"></div> <!-- SECTION 3: AMBROSE PRESSURE ZONE -->
-        <div id="units"></div>               <!-- SECTION 4: UNITS & MODELS -->
-        <div id="about"></div>               <!-- SECTION 5: ABOUT -->
-        <div id="learn-paragliding"></div>   <!-- SECTION 6: LEARN TO PARAGLIDE -->
+        <div id="units"></div> <!-- SECTION 4: UNITS & MODELS -->
+        <div id="about"></div> <!-- SECTION 5: ABOUT -->
+        <div id="learn-paragliding"></div> <!-- SECTION 6: LEARN TO PARAGLIDE -->
       </div>
 
       <!-- PAGE 5: GPS > 2 SECTIONS ############################################################################################# -->
       <div class="collapse keen-slider__slide number-slide5 pe-2" id="gps-page">
         <div id="livetrack24"></div> <!-- SECTION 1: LIVETRACK24 -->
-        <div id="xcfind"></div>      <!-- SECTION 2: XCFIND -->
+        <div id="xcfind"></div> <!-- SECTION 2: XCFIND -->
       </div>
 
       <!-- PAGE 6: CAMS ######################################################################################################### -->
@@ -84,9 +94,9 @@
 
       <!-- PAGE 7: NOW > 4 SECTIONS ############################################################################################# -->
       <div class="collapse keen-slider__slide number-slide7 pe-2" id="now-page">
-        <div id="KSLC-main"></div>     <!-- SECTION 1: KSLC CHART -->
-        <div id="wind-map"></div>      <!-- SECTION 2: WIND MAP SCREEN SHOT -->
-        <div id="wind-charts"></div>   <!-- SECTION 3: WIND STATION CHARTS -->
+        <div id="KSLC-main"></div> <!-- SECTION 1: KSLC CHART -->
+        <div id="wind-map"></div> <!-- SECTION 2: WIND MAP SCREEN SHOT -->
+        <div id="wind-charts"></div> <!-- SECTION 3: WIND STATION CHARTS -->
         <div id="satellite-gif"></div> <!-- SECTION 4: SATELLITE GIF -->
       </div>
 
@@ -94,15 +104,19 @@
   </div> <!-- END BODY CONTAINER -->
 
   <!-- JAVASCRIPT -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-  <script src="prod/js/keen-slider.min.js"></script>
-  <script src="prod/js/utils.js"></script>
-  <script src="prod/js/main.js"></script>
-  <script src="prod/js/synoptic.js"></script>
-  <script src="prod/js/nws-api.js"></script>
-  <script src="prod/js/wind-aloft.js"></script>
-  <script src="prod/js/sounding.js"></script>
-  <script type="module" src="prod/js/async.js"></script>
+  <script>
+    document.write(`
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.2/d3.min.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/keen-slider.min.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/utils.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/main.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/synoptic.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/nws-api.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/wind-aloft.js?v=${APP_VERSION}"><\/script>
+      <script src="prod/js/sounding.js?v=${APP_VERSION}"><\/script>
+      <script type="module" src="prod/js/async.js?v=${APP_VERSION}"><\/script>
+    `);
+  </script>
 
 </body>
 
