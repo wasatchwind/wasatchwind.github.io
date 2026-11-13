@@ -83,9 +83,11 @@ async function fetchWithCache(source, onStage) {
     const hasLocalStorage = localStorage.getItem(source.name);
     cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
 
-    const headers = cached?.etag
-      ? { "If-None-Match": cached.etag }
-      : undefined;
+    const headers = source.name === "openMeteo"
+      ? undefined
+      : cached?.etag
+        ? { "If-None-Match": cached.etag }
+        : undefined;
 
     onStage("Request started");
 
