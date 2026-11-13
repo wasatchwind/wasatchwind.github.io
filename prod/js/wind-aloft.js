@@ -4,6 +4,7 @@
 // Main Wind Aloft Forecast component //
 ////////////////////////////////////////
 function processWindAloft(data) {
+  return;
   try {
     const windAloftUrl = "https://aviationweather.gov/gfa/#winds";
 

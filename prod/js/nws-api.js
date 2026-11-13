@@ -21,7 +21,7 @@ function processSoaringForecastPage(text) {
 
   // Helper functions
   const formatDate = (date) => date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  function forecastDateText(text) { return text.match(/^\s*\d{3,4}\s+[AP]M\s+MDT.*$/m)?.[0] ?? ""; }
+  function forecastDateText(text) { return text.match(/^\s*\d{3,4}\s+[AP]M\s+M[DS]T.*$/m)?.[0] ?? ""; }
 
   const dateMatch = text.match(/\b([A-Z][a-z]+ \d{1,2}, \d{4})\b/) || text.match(/DATE\.\.\.\s*(\d{2})\/(\d{2})\/(\d{2})/);
   const forecastDate = dateMatch[1].includes(",") ? new Date(dateMatch[1]) : new Date(2000 + Number(dateMatch[3]), Number(dateMatch[1]) - 1, Number(dateMatch[2]));
