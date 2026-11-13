@@ -4,8 +4,8 @@ const openMeteoHourlyParams = () => {
   const params = [];
   const hourlyConfig = {
     levels: [875, 850, 825, 800, 775, 750, 725, 700, 675, 650, 550],
-    variables: ["geopotential_height", "winddirection", "windspeed"],
-    surface: ["wind_direction_10m", "wind_speed_10m"]
+    variables: ["geopotential_height", "winddirection", "windspeed"]//,
+    // surface: ["wind_direction_10m", "wind_speed_10m"]
   };
 
   for (const level of hourlyConfig.levels) {
