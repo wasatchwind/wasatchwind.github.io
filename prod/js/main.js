@@ -42,7 +42,7 @@ function main(data) {
   const windMapTime = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Functions to process remaining data
-  processWindAloft(data.openMeteo.hourly);                                                                // wind-aloft.js
+  //processWindAloft(data.openMeteo.hourly);                                                                // wind-aloft.js
   processAreaForecastPageAndHourlyChart(data.areaForecast.productText, isAfterSunset);                    // nws-api.js
   processGeneralForecast(data.generalForecast.properties.periods);                                        // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                                       // synoptic.js
