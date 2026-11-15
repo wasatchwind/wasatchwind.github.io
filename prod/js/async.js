@@ -46,30 +46,85 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
+// async function fetchWithCache(source) {
+//   const hasLocalStorage = localStorage.getItem(source.name);
+//   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
+//   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
+//   try {
+//     const res = await fetch(source.url, { headers, cache: "no-store" });
+//     if (res.status === 304) { // ETag 304: data hasn't changed
+//       if (cached) return cached.data;
+//       return { error: true }
+//     }
+//     let data;
+//     try {
+//       const text = await res.text();
+//       data = text ? JSON.parse(text) : null;
+//     } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
+//     const etag = res.headers.get("etag");
+//     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+//     return data;
+//   } catch (error) {
+//     console.error(`API error: ${source.name}`, error);
+//     if (cached) return cached.data;
+//     return { error: true };
+//   }
+// }
+
+
+
+
 async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
+
   try {
-    const res = await fetch(source.url, { headers, cache: "no-store" });
-    if (res.status === 304) { // ETag 304: data hasn't changed
+    const res = await fetch(source.url, {
+      headers,
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    if (res.status === 304) {
       if (cached) return cached.data;
-      return { error: true }
+      return { error: true };
     }
+
     let data;
     try {
       const text = await res.text();
       data = text ? JSON.parse(text) : null;
-    } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
+    } catch (error) {
+      throw new Error(`Invalid JSON response from ${source.name}`);
+    }
+
     const etag = res.headers.get("etag");
-    if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+    if (etag) {
+      localStorage.setItem(
+        source.name,
+        JSON.stringify({ data, etag, timestamp: Date.now() })
+      );
+    }
+
     return data;
+
   } catch (error) {
     console.error(`API error: ${source.name}`, error);
+
     if (cached) return cached.data;
     return { error: true };
+
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
+
+
+
 
 function renderLoadingStatus(statusMap) {
   const progressEl = document.getElementById("progress");
