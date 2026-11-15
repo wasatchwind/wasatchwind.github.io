@@ -21,7 +21,7 @@ const openMeteoHourlyParams = () => {
 const openMeteoParams = {
   latitude: 40.77069,
   longitude: -111.96503,
-  daily: ["sunset", "temperature_2m_max"],
+  // daily: ["sunset", "temperature_2m_max"],
   windspeed_unit: "mph",
   temperature_unit: "fahrenheit",
   forecast_hours: 12,
@@ -37,7 +37,7 @@ const dataSources = [
   { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "Sounding" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
   { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
-  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/forecast?", openMeteoParams), displayName: "Wind Aloft Hourly" }
+  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
 ];
 
 function buildApiUrl(baseUrl, params) {
@@ -47,119 +47,30 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
-// async function fetchWithCache(source) {
-//   const hasLocalStorage = localStorage.getItem(source.name);
-//   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
-//   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
-//   try {
-//     const res = await fetch(source.url, { headers, cache: "no-store" });
-//     if (res.status === 304) { // ETag 304: data hasn't changed
-//       if (cached) return cached.data;
-//       return { error: true }
-//     }
-//     let data;
-//     try {
-//       const text = await res.text();
-//       data = text ? JSON.parse(text) : null;
-//     } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
-//     const etag = res.headers.get("etag");
-//     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
-//     return data;
-//   } catch (error) {
-//     console.error(`API error: ${source.name}`, error);
-//     if (cached) return cached.data;
-//     return { error: true };
-//   }
-// }
-
-
-
-
-async function fetchWithCache(source, onStage) {
-  let cached = null;
-
+async function fetchWithCache(source) {
+  const hasLocalStorage = localStorage.getItem(source.name);
+  const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
+  const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
   try {
-    onStage("Checking cache");
-
-    const hasLocalStorage = localStorage.getItem(source.name);
-    cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
-
-    const headers = source.name === "openMeteo"
-      ? undefined
-      : cached?.etag
-        ? { "If-None-Match": cached.etag }
-        : undefined;
-
-    onStage("Request started");
-
-    // const res = await fetch(source.url, {
-    //   headers,
-    //   cache: "no-store"
-    // });
-
-    const controller = new AbortController();
-
-    const timeout = setTimeout(() => {
-      onStage("TIMEOUT - request aborted after 15 seconds");
-      controller.abort();
-    }, 15000);
-
-    let res;
-
-    try {
-      res = await fetch(source.url, {
-        headers,
-        cache: "no-store",
-        signal: controller.signal
-      });
-    } finally {
-      clearTimeout(timeout);
-    }
-
-    onStage(`Response received: HTTP ${res.status}`);
-
-    if (res.status === 304) {
+    const res = await fetch(source.url, { headers, cache: "no-store" });
+    if (res.status === 304) { // ETag 304: data hasn't changed
       if (cached) return cached.data;
-      return { error: true };
+      return { error: true }
     }
-
-    onStage("Reading response body");
-
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : null;
-
-    onStage("Saving cache");
-
+    let data;
+    try {
+      const text = await res.text();
+      data = text ? JSON.parse(text) : null;
+    } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
     const etag = res.headers.get("etag");
-
-    if (etag) {
-      localStorage.setItem(
-        source.name,
-        JSON.stringify({
-          data,
-          etag,
-          timestamp: Date.now()
-        })
-      );
-    }
-
-    onStage("Complete");
-
+    if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
     return data;
-
   } catch (error) {
-    console.error(`Diagnostic error: ${source.name}`, error);
-
-    // onStage(`ERROR: ${error.message}`);
-    onStage(`ERROR: ${error.name} - ${error.message || "No message"}`);
-
+    console.error(`API error: ${source.name}`, error);
     if (cached) return cached.data;
     return { error: true };
   }
 }
-
-
-
 
 function renderLoadingStatus(statusMap) {
   const progressEl = document.getElementById("progress");
@@ -180,37 +91,10 @@ async function fetchData() {
   const results = await Promise.allSettled(
     dataSources.map(async (source) => {
       try {
-        // const result = await fetchWithCache(source);
-
-
-        // const result = await fetchWithCache(source, (stage) => {
-        //   statusMap[source.displayName] = stage;
-        //   renderLoadingStatus(statusMap);
-        // });
-
-
-        // statusMap[source.displayName] = "100%";
-        // renderLoadingStatus(statusMap);
-        // return result;
-
-        let hadError = false;
-
-        const result = await fetchWithCache(source, (stage) => {
-          if (stage.startsWith("ERROR:") || stage.startsWith("TIMEOUT")) {
-            hadError = true;
-          }
-
-          statusMap[source.displayName] = stage;
-          renderLoadingStatus(statusMap);
-        });
-
-        statusMap[source.displayName] = hadError
-          ? "FAILED - fallback/error returned"
-          : "100%";
-
+        const result = await fetchWithCache(source);
+        statusMap[source.displayName] = "100%";
         renderLoadingStatus(statusMap);
         return result;
-
       } catch (error) {
         statusMap[source.displayName] = "error";
         renderLoadingStatus(statusMap);
@@ -227,10 +111,6 @@ async function fetchData() {
       data[name] = { error: true };
     }
   });
-
-  statusMap["Application"] = "All requests settled - preparing main()";
-  renderLoadingStatus(statusMap);
-
   return data;
 }
 
@@ -245,4 +125,5 @@ main(data);
 // Sounding data UWYO inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
 // Sounding data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
 // Sounding image sources: https://www.weather.gov/upperair/SkewTViewing
+// Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
 // Keen Slider: https://keen-slider.io/docs
