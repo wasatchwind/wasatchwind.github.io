@@ -21,7 +21,7 @@ const openMeteoHourlyParams = () => {
 const openMeteoParams = {
   latitude: 40.77069,
   longitude: -111.96503,
-  // daily: ["sunset", "temperature_2m_max"],
+  daily: ["sunset", "temperature_2m_max"],
   windspeed_unit: "mph",
   temperature_unit: "fahrenheit",
   forecast_hours: 12,
