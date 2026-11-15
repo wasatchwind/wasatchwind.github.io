@@ -10,9 +10,7 @@ function main(data) {
   // Sunset hour determines Area Forecast & Hourly Chart location (both potentially visible on 2 pages)
   // Current hour determines visibility for Afternoon Surface Wind Images
   
-  // const sunset = new Date(data.openMeteo.daily.sunset[0]);
-  // ['2026-11-14T17:10']
-  const sunset = new Date("2026-11-14T17:10");
+  const sunset = new Date(data.openMeteo.daily.sunset[0]);
   const sunsetHour = sunset.getHours();
   const now = new Date();
   const currentHour = now.getHours();
@@ -44,7 +42,7 @@ function main(data) {
   const windMapTime = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Functions to process remaining data
-  // processWindAloft(data.openMeteo.hourly);                                                                // wind-aloft.js
+  processWindAloft(data.openMeteo.hourly);                                                                // wind-aloft.js
   processAreaForecastPageAndHourlyChart(data.areaForecast.productText, isAfterSunset);                    // nws-api.js
   processGeneralForecast(data.generalForecast.properties.periods);                                        // nws-api.js
   processSynoptic(data.synopticTimeseries.STATION);                                                       // synoptic.js
