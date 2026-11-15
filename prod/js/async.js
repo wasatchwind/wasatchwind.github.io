@@ -77,22 +77,22 @@ function buildApiUrl(baseUrl, params) {
 async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
-  const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
+  // const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 20000);
 
   try {
     const res = await fetch(source.url, {
-      headers,
+      // headers,
       cache: "no-store",
       signal: controller.signal
     });
 
-    if (res.status === 304) {
-      if (cached) return cached.data;
-      return { error: true };
-    }
+    // if (res.status === 304) {
+    //   if (cached) return cached.data;
+    //   return { error: true };
+    // }
 
     let data;
     try {
@@ -168,9 +168,27 @@ async function fetchData() {
   return data;
 }
 
+// const data = await fetchData();
+// console.log(data);
+// main(data);
+
+
+
 const data = await fetchData();
-console.log(data);
+
+console.log("All fetches completed:", data);
+
+document.getElementById("progress").innerHTML += `
+  <div class="d-flex justify-content-center my-2">
+    <strong>Starting app...</strong>
+  </div>
+`;
+
+console.log("About to call main()");
 main(data);
+console.log("main() returned");
+
+
 
 // Documentation references:
 // Open Meteo API: https://open-meteo.com/en/docs/gfs-api
