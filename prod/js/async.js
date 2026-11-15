@@ -43,7 +43,6 @@ const dataSources = [
 function buildApiUrl(baseUrl, params) {
   const url = new URL(baseUrl);
   url.search = new URLSearchParams(Object.entries(params).map(([k, v]) => [k, Array.isArray(v) ? v.join(",") : v]));
-  console.log(url.toString())
   return url.toString();
 }
 
@@ -115,15 +114,4 @@ async function fetchData() {
 }
 
 const data = await fetchData();
-console.log(data);
 main(data);
-
-// Documentation references:
-// Open Meteo API: https://open-meteo.com/en/docs/gfs-api
-// Synoptic API: https://docs.synopticdata.com/services/weather-api
-// NWS API: https://www.weather.gov/documentation/services-web-api
-// Sounding data UWYO inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
-// Sounding data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
-// Sounding image sources: https://www.weather.gov/upperair/SkewTViewing
-// Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
-// Keen Slider: https://keen-slider.io/docs
