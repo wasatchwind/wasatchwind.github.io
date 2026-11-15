@@ -21,7 +21,8 @@ const openMeteoHourlyParams = () => {
 const openMeteoParams = {
   latitude: 40.77069,
   longitude: -111.96503,
-  daily: ["sunset", "temperature_2m_max"],
+  // daily: ["sunset", "temperature_2m_max"],
+  daily: "temperature_2m_max",
   windspeed_unit: "mph",
   temperature_unit: "fahrenheit",
   forecast_hours: 12,
@@ -46,85 +47,30 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
-// async function fetchWithCache(source) {
-//   const hasLocalStorage = localStorage.getItem(source.name);
-//   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
-//   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
-//   try {
-//     const res = await fetch(source.url, { headers, cache: "no-store" });
-//     if (res.status === 304) { // ETag 304: data hasn't changed
-//       if (cached) return cached.data;
-//       return { error: true }
-//     }
-//     let data;
-//     try {
-//       const text = await res.text();
-//       data = text ? JSON.parse(text) : null;
-//     } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
-//     const etag = res.headers.get("etag");
-//     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
-//     return data;
-//   } catch (error) {
-//     console.error(`API error: ${source.name}`, error);
-//     if (cached) return cached.data;
-//     return { error: true };
-//   }
-// }
-
-
-
-
 async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
-  // const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000);
-
+  const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
   try {
-    const res = await fetch(source.url, {
-      // headers,
-      cache: "no-store",
-      signal: controller.signal
-    });
-
-    // if (res.status === 304) {
-    //   if (cached) return cached.data;
-    //   return { error: true };
-    // }
-
+    const res = await fetch(source.url, { headers, cache: "no-store" });
+    if (res.status === 304) { // ETag 304: data hasn't changed
+      if (cached) return cached.data;
+      return { error: true }
+    }
     let data;
     try {
       const text = await res.text();
       data = text ? JSON.parse(text) : null;
-    } catch (error) {
-      throw new Error(`Invalid JSON response from ${source.name}`);
-    }
-
+    } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
     const etag = res.headers.get("etag");
-    if (etag) {
-      localStorage.setItem(
-        source.name,
-        JSON.stringify({ data, etag, timestamp: Date.now() })
-      );
-    }
-
+    if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
     return data;
-
   } catch (error) {
     console.error(`API error: ${source.name}`, error);
-
     if (cached) return cached.data;
     return { error: true };
-
-  } finally {
-    clearTimeout(timeoutId);
   }
 }
-
-
-
 
 function renderLoadingStatus(statusMap) {
   const progressEl = document.getElementById("progress");
@@ -159,12 +105,6 @@ async function fetchData() {
   const data = {};
   results.forEach((result, i) => {
     const name = dataSources[i].name;
-
-    if (name === "openMeteo") {
-      console.log("OPEN METEO RESULT:", result);
-      console.log("OPEN METEO DATA:", result.status === "fulfilled" ? result.value : result.reason);
-    }
-
     if (result.status === "fulfilled") data[name] = result.value;
     else {
       console.error(`Fetch failed: ${name}`, result.reason);
@@ -174,31 +114,9 @@ async function fetchData() {
   return data;
 }
 
-// const data = await fetchData();
-// console.log(data);
-// main(data);
-
-
-
 const data = await fetchData();
-
-console.log("All fetches completed:", data);
-
-try {
-  console.log("About to call main()", data);
-  main(data);
-  console.log("main() returned");
-} catch (error) {
-  console.error("main() failed:", error);
-
-  document.getElementById("progress").innerHTML += `
-    <div class="text-danger text-center my-3">
-      App startup error: ${error.message}
-    </div>
-  `;
-}
-
-
+console.log(data);
+main(data);
 
 // Documentation references:
 // Open Meteo API: https://open-meteo.com/en/docs/gfs-api
