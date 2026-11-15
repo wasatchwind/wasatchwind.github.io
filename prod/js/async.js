@@ -21,8 +21,7 @@ const openMeteoHourlyParams = () => {
 const openMeteoParams = {
   latitude: 40.77069,
   longitude: -111.96503,
-  // daily: ["sunset", "temperature_2m_max"],
-  daily: "temperature_2m_max",
+  daily: ["sunset", "temperature_2m_max"],
   windspeed_unit: "mph",
   temperature_unit: "fahrenheit",
   forecast_hours: 12,
@@ -38,7 +37,7 @@ const dataSources = [
   { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "Sounding" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
   { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
-  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
+  // { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
 ];
 
 function buildApiUrl(baseUrl, params) {
