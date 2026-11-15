@@ -9,18 +9,10 @@ function main(data) {
   // - Sunset hour+ = Tomorrow (nextDay)
   // Sunset hour determines Area Forecast & Hourly Chart location (both potentially visible on 2 pages)
   // Current hour determines visibility for Afternoon Surface Wind Images
-
-
-  console.log("Open-Meteo data at startup:", data.openMeteo);
-
-  if (!data.openMeteo?.daily?.sunset?.[0]) {
-    throw new Error(
-      "Open-Meteo response is missing daily sunset. Check the OPEN METEO DATA log."
-    );
-  }
-
-
-  const sunset = new Date(data.openMeteo.daily.sunset[0]);
+  
+  const sunset = new Date(data.openMeteo.daily.sunset[0]) || new Date("2026-11-14T18:10");
+  // ['2026-11-14T17:10']
+  // const sunset = new Date("2026-11-14T18:10");
   const sunsetHour = sunset.getHours();
   const now = new Date();
   const currentHour = now.getHours();
