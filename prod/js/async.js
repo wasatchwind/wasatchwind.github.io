@@ -174,19 +174,19 @@ async function fetchData() {
 
 
 
-const data = await fetchData();
+try {
+  console.log("About to call main()", data);
+  main(data);
+  console.log("main() returned");
+} catch (error) {
+  console.error("main() failed:", error);
 
-console.log("All fetches completed:", data);
-
-document.getElementById("progress").innerHTML += `
-  <div class="d-flex justify-content-center my-2">
-    <strong>Starting app...</strong>
-  </div>
-`;
-
-console.log("About to call main()");
-main(data);
-console.log("main() returned");
+  document.getElementById("progress").innerHTML += `
+    <div class="text-danger text-center my-3">
+      App startup error: ${error.message}
+    </div>
+  `;
+}
 
 
 
