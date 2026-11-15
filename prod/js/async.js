@@ -174,6 +174,10 @@ async function fetchData() {
 
 
 
+const data = await fetchData();
+
+console.log("All fetches completed:", data);
+
 try {
   console.log("About to call main()", data);
   main(data);
