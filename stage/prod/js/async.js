@@ -3,7 +3,7 @@
 const openMeteoHourlyParams = () => {
   const params = [];
   const hourlyConfig = {
-    levels: [875, 850, 825, 800, 775, 750, 725, 700, 675, 650, 550],
+    levels: [850, 825, 800, 775, 750, 725, 700, 675, 650, 550, 500],
     variables: ["geopotential_height", "winddirection", "windspeed"],
     surface: ["wind_direction_10m", "wind_speed_10m"]
   };
@@ -24,7 +24,7 @@ const openMeteoParams = {
   daily: ["sunset", "temperature_2m_max"],
   windspeed_unit: "mph",
   temperature_unit: "fahrenheit",
-  forecast_hours: 12,
+  forecast_hours: 24,
   forecast_days: 1,
   timezone: "America/Denver",
   hourly: openMeteoHourlyParams()
