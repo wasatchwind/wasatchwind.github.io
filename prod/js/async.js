@@ -159,6 +159,12 @@ async function fetchData() {
   const data = {};
   results.forEach((result, i) => {
     const name = dataSources[i].name;
+
+    if (name === "openMeteo") {
+      console.log("OPEN METEO RESULT:", result);
+      console.log("OPEN METEO DATA:", result.status === "fulfilled" ? result.value : result.reason);
+    }
+
     if (result.status === "fulfilled") data[name] = result.value;
     else {
       console.error(`Fetch failed: ${name}`, result.reason);
