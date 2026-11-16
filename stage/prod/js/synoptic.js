@@ -50,7 +50,7 @@ function processSynoptic(data) {
             </div>
           </div>
           <div class="col-6 d-flex justify-content-between me-2">
-            <div class="align-self-end display-6 fw-semibold text-secondary" id="${stationData.STID}-time-${readingCount}">No Data</div>
+            <div class="align-self-end display-6 fw-semibold" id="${stationData.STID}-time-${readingCount}">No Data</div>
             <div class="col-2 display-2" id="${stationData.STID}-wdir-${readingCount}"></div>
             <div class="col-2 display-4 fw-semibold rounded-4 text-center" id="${stationData.STID}-wspd-${readingCount}"></div>
             <div class="col-2 display-6 fw-semibold gust-color" id="${stationData.STID}-gust-${readingCount}"></div>
@@ -136,12 +136,34 @@ function buildWindChart(stid, data, readingCount, altitude) {
   windChartBarColor(stid, speedData, altitude);
 }
 
+// function windChartTime(stid, times) {
+//   times.forEach((time, i) => {
+//     const element = document.getElementById(`${stid}-time-${i}`);
+//     time = time ? time.slice(0, -3).toLowerCase() : "";
+//     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
+//     element.textContent = time;
+//   });
+// }
+
 function windChartTime(stid, times) {
   times.forEach((time, i) => {
     const element = document.getElementById(`${stid}-time-${i}`);
-    time = time ? time.slice(0, -3).toLowerCase() : "";
+    let [hours, minutes] = time.match(/\d+/g).map(Number);
+
+    // Need to handle midnight when doing time comparisons
+    if (time.includes("PM") && hours !== 12) hours += 12;
+    if (time.includes("AM") && hours === 12) hours = 0;
+    const now = new Date();
+    const readingTime = new Date(now);
+    readingTime.setHours(hours, minutes, 0, 0);
+    if (readingTime > now) readingTime.setDate(readingTime.getDate() - 1);
+
+    const hoursOld = (now - readingTime) / 3600000;
+    element.classList.remove("text-secondary", "text-danger");
+    element.classList.add(hoursOld >= 2 ? "text-danger" : "text-secondary"); // If reading time is 2+ hours old change the color
+    time = time.slice(0, -3).toLowerCase();
     if (stid === "KSLC" && i === times.length - 1) time = `${time} KSLC`;
-    element.textContent = time;
+    element.textContent = time || "";
   });
 }
 
