@@ -46,29 +46,66 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
+// async function fetchWithCache(source) {
+//   const hasLocalStorage = localStorage.getItem(source.name);
+//   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
+//   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
+//   try {
+//     const res = await fetch(source.url, { headers, cache: "no-store" });
+//     if (res.status === 304) { // ETag 304: data hasn't changed
+//       if (cached) return cached.data;
+//       return { error: true }
+//     }
+//     let data;
+//     try {
+//       const text = await res.text();
+//       data = text ? JSON.parse(text) : null;
+//     } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
+//     const etag = res.headers.get("etag");
+//     if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+//     return data;
+//   } catch (error) {
+//     console.error(`API error: ${source.name}`, error);
+//     if (cached) return cached.data;
+//     return { error: true };
+//   }
+// }
+
 async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
-  try {
-    const res = await fetch(source.url, { headers, cache: "no-store" });
-    if (res.status === 304) { // ETag 304: data hasn't changed
-      if (cached) return cached.data;
-      return { error: true }
-    }
-    let data;
+  const MAX_ATTEMPTS = 3;
+  const TIMEOUT = 5000;
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+
     try {
-      const text = await res.text();
-      data = text ? JSON.parse(text) : null;
-    } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`) }
-    const etag = res.headers.get("etag");
-    if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
-    return data;
-  } catch (error) {
-    console.error(`API error: ${source.name}`, error);
-    if (cached) return cached.data;
-    return { error: true };
+      const res = await fetch(source.url, { headers, cache: "no-store", signal: controller.signal });
+      if (res.status === 304) {
+        if (cached) return cached.data;
+        return { error: true };
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      let data;
+      try {
+        const text = await res.text();
+        data = text ? JSON.parse(text) : null;
+      } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`); }
+      const etag = res.headers.get("etag");
+      if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+
+      return data;
+    } catch (error) {
+      console.warn(`${source.name}: attempt ${attempt}/${MAX_ATTEMPTS} failed`, error);
+      if (attempt < MAX_ATTEMPTS) await new Promise(resolve => setTimeout(resolve, 1000));
+    } finally { clearTimeout(timeoutId); }
   }
+  console.error(`API error: ${source.name} - all ${MAX_ATTEMPTS} attempts failed`);
+  if (cached) return cached.data;
+  return { error: true };
 }
 
 function renderLoadingStatus(statusMap) {
@@ -91,7 +128,7 @@ async function fetchData() {
     dataSources.map(async (source) => {
       try {
         const result = await fetchWithCache(source);
-        statusMap[source.displayName] = "100%";
+        statusMap[source.displayName] = result?.error ? "Error" : "100%";
         renderLoadingStatus(statusMap);
         return result;
       } catch (error) {
@@ -114,4 +151,15 @@ async function fetchData() {
 }
 
 const data = await fetchData();
+// console.log(data);
 main(data);
+
+// Documentation references:
+// Open Meteo API: https://open-meteo.com/en/docs/gfs-api
+// Synoptic API: https://docs.synopticdata.com/services/weather-api
+// NWS API: https://www.weather.gov/documentation/services-web-api
+// Sounding data UWYO inventory: https://weather.uwyo.edu/wsgi/sounding?datetime=2026-03-23%2012:00:00&id=72572&src=UNKNOWN&type=INVENTORY
+// Sounding data UWYO UI: https://weather.uwyo.edu/upperair/sounding.shtml
+// Sounding image sources: https://www.weather.gov/upperair/SkewTViewing
+// Google Cloud: https://console.cloud.google.com/storage/overview;tab=overview?project=wasatchwind
+// Keen Slider: https://keen-slider.io/docs
