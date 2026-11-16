@@ -139,35 +139,93 @@ function renderLoadingStatus(statusMap) {
   }).join("");
 }
 
+// async function fetchData() {
+//   const statusMap = {};
+//   dataSources.forEach((source) => { statusMap[source.displayName] = "Fetching..." });
+//   renderLoadingStatus(statusMap);
+//   const results = await Promise.allSettled(
+//     dataSources.map(async (source) => {
+//       try {
+//         const result = source.name === "openMeteo" ? await fetchOpenMeteo(source) : await fetchWithCache(source);
+//         statusMap[source.displayName] = result?.error ? "Error" : "100%";
+//         renderLoadingStatus(statusMap);
+//         return result;
+//       } catch (error) {
+//         statusMap[source.displayName] = "error";
+//         renderLoadingStatus(statusMap);
+//         throw error;
+//       }
+//     })
+//   );
+//   const data = {};
+//   results.forEach((result, i) => {
+//     const name = dataSources[i].name;
+//     if (result.status === "fulfilled") data[name] = result.value;
+//     else {
+//       console.error(`Fetch failed: ${name}`, result.reason);
+//       data[name] = { error: true };
+//     }
+//   });
+//   return data;
+// }
+
+
 async function fetchData() {
   const statusMap = {};
-  dataSources.forEach((source) => { statusMap[source.displayName] = "Fetching..." });
+  dataSources.forEach((source) => {
+    statusMap[source.displayName] = "Fetching...";
+  });
   renderLoadingStatus(statusMap);
+
+  const data = {};
+
+  // Fetch the six other APIs first, concurrently
+  const otherSources = dataSources.filter(
+    source => source.name !== "openMeteo"
+  );
+
   const results = await Promise.allSettled(
-    dataSources.map(async (source) => {
-      try {
-        const result = source.name === "openMeteo" ? await fetchOpenMeteo(source) : await fetchWithCache(source);
-        statusMap[source.displayName] = result?.error ? "Error" : "100%";
-        renderLoadingStatus(statusMap);
-        return result;
-      } catch (error) {
-        statusMap[source.displayName] = "error";
-        renderLoadingStatus(statusMap);
-        throw error;
-      }
+    otherSources.map(async (source) => {
+      const result = await fetchWithCache(source);
+
+      statusMap[source.displayName] =
+        result?.error ? "Error" : "100%";
+
+      renderLoadingStatus(statusMap);
+      return result;
     })
   );
-  const data = {};
+
   results.forEach((result, i) => {
-    const name = dataSources[i].name;
-    if (result.status === "fulfilled") data[name] = result.value;
-    else {
-      console.error(`Fetch failed: ${name}`, result.reason);
-      data[name] = { error: true };
-    }
+    const name = otherSources[i].name;
+
+    data[name] = result.status === "fulfilled"
+      ? result.value
+      : { error: true };
   });
+
+  // Now fetch Open-Meteo separately
+  const openMeteo = dataSources.find(
+    source => source.name === "openMeteo"
+  );
+
+  try {
+    data.openMeteo = await fetchOpenMeteo(openMeteo);
+
+    statusMap[openMeteo.displayName] =
+      data.openMeteo?.error ? "Error" : "100%";
+
+  } catch (error) {
+    console.error("Open-Meteo fetch failed:", error);
+    data.openMeteo = { error: true };
+    statusMap[openMeteo.displayName] = "Error";
+  }
+
+  renderLoadingStatus(statusMap);
+
   return data;
 }
+
 
 const data = await fetchData();
 // console.log(data);
