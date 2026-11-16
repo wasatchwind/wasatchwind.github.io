@@ -75,38 +75,75 @@ async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
   const cached = hasLocalStorage ? JSON.parse(hasLocalStorage) : null;
   const headers = cached?.etag ? { "If-None-Match": cached.etag } : undefined;
+
   const MAX_ATTEMPTS = 3;
   const TIMEOUT = 5000;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+
+    console.log(`${source.name}: attempt ${attempt}/${MAX_ATTEMPTS}`);
 
     try {
-      const res = await fetch(source.url, { headers, cache: "no-store", signal: controller.signal });
+      const fetchPromise = fetch(source.url, {
+        headers,
+        cache: "no-store",
+        signal: controller.signal
+      });
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          controller.abort();
+          reject(new Error("Request timed out after 5 seconds"));
+        }, TIMEOUT);
+      });
+
+      const res = await Promise.race([fetchPromise, timeoutPromise]);
+
       if (res.status === 304) {
         if (cached) return cached.data;
         return { error: true };
       }
-      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+
       let data;
       try {
         const text = await res.text();
         data = text ? JSON.parse(text) : null;
-      } catch (error) { throw new Error(`Invalid JSON response from ${source.name}`); }
+      } catch (error) {
+        throw new Error(`Invalid JSON response from ${source.name}`);
+      }
+
       const etag = res.headers.get("etag");
-      if (etag) localStorage.setItem(source.name, JSON.stringify({ data, etag, timestamp: Date.now() }));
+      if (etag) {
+        localStorage.setItem(source.name, JSON.stringify({
+          data, etag, timestamp: Date.now()
+        }));
+      }
 
       return data;
+
     } catch (error) {
-      console.warn(`${source.name}: attempt ${attempt}/${MAX_ATTEMPTS} failed`, error);
-      if (attempt < MAX_ATTEMPTS) await new Promise(resolve => setTimeout(resolve, 1000));
-    } finally { clearTimeout(timeoutId); }
+      console.warn(
+        `${source.name}: attempt ${attempt}/${MAX_ATTEMPTS} failed:`,
+        error.message
+      );
+
+      if (attempt < MAX_ATTEMPTS) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
   }
-  console.error(`API error: ${source.name} - all ${MAX_ATTEMPTS} attempts failed`);
+
+  console.error(`${source.name}: all attempts failed`);
+
   if (cached) return cached.data;
   return { error: true };
 }
+
 
 function renderLoadingStatus(statusMap) {
   const progressEl = document.getElementById("progress");
