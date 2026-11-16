@@ -47,30 +47,70 @@ function buildApiUrl(baseUrl, params) {
 }
 
 
+let openMeteoRequestInProgress = false;
+// async function fetchOpenMeteo(source) {
+//   try {
+//     console.log("Open-Meteo: starting fetch", new Date().toISOString());
+
+//     const response = await fetch(source.url);
+
+//     console.log("Open-Meteo: response received", response.status);
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP error: ${response.status}`);
+//     }
+
+//     const data = await response.json();
+
+//     console.log("Open-Meteo: data received", new Date().toISOString());
+
+//     return data;
+
+//   } catch (error) {
+//     console.error("Open-Meteo failed:", error);
+//     return { error: true };
+//   }
+// }
 
 async function fetchOpenMeteo(source) {
+  if (openMeteoRequestInProgress) {
+    console.warn("Open-Meteo: request already in progress");
+    return { error: true };
+  }
+
+  openMeteoRequestInProgress = true;
+
+  const started = Date.now();
+
   try {
-    console.log("Open-Meteo: starting fetch", new Date().toISOString());
+    console.log("Open-Meteo: starting", new Date().toISOString());
 
     const response = await fetch(source.url);
 
-    console.log("Open-Meteo: response received", response.status);
+    console.log("Open-Meteo HTTP status:", response.status);
+    console.log("Open-Meteo response headers:",
+      Object.fromEntries(response.headers.entries()));
+
+    const text = await response.text();
+
+    console.log("Open-Meteo elapsed:", Date.now() - started, "ms");
+    console.log("Open-Meteo response:", text.slice(0, 500));
 
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+      throw new Error(`HTTP ${response.status}: ${text}`);
     }
 
-    const data = await response.json();
-
-    console.log("Open-Meteo: data received", new Date().toISOString());
-
-    return data;
+    return JSON.parse(text);
 
   } catch (error) {
     console.error("Open-Meteo failed:", error);
     return { error: true };
+
+  } finally {
+    openMeteoRequestInProgress = false;
   }
 }
+
 
 
 
