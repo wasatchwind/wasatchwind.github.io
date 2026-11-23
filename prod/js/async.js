@@ -43,6 +43,7 @@ const dataSources = [
 function buildApiUrl(baseUrl, params) {
   const url = new URL(baseUrl);
   url.search = new URLSearchParams(Object.entries(params).map(([k, v]) => [k, Array.isArray(v) ? v.join(",") : v]));
+  console.log(url.toString());
   return url.toString();
 }
 
