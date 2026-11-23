@@ -46,73 +46,17 @@ function buildApiUrl(baseUrl, params) {
   return url.toString();
 }
 
-
-let openMeteoRequestInProgress = false;
-// async function fetchOpenMeteo(source) {
-//   try {
-//     console.log("Open-Meteo: starting fetch", new Date().toISOString());
-
-//     const response = await fetch(source.url);
-
-//     console.log("Open-Meteo: response received", response.status);
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-
-//     console.log("Open-Meteo: data received", new Date().toISOString());
-
-//     return data;
-
-//   } catch (error) {
-//     console.error("Open-Meteo failed:", error);
-//     return { error: true };
-//   }
-// }
-
 async function fetchOpenMeteo(source) {
-  if (openMeteoRequestInProgress) {
-    console.warn("Open-Meteo: request already in progress");
-    return { error: true };
-  }
-
-  openMeteoRequestInProgress = true;
-
   const started = Date.now();
-
   try {
-    console.log("Open-Meteo: starting", new Date().toISOString());
-
     const response = await fetch(source.url);
-
-    console.log("Open-Meteo HTTP status:", response.status);
-    console.log("Open-Meteo response headers:",
-      Object.fromEntries(response.headers.entries()));
-
     const text = await response.text();
-
-    console.log("Open-Meteo elapsed:", Date.now() - started, "ms");
-    console.log("Open-Meteo response:", text.slice(0, 500));
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${text}`);
-    }
-
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${text}`);
     return JSON.parse(text);
-
   } catch (error) {
     console.error("Open-Meteo failed:", error);
     return { error: true };
-
-  } finally {
-    openMeteoRequestInProgress = false;
-  }
 }
-
-
-
 
 async function fetchWithCache(source) {
   const hasLocalStorage = localStorage.getItem(source.name);
@@ -182,7 +126,7 @@ async function fetchData() {
 }
 
 const data = await fetchData();
-// console.log(data);
+console.log(data);
 main(data);
 
 // Documentation references:
