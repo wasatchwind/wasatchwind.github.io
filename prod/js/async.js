@@ -56,6 +56,7 @@ async function fetchOpenMeteo(source) {
   } catch (error) {
     console.error("Open-Meteo failed:", error);
     return { error: true };
+  }
 }
 
 async function fetchWithCache(source) {
