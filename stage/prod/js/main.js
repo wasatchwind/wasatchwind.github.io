@@ -10,7 +10,8 @@ function main(data) {
   // Sunset hour determines Area Forecast & Hourly Chart location (both potentially visible on 2 pages)
   // Current hour determines visibility for Afternoon Surface Wind Images
   
-  const sunset = new Date(data.openMeteo.daily.sunset[0]);
+  const sunset = new Date(data.sunsetTime.sunset);
+  const roundedSunset = new Date(sunset.getTime() + 30000);
   const sunsetHour = sunset.getHours();
   const now = new Date();
   const currentHour = now.getHours();
@@ -42,10 +43,10 @@ function main(data) {
   const windMapTime = new Date(data.windMapScreenshotMetadata.timeCreated).toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
 
   // Functions to process remaining data
-  processWindAloft(data.openMeteo.hourly);                                                                // wind-aloft.js
+  processWindAloft(data.windAloft);                                                                // wind-aloft.js
   processAreaForecastPageAndHourlyChart(data.areaForecast.productText, isAfterSunset);                    // nws-api.js
   processGeneralForecast(data.generalForecast.properties.periods);                                        // nws-api.js
-  processSynoptic(data.synopticTimeseries.STATION);                                                       // synoptic.js
+  processSynoptic(data.timeSeries.STATION);                                                       // synoptic.js
   displayPersistentImages(windMapTime);                                                                   // utils.js
   if (currentHour > 6) {
     displayAfternoonSurfaceWindImages(currentHour, sunsetHour, tomorrowDay);                              // utils.js
@@ -53,7 +54,7 @@ function main(data) {
   }
 
   // Populate sunset & high temp in the marquee and hide the loading spinner
-  document.getElementById("sunset").textContent = sunset.toLocaleString("en-us", { hour: "numeric", minute: "2-digit" }).slice(0, -3); // Slice: Always PM
+  document.getElementById("sunset").textContent = `${roundedSunset.getHours() % 12 || 12}:${String(roundedSunset.getMinutes()).padStart(2, '0')}`;
   document.getElementById("hi-temp").textContent = `${hiTemp}`;
   document.getElementById("spinner").style.display = "none";
 

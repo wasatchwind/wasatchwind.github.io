@@ -311,7 +311,7 @@ function buildSoundingChart(id, data, hiTemp, liftParams) {
     .attr("text-anchor", "end")
     .attr("x", x(113))
     .attr("y", y(19))
-    .text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt ? tol : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
+    .text(`Top of Lift: ${liftParams.topOfLiftAltFt < surfaceAlt * 1000 ? tol : Math.round(liftParams.topOfLiftAltFt).toLocaleString()} `);
 
   const neg3Legend = svg.append("text") // -3 Index
     .attr("class", "legend-label-upper")
