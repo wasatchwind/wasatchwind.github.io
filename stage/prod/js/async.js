@@ -125,19 +125,19 @@ const data = await fetchData();
 console.log(data);
 main(data);
 
-// If AWS API triggered an on-demand Lambda refresh, silently re-fetch windAloft once ready
-if (data.windAloft?.refresh?.refresh_requested) {
-  const windAloftSource = dataSources.find((s) => s.name === "windAloft");
-  setTimeout(async () => {
-    console.log("Polling for updated windAloft forecast...");
-    const updatedWindAloft = await fetchWithCache(windAloftSource);
-    if (updatedWindAloft && !updatedWindAloft.error) {
-      data.windAloft = filterPastWindAloftHours(updatedWindAloft);
-      console.log("Updated windAloft received:", data.windAloft);
-      main(data);
-    }
-  }, 20000);
-}
+// // If AWS API triggered an on-demand Lambda refresh, silently re-fetch windAloft once ready
+// if (data.windAloft?.refresh?.refresh_requested) {
+//   const windAloftSource = dataSources.find((s) => s.name === "windAloft");
+//   setTimeout(async () => {
+//     console.log("Polling for updated windAloft forecast...");
+//     const updatedWindAloft = await fetchWithCache(windAloftSource);
+//     if (updatedWindAloft && !updatedWindAloft.error) {
+//       data.windAloft = filterPastWindAloftHours(updatedWindAloft);
+//       console.log("Updated windAloft received:", data.windAloft);
+//       main(data);
+//     }
+//   }, 20000);
+// }
 
 
 // Documentation references:
