@@ -8,7 +8,7 @@ const dataSources = [
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
   { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
   { name: "sunsetTime", url: "https://api.sunrise-sunset.org/v2?lat=40.77069&lng=-111.96503", displayName: "Sunset Time" },
-  { name: "windAloft", url: "https://e9b6ls8sb9.execute-api.us-east-1.amazonaws.com/forecast", displayName: "Wind Aloft Forecast" },
+  { name: "windAloft", url: "https://e9b6ls8sb9.execute-api.us-east-1.amazonaws.com/forecast", displayName: "Wind Aloft Hourly" },
 ];
 
 function buildApiUrl(baseUrl, params) {
