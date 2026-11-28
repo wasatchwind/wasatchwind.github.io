@@ -31,13 +31,13 @@ const openMeteoParams = {
 };
 
 const dataSources = [
+  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" },
   { name: "areaForecast", url: "https://api.weather.gov/products/types/AFD/locations/SLC/latest", displayName: "AFD" },
   { name: "soaringForecast", url: "https://api.weather.gov/products/types/SRG/locations/SLC/latest", displayName: "SRG" },
   { name: "synopticTimeseries", url: "https://python-synoptic-api-483547589035.us-west3.run.app", displayName: "Stations" },
   { name: "sounding", url: "https://storage.googleapis.com/wasatch-wind-static/raob.json", displayName: "Sounding" },
   { name: "windMapScreenshotMetadata", url: "https://storage.googleapis.com/storage/v1/b/wasatch-wind-static/o/wind-map-save.png", displayName: "Wind Map" },
-  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" },
-  { name: "openMeteo", url: buildApiUrl("https://api.open-meteo.com/v1/gfs?", openMeteoParams), displayName: "Wind Aloft Hourly" }
+  { name: "generalForecast", url: "https://api.weather.gov/gridpoints/SLC/97,175/forecast", displayName: "General Forecast" }
 ];
 
 function buildApiUrl(baseUrl, params) {
